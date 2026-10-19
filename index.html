@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="c2df8c2734";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="68e3199e0b";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -377,6 +377,10 @@ td{border-top:1px solid #ffffff12}
 .pm-sum{display:grid;gap:4px;color:#fff;font:600 14px var(--f-body)}.pm-sum>b{font:700 18px Silkscreen,var(--f-display);color:var(--led)}.pm-sum>b.no{color:var(--bad)}.pm-sum>b.ok{color:#8fe08f}.pm-sum div b{color:var(--led)}
 .pm-bar{margin-top:6px}
 .st-col{display:grid;gap:6px}.st-opt{display:grid;gap:2px;text-align:left;background:#fff;border:1px solid #cfd3dc;border-radius:6px;padding:8px 10px;cursor:pointer;color:#2b2b33}.st-opt.on{background:#fff6d6;border-color:#f5a623;box-shadow:inset 0 0 0 1px #f5a623}.st-opt b{font:700 14px var(--f-body)}.st-opt small{font-size:12px;color:#4a4f5e}
+.plg{display:grid;gap:12px;max-width:980px;margin:0 auto}.plg-scene{position:relative;height:min(46vh,360px);border:3px solid #000;border-radius:8px;overflow:hidden;background:#0b0f1a;box-shadow:0 12px 30px #000a}.plg-scene canvas{width:100%;height:100%;display:block;image-rendering:pixelated}
+.plg-cap{position:absolute;left:12px;bottom:10px;background:#000b;color:#fff;padding:6px 10px;border-radius:6px;display:grid}.plg-cap small{font:700 10px Silkscreen,var(--f-mono);color:#ffd166;letter-spacing:.1em}.plg-cap b{font:900 20px var(--f-display);text-transform:uppercase}
+.plg-txt{display:grid;gap:12px}.plg-txt .arch{margin:0;font:500 18px/1.55 var(--f-body);color:#f4f1ea;background:#0d1630e6;border:1px solid #ffffff1c;border-left:4px solid #ffd166;border-radius:8px;padding:14px 16px;font-style:italic}
+.plg-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.plg-opts .mp-card{background:linear-gradient(180deg,#fff,#eef0f4)}
 .kb-list{display:grid;gap:4px}.kb-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:6px 10px;font-size:13px;font-weight:600}.kb-key{min-width:64px;border:1px solid #4a4f5e;border-radius:5px;background:linear-gradient(180deg,#fff,#dde1e8);font:700 11px Silkscreen,var(--f-mono);padding:5px 8px;cursor:pointer;box-shadow:0 2px 0 #9aa1b1}
 .st-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:8px 10px;font-size:13px;font-weight:600}.st-row>span{min-width:48px;color:#4a4f5e}.st-row .sw-b{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #6b7080;cursor:pointer}.st-row .sw-b.on,.st-row .mp-btn.on{box-shadow:0 0 0 3px #f5a623}.st-row b{font:700 12px Silkscreen,var(--f-mono);min-width:70px;text-align:center}
 /* ===== game viewer ===== */
@@ -1398,7 +1402,7 @@ function saveC(){if(C){C.savedAt=Date.now();cloudSoon()}if(C)idbPut(CKEY,JSON.st
 async function loadC(){try{const s=await idbGet(CKEY);if(s===""){return null}if(s)return JSON.parse(s)}catch(e){}try{const s=localStorage.getItem(CKEY);return s?JSON.parse(s):null}catch(e){return null}}
 const ARCH={PG:"Floor general",SG:"Shooter",SF:"Wing",PF:"Forward",C:"Big"};
 const HRANGE={PG:[70,78],SG:[73,80],SF:[76,82],PF:[78,84],C:[80,88]};
-const CLASSN=["Freshman","Sophomore","Junior","Senior"];
+const CLASSN=["Freshman","Sophomore","Junior","Senior","Fifth-year"];
 const FOCI=[["SHT","Shooting"],["FIN","Finishing"],["PLY","Playmaking"],["DEF","Defense"],["REB","Rebounding"],["ATH","Athleticism"],["IQ","Basketball IQ"],["DUR","Conditioning"]];
 let POOL=null,COLL=null;
 function reelPool(){
@@ -1425,7 +1429,7 @@ function prodScore(){const t=C.season.tot,g=t.gp||1;return t.pts/g+t.reb/g*.7+t.
 const slotV=k=>82-10*Math.log(k);
 function scoutPot(){return Math.round(C.pot+(C.scoutN??0))}
 function stock(){const t=C.season?.tot,g=t?.gp||0;const prod=(g?prodScore():0)+(C.prep?6:0);
-  const v=.5*scoutPot()+.5*calcOvr(C.a,C.pos)-8+prod*.25+(C.awards.filter(a=>a.y===C.y).length*1.5)-Math.max(0,C.cls-1)*1.2;
+  const v=.5*scoutPot()+.5*calcOvr(C.a,C.pos)-8+prod*.25*(isJuco(C.school)?.3:1)+(C.awards.filter(a=>a.y===C.y).length*1.5)-Math.max(0,C.cls-1)*1.2-(isJuco(C.school)?10:0);
   let k=1;while(k<=60&&slotV(k)>v)k++;return k>60?null:k}
 function closeSeason(){
   if(!frEligible(C.cl.y)&&C.cls===1){C.season.tot=freshLine();C.season.res=`Freshman team (varsity: ${C.season.res||"season over"})`}
@@ -1444,7 +1448,7 @@ function mcReturnGo(){careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;rpgApply();C
 function mcDeclareGo(prep){if(!prep)careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;rpgApply();const st=C.stock;let fin=st?Math.round(st+gauss()*(1.5+st/8)):null;if(fin!=null)fin=clamp(fin,1,60);
   if(!st&&R()<.25)fin=ri(45,60);if(C.legacy&&fin&&fin>nPicks())fin=null;C.final=fin;const row=fin?(DB.drafts[C.y+1]||[]).find(r=>r[2]===fin):null;
   const fe=row&&row[3]?franchiseEra(row[3],C.y+1):null;C.dteam=fe?`${fe[2]} ${fe[3]}`:"an NBA team";C.stage="draft";mcRender()}
-function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"SG",ht:77,wt:205,startY:1983,slots:{},cur:null,respins:2,hist:[],awards:[],focus:null};saveC()}
+function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"SG",ht:77,wt:205,startY:START_Y,slots:{},cur:null,respins:2,hist:[],awards:[],focus:null};saveC()}
 
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
@@ -1453,8 +1457,8 @@ function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
   el.style.setProperty("--e1","#ff8a3d");el.style.setProperty("--e2","#ffd166");el.style.setProperty("--e3","#16264a");
-  const v={create:mcCreate,spin:mcCreate,offers:mcOffers,college:mcCollege,decide:mcDecide,draft:mcDraft,portal:mcPortal}[C.stage]||mcCreate;
-  const html=v();el.innerHTML=C.stage==="college"?html:`<div class="eras-in">${html}</div>`;saveC();paintAvatars(el);showLoop();rpgFlush();
+  const v={create:mcCreate,spin:mcCreate,prologue:mcPrologue,offers:mcOffers,college:mcCollege,decide:mcDecide,draft:mcDraft,portal:mcPortal}[C.stage]||mcCreate;
+  const html=v();el.innerHTML=C.stage==="college"?html:`<div class="eras-in">${html}</div>`;saveC();paintAvatars(el);showLoop();rpgFlush();if(C.stage==="prologue")setTimeout(plgLoop,0);
 }
 function mcCreate(){
   const [lo,hi]=HRANGE[C.pos];C.ht=clamp(C.ht,lo,hi);
@@ -1511,19 +1515,18 @@ function mcSpin(){
 }
 function mcOffers(){
   const sch=colleges().schools,y=C.y,cl=clEnsure();const pr=s=>prestige(s,y);const ranked=[...sch].sort((a,b)=>pr(b)-pr(a));
-  if(!C.offers){const band=C.stars>=5?[0,12]:C.stars===4?[8,40]:[30,110];C.offers=shuffle(ranked.slice(...band)).slice(0,4).sort((a,b)=>pr(b)-pr(a))}
+  if(!C.offers)C.offers=recruitOffers();
   return mcHead(`${"★".repeat(C.stars)} recruit · ${C.pos} · ${ftin(C.ht)} · potential ${C.pot}`)+`
   <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="create">← Back to creation</button></div><div class="kicker">Step 3 of 3 · ${sl(y)} recruiting</div><h2>Choose your school</h2>
-    <p>You're a ${C.stars}-star recruit. These programs offered you a scholarship. Their rosters are real: future NBA players who were in school that season.</p>
-    ${prepOK(C.y)&&!C.legacy?`<div class="go" style="margin:4px 0 10px"><button class="opt" data-act="mcprep">Skip college: enter the ${C.y} draft out of high school</button></div><p class="note" style="color:#c9cfe0">From 1974 to 2005 high schoolers could jump straight to the NBA. Scouts will draft you on potential alone.</p>`:C.y>=2005?`<p class="note" style="color:#c9cfe0">Since 2006 you must spend a year after high school before the draft, so college it is (one-and-done is allowed).</p>`:""}
+    <p>${C.stars<=1?`One letter. Junior colleges only. ${esc(C.bonds?.coach?.name||"Coach")} is coming with you.`:C.stars===2?"Three low-majors called. Coach drove you to all of them.":`You're a ${C.stars}-star recruit. These programs offered you a scholarship${C.bonds?.rival?`; ${esc(C.bonds.rival.name)} is already committed somewhere else`:""}.`}</p>
     <div class="mc-offers">${C.offers.map(s=>{const ros=collegeRoster(s,y);const me=calcOvr(C.a,C.pos),role=(cl.teams[s]?.roster||[]).filter(id=>cl.players[id]&&cl.players[id].ovr>me).length,rk=apRk(cl,s);
       return`<div class="mc-offer"><div><b>${esc(s)}</b><small>${esc(cl.teams[s]?.conf||"")} · Program ${pr(s)}${rk?` · Preseason AP #${rk}`:""} · ${role<=1?"Projected starter":role<=4?"Rotation role":"Bench to start"}</small></div>
-      <p>${ros.length?"Future pros: "+ros.slice(0,4).map(x=>`${esc(x.name)} ('${String(x.d).slice(2)} #${x.pick})`).join(", "):"No future NBA players on the roster yet. You'd be the star."}</p>
+      <p>${cl.teams[s]?.juco?"Junior college. Two years at most, then the portal. Nobody films these games.":ros.length?"Future pros: "+ros.slice(0,4).map(x=>`${esc(x.name)} ('${String(x.d).slice(2)} #${x.pick})`).join(", "):`Best player: ${esc(cl.players[(cl.teams[s]?.roster||[]).slice().sort((a,b)=>(cl.players[b]?.ovr||0)-(cl.players[a]?.ovr||0))[0]]?.name||"--")}. ${(C.stars||3)>=4?"You would start on day one.":"Minutes are earned here."}`}</p>
       <button class="start" data-act="mcschool" data-v="${esc(s)}">Commit to ${esc(s)}</button></div>`}).join("")}</div></div></section>`;
 }
 function mcLine(t){const g=t.gp||1;return`${(t.pts/g).toFixed(1)} PTS · ${(t.reb/g).toFixed(1)} REB · ${(t.ast/g).toFixed(1)} AST · ${(t.stl/g).toFixed(1)} STL · ${(t.blk/g).toFixed(1)} BLK`}
 function mcDecide(){
-  const h=C.hist[C.hist.length-1],st=C.stock,last=C.cls>=4||C.y>=2024;
+  const h=C.hist[C.hist.length-1],st=C.stock,last=C.cls>=ELIG,jucoOut=isJuco(C.school)&&C.cls>=2;
   return mcHead(`${C.school} · ${sl(C.y)} season complete`)+`
   <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div class="kicker">${CLASSN[C.cls-1]} season · ${h.w}-${h.l}${h.seed?` · No. ${h.seed} seed`:""}</div><h2>${esc(h.res)}</h2>
     <p>${h.ppg} PTS · ${h.rpg} REB · ${h.apg} AST · ${h.spg} STL · ${h.bpg} BLK in ${h.gp} games. OVR now ${calcOvr(C.a,C.pos)}.</p>
@@ -1533,11 +1536,11 @@ function mcDecide(){
     ${h.ap?`<p class="note" style="color:#c9cfe0">Final AP poll: No. ${h.ap}.</p>`:""}
     ${C.cl?.rec?`<p class="note" style="color:#c9cfe0">Next year's recruiting class: ${C.cl.rec.list.filter(r=>r.com===C.school).map(r=>`${"★".repeat(r.stars)} ${esc(r.name)} (${r.pos})`).join(", ")||"nobody signed"}.</p>`:""}
     <div class="kicker" style="margin-top:6px">Draft stock</div><h2 style="font-size:clamp(26px,4vw,40px)">${st?`Projected #${st}`:"Not projected to be drafted"}</h2>
-    <p>${st?`In the real ${C.y+1} draft, pick #${st} was ${esc(DB.drafts[C.y+1]?.find(r=>r[2]===st)?.[1]||"someone")}.`:"Another year could raise your stock."}</p>
+    <p>${st?(DB.drafts[C.y+1]?`In the real ${C.y+1} draft, pick #${st} was ${esc(DB.drafts[C.y+1]?.find(r=>r[2]===st)?.[1]||"someone")}.`:`Scouts have you going in the ${st<=14?"lottery":st<=30?"first round":"second round"}.`):"Another year could raise your stock."}</p>
     <div class="label" style="color:#c9cfe0">Summer training focus</div><div class="fid">${FOCI.map(([k,l])=>`<button data-act="mcfocus" data-v="${k}" aria-pressed="${C.focus===k}">${l}</button>`).join("")}</div>
     ${C.nil?`<p class="note" style="color:#c9cfe0">💰 ${nilDeals(C.nil)}. Coming back keeps the money flowing.</p>`:""}
-    <div class="go"><button class="start" data-act="mcdeclare">Declare for the ${C.y+1} draft</button>${last?"":`<button class="opt" data-act="mcreturn">Return as a ${CLASSN[C.cls]}</button>`}${!last&&portalOK(C.y+1)&&!(C.transfers||[]).length?`<button class="opt" data-act="mcportalgo">Enter the transfer portal</button>`:""}</div>
-    ${last?`<p class="note" style="color:#c9cfe0">${C.cls>=4?"Your college eligibility is used up.":"This is the last draft with real data, so it's time to go pro."}</p>`:""}</div></section>`;
+    <div class="go"><button class="start" data-act="mcdeclare">Declare for the ${C.y+1} draft</button>${last||jucoOut?"":`<button class="opt" data-act="mcreturn">Return as a ${CLASSN[C.cls]}</button>`}${!last&&(isJuco(C.school)||(portalOK(C.y+1)&&!(C.transfers||[]).length))?`<button class="opt" data-act="mcportalgo">${isJuco(C.school)?"Transfer up (portal)":"Enter the transfer portal"}</button>`:""}</div>${jucoOut?`<p class="note" style="color:#c9cfe0">Two years is the JUCO limit. The portal or the draft. ${esc(C.bonds?.coach?.name||"Coach")} already packed.</p>`:""}
+    ${last?`<p class="note" style="color:#c9cfe0">Five years. Your college eligibility is used up.</p>`:""}</div></section>`;
 }
 function mcDraft(){
   const D=C.y+1,cls=DB.drafts[D]||[],pk=C.final,team=C.dteam;
@@ -1545,8 +1548,8 @@ function mcDraft(){
   if(C.legacy)return mcDraftLegacy();
   return mcHead(`${D} NBA Draft`)+`
   <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div class="kicker">Draft night · ${D}</div>
-    <h2>${pk?`#${pk}: ${esc(team)}`:"Undrafted"}</h2>
-    <p>${pk?`With the ${pk}${["th","st","nd","rd"][(pk%100>10&&pk%100<14)?0:Math.min(pk%10,4)%4]||"th"} pick, the ${esc(team)} select ${esc(C.name)} out of ${esc(C.school)}.`:`No team called your name, but the ${esc(team)} sign you to a camp deal. Prove them wrong.`}</p>
+    <h2>${pk?(D>LAST_DATA_Y?`Projected #${pk}`:`#${pk}: ${esc(team)}`):"Undrafted"}</h2>
+    <p>${D>LAST_DATA_Y?(pk?`Scouts have you going around #${pk}. The league plays its seasons first; draft night decides the rest.`:`No team is projected to call your name. You'll sign a camp deal and prove them wrong.`):pk?`With the ${pk}${["th","st","nd","rd"][(pk%100>10&&pk%100<14)?0:Math.min(pk%10,4)%4]||"th"} pick, the ${esc(team)} select ${esc(C.name)} out of ${esc(C.school)}.`:`No team called your name, but the ${esc(team)} sign you to a camp deal. Prove them wrong.`}</p>
     ${before.length?`<div class="kicker">Picks before you</div><p>${before.map(r=>`#${r[2]} ${esc(r[1])}`).join(" · ")}</p>`:""}
     <div class="label" style="color:#c9cfe0">History fidelity for your NBA league</div><div class="fid">${[[.3,"Loose"],[.7,"Balanced"],[1,"True to history"]].map(([v,l])=>`<button data-act="mcfid" data-v="${v}" aria-pressed="${(C.fid??.7)===v}">${l}</button>`).join("")}</div>
     <div class="go"><button class="start" data-act="mcenter">Start your NBA career</button></div>
@@ -1554,6 +1557,7 @@ function mcDraft(){
 }
 async function mcEnter(){
   const D=C.y+1,btn=document.querySelector("#mc .start");if(btn){btn.disabled=true;btn.textContent="Building the league…"}
+  if(D>LAST_DATA_Y){await newHistoricalLeague(LAST_DATA_Y,C.fid??.7,true);G.userTid=pick(G.teams).tid;G.phase="preseason";G.expWins=expectedWins(G.userTid);autoLineup();const msg=t=>{if(btn)btn.textContent=t};await autoAdvance(()=>G.phase==="draft"&&G.draft&&G.draft.year===D,()=>msg(`NBA ${sl(G.year)} · ${G.phase==="season"?"day "+G.day:G.phase}…`));return mcEnterFuture(D)}
   await newHistoricalLeague(D,C.fid??.7,true);
   const row=C.final?(DB.drafts[D]||[]).find(r=>r[2]===C.final):null;let t=row&&G.teams.find(x=>x.fid===row[3]);if(!t)t=pick(G.teams);
   const p=mkPlayer({name:C.name,pos:C.pos,age:C.age,a:{...C.a},pot:C.pot,tid:t.tid,no:C.no??String(ri(0,55)),ht:C.ht,wt:C.wt});
@@ -1784,10 +1788,10 @@ function clConfs(sch,y){
   const out={};for(const c in by)by[c].forEach(s=>out[s]=c);return out;
 }
 function buildCL(y){
-  const sch=clSchools();if(C.school&&!sch.includes(C.school))sch.push(C.school);
+  const sch=clSchools();if(C.school&&!sch.includes(C.school)&&!isJuco(C.school))sch.push(C.school);
   const cl={y,teams:{},players:{},nid:1,ppp:1,day:0,phase:"reg",news:[],games:[],ap:[],apPrev:{},apHist:{},past:[],week:0};
-  const cf=clConfs(sch,y);
-  sch.forEach(s=>{cl.teams[s]={tid:s,abbr:schAbbr(s),city:s,name:"",color:schColor(s),conf:cf[s],pres:prestige(s,y),w:0,l:0,cw:0,cl:0,pf:0,pa:0,st:0,roster:[]}});
+  const cf=clConfs(sch,y);JUCOS.forEach(j=>{cf[j]="NJCAA";sch.push(j)});
+  sch.forEach(s=>{const j=isJuco(s);cl.teams[s]={tid:s,abbr:schAbbr(s),city:s,name:"",color:schColor(s),conf:cf[s],pres:j?14:prestige(s,y),juco:j||undefined,w:0,l:0,cw:0,cl:0,pf:0,pa:0,st:0,roster:[]}});
   sch.forEach(s=>{const t=cl.teams[s];
     (COLL.pros[s]||[]).forEach(x=>{const c=realCls(x,y);if(c&&!cl.players["r"+x.rid])addCP(cl,s,{real:{rid:x.rid,d:x.d,pick:x.pick},cls:c,pos:POS.includes(x.pos)?x.pos:"SF",a:realAttrs(x,y)})});
     fillRoster(cl,s)});
@@ -1805,11 +1809,12 @@ function makeSched(cl){
   const pairUp=(free,pairs)=>{const sh=shuffle(free),used=new Set();
     for(let i=0;i<sh.length;i++){const a=sh[i];if(used.has(a))continue;let j=i+1;while(j<sh.length&&(used.has(sh[j])||cl.teams[sh[j]].conf===cl.teams[a].conf))j++;
       if(j>=sh.length){j=i+1;while(j<sh.length&&used.has(sh[j]))j++}if(j<sh.length){used.add(a);used.add(sh[j]);pairs.push(R()<.5?[a,sh[j]]:[sh[j],a])}}};
+  const pairUpSplit=(free,pairs)=>{pairUp(free.filter(s=>!cl.teams[s].juco),pairs);pairUp(free.filter(s=>cl.teams[s].juco),pairs)};
   for(let d=0;d<DAYS;d++){const pairs=[],free=[];
     if(d<NC)free.push(...all);
     else{const k=d-NC;for(const c in confs){if(k>=cd[c]){free.push(...confs[c]);continue}const R0=rr[c],rd=R0[k%R0.length],flip=Math.floor(k/R0.length)%2;
       rd.forEach(([a,b])=>{if(a&&b)pairs.push(flip?[b,a]:[a,b]);else free.push(a||b)})}}
-    pairUp(free,pairs);days.push(pairs)}
+    pairUpSplit(free,pairs);days.push(pairs)}
   cl.sched=days;cl.day=0;
 }
 function clTal(cl,s){const r=cl.teams[s].roster.map(id=>cOvr(cl.players[id])).sort((a,b)=>b-a);return r.slice(0,8).reduce((a,v,i)=>a+v*[.18,.17,.15,.14,.12,.1,.08,.06][i],0)}
@@ -1822,7 +1827,7 @@ function apScores(cl){
 }
 function apPoll(cl,pre){
   const sc=apScores(cl);if(!pre&&cl.apS)for(const s in sc)sc[s]=.3*(cl.apS[s]??sc[s])+.7*sc[s];cl.apS=sc;
-  const order=Object.keys(sc).sort((a,b)=>sc[b]-sc[a]);cl.apPrev={};cl.ap.forEach((s,i)=>cl.apPrev[s]=i+1);
+  const order=Object.keys(sc).filter(s=>!cl.teams[s].juco).sort((a,b)=>sc[b]-sc[a]);cl.apPrev={};cl.ap.forEach((s,i)=>cl.apPrev[s]=i+1);
   const old1=cl.ap[0];cl.ap=order.slice(0,25);cl.apOthers=order.slice(25,33);const top=sc[order[0]],sec=sc[order[1]];
   cl.apPts=cl.ap.map((s,i)=>Math.round(65*(25-i)*(.86+.14*clamp((sc[s]-sc[order[30]])/(top-sc[order[30]]||1),0,1))+(i===0?65:0)));
   for(let i=1;i<25;i++)if(cl.apPts[i]>=cl.apPts[i-1])cl.apPts[i]=cl.apPts[i-1]-ri(3,25);
@@ -1897,8 +1902,8 @@ function ctRound(cl,watch){
 function regionNames(cl){return["East","West","South",cl.y+1<1985?"Mideast":"Midwest"]}
 const NCR=["First Round","Second Round","Sweet 16","Elite Eight","Final Four","National Championship"],NORD=[1,16,8,9,5,12,4,13,6,11,3,14,7,10,2,15];
 function selection(cl){
-  apPoll(cl);const sc=cl.apS,champs=Object.values(cl.ct).map(x=>x.champ);
-  const atl=Object.keys(cl.teams).filter(s=>!champs.includes(s)).sort((a,b)=>sc[b]-sc[a]).slice(0,64-champs.length);
+  apPoll(cl);const sc=cl.apS,champs=Object.values(cl.ct).map(x=>x.champ).filter(s=>!cl.teams[s].juco);
+  const atl=Object.keys(cl.teams).filter(s=>!champs.includes(s)&&!cl.teams[s].juco).sort((a,b)=>sc[b]-sc[a]).slice(0,64-champs.length);
   const field=[...champs,...atl].sort((a,b)=>sc[b]-sc[a]),regs=[[],[],[],[]];
   field.forEach((t,i)=>{const line=Math.floor(i/4),pos=i%4,r=line%2?3-pos:pos;regs[r].push({t,seed:line+1})});
   cl.ncaa={regs:regionNames(cl),seeds:{},rounds:[],round:0,alive:regs.flatMap((r,ri)=>NORD.map(sd=>{const e=r.find(x=>x.seed===sd);return{...e,reg:ri}}))};
@@ -2618,8 +2623,8 @@ function aiPortal(cl){if(cl.y<2018)return;const moves=[];
     ps.slice(7).forEach(p=>{if(R()<(portalOK(cl.y)?.18:.08)&&p.ovr>=44){const to=pick(Object.keys(cl.teams).filter(x=>x!==s&&cl.teams[x].roster.length<CRMAX&&Math.abs(cl.teams[x].pres-t.pres)<35));if(!to)return;
       t.roster=t.roster.filter(x=>x!==p.pid);cl.teams[to].roster.push(p.pid);p.sid=to;p.no=freeNo(cl,to);moves.push([p,s,to])}})}
   const top=moves.sort((a,b)=>b[0].ovr-a[0].ovr).slice(0,4);if(top.length)clNews(cl,`Transfer portal: ${top.map(([p,a,b])=>`${p.name} (${a} → ${b})`).join(", ")}${moves.length>4?` and ${moves.length-4} more`:""}.`,"rec")}
-function portalOffers(){const cl=C.cl,o=calcOvr(C.a,C.pos),h=C.hist[C.hist.length-1]||{ppg:0},want=clamp(25+o*.6+h.ppg*1.2,20,95);
-  const sch=Object.keys(cl.teams).filter(s=>s!==C.school).sort((a,b)=>Math.abs(cl.teams[a].pres-want)-Math.abs(cl.teams[b].pres-want));return shuffle(sch.slice(0,10)).slice(0,4).sort((a,b)=>cl.teams[b].pres-cl.teams[a].pres)}
+function portalOffers(){const cl=C.cl,o=calcOvr(C.a,C.pos),h=C.hist[C.hist.length-1]||{ppg:0},want=clamp(25+o*.6+h.ppg*1.2*(isJuco(C.school)?.4:1),20,95)-(isJuco(C.school)?22:0);
+  const sch=Object.keys(cl.teams).filter(s=>s!==C.school&&!cl.teams[s].juco).sort((a,b)=>Math.abs(cl.teams[a].pres-want)-Math.abs(cl.teams[b].pres-want));return shuffle(sch.slice(0,10)).slice(0,4).sort((a,b)=>cl.teams[b].pres-cl.teams[a].pres)}
 function mcPortal(){C.portal??=portalOffers();const cl=C.cl;
   return mcHead("Transfer portal")+`<section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="decide">← Back</button></div><div class="kicker">${sl(C.y)} offseason · immediate eligibility</div><h2>Pick your next school</h2>
     <p>Since 2021 players can transfer once and play right away. These programs called the moment your name hit the portal.</p>
@@ -2796,6 +2801,17 @@ function mcDraftLegacy(){
     <p>${pk?`With the ${pk} pick, the ${esc(t.city)} ${esc(t.name)} select ${esc(C.name)} out of ${esc(C.school)}. You'll run the ${esc(t.name)} from here.`:"No team called his name. He'll sign with a team that needs him, and that's your new team."}</p>
     <div class="go"><button class="start" data-act="mcenterlegacy">Start his NBA career</button></div></div></section>`;
 }
+function mcEnterFuture(D){const dr=G.draft;
+  const p=mkPlayer({name:C.name,pos:C.pos,age:C.age,a:{...C.a},pot:C.pot,tid:-3,no:C.no??String(ri(0,55)),ht:C.ht,wt:C.wt});
+  p.peakA={...C.peakA};p.focus=C.focus;p.everUser=true;p.look={...(C.look||lookFor(C.name))};if(C.rpg){p.rpg=C.rpg;p.sk=C.sk}dr.prospects.push(p.pid);
+  revealLottery(true);dr.started=true;const slot=C.final?Math.min(C.final,nPicks())-1:null;
+  while(dr.i<nPicks()){if(dr.i===slot){draftPick(dr.order[dr.i],p.pid);continue}draftPick(dr.order[dr.i],aiChoice())}
+  if(p.tid<0){const t=[...G.teams].sort((a,b)=>a.roster.length-b.roster.length)[0];p.tid=t.tid;t.roster.push(p.pid);p.contract={amt:MINSAL,exp:G.year+1};p.rookieYear=D;p.draft={y:D,pick:null,round:null,t:t.abbr}}
+  const t=T(p.tid);if(t.roster.length>RMAX)toFA(best(t.roster.map(P).filter(x=>x!==p),x=>-value(x)));
+  G.career={pid:p.pid,name:C.name,college:{school:C.school,hist:C.hist,awards:C.awards},draft:{y:D,pick:C.final,team:`${t.city} ${t.name}`,fid:t.fid}};G.reel=[...(C.reel||[]),...(G.reel||[])].slice(0,60);
+  news(C.final?`${C.name} goes #${C.final} to the ${t.name} in the ${D} draft.`:`${C.name} goes undrafted and signs with the ${t.name}.`,"draft");
+  G.userTid=t.tid;t.roster.forEach(x=>P(x).everUser=true);news(`You're the GM of the ${t.city} ${t.name}, the team that drafted ${C.name}. Where he goes, you go.`,"team");
+  C.stage="done";saveC();mcClose();G.tab="me";render()}
 function mcEnterLegacy(){
   const D=C.y+1,dr=G.draft;
   const p=mkPlayer({name:C.name,pos:C.pos,age:C.age,a:{...C.a},pot:C.pot,tid:-3,no:C.no??C.legacy.no??String(ri(0,55)),ht:C.ht,wt:C.wt});
@@ -3153,6 +3169,102 @@ function drawPortrait(c,look,jersey,trim,num){const x=c.getContext("2d");x.image
   const sp0=hlSprite(hlOpts(look||{},jersey,trim,num,79,{}));x.drawImage(sp0,8,10,24,24,0,0,c.width,c.height)}
 
 /*RPG_BEGIN*/
+/* ---------- CAREER SKELETON: 2026 start, star tiers, backstory-gated recruiting, JUCO, five-year eligibility, the Prologue ---------- */
+const START_Y=2026,LAST_DATA_Y=2025,ELIG=5;
+const STARS={5:{sp:500,n:"Five-star",tag:"Everybody knows your name",d:"Blue bloods call. Cameras in the gym. Five hundred points and no idea what they cost."},
+  4:{sp:400,n:"Four-star",tag:"Most people know your name",d:"High-majors call. Four hundred points. One rival, one friend, both chosen tonight."},
+  3:{sp:300,n:"Three-star",tag:"Somebody knows your name",d:"Mid-majors and a few bigger schools with a hole. Three hundred points. Enough to be good, not enough to be forgiven for it."},
+  2:{sp:150,n:"Two-star",tag:"A coach knows your name",d:"Low-majors. One hundred fifty points. Coach drives. The car has a check-engine light he calls Earl."},
+  1:{sp:1,n:"One-star",tag:"Nobody knows your name",d:"JUCO only, and you will have to transfer. One point. One. Your bus leaves at 6. Bring a pillow."}};
+const JUCOS=["Northeast Oklahoma A&M","Indian Hills CC","Salt Lake CC","Chipola College","Odessa College","South Plains College","Trinity Valley CC","Vincennes University"];
+const isJuco=s=>JUCOS.includes(s);
+function spBase(R){return STARS[R?.stars||3].sp}
+/* ---- schools a backstory opens: each Origin adds one school that fits, if it exists in the world ---- */
+const ORIG_SCHOOLS={legacy:["Duke","Kentucky","North Carolina","Kansas","UCLA"],scholar:["Stanford","Duke","Vanderbilt","Northwestern","Virginia","Notre Dame"],blacktop:["Memphis","Syracuse","Georgetown","St. John's","UNLV","Cincinnati"],
+  import:["Gonzaga","Saint Mary's","Utah","Iowa State","Oregon"],bloom:["Butler","Dayton","Creighton","Wichita State","Loyola Chicago"],comeback:["Marquette","Providence","Xavier","Houston"],custom:[]};
+function recruitOffers(){const cl=clEnsure(),stars=C.stars||3;if(stars<=1)return shuffle([...JUCOS]).slice(0,3);
+  const sch=Object.keys(cl.teams).filter(s=>!cl.teams[s].juco),pr=s=>cl.teams[s].pres,ranked=[...sch].sort((a,b)=>pr(b)-pr(a));
+  const band=stars>=5?[0,12]:stars===4?[8,40]:stars===3?[30,110]:[90,Math.max(96,ranked.length)];
+  let offers=shuffle(ranked.slice(...band)).slice(0,stars===2?3:4);
+  const fit=(ORIG_SCHOOLS[C.rpg?.origin]||[]).filter(s=>sch.includes(s)&&!offers.includes(s));
+  if(fit.length&&stars>=3){const want=fit.find(s=>stars>=5||pr(s)<=pr(ranked[band[1]-1])+10)||fit[0];offers[offers.length-1]=want}
+  return offers.sort((a,b)=>pr(b)-pr(a))}
+/* ---- the Prologue ---- */
+const PLG_F=["Marcus","Dre","Jalen","Kofi","Tobias","Elijah","Theo","Nico","Isaiah","Deshawn","Cam","Rashad","Luis","Micah","Omar","Jordan"],PLG_L=["Reed","Okafor","Bell","Vance","Mercer","Hale","Santos","Whitfield","Banks","Cole","Pryor","Holloway","Nwosu","Ferris","Greer","Lott","Adeyemi","Barlow","Castillo","Dunbar","Ellison","Foster","Gaines","Hightower","Irving","Jemison","Kincaid","Lowery","Mbeki","Navarro","Osei","Pettway","Quarles","Rucker","Sterling","Toussaint","Upshaw","Valdez","Winslow","Yarbrough"];
+const nm=seed=>PLG_F[hsh(seed)%PLG_F.length]+" "+PLG_L[hsh(seed+"l")%PLG_L.length];
+function plgCast(){if(C.plgCast)return C.plgCast;const s=C.name;const used=new Set([String(C.name).split(" ").pop()]);const nm=seed=>{let i=hsh(seed+"l")%PLG_L.length,g=0;while(used.has(PLG_L[i])&&g++<PLG_L.length)i=(i+1)%PLG_L.length;used.add(PLG_L[i]);return PLG_F[hsh(seed)%PLG_F.length]+" "+PLG_L[i]};
+  C.plgCast={friends:[{k:"big",name:nm(s+"f1"),role:"The big who set every screen",d:"6'10\", never complained, never got the ball back. He will follow you anywhere, including a school that didn't offer him.",perk:"On your roster as a walk-on. Chemistry on the floor."},
+      {k:"guard",name:nm(s+"f2"),role:"The AAU guard who thinks he's better",d:"He might be. He signed somewhere else. Your group chat is a cold war.",perk:"Across the floor twice a year. Honesty off it."},
+      {k:"manager",name:["Nia","Tasha","Maya","Simone","Jada","Imani"][hsh(s+"f3")%6]+" "+nm(s+"f3").split(" ")[1],role:"The manager who films everything",d:"Four years of your highlights are on a hard drive in her backpack. So are the lowlights.",perk:"The YouTube series. Attention, when it arrives, arrives faster."}],
+    rivals:[{k:"pos",name:nm(s+"r1"),role:"The other No. 1 at your position",d:"Every ranking has you two in some order. He has never said your name in an interview.",where:"top"},
+      {k:"clip",name:nm(s+"r2"),role:"The kid you dunked on",d:"1.1 million views. 40% bots. He has watched it more than you have.",where:"mid"},
+      {k:"home",name:nm(s+"r3"),role:"The hometown star",d:"He went to the school that didn't offer you. The town picked him. The town was wrong, probably.",where:"home"}],
+    coach:{name:"Coach "+nm(s+"c").split(" ")[1],d:"Two years in your gym at 6 a.m. Nobody is sure he has a job. He has a clipboard and a cough and he saw it first."},
+    mother:{name:"Your mother",job:["a nurse on nights","a bus dispatcher","a paralegal","a pastor's wife","a line cook"][hsh(s+"m")%5]}};
+  return C.plgCast}
+function plgPanels(){const st=C.stars||3,cast=plgCast(),og=ORIGINS.find(o=>o.k===C.rpg?.origin)||ORIGINS[6];
+  const hi=st>=4,mid=st===3;
+  const P=[];
+  P.push({scene:hi?"full":mid?"half":"empty",title:"Where you're from",txt:hi?"Four hundred people came to watch you warm up. One of them is here to buy you.":mid?"Thirty people. Two of them are coaches. One is your mother and she is on her break.":"Nobody. Well. One. He has been here every day for two years and I am not sure he has a job."});
+  if(hi)P.push({scene:"full",title:"The people",txt:"Three of them matter. Pick one. The other two will remember that you did.",pick:"friend",opts:cast.friends});
+  else if(mid)P.push({scene:"half",title:"The people",txt:`${cast.friends[0].name} sat next to you on every bus. He carries a speaker, a charger and your bag when you forget it. He is your friend. That part isn't a choice.`,auto:{friend:0}});
+  else P.push({scene:"empty",title:"The people",txt:`${cast.coach.name}. ${cast.coach.d} He sees it. I see it too, but I am not allowed to say.`,auto:{coach:1}});
+  if(hi)P.push({scene:"full",title:"The other one",txt:"Every story needs one. Pick yours. He will be placed on a real roster and the game will keep score.",pick:"rival",opts:cast.rivals});
+  else if(mid)P.push({scene:"half",title:"The other one",txt:"No rival yet. Yours is out there. He will introduce himself by scoring on you."});
+  else P.push({scene:"empty",title:"The other one",txt:`${cast.rivals[2].name} took your spot at the school that passed. He does not know you exist. That is the plan.`,auto:{rival:2}});
+  P.push({scene:"table",title:"The offers",txt:hi?"Eleven letters. You will read four.":mid?"Two letters and an email.":`One letter, from a junior college, and ${cast.coach.name}: "I called them. I may have exaggerated."`});
+  P.push({scene:"night",title:"The night before",txt:og.k==="legacy"?`${cast.mother.name}, awake. "Your father's number was 23 too. Pick something else."`:hi?`${cast.mother.name}, ${cast.mother.job}, awake. She asks if you ate. You lie. She knows.`:mid?`${cast.mother.name}, ${cast.mother.job}, asleep on the couch. You eat standing up.`:`${cast.coach.name} drives. The car has a check-engine light he calls Earl.`});
+  P.push({scene:"arch",title:"The Architect",txt:st>=5?"You have five hundred points and no idea what they cost. We will fix that.":st===4?"Four hundred points. Enough that people will expect things. Expectations are the first thing this game takes.":st===3?"Three hundred. Enough to be good. Not enough to be forgiven for it.":st===2?"One hundred fifty. Coach says it's plenty. Coach also says the car is fine.":"One point. Spend it wisely. Or don't; there is a certain honesty to being bad on purpose. Your bus leaves at 6. Bring a pillow."});
+  return P}
+function mcPrologue(){const P=plgPanels(),i=clamp(C.plg||0,0,P.length-1),p=P[i],picks=C.plgPick??={};
+  if(p.auto)for(const k in p.auto)picks[k]=p.auto[k];
+  const need=p.pick&&picks[p.pick]==null;
+  setTimeout(()=>plgDraw(p.scene),0);
+  return`<div class="plg"><div class="plg-scene"><canvas id="plg-cv"></canvas><div class="plg-cap"><small>Prologue · ${i+1} / ${P.length}</small><b>${esc(p.title)}</b></div></div>
+    <div class="plg-txt"><p class="arch">${esc(p.txt)}</p>
+    ${p.pick?`<div class="plg-opts">${p.opts.map((o,j)=>`<button class="mp-card ${picks[p.pick]===j?"picked":""}" data-act="plgpick" data-v="${p.pick}:${j}"><b>${esc(o.name)}</b><span class="chip">${esc(o.role)}</span><p>${esc(o.d)}</p>${o.perk?`<small>${esc(o.perk)}</small>`:""}</button>`).join("")}</div>`:""}
+    <div class="mp-nav">${i>0?`<button class="mp-btn" data-act="plgnav" data-v="-1">← Back</button>`:`<button class="mp-btn" data-act="mcback" data-v="create">← Creation</button>`}<span></span><button class="mp-btn main" data-act="plgnav" data-v="1" ${need?"disabled":""}>${i<P.length-1?"Next →":"Open the letters →"}</button></div></div></div>`}
+function plgNav(d){const P=plgPanels();const n=(C.plg||0)+d;if(n>=P.length){plgFinish();return}C.plg=Math.max(0,n);saveC();mcRender()}
+function plgPick(v){const[k,j]=v.split(":");(C.plgPick??={})[k]=+j;saveC();mcRender()}
+function plgFinish(){const cast=plgCast(),pk=C.plgPick||{};C.bonds={};
+  if(pk.friend!=null)C.bonds.friend={...cast.friends[pk.friend],lv:30,met:C.y};
+  if(pk.rival!=null)C.bonds.rival={...cast.rivals[pk.rival],lv:-20,hh:[0,0]};
+  if(pk.coach!=null||(C.stars||3)<=2)C.bonds.coach={...cast.coach,lv:45,follows:true};
+  C.bonds.mother={...cast.mother,lv:60};C.plgDone=true;C.offers=null;C.stage="offers";saveC();mcRender()}
+/* seed the rival onto a real roster and the friend onto yours; called when you commit to a school */
+function bondsSeed(){const cl=C.cl,b=C.bonds;if(!cl||!b||b.seeded)return;b.seeded=true;
+  if(b.rival){const pr=s=>cl.teams[s].pres,sch=Object.keys(cl.teams).filter(s=>s!==C.school&&!cl.teams[s].juco).sort((a,c)=>pr(c)-pr(a));
+    const pool=b.rival.where==="top"?sch.slice(0,10):b.rival.where==="mid"?sch.slice(10,50):sch.slice(0,30);const s=pick(pool);
+    const cand=cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&!p.real&&p.cls===1).sort((x,y)=>y.ovr-x.ovr)[0]||cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&!p.real)[0];
+    if(cand){cand.name=b.rival.name;cand.pos=C.pos;cand.ovr=Math.max(cand.ovr,calcOvr(C.a,C.pos)+ri(0,4));cand.rival=true;b.rival.pid=cand.pid;b.rival.school=s;ensureRivalry&&(cl.rivalPid=cand.pid)}}
+  if(b.friend&&b.friend.k==="big"){const t=cl.teams[C.school];const fk=t.roster.map(id=>cl.players[id]).filter(p=>p&&!p.real&&p.pid!=="me").sort((x,y)=>x.ovr-y.ovr)[0];
+    if(fk){fk.name=b.friend.name;fk.pos="C";fk.ht=82;fk.cls=1;fk.friend=true;b.friend.pid=fk.pid}}
+  if(b.friend&&b.friend.k!=="big"){const sch=Object.keys(cl.teams).filter(s=>s!==C.school&&!cl.teams[s].juco);const s=pick(sch);const c=cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&!p.real&&p.cls===1)[0];if(c){c.name=b.friend.name;c.friend=true;b.friend.pid=c.pid;b.friend.school=s}}
+  if(b.coach)cl.teams[C.school].coach=b.coach.name.replace(/^Coach /,"")}
+/* ---- prologue scenes drawn with the hub's pieces ---- */
+function plgDraw(kind){const cv=$("plg-cv");if(!cv)return;const W=cv.clientWidth||800,H=cv.clientHeight||300,sc=clamp(Math.round(Math.min(W/400,H/180)),1,3),iw=Math.ceil(W/sc),ih=Math.ceil(H/sc);
+  if(cv.width!==iw*sc||cv.height!==ih*sc){cv.width=iw*sc;cv.height=ih*sc}const g=cv.getContext("2d");g.setTransform(sc,0,0,sc,0,0);g.imageSmoothingEnabled=false;const floorY=Math.round(ih*.76),hc="#2f6fd6";
+  let seed=hsh(kind+C.name);const rr=()=>{seed=(Math.imul(seed,1103515245)+12345)>>>0;return(seed>>>8)/16777216};
+  if(kind==="night"){g.fillStyle="#0b0f1a";g.fillRect(0,0,iw,ih);const city=hubImg("bg/city_night.png");if(okImg(city)){const k=ih/city.naturalHeight;g.drawImage(city,0,0,city.naturalWidth*k,ih)}
+    g.fillStyle="#1a1a24";g.fillRect(0,floorY,iw,ih-floorY);g.fillStyle="#ffd16633";g.fillRect(iw*.5-40,floorY-60,80,60);const sh=charSheet(charLook({jersey:"#2b2f40",shorts:"#2b2f40"}));if(sh)drawChar(g,sh,"idle",performance.now()/1000,iw*.5,floorY,-1,2);
+    g.fillStyle="#000a";g.fillRect(0,0,iw,ih*.08);return}
+  if(kind==="arch"){g.fillStyle="#05070f";g.fillRect(0,0,iw,ih);for(let i=0;i<60;i++){g.fillStyle=`rgba(255,209,102,${.2+rr()*.6})`;g.fillRect(Math.floor(rr()*iw),Math.floor(rr()*ih*.7),1,1)}
+    g.fillStyle="#1b1b22";g.fillRect(0,floorY,iw,ih-floorY);g.fillStyle="#ffd166";glyphs(g,"THE ARCHITECT",Math.round(iw/2-52),Math.round(ih*.4),"#ffd166",2);const sh=charSheet(charLook({jersey:hc,shorts:hc}));if(sh)drawChar(g,sh,"idle",performance.now()/1000,iw*.5,floorY,1,2);return}
+  if(kind==="table"){g.fillStyle="#eadfc7";g.fillRect(0,0,iw,ih);g.fillStyle="#d9ccae";g.fillRect(0,floorY-40,iw,40);g.fillStyle="#6b4a2f";g.fillRect(iw*.2,floorY-20,iw*.6,14);g.fillStyle="#4a3220";g.fillRect(iw*.2,floorY-6,6,ih-floorY);g.fillRect(iw*.8-6,floorY-6,6,ih-floorY);
+    const n=(C.stars||3)>=4?11:(C.stars||3)===3?3:1;for(let i=0;i<n;i++){g.fillStyle="#fff";g.fillRect(iw*.22+i*(iw*.56/Math.max(1,n-1||1))*(n>1?1:0)+(n===1?iw*.26:0),floorY-34,22,14);g.fillStyle="#2f6fd6";g.fillRect(iw*.22+i*(iw*.56/Math.max(1,n-1||1))*(n>1?1:0)+(n===1?iw*.26:0)+3,floorY-31,16,2)}
+    g.fillStyle="#a57440";g.fillRect(0,floorY,iw,ih-floorY);const sh=charSheet(charLook({jersey:hc,shorts:hc}));if(sh)drawChar(g,sh,"idle",performance.now()/1000,iw*.5,floorY+30,1,2);return}
+  // gym: full / half / empty
+  g.fillStyle="#eadfc7";g.fillRect(0,0,iw,floorY);g.fillStyle="#d9d0b8";g.fillRect(0,0,iw,60);g.fillStyle="#1d2238";g.fillRect(0,floorY-40,iw,40);g.fillStyle=hc;g.fillRect(0,floorY-14,iw,5);
+  const fill=kind==="full"?.95:kind==="half"?.35:.04;
+  for(let r=0;r<4;r++){const y=floorY-56-r*22,x0=40+r*8,x1=iw-40-r*8;g.fillStyle=r%2?"#b9c7e0":"#a7b7d4";g.fillRect(x0,y,x1-x0,20);g.fillStyle="#0003";g.fillRect(x0,y+19,x1-x0,2);
+    for(let x=x0+8;x<x1-10;x+=18){if(rr()>fill)continue;const sk=SKN[Math.floor(rr()*6)];g.fillStyle=[hc,"#f4f1ea","#2b2f40","#ffd166","#c8102e"][Math.floor(rr()*5)];g.fillRect(x,y+4,10,13);g.fillStyle=sk;g.fillRect(x+2,y-4,6,8);g.fillStyle="#17121c";g.fillRect(x+1,y-6,8,4);if(kind==="full"&&rr()<.3){g.fillStyle="#fff";g.fillRect(x+3,y-1,4,3)}}}
+  const tones=["#e4bb80","#dcb074","#e9c48c","#d5a86c"];for(let y=floorY;y<ih;y+=5){let x=-Math.floor(rr()*30);while(x<iw){const L=30+Math.floor(rr()*50);g.fillStyle=tones[Math.floor(rr()*4)];g.fillRect(Math.max(0,x),y,L,5);x+=L}}
+  const me=charSheet(charLook({jersey:hc,shorts:hc}));if(me)drawChar(g,me,"drib",performance.now()/1000,iw*.5,floorY+20,1,2);
+  if(kind==="empty"){const co=charSheet(charLook({style:"A",tone:2,hairc:7,jersey:"#2b2f40",shorts:"#2b2f40",shoes:"#222222"}));if(co)drawChar(g,co,"idle",performance.now()/1000,iw*.5+90,floorY+20,-1,2);g.fillStyle="#8a90a0";g.fillRect(iw*.12,floorY-10,10,30);g.fillStyle="#ffd166";g.fillRect(iw*.12-4,floorY+16,18,8)}
+  if(kind==="full"){for(let i=0;i<3;i++){const sh=charSheet(charLook({style:i%2?"B":"A",tone:(i*2+1)%6,hairc:i,jersey:"#f4f1ea",shorts:"#2b2f40"}));if(sh)drawChar(g,sh,"idle",performance.now()/1000+i,iw*.2+i*40,floorY+24,1,2)}}
+}
+let PLGT=null;function plgLoop(){clearTimeout(PLGT);if(!$("plg-cv"))return;const P=plgPanels();plgDraw(P[clamp(C.plg||0,0,P.length-1)].scene);PLGT=setTimeout(plgLoop,120)}
+
 /* =====================================================================
    MYCAREER RPG CORE: skills (point-buy), body, origins, traits, EXP, levels,
    daily events, rested EXP, goals, respec + loadouts
@@ -3225,7 +3337,7 @@ function skBase(k,b,age){
 function rpgFlat(R){const o={};const add=s=>{for(const k in s||{})o[k]=(o[k]||0)+s[k]};const og=ORIGINS.find(x=>x.k===R.origin);if(og)add(og.sk);(R.traits||[]).forEach(t=>{const tt=TRAITS.find(x=>x.k===t);if(tt){add(tt.sk);add(tt.skx)}});return o}
 function skUp(base,pts){let v=base,left=pts;while(left>=skCost(v)){left-=skCost(v);v++}return{v,left}}
 function rpgSkills(R,age){const fl=rpgFlat(R),o={};for(const k of SKK){const b=skBase(k,R.body,age)+(fl[k]||0);o[k]=skUp(b,R.alloc[k]||0).v}return o}
-function rpgTotal(R){const og=ORIGINS.find(x=>x.k===R.origin);return SP0+(og?.sp||0)+(R.traits||[]).reduce((a,t)=>a+(TRAITS.find(x=>x.k===t)?.sp||0),0)+(R.spLv||0)+(R.spBonus||0)}
+function rpgTotal(R){const og=ORIGINS.find(x=>x.k===R.origin);return spBase(R)+(og?.sp||0)+(R.traits||[]).reduce((a,t)=>a+(TRAITS.find(x=>x.k===t)?.sp||0),0)+(R.spLv||0)+(R.spBonus||0)}
 function rpgSpent(R){return SKK.reduce((a,k)=>a+(R.alloc[k]||0),0)}
 function rpgFree(R){return rpgTotal(R)-rpgSpent(R)}
 function skToA(s){const r=x=>clamp(Math.round(x),25,115);
@@ -3279,7 +3391,7 @@ function rpgGoalsCheck(R){if(!R)return;let any=true,guard=0;while(any&&guard++<2
       R.keys=(R.keys||0)+Math.max(1,Math.round((today().drop||1)));R.exp+=xp;while(R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R)+(today().spB||0);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
       (R.toast??=[]).push(`Goal complete: ${g.t} (+${xp.toLocaleString()} EXP, +1 crate key)`);any=true}}}
 /* ---- new careers start here ---- */
-function rpgNew(){return{v:1,origin:"custom",tags:[],traits:[],body:{ht:78,wt:205,ws:82},pos:"SF",alloc:{},lv:1,exp:0,spLv:0,spBonus:0,rest:0,last:Date.now(),keys:0,goals:{},loads:[null,null,null],rec:null}}
+function rpgNew(){return{v:1,origin:"custom",stars:3,tags:[],traits:[],body:{ht:78,wt:205,ws:82},pos:"SF",alloc:{},lv:1,exp:0,spLv:0,spBonus:0,rest:0,last:Date.now(),keys:0,goals:{},loads:[null,null,null],rec:null}}
 function autoBuild(R,age,style){R.alloc={};const pri={shooter:["THR","MID","SIQ","FT","CLS","HND","PER","SPD","ACC","CLU"],slasher:["LAY","DNK","ACC","SPD","VRT","HND","DRW","CLS","STR","PER"],
     playmaker:["HND","PAS","VIS","ACC","MID","SPD","SIQ","STL","PER","THR"],twoway:["PER","STL","THR","MID","ACC","SPD","INT","VRT","SIQ","DRB"],big:["INT","BLK","DRB","ORB","CLS","DNK","PST","STR","VRT","STA"]}[style];
   let guard=0;while(rpgFree(R)>0&&guard++<4000){const s=rpgSkills(R,age);let best=null,bv=-1e9;pri.forEach((k,i)=>{const w=(10-i)*1.4-(s[k]-50)*.35;if(w>bv&&skCost(s[k])<=rpgFree(R)){bv=w;best=k}});if(!best)break;R.alloc[best]=(R.alloc[best]||0)+skCost(s[best])}}
@@ -3490,17 +3602,18 @@ function mpWin(title,body,opt={}){return`<div class="mp-win ${opt.cls||""}"><div
 function rpgSummary(R,age){const s=rpgSkills(R,age),a=skToA(s),pos=C?.pos||rpgP()?.pos||"SF",ovr=calcOvr(a,pos);
   return`<div class="mp-sum"><div><small>Archetype</small><b>${archName(s,R.body.ht)}</b></div><div><small>Overall</small><b>${ovr}</b></div><div><small>Points left</small><b class="${rpgFree(R)>0?"hot":""}">${rpgFree(R)}</b></div><div><small>Height</small><b>${ftin(R.body.ht)}</b></div><div><small>Wingspan</small><b>${ftin(R.body.ws)}</b></div><div><small>Weight</small><b>${R.body.wt} lb</b></div></div>`}
 /* ---- creation: origin → body & look → skills → traits ---- */
-const CSTEPS=[["origin","Origin"],["body","Body & look"],["skills","Skills"],["traits","Traits"]];
+const CSTEPS=[["origin","Origin"],["stars","Stars"],["body","Body & look"],["skills","Skills"],["traits","Traits"]];
 function mcCreate(){
   C.rpg??=rpgNew();const R=C.rpg,st=C.cs||"origin",i=CSTEPS.findIndex(x=>x[0]===st),age=18;
   C.look??=lookFor(C.name);C.no??=String(ri(0,55));C.pos??="SF";R.body.ht??=78;
   const steps=`<nav class="mp-tabs">${CSTEPS.map(([k,l],j)=>`<button data-act="rstep" data-v="${k}" aria-current="${k===st}" ${j>i+1?"disabled":""}>${j+1}. ${l}</button>`).join("")}</nav>`;
-  const nav=`<div class="mp-nav">${i>0?`<button class="mp-btn" data-act="rstep" data-v="${CSTEPS[i-1][0]}">← Back</button>`:""}<span></span>${i<CSTEPS.length-1?`<button class="mp-btn main" data-act="rstep" data-v="${CSTEPS[i+1][0]}">Next: ${CSTEPS[i+1][1]} →</button>`:`<button class="mp-btn main" data-act="mcoffers" ${rpgFree(R)>0?`title="You still have ${rpgFree(R)} points to spend"`:""}>Start his story →</button>`}</div>`;
-  const yrs=[];for(let y=2024;y>=1969;y--)yrs.push(y);
+  const nav=`<div class="mp-nav">${i>0?`<button class="mp-btn" data-act="rstep" data-v="${CSTEPS[i-1][0]}">← Back</button>`:""}<span></span>${i<CSTEPS.length-1?`<button class="mp-btn main" data-act="rstep" data-v="${CSTEPS[i+1][0]}">Next: ${CSTEPS[i+1][1]} →</button>`:`<button class="mp-btn main" data-act="mcoffers" ${rpgFree(R)>0?`title="You still have ${rpgFree(R)} points to spend"`:""}>Begin the Prologue →</button>`}</div>`;
   let body="";
   if(st==="origin")body=mpWin("Who is he?",`<div class="mp-form"><label>Name <input id="mc-name" class="mp-in" maxlength="24" value="${esc(C.name)}"></label>
-      ${C.legacy?`<div class="mp-note">Generation ${C.legacy.gen}. Son of ${esc(C.legacy.parent)}. He'll wear No. ${esc(C.legacy.no??"--")} and get a recruiting boost.</div>`:`<label>Freshman season <select id="mc-year" class="mp-in">${yrs.map(y=>`<option value="${y}" ${y===C.startY?"selected":""}>${sl(y)}</option>`).join("")}</select></label>`}</div>`)
+      ${C.legacy?`<div class="mp-note">Generation ${C.legacy.gen}. Son of ${esc(C.legacy.parent)}. He'll wear No. ${esc(C.legacy.no??"--")} and get a recruiting boost.</div>`:`<div class="mp-note">Freshman season: <b>${sl(START_Y)}</b>. This is your 2K27. One to five years of college, then the league.</div>`}</div>`)
     +mpWin("Choose an origin",`<div class="mp-orig">${ORIGINS.map(o=>`<button class="mp-card ${R.origin===o.k?"picked":""}" data-act="rorig" data-v="${o.k}"><b>${o.n}</b>${o.tag?`<span class="chip">[${o.tag}]</span>`:""}<p>${o.bio}</p><small>${o.trait}</small>${o.sig?`<em>Signature: ${o.sig}</em>`:""}</button>`).join("")}</div>`);
+  else if(st==="stars")body=mpWin("How good are you right now?",`<div class="mp-note">Your star rating sets your starting skill points and which doors open at the recruiting table. Your backstory decides which of those doors have your name on them. The game never caps you later: a one-star can become anything, slowly.</div>
+      <div class="mp-orig">${[5,4,3,2,1].map(k=>{const s=STARS[k];return`<button class="mp-card ${(R.stars||3)===k?"picked":""}" data-act="rstars" data-v="${k}"><b>${"★".repeat(k)}${"☆".repeat(5-k)} ${s.n}</b><span class="chip">${s.sp} SP</span><small>${s.tag}</small><p>${s.d}</p>${k===1?`<em>JUCO only. Mandatory transfer. Underdog EXP bonuses.</em>`:k>=4?`<em>Prologue: choose a friend and a rival.</em>`:k===2?`<em>Prologue: Coach follows you.</em>`:`<em>Prologue: one friend, no rival yet.</em>`}</button>`}).join("")}</div>`);
   else if(st==="body"){const hts=[];for(let h=66;h<=91;h++)hts.push(h);const wts=[];for(let w=150;w<=330;w+=5)wts.push(w);const wss=[];for(let w=R.body.ht-2;w<=R.body.ht+12;w++)wss.push(w);
     body=`<div class="mp-two"><div class="mp-col">${mpWin("Body",`<div class="mp-form">
       <div class="mp-lab">Position</div><div class="fid">${POS.map(p=>`<button data-act="mcpos" data-v="${p}" aria-pressed="${C.pos===p}">${p}</button>`).join("")}</div>
@@ -3510,12 +3623,12 @@ function mcCreate(){
       <div class="mp-note">Any height at any position. Height raises your floor for blocks, boards, interior defense and dunking, lowers it for speed and handle, and raises your ceiling: the taller you are, the higher you can climb. Wingspan helps steals, blocks and contests. Weight trades speed for strength.</div></div>`)}
       ${mpWin("Look",avOpts(C.look,"mclook")+noSelect("mc-no",C.no)+`<div class="actions" style="margin-top:8px"><button class="mp-btn" data-act="mclookrand">Randomize</button></div>`)}</div>
       <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas><canvas data-show='${showData("back")}' width="${SHW}" height="${SHH}"></canvas></div><div class="mp-show-s"><canvas class="av-sm" data-av='${esc(JSON.stringify({l:C.look,j:rpgJersey()[0],t:"#f4f1ea",h:R.body.ht}))}' width="40" height="56"></canvas><small>How he looks on the court</small></div>`)}</div></div>`}
-  else if(st==="skills")body=`<div class="mp-two"><div class="mp-col">${mpWin("Skills",`<div class="mp-pts"><span>${rpgTotal(R)} to start. The next point costs 1 under 60, 2 under 75, 3 under 85, 4 under 95, then more. No cap.</span><b>${rpgFree(R)}</b></div>
+  else if(st==="skills")body=`<div class="mp-two"><div class="mp-col">${mpWin("Skills",`<div class="mp-pts"><span>${rpgTotal(R)} to start (${"★".repeat(R.stars||3)}). The next point costs 1 under 60, 2 under 75, 3 under 85, 4 under 95, then more. No cap.</span><b>${rpgFree(R)}</b></div>
       <div class="actions"><button class="mp-btn" data-act="rauto" data-v="shooter">Auto: Shooter</button><button class="mp-btn" data-act="rauto" data-v="slasher">Slasher</button><button class="mp-btn" data-act="rauto" data-v="playmaker">Playmaker</button><button class="mp-btn" data-act="rauto" data-v="twoway">Two-way</button><button class="mp-btn" data-act="rauto" data-v="big">Big</button><button class="mp-btn" data-act="rreset">Reset</button></div>${skGroups(R,age,true)}`)}</div>
       <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>`+rpgSummary(R,age))}</div></div>`;
   else body=mpWin("Traits (pick up to 2)",`<div class="mp-orig">${TRAITS.map(t=>{const on=R.traits.includes(t.k);return`<button class="mp-card ${on?"picked":""}" data-act="rtrait" data-v="${t.k}" ${!on&&R.traits.length>=2?"disabled":""}><b>${t.n}</b><p class="up">▲ ${t.up}</p><p class="dn">▼ ${t.down}</p></button>`}).join("")}</div>`)
     +mpWin("Summary",rpgSummary(R,age)+`<div class="mp-note">You can respec for free at any time from the Character window (press C) and save three loadouts.</div>`);
-  return mcHead("Create your player. Choose an origin, build his body, spend 300 skill points.")+`<div class="mp">${steps}${body}${nav}</div>`;
+  return mcHead(`Create your player. Choose a backstory and a star rating, build his body, spend ${rpgTotal(R)} skill points.`)+`<div class="mp">${steps}${body}${nav}</div>`;
 }
 /* ---- the Character window (in college and in the league) ---- */
 function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetTab||"stat");const t=C?.sheetTab||tab||"stat",age=rpgAge(),s=rpgSkills(R,age),ev=today();
@@ -4624,8 +4737,8 @@ document.addEventListener("click",e=>{
     case"mcrespin":if(C.respins>0){C.respins--;C.cur=null;$("mc").querySelector('[data-act="mcspin"]')?.removeAttribute("disabled");const pool=reelPool();C.cur=Math.floor(R()*pool.length);mcRender()}return;
     case"mctake":{const cur=reelPool()[C.cur];C.slots[d.k]={n:cur.n,v:cur.a[d.k]};C.cur=null;mcRender();return}
     case"mcreset":C.slots={};C.cur=null;C.respins=2;mcRender();return;
-    case"mcoffers":{if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);C.age=18;C.y=C.startY;C.cls=1;rpgApply();C.stars=Math.min(5,(C.pot>=93?5:C.pot>=86?4:3)+(C.legacy?1:0)+(C.rpg.origin==="legacy"?1:0));
-      C.scoutN=Math.round(gauss()*4);C.offers=null;C.stage="offers";C.rpg.last=Date.now();mcRender();return}
+    case"mcoffers":{if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);C.age=18;C.y=START_Y;C.startY=START_Y;C.cls=1;rpgApply();
+      C.stars=C.rpg.stars||3;C.scoutN=Math.round(gauss()*4);C.offers=null;C.plg=0;C.plgPick={};C.plgCast=null;C.stage=C.legacy?"offers":"prologue";C.rpg.last=Date.now();mcRender();return}
     case"rstep":{if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);if($("mc-year")&&!C.legacy)C.startY=+$("mc-year").value;if($("mc-no"))C.no=$("mc-no").value;C.cs=d.v;mcRender();$("mc").scrollTop=0;return}
     case"rorig":{C.rpg.origin=d.v;const og=ORIGINS.find(o=>o.k===d.v);C.rpg.tags=og?.tag?[og.tag]:[];if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);mcRender();return}
     case"rsk":{const R=rpgS();if(!R)return;const age=rpgAge(),k=d.k;let n=+d.n;
@@ -4639,7 +4752,8 @@ document.addEventListener("click",e=>{
     case"rrespec":{const R=rpgS();R.alloc={};rpgApply();if(rpgP())save();else saveC();openSheet("skills");toast("All points refunded.");return}
     case"rsave":{const R=rpgS(),age=rpgAge();(R.loads??=[null,null,null])[+d.v]={n:archName(rpgSkills(R,age),R.body.ht),pts:rpgSpent(R),alloc:{...R.alloc}};if(rpgP())save();else saveC();openSheet("loads");return}
     case"rload":{const R=rpgS(),L=R.loads?.[+d.v];if(!L)return;R.alloc={...L.alloc};let guard=0;while(rpgFree(R)<0&&guard++<500){const k=Object.keys(R.alloc).sort((a,b)=>R.alloc[b]-R.alloc[a])[0];R.alloc[k]--}rpgApply();if(rpgP())save();else saveC();openSheet("skills");toast(`Loaded: ${L.n}`);return}
-    case"mcschool":C.school=d.v;C.stage="college";seasonSetup();mcRender();return;
+    case"mcschool":C.school=d.v;C.stage="college";seasonSetup();bondsSeed();mcRender();return;
+    case"plgnav":plgNav(+d.v);return;case"plgpick":plgPick(d.v);return;case"rstars":{C.rpg.stars=+d.v;C.stars=+d.v;saveC();mcRender();return}
     case"mcgame":{const n=+d.n,s=C.season;for(let i=0;i<n&&s.games.length<31;i++)collegeGame(s.opps[s.games.length],false);mcRender();return}
     case"mctourney":{const s=C.season;while(s.games.length<31)collegeGame(s.opps[s.games.length],false);runTourney();closeSeason();
       if(C.legacy){mcRender();legacyCatchUp(C.y+1).then(()=>{mcRender();toast(`Meanwhile in the NBA: the ${G.recaps?.[0]?.champ||"season"} wrapped up.`)});return}mcRender();return}
