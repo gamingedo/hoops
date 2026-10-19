@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="037c650246";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="72c8096a52";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -327,6 +327,8 @@ tr.me td{background:#ffd16614}
 .news li.nk-mine{border-left:3px solid var(--led)}.news li.nk-upset{border-left:3px solid var(--bad)}
 .sheet>*{min-width:0;max-width:100%}
 .sel{display:grid;grid-template-columns:repeat(2,1fr);gap:4px;text-align:left;font-size:13px}.sel div{padding:4px 8px;border-radius:6px;background:#ffffff08}.sel div.me{background:#ffd16633;color:var(--led);font-weight:800}.sel b{display:inline-block;width:22px;color:#a9b1c7}
+th.srt{cursor:pointer;user-select:none;-webkit-user-select:none;white-space:nowrap}th.srt::after{content:" ⇅";opacity:.3;font-size:.85em}
+th.srt[data-sort="asc"]::after{content:" ▲";opacity:1;color:var(--led)}th.srt[data-sort="desc"]::after{content:" ▼";opacity:1;color:var(--led)}
 /* ===== rivals, goals, ceremonies ===== */
 .riv{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;text-align:center;margin-bottom:8px}.riv b{display:block;font:900 18px var(--f-display);text-transform:uppercase}.riv small{color:#a9b1c7}.riv>span{font:900 20px var(--f-display);color:var(--led)}
 .rivt td{text-align:center}.dash-riv{font:600 13px var(--f-body);color:#c9cfe0}.dash-riv b{color:var(--paper)}
@@ -2554,6 +2556,32 @@ function drawRafters(h){const cv=$("rafters");if(!cv)return;const g=cv.getContex
     pxText(g,String(x.y+1).slice(-2),bx+11,12,x.res==="NC"?"#14100c":"#fff",1,"c");pxText(g,x.res==="NC"?"NC":x.res==="F4"||x.res==="RU"?"F4":"CF",bx+11,26,x.res==="NC"?"#14100c":"#ffd166",1,"c")})}
 
 
+
+/* ---------- sortable tables: tap a header for ascending, again for descending, again to reset ---------- */
+const SORTS={};
+const tKey=t=>[...t.querySelectorAll("thead th")].map(th=>th.textContent.trim()).join("|");
+const YRS={fr:1,so:2,jr:3,sr:4};
+function cellVal(td){const s=(td?.textContent||"").trim();if(!s||s==="--"||s==="—")return null;
+  let m=s.match(/^(\d+)'(\d+)/);if(m)return +m[1]*12+ +m[2];
+  m=s.match(/^(\d+)-(\d+)(\s|$)/);if(m&&!/^\d{4}-\d{2}$/.test(s)){const w=+m[1],l=+m[2];return w+l?w/(w+l)+w*1e-6:0}
+  if(YRS[s.toLowerCase()])return YRS[s.toLowerCase()];
+  m=s.replace(/[,$%#×+]/g,"").match(/^-?\d+(\.\d+)?/);if(m){let v=parseFloat(m[0]);if(/M\b/.test(s))v*=1;if(/K\b/.test(s))v/=1000;return v}
+  return s.toLowerCase()}
+function sortTable(t){const st=SORTS[tKey(t)],tb=t.tBodies[0];if(!tb)return;
+  const rows=[...tb.rows];rows.forEach((r,i)=>{if(r.dataset.oi==null)r.dataset.oi=i});
+  const pin=rows.filter(r=>r.dataset.pin),rest=rows.filter(r=>!r.dataset.pin);
+  if(!st||!st.dir)rest.sort((a,b)=>a.dataset.oi-b.dataset.oi);
+  else{const c=st.col,d=st.dir==="asc"?1:-1;rest.sort((a,b)=>{const x=cellVal(a.cells[c]),y=cellVal(b.cells[c]);
+    if(x==null&&y==null)return a.dataset.oi-b.dataset.oi;if(x==null)return 1;if(y==null)return -1;
+    const r=typeof x==="number"&&typeof y==="number"?x-y:String(x).localeCompare(String(y));return r*d||a.dataset.oi-b.dataset.oi})}
+  [...rest,...pin].forEach(r=>tb.appendChild(r));
+  t.querySelectorAll("thead th").forEach((th,i)=>{th.classList.add("srt");th.dataset.sort=st&&st.dir&&st.col===i?st.dir:""});t.dataset.sorted="1"}
+document.addEventListener("click",e=>{const th=e.target.closest("thead th");if(!th||!th.textContent.trim()||th.closest("[data-nosort]"))return;
+  const t=th.closest("table"),k=tKey(t),i=[...th.parentNode.children].indexOf(th),cur=SORTS[k];
+  SORTS[k]=!cur||cur.col!==i?{col:i,dir:"asc"}:cur.dir==="asc"?{col:i,dir:"desc"}:{col:i,dir:null};sortTable(t)});
+let sortRaf=0;new MutationObserver(()=>{if(sortRaf)return;sortRaf=requestAnimationFrame(()=>{sortRaf=0;document.querySelectorAll("table").forEach(t=>{if(t.dataset.sorted)return;
+  if(t.tHead){t.querySelectorAll("thead th").forEach(th=>{if(th.textContent.trim())th.classList.add("srt")});const st=SORTS[tKey(t)];if(st&&st.dir)sortTable(t);else t.dataset.sorted="1"}})})}).observe(document.body,{childList:true,subtree:true});
+
 /* ---------- My Player (in the league) ---------- */
 function careerOffers(p){
   const cur=T(p.tid),wantStay=(p.mood??65)>=40;const offers=[];
@@ -3492,7 +3520,7 @@ function openPlayer(pid,confirmRelease){
   const priorRows=(p.rid&&DB&&G.hist)?(DB.seasons[p.rid]||[]).filter(s=>s[0]<G.hist.start).map(s=>{const e=franchiseEra(s[1],s[0]);return`<tr><td class="l">${sl(s[0])} <span class="chip">Real</span></td><td class="l">${e?e[4]:"--"}</td><td>${s[2]}</td><td>${s[3]}</td><td class="hi">${s[4]}</td><td>${s[5]}</td><td>${s[6]}</td><td>${s[7]}</td><td>${s[8]}</td><td>--</td><td>--</td></tr>`}).join(""):"";
   const rows=priorRows+p.career.map(s=>`<tr><td class="l">${sl(s.y)}</td><td class="l">${s.t}</td><td>${s.gp}</td><td>${(s.min/s.gp).toFixed(1)}</td><td class="hi">${(s.pts/s.gp).toFixed(1)}</td><td>${(s.reb/s.gp).toFixed(1)}</td><td>${(s.ast/s.gp).toFixed(1)}</td><td>${(s.stl/s.gp).toFixed(1)}</td><td>${(s.blk/s.gp).toFixed(1)}</td><td>${s.fga?(s.fgm/s.fga*100).toFixed(1):"--"}</td><td>${s.tpa?(s.tpm/s.tpa*100).toFixed(1):"--"}</td></tr>`).join("");
   const c=p.career,tg=c.reduce((a,s)=>a+s.gp,0),sm=k=>c.reduce((a,s)=>a+s[k],0);
-  const totRow=c.length?`<tr class="cut"><td class="l">${priorRows?"In this league":"Career"}</td><td></td><td>${tg}</td><td>${(sm("min")/tg).toFixed(1)}</td><td class="hi">${(sm("pts")/tg).toFixed(1)}</td><td>${(sm("reb")/tg).toFixed(1)}</td><td>${(sm("ast")/tg).toFixed(1)}</td><td>${(sm("stl")/tg).toFixed(1)}</td><td>${(sm("blk")/tg).toFixed(1)}</td><td>${sm("fga")?(sm("fgm")/sm("fga")*100).toFixed(1):"--"}</td><td>${sm("tpa")?(sm("tpm")/sm("tpa")*100).toFixed(1):"--"}</td></tr>`:"";
+  const totRow=c.length?`<tr class="cut" data-pin="1"><td class="l">${priorRows?"In this league":"Career"}</td><td></td><td>${tg}</td><td>${(sm("min")/tg).toFixed(1)}</td><td class="hi">${(sm("pts")/tg).toFixed(1)}</td><td>${(sm("reb")/tg).toFixed(1)}</td><td>${(sm("ast")/tg).toFixed(1)}</td><td>${(sm("stl")/tg).toFixed(1)}</td><td>${(sm("blk")/tg).toFixed(1)}</td><td>${sm("fga")?(sm("fgm")/sm("fga")*100).toFixed(1):"--"}</td><td>${sm("tpa")?(sm("tpm")/sm("tpa")*100).toFixed(1):"--"}</td></tr>`:"";
   const aw={};p.awards.forEach(a=>aw[a.a]=(aw[a.a]||0)+1);
   const awards=Object.entries(aw).map(([a,n])=>`<span class="chip ${/MVP|DPOY|Champion/.test(a)?"gold":""}" style="margin:0 4px 4px 0">${n>1?n+"× ":""}${a}</span>`).join("");
   const status=p.tid===-2?"Retired":p.tid===-1?"Free agent":p.tid===-3?"Draft prospect":`${esc(t.city)} ${esc(t.name)}`;
