@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="0f59fee0f3";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="97c0d20c96";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -281,6 +281,87 @@ td{border-top:1px solid #ffffff12}
 .rc-you .grade{font:900 44px/1 var(--f-display);color:var(--led)}
 
 
+
+/* ===== MapleStory-style RPG windows ===== */
+.mp{display:grid;gap:12px;font-family:var(--f-body)}
+.mp-win{background:#f7f7f9;border:1px solid #2b2b33;border-radius:7px;box-shadow:inset 0 0 0 1px #ffffff,inset 0 0 0 2px #cfd3dc,0 8px 22px #0007;color:#2b2b33;overflow:hidden}
+.mp-title{display:flex;align-items:center;gap:8px;padding:5px 6px 5px 10px;background:linear-gradient(180deg,#fdfdfe,#dfe3ea 55%,#cfd4de);color:#3a3f4d;font:700 11px/1 Silkscreen,var(--f-mono);border-bottom:1px solid #9aa1b1;letter-spacing:.06em;text-transform:uppercase;cursor:default}
+.mp-title b{flex:1;font:inherit;text-align:center}.mp-x{width:20px;height:20px;border-radius:4px;border:1px solid #6b7080;background:linear-gradient(180deg,#fff,#d9dde6);color:#3a3f4d;font:900 14px/1 var(--f-body);cursor:pointer}
+.mp-body{padding:10px;display:grid;gap:10px;background:#f7f7f9}
+.mp-tabs{display:flex;gap:2px;flex-wrap:wrap;padding:0 6px}
+.mp-tabs button{border:1px solid #6b7080;border-bottom:0;border-radius:8px 8px 0 0;background:linear-gradient(180deg,#e9ebf0,#c9ced8);color:#4a4f5e;font:700 11px/1 Silkscreen,var(--f-mono);padding:8px 13px 6px;cursor:pointer;box-shadow:inset 0 1px 0 #fff}
+.mp-tabs button[aria-current="true"]{background:linear-gradient(180deg,#ffd76a,#f5a623);color:#3a2300;border-color:#8a5a00;transform:translateY(1px)}.mp-tabs button:disabled{opacity:.5;cursor:default}
+.mp-top{display:flex;align-items:flex-end;justify-content:space-between;gap:8px}
+.mp-nav{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.mp-btn{border:1px solid #4a4f5e;border-radius:6px;background:linear-gradient(180deg,#fff,#dde1e8);color:#2b2b33;font:700 13px var(--f-body);padding:9px 16px;cursor:pointer;box-shadow:inset 0 1px 0 #fff,0 2px 0 #9aa1b1}
+.mp-btn.main{background:linear-gradient(180deg,#ffd76a,#f5a623);color:#3a2300;border-color:#8a5a00;font-weight:900;font-size:15px;box-shadow:inset 0 1px 0 #fff4c2,0 2px 0 #8a5a00}.mp-btn.sm{padding:5px 10px;font-size:12px}.mp-btn:active{transform:translateY(2px);box-shadow:inset 0 1px 0 #fff}
+.mp-btn.go{background:linear-gradient(180deg,#8fe08f,#2fa84a);color:#fff;border-color:#1c6b2e;text-shadow:0 1px 0 #0006}
+.mp-form{display:grid;gap:10px}.mp-form label{display:grid;gap:4px;font:700 11px var(--f-body);color:#4a4f5e;text-transform:uppercase;letter-spacing:.06em}
+.eras .mp select,.mp select,.mp .mp-in,.mp select.mp-in{background:#fff;color:#2b2b33;border:1px solid #6b7080;border-radius:5px}
+.mp-in{font:600 15px var(--f-body);padding:8px 10px;border:1px solid #6b7080;border-radius:5px;background:#fff;color:#2b2b33;box-shadow:inset 0 2px 0 #0001}
+.mp-lab{font:700 11px var(--f-body);color:#4a4f5e;text-transform:uppercase;letter-spacing:.06em}
+.mp .fid button,.mp .sw-b{background:linear-gradient(180deg,#fff,#dde1e8);color:#2b2b33;border:1px solid #6b7080;box-shadow:0 2px 0 #9aa1b1}.mp .fid button[aria-pressed="true"]{background:linear-gradient(180deg,#ffd76a,#f5a623);color:#3a2300;border-color:#8a5a00}.mp .av-row .label{color:#4a4f5e}
+.mp-note{font-size:13px;line-height:1.45;color:#4a4f5e;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:8px 10px}
+.mp-orig{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.mp-card{display:grid;gap:6px;text-align:left;padding:12px;border:1px solid #6b7080;border-radius:7px;background:linear-gradient(180deg,#fff,#eef0f4);color:#2b2b33;cursor:pointer;box-shadow:inset 0 1px 0 #fff,0 2px 0 #9aa1b1}
+.mp-card.picked{background:linear-gradient(180deg,#fff6d6,#ffe08a);outline:2px solid #f5a623;outline-offset:-2px;border-color:#8a5a00}.mp-card:disabled{opacity:.5;cursor:default}
+.mp-card b{font:900 17px var(--f-display);text-transform:uppercase}.mp-card p{margin:0;font-size:13px;line-height:1.4}.mp-card small{font-size:12px;color:#2457b4;font-weight:700}.mp-card em{font-size:12px;color:#8a5a00}.mp-card .chip{justify-self:start;background:#3b7ddd;color:#fff;border:0}
+.mp-card .up{color:#1a6e2f;font-weight:600}.mp-card .dn{color:#a3341f;font-weight:600}
+.mp-two{display:grid;gap:12px;grid-template-columns:minmax(0,1fr) 300px}.mp-col{display:grid;gap:12px;align-content:start}.mp-stick{position:sticky;top:8px}
+@media (max-width:860px){.mp-two{grid-template-columns:1fr}.mp-stick{position:static}}
+.mp-show{display:flex;gap:8px;justify-content:center;background:linear-gradient(180deg,#bfe3ff,#8ec5f5 60%,#6aa84f 60.5%,#4e8a3a);border:1px solid #6b7080;border-radius:5px;padding:8px}
+.mp-show canvas{width:156px;height:258px;image-rendering:pixelated}.mp-show.one canvas{width:182px;height:301px}
+.mp-show-s{display:flex;gap:10px;align-items:center;font-size:12px;color:#4a4f5e}.mp-show-s canvas{margin:0}
+.mp-sum{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.mp-sum div{background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:6px 8px;display:grid}.mp-sum small{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#4a4f5e}.mp-sum b{font:900 16px var(--f-display);color:#2b2b33}.mp-sum b.hot{color:#d6560f}
+.mp-pts{font-size:12px;color:#4a4f5e;display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:space-between}.mp-pts>b{font:700 14px Silkscreen,var(--f-mono);color:#2b2b33;background:#fff;border:1px solid #6b7080;border-radius:4px;padding:4px 10px;margin-left:auto}.mp-pts>b::before{content:"SKILL POINT ";font-size:9px;color:#4a4f5e}
+.mp-grp{border:1px solid #cfd3dc;border-radius:5px;background:#fff;overflow:hidden}.mp-gh{background:linear-gradient(180deg,#5aa9f0,#2f7fd6);padding:6px 10px;font:700 12px var(--f-body);color:#fff;text-shadow:0 1px 0 #0b2a66;border-bottom:1px solid #1b4f9e}
+.sk{display:grid;grid-template-columns:34px 1fr 34px auto;gap:2px 8px;align-items:center;padding:4px 8px;border-bottom:1px solid #e3e5ea;font-size:13px}.sk:last-child{border-bottom:0}.sk:nth-child(even){background:#f3f4f7}
+.sk-n{font-weight:700;color:#2b2b33;grid-column:2;font-size:12px}.sk-ic{width:30px;height:30px;border-radius:5px;border:1px solid #6b7080;background:linear-gradient(135deg,#fff,#d9dde6);grid-row:span 2;display:grid;place-items:center;font:700 10px Silkscreen,var(--f-mono);color:#2f7fd6}
+.sk-bar{position:relative;height:9px;background:#d9dde6;border:1px solid #6b7080;border-radius:3px;overflow:hidden;grid-column:2}.sk-bar i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#8fd2ff,#2f7fd6)}.sk-bar i.ov{background:linear-gradient(180deg,#ffe08a,#f5a623)}
+.sk-v{font:900 15px var(--f-display);text-align:right;font-variant-numeric:tabular-nums;grid-row:span 2;grid-column:3}
+.sk-b{display:flex;gap:3px;align-items:center;grid-row:span 2;grid-column:4}.mp-b{width:24px;height:22px;border:1px solid #4a4f5e;border-radius:4px;background:linear-gradient(180deg,#fff,#dde1e8);font:900 12px var(--f-body);color:#2b2b33;cursor:pointer;box-shadow:0 1px 0 #9aa1b1;padding:0}.mp-b.plus{background:linear-gradient(180deg,#8fe08f,#2fa84a);color:#fff;border-color:#1c6b2e;text-shadow:0 1px 0 #0006}.mp-b:disabled{opacity:.3;cursor:default;box-shadow:none}
+.sk-c{width:14px;text-align:center;font:700 11px var(--f-mono);color:#4a4f5e}
+@media (max-width:480px){.sk{grid-template-columns:30px 1fr 30px auto;gap:5px;padding:4px 6px;font-size:12px}.sk-n{font-size:11px}}
+.mp-kv{display:grid;grid-template-columns:1fr auto;gap:3px 12px;font-size:13px}.mp-kv span{color:#4a4f5e}.mp-kv b{font:900 15px var(--f-display);text-align:right}
+.mp-log{margin:0;padding:0;list-style:none;display:grid;gap:4px;font-size:13px}.mp-log b{color:#1a6e2f;font-family:var(--f-mono);margin-right:6px}
+.mp-goals{display:grid;gap:8px}.mp-goal{display:grid;grid-template-columns:1fr auto;gap:2px 10px;font-size:13px;font-weight:600}.mp-goal i{grid-column:1/-1;height:9px;background:#d9dde6;border:1px solid #6b7080;border-radius:3px;overflow:hidden;display:block}.mp-goal i b{display:block;height:100%;background:linear-gradient(180deg,#ffe08a,#f5a623)}.mp-goal small{color:#4a4f5e;font-family:var(--f-mono)}
+.mp-loads{display:grid;gap:8px}.mp-load{display:grid;grid-template-columns:70px 1fr auto;gap:8px;align-items:center;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:8px;font-size:13px}
+.mp-ev{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:10px}.mp-ev .ic{font:900 24px Silkscreen,var(--f-mono);color:#d6560f;min-width:52px;text-align:center}.mp-ev b{font:900 18px var(--f-display);text-transform:uppercase}.mp-ev p{margin:2px 0 0;font-size:13px}
+.mp-week{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.mp-week div{display:grid;justify-items:center;gap:2px;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:6px 2px;text-align:center}.mp-week div.on{background:#fff6d6;border-color:#f5a623}.mp-week small{font-size:10px;color:#4a4f5e}.mp-week span{font:700 14px Silkscreen,var(--f-mono);color:#2f7fd6}.mp-week em{font-size:9px;font-style:normal;line-height:1.1}
+.mp-sheet{max-width:980px}
+#sheet:has(>.mp-sheet){background:#f7f7f9;border:1px solid #2b2b33;color:#2b2b33;box-shadow:inset 0 0 0 1px #fff,inset 0 0 0 2px #cfd3dc,0 12px 28px #000a}#sheet:has(>.mp-sheet)::before{display:none}
+#lvup-b{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%) scale(.6);z-index:120;pointer-events:none;opacity:0;transition:all .25s;text-align:center;display:grid;justify-items:center;gap:4px}#lvup-b.show{opacity:1;transform:translate(-50%,-50%) scale(1)}#lvup-b small{font:700 16px Silkscreen,var(--f-mono);color:#ffd166;letter-spacing:.2em;text-shadow:2px 2px 0 #2a2f45}#lvup-b b{font:900 72px/1 var(--f-display);color:#fff;text-shadow:0 0 24px #ffd166,3px 3px 0 #2a2f45}#lvup-b p{margin:0;color:#fff;font:700 15px var(--f-body);text-shadow:1px 1px 0 #000}#lvup-b .lv-burst{inset:-60px}
+.lvup{text-align:center;position:relative;padding:20px 8px;display:grid;gap:6px;justify-items:center}.lvup small{font:700 14px Silkscreen,var(--f-mono);color:#ffd166;letter-spacing:.2em}.lvup>b{font:900 64px/1 var(--f-display);color:#fff;text-shadow:0 0 24px #ffd166,3px 3px 0 #2a2f45}.lvup p{margin:0;color:#f4f1ea}
+.lv-burst{position:absolute;inset:-20px;background:conic-gradient(from 0deg,#ffd16600,#ffd16640 10%,#ffd16600 20%,#ffd16640 30%,#ffd16600 40%,#ffd16640 50%,#ffd16600 60%,#ffd16640 70%,#ffd16600 80%,#ffd16640 90%,#ffd16600);animation:spin 6s linear infinite;pointer-events:none;mask:radial-gradient(circle,#000 20%,transparent 70%)}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* content from the old views, re-skinned inside windows */
+.mp-body .panel{background:#fff;color:#2b2b33;border:1px solid #cfd3dc;box-shadow:none;border-radius:6px;padding:10px}
+.mp-body h2,.mp-body h3{color:#2b2b33}.mp-body h3{font:900 16px var(--f-display);text-transform:uppercase;margin:0 0 8px}
+.mp-body .tw{border-color:#cfd3dc}.mp-body table{font-size:13px}.mp-body th{background:#e9ebf0;color:#4a4f5e}.mp-body td{border-top-color:#e3e5ea;color:#2b2b33}.mp-body tr.me td{background:#fff6d6}
+.mp-body .chip{background:#e9ebf0;color:#4a4f5e;border:1px solid #cfd3dc}.mp-body .muted{color:#7a8090}.mp-body .label,.mp-body .kicker{color:#4a4f5e}
+.mp-body .news li,.mp-body .news li b{background:#fff;color:#2b2b33;border:1px solid #e3e5ea}
+.mp-body .btn{background:linear-gradient(180deg,#fff,#dde1e8);color:#2b2b33;border:1px solid #4a4f5e;box-shadow:0 2px 0 #9aa1b1}.mp-body .btn.ghost{background:#fff}
+.mp-body .tch{color:#2b2b33}.mp-body .tch span{color:#2b2b33}.mp-body .note{color:#4a4f5e}
+.mp-body .wl-w{color:#1a6e2f}.mp-body .wl-l{color:#a3341f}.mp-body .r-w td:first-child{box-shadow:inset 3px 0 0 #2fa84a}.mp-body .r-l td:first-child{box-shadow:inset 3px 0 0 #d6560f}
+/* ===== MyCareer game shell ===== */
+.cs{position:fixed;inset:0;display:grid;grid-template-rows:1fr auto;background:#0b0f1a;overflow:hidden;font-family:var(--f-body)}
+.cs-scene{position:relative;overflow:hidden;min-height:0}.cs-scene canvas{position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated}
+.cs-plate{position:absolute;left:10px;top:10px;display:grid;gap:4px;background:#f7f7f9;border:1px solid #2b2b33;border-radius:6px;box-shadow:inset 0 0 0 1px #fff,0 4px 12px #0006;padding:6px 10px;color:#2b2b33;min-width:200px}
+.cs-plate b{font:700 12px Silkscreen,var(--f-mono);text-transform:uppercase}.cs-plate small{font-size:11px;color:#4a4f5e}.cs-plate .rec{font:900 22px var(--f-display);color:#2b2b33}
+.cs-quest{position:absolute;right:10px;top:10px;width:250px;background:#f7f7f9e6;border:1px solid #2b2b33;border-radius:6px;box-shadow:inset 0 0 0 1px #fff,0 4px 12px #0006;color:#2b2b33;overflow:hidden}
+.cs-quest .h{background:linear-gradient(180deg,#fdfdfe,#dfe3ea);font:700 10px Silkscreen,var(--f-mono);padding:5px 8px;border-bottom:1px solid #9aa1b1;text-transform:uppercase;display:flex;justify-content:space-between}
+.cs-quest .q{display:grid;gap:3px;padding:6px 8px;border-bottom:1px solid #e3e5ea;font-size:12px;font-weight:600;cursor:pointer;background:none;border-left:0;border-right:0;border-top:0;width:100%;text-align:left;color:#2b2b33}.cs-quest .q i{display:block;height:6px;background:#d9dde6;border:1px solid #9aa1b1;border-radius:3px;overflow:hidden}.cs-quest .q i b{display:block;height:100%;background:linear-gradient(180deg,#ffe08a,#f5a623)}.cs-quest .q small{color:#4a4f5e;font-family:var(--f-mono)}
+.cs-next{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);display:flex;gap:8px;align-items:stretch}
+.cs-next .mp-btn{font-size:14px}.cs-next .mp-btn.main{padding:12px 26px;font-size:18px;display:grid;line-height:1.1}.cs-next .mp-btn.main small{font-size:10px;font-weight:600;opacity:.8;text-transform:uppercase;letter-spacing:.08em}
+.cs-tag{position:absolute;transform:translateX(-50%);background:#0009;color:#fff;font:700 10px Silkscreen,var(--f-mono);padding:3px 6px;border-radius:3px;white-space:nowrap;pointer-events:none}.cs-tag.me{background:#2f7fd6e6}
+.cs-hud{display:flex;align-items:center;gap:8px;padding:6px 10px;background:linear-gradient(180deg,#2a2d38,#101218);border-top:2px solid #5a5f70;box-shadow:inset 0 1px 0 #8a90a0;color:#fff;flex-wrap:wrap}
+.cs-lv{display:grid;line-height:1;padding:4px 8px;background:#000;border:1px solid #5a5f70;border-radius:4px;min-width:110px}.cs-lv b{font:700 20px Silkscreen,var(--f-mono);color:#ffd166}.cs-lv b small{font-size:10px;color:#fff;margin-right:4px}.cs-lv span{font-size:11px;color:#c9cfe0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:160px}
+.cs-xp{flex:1 1 200px;min-width:140px;position:relative;height:22px;background:#000;border:1px solid #5a5f70;border-radius:3px;overflow:hidden;cursor:pointer;padding:0}.cs-xp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#ffe08a,#f5a623);box-shadow:inset 0 -3px 0 #c76a0a}.cs-xp span{position:absolute;inset:0;display:grid;place-items:center;font:700 10px Silkscreen,var(--f-mono);color:#fff;text-shadow:1px 1px 0 #000}
+.cs-keys{display:flex;gap:3px;flex-wrap:wrap}.cs-k{display:grid;justify-items:center;gap:2px;width:52px;padding:4px 2px;border:1px solid #5a5f70;border-radius:5px;background:linear-gradient(180deg,#3a3e4c,#20232c);color:#fff;font:700 9px var(--f-body);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;box-shadow:inset 0 1px 0 #6a7080}.cs-k i{font:700 13px Silkscreen,var(--f-mono);color:#ffd166;font-style:normal}.cs-k.hot{background:linear-gradient(180deg,#8fe08f,#2fa84a);border-color:#1c6b2e}.cs-k.hot i{color:#fff}
+.cs-ev{display:flex;gap:6px;align-items:center;padding:5px 9px;border:1px solid #5a5f70;border-radius:5px;background:#000;font-size:11px;color:#c9cfe0;cursor:pointer}.cs-ev b{font:700 12px Silkscreen,var(--f-mono);color:#ffd166}
+.cs-wins{position:absolute;inset:0;pointer-events:none}.cs-wins .mp-win{position:absolute;pointer-events:auto;min-width:300px;max-width:min(96vw,900px);max-height:min(82vh,760px);display:grid;grid-template-rows:auto 1fr;resize:both}.cs-wins .mp-body{overflow:auto;align-content:start}
+.cs-wins .mp-win.focus{box-shadow:inset 0 0 0 1px #fff,inset 0 0 0 2px #cfd3dc,0 0 0 2px #f5a623,0 12px 28px #000a}
+@media (max-width:760px){.cs-quest{display:none}.cs-plate{min-width:0;padding:4px 8px}.cs-plate .rec{font-size:16px}.cs-next{bottom:8px;width:calc(100% - 16px)}.cs-next .mp-btn.main{flex:1;padding:10px 12px;font-size:15px}.cs-keys{order:3;width:100%;justify-content:space-between}.cs-k{width:auto;flex:1}.cs-lv{min-width:0}.cs-lv span{display:none}.cs-wins .mp-win{left:4px!important;right:4px!important;top:4px!important;bottom:auto;max-width:none;max-height:calc(100% - 8px);width:auto!important;resize:none}}
 /* ===== game viewer ===== */
 .lv{max-width:1100px;margin:0 auto;padding-block:10px 24px;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));display:grid;gap:10px}
 .lv-top{display:flex;gap:10px;align-items:center}
@@ -704,6 +785,7 @@ function boxFor(t,s,pts,opp,ot,playoff,oppT){
   });
 }
 function injure(p,t){
+  if(p.pid===G.career?.pid&&!G.career.retired)return;
   const r=R(),tier=r<.8?0:r<.95?1:r<.99?2:3,[mx,lo,names]=INJ_KINDS[tier],g=ri(lo,mx);
   p.inj=g+1;p.injName=pick(names);p.playHurt=false;
   if(t.tid===G.userTid)news(`${p.name} is out about ${g} game${g>1?"s":""} (${p.injName}).`);
@@ -719,6 +801,7 @@ function recordUser(g,label){
   G.results.unshift({label,opp,home,us,them,w:us>them,ot:g.ot});G.results=G.results.slice(0,12);
   try{pressCheck(g,label)}catch(e){}
   try{assignRival();teamRival();rivalNote(g);featNote(g);achScan()}catch(e){console.error(e)}
+  try{const me=G.career&&!G.career.retired&&P(G.career.pid);if(me?.rpg){const r=(g.box[G.userTid]||[]).find(x=>x.pid===me.pid);rpgRest(me.rpg);rpgGame(r||{min:0},us>them,label&&/playoff|final|round|series/i.test(label)?"po":"reg")}}catch(e){console.error(e)}
 }
 function makeSchedule(){
   const n=G.teams.length,gp=G.teams.map(()=>0),days=[],target=seasonLen();let guard=0;
@@ -890,6 +973,7 @@ function finishDraft(){
 
 /* ---------- offseason ---------- */
 function develop(p){
+  if(p.rpg&&p.pid===G.career?.pid&&!G.career.retired){p.age++;rpgApply();return}
   if(p.peakA){careerGrow(p.a,p.peakA,p.age,p.focus);p.age++;p.ovr=calcOvr(p.a,p.pos);p.pot=Math.max(p.ovr,calcOvr(p.peakA,p.pos));return}
   p.age++;const gap=Math.max(0,p.pot-p.ovr);let d;
   if(p.age<=22)d=rnd(0,5)+gap*.18;else if(p.age<=25)d=rnd(-1,3.5)+gap*.12;else if(p.age<=29)d=rnd(-2,2);else if(p.age<=32)d=rnd(-4,.8);else d=rnd(-6.5,-1.5);
@@ -1333,14 +1417,14 @@ function closeSeason(){
   C.hist.push({y:C.y,school:C.school,cls:C.cls,gp:t.gp,ppg:r1(t.pts/g),rpg:r1(t.reb/g),apg:r1(t.ast/g),spg:r1(t.stl/g),bpg:r1(t.blk/g),w:tm.w,l:tm.l,res:s.res||"Season complete",seed:s.seed,aw:s.awards,ovr:calcOvr(C.a,C.pos),ap:apRk(C.cl,C.school)});
   C.stage="decide";C.stock=stock();
 }
-function careerGrow(a,peak,age,focus){
+function careerGrow(a,peak,age,focus){if(C?.rpg&&a===C.a)return;
   for(const k of K){const gap=peak[k]-a[k];let d;
     if(age<=26)d=gap*(.22+R()*.12);else if(age<=30)d=gap>0?gap*.3:rnd(-1,.5);else d=-rnd(1,4.5)*AGEW[k]*(1-(a.IQ-60)/200);
     if(focus===k&&age<=31)d+=ri(2,4);a[k]=clamp(Math.round(a[k]+d),25,99)}
 }
-function mcReturnGo(){careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;C.y++;C.cls++;seasonSetup();C.stage="college";
+function mcReturnGo(){careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;rpgApply();C.y++;C.cls++;seasonSetup();C.stage="college";
   if(C.legacy){mcRender();legacyToNextSeason().then(mcRender);return}mcRender()}
-function mcDeclareGo(prep){if(!prep)careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;const st=C.stock;let fin=st?Math.round(st+gauss()*(1.5+st/8)):null;if(fin!=null)fin=clamp(fin,1,60);
+function mcDeclareGo(prep){if(!prep)careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;rpgApply();const st=C.stock;let fin=st?Math.round(st+gauss()*(1.5+st/8)):null;if(fin!=null)fin=clamp(fin,1,60);
   if(!st&&R()<.25)fin=ri(45,60);if(C.legacy&&fin&&fin>nPicks())fin=null;C.final=fin;const row=fin?(DB.drafts[C.y+1]||[]).find(r=>r[2]===fin):null;
   const fe=row&&row[3]?franchiseEra(row[3],C.y+1):null;C.dteam=fe?`${fe[2]} ${fe[3]}`:"an NBA team";C.stage="draft";mcRender()}
 function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"SG",ht:77,wt:205,startY:1983,slots:{},cur:null,respins:2,hist:[],awards:[],focus:null};saveC()}
@@ -1352,9 +1436,8 @@ function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
   el.style.setProperty("--e1","#ff8a3d");el.style.setProperty("--e2","#ffd166");el.style.setProperty("--e3","#16264a");
-  const v={create:mcCreate,spin:mcSpin,offers:mcOffers,college:mcCollege,decide:mcDecide,draft:mcDraft,portal:mcPortal}[C.stage]||mcCreate;
-  el.innerHTML=`<div class="eras-in">${v()}</div>`;saveC();
-  const av=$("mc-av");if(av)drawAv(av,C.look,"#2f6fd6","#f4f1ea",C.ht);
+  const v={create:mcCreate,spin:mcCreate,offers:mcOffers,college:mcCollege,decide:mcDecide,draft:mcDraft,portal:mcPortal}[C.stage]||mcCreate;
+  const html=v();el.innerHTML=C.stage==="college"?html:`<div class="eras-in">${html}</div>`;saveC();paintAvatars(el);showLoop();rpgFlush();
 }
 function mcCreate(){
   const [lo,hi]=HRANGE[C.pos];C.ht=clamp(C.ht,lo,hi);
@@ -1413,7 +1496,7 @@ function mcOffers(){
   const sch=colleges().schools,y=C.y,cl=clEnsure();const pr=s=>prestige(s,y);const ranked=[...sch].sort((a,b)=>pr(b)-pr(a));
   if(!C.offers){const band=C.stars>=5?[0,12]:C.stars===4?[8,40]:[30,110];C.offers=shuffle(ranked.slice(...band)).slice(0,4).sort((a,b)=>pr(b)-pr(a))}
   return mcHead(`${"★".repeat(C.stars)} recruit · ${C.pos} · ${ftin(C.ht)} · potential ${C.pot}`)+`
-  <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="spin">← Back to ratings</button></div><div class="kicker">Step 3 of 3 · ${sl(y)} recruiting</div><h2>Choose your school</h2>
+  <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="create">← Back to creation</button></div><div class="kicker">Step 3 of 3 · ${sl(y)} recruiting</div><h2>Choose your school</h2>
     <p>You're a ${C.stars}-star recruit. These programs offered you a scholarship. Their rosters are real: future NBA players who were in school that season.</p>
     ${prepOK(C.y)&&!C.legacy?`<div class="go" style="margin:4px 0 10px"><button class="opt" data-act="mcprep">Skip college: enter the ${C.y} draft out of high school</button></div><p class="note" style="color:#c9cfe0">From 1974 to 2005 high schoolers could jump straight to the NBA. Scouts will draft you on potential alone.</p>`:C.y>=2005?`<p class="note" style="color:#c9cfe0">Since 2006 you must spend a year after high school before the draft, so college it is (one-and-done is allowed).</p>`:""}
     <div class="mc-offers">${C.offers.map(s=>{const ros=collegeRoster(s,y);const me=calcOvr(C.a,C.pos),role=(cl.teams[s]?.roster||[]).filter(id=>cl.players[id]&&cl.players[id].ovr>me).length,rk=apRk(cl,s);
@@ -1457,7 +1540,7 @@ async function mcEnter(){
   await newHistoricalLeague(D,C.fid??.7,true);
   const row=C.final?(DB.drafts[D]||[]).find(r=>r[2]===C.final):null;let t=row&&G.teams.find(x=>x.fid===row[3]);if(!t)t=pick(G.teams);
   const p=mkPlayer({name:C.name,pos:C.pos,age:C.age,a:{...C.a},pot:C.pot,tid:t.tid,no:C.no??String(ri(0,55)),ht:C.ht,wt:C.wt});
-  p.peakA={...C.peakA};p.focus=C.focus;p.everUser=true;p.rookieYear=D;p.look={...(C.look||lookFor(C.name))};p.draft={y:D,pick:C.final,round:C.final?(C.final<=nTeams()?1:2):null,t:t.abbr};
+  p.peakA={...C.peakA};p.focus=C.focus;p.everUser=true;p.rookieYear=D;p.look={...(C.look||lookFor(C.name))};p.draft={y:D,pick:C.final,round:C.final?(C.final<=nTeams()?1:2):null,t:t.abbr};if(C.rpg){p.rpg=C.rpg;p.sk=C.sk}
   const n=C.final||61;p.contract=C.final?(n<=nTeams()?{amt:r1(Math.max(2,11-(n-1)*(9/nTeams()))),exp:D+2}:{amt:MINSAL,exp:D+1}):{amt:MINSAL,exp:D};
   t.roster.push(p.pid);if(t.roster.length>RMAX)toFA(best(t.roster.map(P).filter(x=>x!==p),x=>-value(x)));
   G.career={pid:p.pid,name:C.name,college:{school:C.school,hist:C.hist,awards:C.awards},draft:{y:D,pick:C.final,team:`${t.city} ${t.name}`,fid:t.fid}};G.reel=[...(C.reel||[]),...(G.reel||[])].slice(0,60);
@@ -1755,7 +1838,7 @@ function playCL(cl,h,a,o){
   if(h===C.school||a===C.school){const home=h===C.school,us=home?hs:as,them=home?as:hs,opp=home?a:h,me=(box[C.school]||[]).find(r=>r.pid==="me");
     const ln=me?{min:me.min,pts:me.pts,reb:me.reb,ast:me.ast,stl:me.stl,blk:me.blk,fgm:me.fgm,fga:me.fga,tpm:me.tpm,tpa:me.tpa}:{min:0,pts:0,reb:0,ast:0,stl:0,blk:0};
     const s=C.season,t=s.tot;if(me){t.gp++;for(const kk of["min","pts","reb","ast","stl","blk"])t[kk]+=ln[kk]}
-    const mg={opp,us,them,w:us>them,ln,label:o.label||null,home,neutral:!!o.neutral,ork:apRk(cl,opp)};s.games.push(mg);if(o.label)s.tlog.push(mg);else mg.w?s.w++:s.l++;
+    const mg={opp,us,them,w:us>them,ln,label:o.label||null,home,neutral:!!o.neutral,ork:apRk(cl,opp)};s.games.push(mg);if(o.label)s.tlog.push(mg);else mg.w?s.w++:s.l++;try{if(C.rpg){rpgRest(C.rpg);rpgGame(ln,mg.w,o.kind)}}catch(e){console.error(e)}
     g.live=o.watch?{ev:L.ev,teams:[h,a],halves:true,no3:cl.y<1986,mine:me?"me":null,court:{r3:col3(cl.y),lane:12,corner:col3(cl.y)},college:true}:null;g.box=box;return g}
   return g;
 }
@@ -1922,11 +2005,11 @@ const CGROUPS=[["home","Home",["home"]],["team","Team",["roster","sched","prog"]
 const CTABN={prog:"Program",home:"Home",roster:"Roster",sched:"Schedule",poll:"AP Top 25",stand:"Standings",brk:"Bracket",rec:"Recruiting",lead:"Leaders",news:"News",reel:"Highlights",goals:"Goals"};
 function clVis(){return CGROUPS.flatMap(g=>g[2]).filter(t=>t!=="brk"||C.cl?.ncaa)}
 function clSwipe(dir){const v=clVis(),i=v.indexOf(C.ctab||"home"),n=v[i+dir];if(!n)return;C.ctab=n;(C.clSub??={})[CGROUPS.find(g=>g[2].includes(n))[0]]=n;mcRender();$("mc").scrollTop=0}
-function mcCollege(){
+function mcCollegeOld(){
   const cl=C.cl;if(!cl||!cl.players.me){clJoin()}syncMe();const tab=clVis().includes(C.ctab)?C.ctab:"home",grp=CGROUPS.find(g=>g[2].includes(tab)),t=C.cl.teams[C.school],rk=apRk(C.cl,C.school);
   const v={home:clHome,sched:clSched,poll:clPollV,stand:clStand,roster:()=>clRoster(C.school,true),rec:clRec,prog:clProgram,lead:clLead,brk:clBracket,news:clNewsV,reel:clReel,goals:viewGoals}[tab]||clHome;
   const subs=grp[2].filter(x=>clVis().includes(x));
-  const head=`<div class="topstick cl-top"><div class="hdr"><div class="who"><button class="menu-btn ico" data-act="menu" aria-label="Main menu">☰</button><span class="sw" style="background:${t.color}"></span><div style="min-width:0"><div class="sub">${CLASSN[C.cls-1]} · ${sl(C.y)} · ${esc(t.conf)}</div><h1>${rk?`#${rk} `:""}${esc(C.school)}</h1></div></div><div class="rec">${t.w}-${t.l}</div></div>
+  const head=`<div class="topstick cl-top"><div class="hdr"><div class="who"><button class="menu-btn ico" data-act="menu" aria-label="Main menu">☰</button><span class="sw" style="background:${t.color}"></span><div style="min-width:0"><div class="sub">${CLASSN[C.cls-1]} · ${sl(C.y)} · ${esc(t.conf)}</div><h1>${rk?`#${rk} `:""}${esc(C.school)}</h1></div></div><div class="rec">${t.w}-${t.l}</div></div>${rpgBar()}
     ${subs.length>1?`<nav class="segs">${subs.map(k=>`<button data-act="cltab" data-v="${k}" aria-current="${tab===k}">${CTABN[k]}</button>`).join("")}</nav>`:""}</div>`;
   const nav=`<nav class="bnav cl-nav">${CGROUPS.map(([k,l,ts])=>{const go=C.clSub?.[k]&&clVis().includes(C.clSub[k])?C.clSub[k]:ts[0];return`<button data-act="cltab" data-v="${go}" aria-current="${grp[0]===k}">${icon(k==="team"?"team":k==="poll"?"poll":k==="rec"?"rec":k)}<span>${l}</span></button>`}).join("")}</nav>`;
   return head+`<div class="cl-body">${v()}</div>${clBar()}${nav}`;
@@ -2699,7 +2782,7 @@ function mcDraftLegacy(){
 function mcEnterLegacy(){
   const D=C.y+1,dr=G.draft;
   const p=mkPlayer({name:C.name,pos:C.pos,age:C.age,a:{...C.a},pot:C.pot,tid:-3,no:C.no??C.legacy.no??String(ri(0,55)),ht:C.ht,wt:C.wt});
-  p.peakA={...C.peakA};p.focus=C.focus;p.everUser=true;p.lineage=C.legacy.gen;p.look={...(C.look||lookFor(C.name))};dr.prospects.push(p.pid);
+  p.peakA={...C.peakA};p.focus=C.focus;p.everUser=true;p.lineage=C.legacy.gen;p.look={...(C.look||lookFor(C.name))};if(C.rpg){p.rpg=C.rpg;p.sk=C.sk}dr.prospects.push(p.pid);
   revealLottery(true);dr.started=true;const slot=C.final?C.final-1:null;
   while(dr.i<nPicks()){if(dr.i===slot){draftPick(dr.order[dr.i],p.pid);continue}draftPick(dr.order[dr.i],aiChoice())}
   if(p.tid<0){const t=[...G.teams].sort((a,b)=>a.roster.length-b.roster.length)[0];p.tid=t.tid;t.roster.push(p.pid);p.contract={amt:MINSAL,exp:G.year+1};p.rookieYear=D;p.draft={y:D,pick:null,round:null,t:t.abbr}}
@@ -3052,6 +3135,385 @@ function drawAv(c,look,jersey,trim,ht){const x=c.getContext("2d");x.imageSmoothi
 function drawPortrait(c,look,jersey,trim,num){const x=c.getContext("2d");x.imageSmoothingEnabled=false;x.clearRect(0,0,c.width,c.height);
   const sp0=hlSprite(hlOpts(look||{},jersey,trim,num,79,{}));x.drawImage(sp0,8,10,24,24,0,0,c.width,c.height)}
 
+/*RPG_BEGIN*/
+/* =====================================================================
+   MYCAREER RPG CORE: skills (point-buy), body, origins, traits, EXP, levels,
+   daily events, rested EXP, goals, respec + loadouts
+   ===================================================================== */
+const SKL=[
+ ["CLS","Close shot","Shooting","Shots from 0 to 5 feet: floaters, hooks, putbacks."],
+ ["MID","Mid-range","Shooting","Pull-ups and jumpers from about 15 feet."],
+ ["THR","Three-point","Shooting","Shots from 25 feet and beyond."],
+ ["FT","Free throw","Shooting","Points at the line."],
+ ["SIQ","Shot IQ","Shooting","Taking good shots instead of bad ones."],
+ ["LAY","Layup","Finishing","Finishing at the rim without dunking."],
+ ["DNK","Dunk","Finishing","Throwing it down. Height and Vertical help a lot."],
+ ["PST","Post moves","Finishing","Scoring with your back to the basket."],
+ ["DRW","Draw foul","Finishing","Getting fouled and getting to the line."],
+ ["HND","Ball handling","Playmaking","Dribbling and protecting the ball."],
+ ["PAS","Passing","Playmaking","Accuracy and assists."],
+ ["VIS","Court vision","Playmaking","Seeing the open man. Fewer turnovers."],
+ ["PER","Perimeter D","Defense","Staying in front of guards and wings."],
+ ["INT","Interior D","Defense","Protecting the paint."],
+ ["STL","Steal","Defense","Jumping passing lanes and poking the ball loose."],
+ ["BLK","Block","Defense","Sending shots back. Height and wingspan help."],
+ ["ORB","Off. rebound","Rebounding","Second-chance boards."],
+ ["DRB","Def. rebound","Rebounding","Ending the other team's possession."],
+ ["SPD","Speed","Athletic","Top speed in the open floor."],
+ ["ACC","Acceleration","Athletic","Your first step."],
+ ["VRT","Vertical","Athletic","How high you get off the floor."],
+ ["STR","Strength","Athletic","Holding position and finishing through contact."],
+ ["STA","Stamina","Athletic","Playing more minutes at full strength."],
+ ["CLU","Clutch","Intangibles","Making plays when the game is on the line."],
+];
+const SKG=["Shooting","Finishing","Playmaking","Defense","Rebounding","Athletic","Intangibles"],SKK=SKL.map(s=>s[0]),SKN_=Object.fromEntries(SKL.map(s=>[s[0],s[1]]));
+const PHYS=new Set(["SPD","ACC","VRT","STR","STA"]),MIND=new Set(["SIQ","VIS","CLU"]);
+const SP0=300;
+const ORIGINS=[
+ {k:"legacy",n:"The Legacy Kid",tag:"Legacy",bio:"Son of Ray \"Tick\" Coleman, a 1990s All-Star who flamed out and never talks about why. Everyone knows your last name.",trait:"Name on the Back: scouts notice you early (+1 recruiting star), but crowds expect more.",sk:{MID:6,SIQ:4},sig:"Fadeaway"},
+ {k:"bloom",n:"The Late Bloomer",tag:"Underdog",bio:"Cut from JV as a 5'9\" freshman. Grew six inches in one summer. Nobody has a file on you.",trait:"Growth Spurt: +1 skill point every level, and bonus EXP for beating better players.",sk:{},spLv:1,sig:"Second Jump"},
+ {k:"blacktop",n:"The Blacktop Prodigy",tag:"Streetball",bio:"Raised on city park courts. A legend there at 14, with flair to spare and holes in your fundamentals.",trait:"And-One: +6 handle and +4 dunk to start. Crowds love you.",sk:{HND:6,DNK:4,FT:-3},sig:"Crossover Chain"},
+ {k:"import",n:"The Import",tag:"International",bio:"Moved to the States at 15 from Lagos, Belgrade or Melbourne. New language, old-school fundamentals.",trait:"Fundamentalist: +6 passing and +6 court vision. Overseas teams know your name.",sk:{PAS:6,VIS:6},sig:"No-Look Pass"},
+ {k:"scholar",n:"The Scholar",tag:"Scholar",bio:"Straight-A student who wants law school. Basketball is your second love, for now.",trait:"Film Study: +8 shot IQ and +6 court vision. Academics never block eligibility.",sk:{SIQ:8,VIS:6},sig:"Read & React"},
+ {k:"comeback",n:"The Comeback",tag:"Redemption",bio:"Number-one prospect in your class at 14. Tore an ACL at 15. Everyone moved on.",trait:"Scar Tissue: +10 clutch and 20 extra starting points, but the knee costs you 6 speed.",sk:{CLU:10,SPD:-6},sp:20,sig:"Ice Veins"},
+ {k:"custom",n:"Custom",tag:"",bio:"Anyone you want. No personal storyline, more freedom.",trait:"Blank slate: 10 extra starting points.",sk:{},sp:10,sig:""}];
+const TRAITS=[
+ {k:"gym",n:"Gym Rat",up:"+1 skill point every level",down:"Family and friends see you less (Bonds grow slower)",spLv:1},
+ {k:"scorer",n:"Pure Scorer",up:"+6 to every shooting and finishing skill",down:"-6 to every defense skill",sk:{CLS:6,MID:6,THR:6,FT:6,LAY:6,DNK:6,PST:6},skx:{PER:-6,INT:-6,STL:-6,BLK:-6}},
+ {k:"engine",n:"Motor",up:"+10 stamina and +5 offensive rebound",down:"-5 shot IQ",sk:{STA:10,ORB:5},skx:{SIQ:-5}},
+ {k:"showman",n:"Showman",up:"+15% EXP from highlight games (25+ points)",down:"-4 shot IQ, refs notice you",skx:{SIQ:-4},hl:1},
+ {k:"quiet",n:"Quiet Storm",up:"+8 clutch and +4 free throw",down:"-10% EXP from media and fame quests",sk:{CLU:8,FT:4}},
+ {k:"twoway",n:"Two-Way Mindset",up:"+5 to every defense skill",down:"-3 to every shooting skill",sk:{PER:5,INT:5,STL:5,BLK:5},skx:{CLS:-3,MID:-3,THR:-3,FT:-3}},
+ {k:"bigfoot",n:"Heavy Feet",up:"+8 strength and +6 post moves",down:"-6 speed and -6 acceleration",sk:{STR:8,PST:6},skx:{SPD:-6,ACC:-6}},
+ {k:"natural",n:"Natural Talent",up:"30 extra starting points",down:"Level-ups give 1 fewer skill point",sp:30,spLv:-1}];
+const DAYEV=[
+ {k:"sun",n:"Rest Day Sunday",d:"Rested EXP builds twice as fast and quest rewards are doubled.",xp:1,q:2,rest:2,ic:"☾"},
+ {k:"mon",n:"Double EXP Monday",d:"2x EXP from every game.",xp:2,ic:"2×"},
+ {k:"tue",n:"Two-Drop Tuesday",d:"2x crate keys from games and quests.",xp:1,drop:2,ic:"🗝"},
+ {k:"wed",n:"Brotherhood Wednesday",d:"2x friendship from Bond moments (Bonds arrive soon) and 1.5x EXP from wins.",xp:1,winx:1.5,bond:2,ic:"🤝"},
+ {k:"thu",n:"Training Thursday",d:"+3 bonus skill points on every level-up.",xp:1,spB:3,ic:"+SP"},
+ {k:"fri",n:"Friday Night Lights",d:"4x EXP from every game.",xp:4,ic:"4×"},
+ {k:"sat",n:"Lucky Saturday",d:"1.5x EXP and 1.5x crate keys.",xp:1.5,drop:1.5,ic:"★"}];
+const today=()=>DAYEV[new Date().getDay()];
+const needXP=L=>Math.round(90+45*Math.pow(L,1.5));
+const skCost=v=>v<60?1:v<75?2:v<85?3:v<95?4:5+Math.floor((v-95)/10);
+/* ---- body-driven bases: height raises the floor on size skills and lowers it on quickness ---- */
+function skBase(k,b,age){
+  const h=(b.ht-78)/3,w=((b.ws??b.ht+3)-b.ht-3)/2,m=(b.wt-(b.ht*2.85-22))/15,ag=age<=24?(age-18)*1.4:age<=30?8.4:8.4-(age-30)*2.4;
+  const T={CLS:[h*1.5,0,0],THR:[-h*1.2,0,0],LAY:[-h*.5,0,0],DNK:[h*4.5,w*1.5,-m],PST:[h*3,0,m*2],DRW:[0,0,m],HND:[-h*3,0,0],PAS:[-h*.8,0,0],PER:[-h*2,w,0],INT:[h*3,w*1.5,m*1.5],STL:[-h*.8,w*1.5,0],
+    BLK:[h*4.5,w*2,0],ORB:[h*3,w,m],DRB:[h*3.5,w,m],SPD:[-h*3,0,-m*2],ACC:[-h*3,0,-m*1.5],VRT:[-h,0,-m*1.5],STR:[h*1.5,0,m*4],STA:[0,0,-m]}[k]||[0,0,0];
+  let v=50+T[0]+T[1]+T[2];if(PHYS.has(k))v+=ag;else if(MIND.has(k))v+=Math.max(0,age-18)*1.2;
+  return Math.round(clamp(v,18,72));
+}
+function rpgFlat(R){const o={};const add=s=>{for(const k in s||{})o[k]=(o[k]||0)+s[k]};const og=ORIGINS.find(x=>x.k===R.origin);if(og)add(og.sk);(R.traits||[]).forEach(t=>{const tt=TRAITS.find(x=>x.k===t);if(tt){add(tt.sk);add(tt.skx)}});return o}
+function skUp(base,pts){let v=base,left=pts;while(left>=skCost(v)){left-=skCost(v);v++}return{v,left}}
+function rpgSkills(R,age){const fl=rpgFlat(R),o={};for(const k of SKK){const b=skBase(k,R.body,age)+(fl[k]||0);o[k]=skUp(b,R.alloc[k]||0).v}return o}
+function rpgTotal(R){const og=ORIGINS.find(x=>x.k===R.origin);return SP0+(og?.sp||0)+(R.traits||[]).reduce((a,t)=>a+(TRAITS.find(x=>x.k===t)?.sp||0),0)+(R.spLv||0)+(R.spBonus||0)}
+function rpgSpent(R){return SKK.reduce((a,k)=>a+(R.alloc[k]||0),0)}
+function rpgFree(R){return rpgTotal(R)-rpgSpent(R)}
+function skToA(s){const r=x=>clamp(Math.round(x),25,115);
+  return{SHT:r(.14*s.CLS+.3*s.MID+.38*s.THR+.1*s.FT+.08*s.SIQ),FIN:r(.4*s.LAY+.25*s.DNK+.15*s.PST+.1*s.DRW+.1*s.CLS),PLY:r(.45*s.HND+.35*s.PAS+.2*s.VIS),DEF:r(.4*s.PER+.35*s.INT+.15*s.STL+.1*s.BLK),
+    REB:r(.55*s.DRB+.35*s.ORB+.1*s.STR),ATH:r(.3*s.SPD+.25*s.ACC+.3*s.VRT+.15*s.STR),IQ:r(.35*s.SIQ+.35*s.VIS+.3*s.CLU),DUR:99}}
+function archName(s,ht){const g=(...ks)=>ks.reduce((a,k)=>a+s[k],0)/ks.length,sc={sh:g("MID","THR","SIQ"),sl:g("LAY","DNK","ACC"),pm:g("HND","PAS","VIS"),df:g("PER","STL"),rp:g("INT","BLK"),rb:g("DRB","ORB"),po:g("PST","STR")};
+  const top=Object.entries(sc).sort((a,b)=>b[1]-a[1]),[a,b]=[top[0][0],top[1][0]],big=ht>=81;
+  const N={sh:big?"Stretch":"Sharpshooting",sl:big?"Rim-Running":"Slashing",pm:big?"Point":"Playmaking",df:"Lockdown",rp:"Rim-Protecting",rb:"Glass-Cleaning",po:"Post"};
+  const M={sh:big?"Big":"Shooter",sl:big?"Big":"Slasher",pm:big?"Forward":"Guard",df:"Defender",rp:"Anchor",rb:"Big",po:"Scorer"};
+  if(sc.sh>=58&&sc.sl>=58&&g("MID")>=58)return"Three-Level Scorer";if(sc.sh>=60&&sc.df>=58&&!big)return"3-and-D Wing";
+  if(big&&a==="sh")return b==="pm"?"Point Forward":"Stretch Big";return`${N[a]} ${M[b]}`}
+/* ---- which state is live: college (C.rpg) or the league (your player's p.rpg) ---- */
+function rpgP(){const c=typeof G!=="undefined"&&G?.career;if(c&&!c.retired){const p=P(c.pid);if(p?.rpg)return p}return null}
+function rpgS(){const p=rpgP();return p?p.rpg:(C?.rpg||null)}
+function rpgAge(){const p=rpgP();return p?p.age:(C?.age??18)}
+function rpgApply(){const R=rpgS();if(!R)return;const age=rpgAge(),s=rpgSkills(R,age),a=skToA(s),p=rpgP();
+  if(p){p.sk=s;Object.assign(p.a,a);p.peakA={...a};p.ovr=calcOvr(p.a,p.pos);p.ht=R.body.ht;p.wt=R.body.wt}
+  else{C.sk=s;C.a=a;C.peakA={...a};C.ht=R.body.ht;C.wt=R.body.wt;C.pot=rpgPot(R,age);if(C.cl?.players?.me){syncMe()}}}
+function rpgPot(R,age){const s=rpgSkills(R,age),o=calcOvr(skToA(s),C?.pos||"SF");return clamp(Math.round(o+30+(R.body.ht-78)*1.2-Math.max(0,age-19)*3),50,99)}
+/* ---- EXP ---- */
+function spPerLv(R){const og=ORIGINS.find(x=>x.k===R.origin);return Math.max(2,5+(og?.spLv||0)+(R.traits||[]).reduce((a,t)=>a+(TRAITS.find(x=>x.k===t)?.spLv||0),0))}
+function rpgRest(R){const now=Date.now();if(R.last){const h=(now-R.last)/36e5,cap=needXP(R.lv)*1.5;if(h>.25)R.rest=Math.min(cap,(R.rest||0)+h*needXP(R.lv)*.12*(today().rest||1))}R.last=now}
+function rpgXP(R,amt,why){if(!R||amt<=0)return 0;amt=Math.round(amt);R.exp+=amt;R.xpLog=[{t:why,x:amt},...(R.xpLog||[])].slice(0,12);let ups=0;
+  while(R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const g=spPerLv(R)+(today().spB||0);R.spLv=(R.spLv||0)+g;ups++;(R.pend??=[]).push({lv:R.lv,sp:g})}
+  if(ups){rpgGoalsCheck(R)}return amt}
+/* one game for your player: line = {min,pts,reb,ast,stl,blk,fgm,fga,tpm}, w = won */
+function rpgGame(ln,w,kind){const R=rpgS();if(!R||!ln)return;const ev=today();
+  if(!ln.min){rpgXP(R,15*ev.xp,"Practice reps");return}
+  let x=55+4*ln.pts+3*ln.reb+4*ln.ast+6*((ln.stl||0)+(ln.blk||0))+(w?40*(ev.winx||1):0)+(kind&&kind!=="reg"?40:0);
+  if((R.traits||[]).includes("showman")&&ln.pts>=25)x*=1.15;x*=ev.xp;
+  let bonus=0;if(R.rest>0){bonus=Math.min(R.rest,x);R.rest-=bonus}
+  const r=R.rec??={g:0,maxPts:0,maxAst:0,maxReb:0,maxSB:0,dd:0,st:0,bestSt:0,pts:0,w:0};r.g++;r.pts+=ln.pts;r.maxPts=Math.max(r.maxPts,ln.pts);r.maxAst=Math.max(r.maxAst,ln.ast);r.maxReb=Math.max(r.maxReb,ln.reb);r.maxSB=Math.max(r.maxSB,(ln.stl||0)+(ln.blk||0));
+  if([ln.pts,ln.reb,ln.ast,ln.stl||0,ln.blk||0].filter(v=>v>=10).length>=2)r.dd++;if(w){r.w++;r.st++;r.bestSt=Math.max(r.bestSt,r.st)}else r.st=0;
+  R.keyFrac=(R.keyFrac||0)+(w?.5:.25)*(ev.drop||1);while(R.keyFrac>=1){R.keyFrac--;R.keys=(R.keys||0)+1}
+  rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${bonus?" · rested":""}${ev.xp>1?` · ${ev.n}`:""}`);rpgGoalsCheck(R);
+  R.lastGame={x:Math.round(x+bonus),b:Math.round(bonus)}}
+/* ---- goals: always three within reach ---- */
+const GOALS=[
+ ["pts","Score {n} in a game",[12,18,24,30,36,42,50,60],r=>r.rec?.maxPts||0],
+ ["lv","Reach level {n}",[3,5,8,12,16,20,25,30,40,50,60,75,90,110,130,150],(r)=>r.lv],
+ ["ast","Dish {n} assists in a game",[4,6,8,10,13,16],r=>r.rec?.maxAst||0],
+ ["reb","Grab {n} rebounds in a game",[6,9,12,15,18,22],r=>r.rec?.maxReb||0],
+ ["sb","Get {n} steals plus blocks in a game",[3,4,5,7,9],r=>r.rec?.maxSB||0],
+ ["dd","Record {n} double-doubles",[1,3,6,10,20,40],r=>r.rec?.dd||0],
+ ["st","Win {n} games in a row",[3,5,7,10,15],r=>r.rec?.bestSt||0],
+ ["cp","Score {n} career points",[100,300,600,1000,2000,4000,8000,15000,25000,32000],r=>r.rec?.pts||0],
+ ["sp","Spend your skill points (have fewer than {n} left)",[5],r=>rpgFree(r)<5?1:0,1]];
+function rpgGoals(R){R.goals??={};const out=[];for(const[k,txt,ns,f,flag]of GOALS){const i=R.goals[k]||0;if(i>=ns.length)continue;const n=ns[i],v=f(R);out.push({k,t:txt.replace("{n}",n.toLocaleString()),n:flag?1:n,v:flag?(v?1:0):Math.min(v,n),i,pct:flag?(v?1:0):Math.min(1,v/n)})}
+  return out.sort((a,b)=>b.pct-a.pct)}
+function rpgGoalsCheck(R){if(!R)return;let any=true,guard=0;while(any&&guard++<20){any=false;for(const g of rpgGoals(R))if(g.pct>=1){R.goals[g.k]=g.i+1;const xp=Math.round(needXP(R.lv)*(.35+g.i*.05)*(today().q||1));(R.done??=[]).unshift({t:g.t,x:xp});R.done=R.done.slice(0,30);
+      R.keys=(R.keys||0)+Math.max(1,Math.round((today().drop||1)));R.exp+=xp;while(R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R)+(today().spB||0);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
+      (R.toast??=[]).push(`Goal complete: ${g.t} (+${xp.toLocaleString()} EXP, +1 crate key)`);any=true}}}
+/* ---- new careers start here ---- */
+function rpgNew(){return{v:1,origin:"custom",tags:[],traits:[],body:{ht:78,wt:205,ws:82},pos:"SF",alloc:{},lv:1,exp:0,spLv:0,spBonus:0,rest:0,last:Date.now(),keys:0,goals:{},loads:[null,null,null],rec:null}}
+function autoBuild(R,age,style){R.alloc={};const pri={shooter:["THR","MID","SIQ","FT","CLS","HND","PER","SPD","ACC","CLU"],slasher:["LAY","DNK","ACC","SPD","VRT","HND","DRW","CLS","STR","PER"],
+    playmaker:["HND","PAS","VIS","ACC","MID","SPD","SIQ","STL","PER","THR"],twoway:["PER","STL","THR","MID","ACC","SPD","INT","VRT","SIQ","DRB"],big:["INT","BLK","DRB","ORB","CLS","DNK","PST","STR","VRT","STA"]}[style];
+  let guard=0;while(rpgFree(R)>0&&guard++<4000){const s=rpgSkills(R,age);let best=null,bv=-1e9;pri.forEach((k,i)=>{const w=(10-i)*1.4-(s[k]-50)*.35;if(w>bv&&skCost(s[k])<=rpgFree(R)){bv=w;best=k}});if(!best)break;R.alloc[best]=(R.alloc[best]||0)+skCost(s[best])}}
+
+/* ---------- Showcase model: a detailed pixel figure for creation and the character sheet ---------- */
+const SHW=104,SHH=172;
+function drawShow(cv,o){
+  const off=drawShow.off||(drawShow.off=document.createElement("canvas"));off.width=SHW;off.height=SHH;const g=off.getContext("2d");g.clearRect(0,0,SHW,SHH);
+  const L=o.look||{},b=o.body||{ht:78,wt:205,ws:82},back=o.view==="back",t=o.t||0,breath=Math.sin(t*2.2)>0?0:1;
+  const sk=SKN[L.skin??2],skD=mixc(sk,"#000000",.24),skDD=mixc(sk,"#000000",.4),skL=mixc(sk,"#ffffff",.16),hc=HAIR[clamp(L.hair??0,0,HAIR.length-1)],hD=mixc(hc,"#000000",.35),hL=mixc(hc,"#ffffff",.25);
+  const jy=o.jersey||"#2f6fd6",tr=o.trim||"#f4f1ea",jD=mixc(jy,"#000000",.22),jL=mixc(jy,"#ffffff",.14),tc=c=>c===1?tr:c===2?"#f4f1ea":"#16161c";
+  const R=(x,y,w,h,c)=>{if(w<=0||h<=0)return;g.fillStyle=c;g.fillRect(Math.round(x),Math.round(y),Math.round(w),Math.round(h))};
+  const E=(cx,cy,rx,ry,c)=>{g.fillStyle=c;for(let dy=-ry;dy<=ry;dy++){const hw=Math.round(Math.sqrt(Math.max(0,1-(dy*dy)/(ry*ry+.01)))*rx);g.fillRect(Math.round(cx-hw),Math.round(cy+dy),hw*2+1,1)}};
+  const limb=(x0,y0,r0,x1,y1,r1,c,cs,ch)=>{const n=Math.ceil(Math.hypot(x1-x0,y1-y0))+1;for(let i=0;i<=n;i++){const u=i/n,x=x0+(x1-x0)*u,y=y0+(y1-y0)*u,r=r0+(r1-r0)*u;E(x,y,r,1,c)}
+    if(cs)for(let i=0;i<=n;i++){const u=i/n,x=x0+(x1-x0)*u,y=y0+(y1-y0)*u,r=r0+(r1-r0)*u;R(x+r-1.2,y,1.5,1,cs)}
+    if(ch)for(let i=2;i<n-2;i++){const u=i/n,x=x0+(x1-x0)*u,y=y0+(y1-y0)*u,r=r0+(r1-r0)*u;R(x-r+1,y,1,1,ch)}};
+  const s=clamp(b.ht/84,.78,1.12),Hp=150*s,cx=52,y0=SHH-6,m=clamp((b.wt-(b.ht*2.85-22))/40,-1,2.5),bd=L.build?1:0,ws=clamp((b.ws||b.ht+3)/b.ht,.96,1.14);
+  const hh=20,yH=Math.round(y0-Hp)+breath*0,yS=yH+hh+3+breath,SW=12+bd*2+m*1.2+(b.ht-78)*.1,yW=Math.round(yS+Hp*.27),WW=8.5+bd*.5+m*1.6,yK=Math.round(yW+Hp*.15);
+  // ---- legs ----
+  const kneeY=yK+5,ank=y0-7,legC=L.sleeve===3?tr:sk,legS=L.sleeve===3?mixc(tr,"#000000",.25):skD;
+  [-1,1].forEach(sd=>{const hx=cx+sd*5,kx=cx+sd*6.5,ax=cx+sd*7;limb(hx,yW+4,7.2+m*.8+bd*.6,kx,kneeY,5.2+bd*.5,legC,legS,L.sleeve===3?null:skL);limb(kx,kneeY,5.2+bd*.5,ax,ank,3.4,legC,legS,null);
+    if(L.sleeve!==3){E(kx,kneeY,3,2,skL);E(kx+sd*.5,kneeY+7,4.2+bd*.5,4,sk);R(kx+3,kneeY+4,1,6,skD)}
+    const sc=L.socks===1?"#f4f1ea":L.socks===2?"#1b1b22":L.socks===3?tr:"#f4f1ea",sh=L.socks?10:3;R(ax-3.5,ank-sh+1,7,sh,sc);R(ax+2.5,ank-sh+1,1,sh,mixc(sc,"#000000",.2));if(L.socks)R(ax-3.5,ank-sh+2,7,1,mixc(sc,tr,.6));
+    const shoe=SHOEC[L.shoe??0],sD=mixc(shoe,"#000000",.3);const tx=back?ax-5:ax-5+sd*1;R(tx,ank,11,5,shoe);R(tx+1,ank-1,8,1,shoe);R(tx,ank+4,11,2,lumc(shoe)>.6?"#c9ccd6":"#f4f1ea");R(tx+2,ank+1,6,1,mixc(shoe,tr,.7));R(tx+9,ank,2,4,sD)});
+  // ---- shorts ----
+  for(let y=yW-1;y<=yK;y++){const u=(y-yW)/(yK-yW),hw=WW+1+u*3.5;if(y>yK-6&&!back){R(cx-hw,y,hw-1,1,jy);R(cx+1,y,hw-1,1,jy)}else R(cx-hw,y,hw*2,1,jy);R(cx-hw,y,2,1,tr);R(cx+hw-2,y,2,1,tr);R(cx+hw-4,y,2,1,jD)}
+  R(cx-WW-1,yW-1,WW*2+2,2,jD);R(cx-WW-3,yK,WW*2+7,1,jD);
+  // ---- arms (behind torso edges) ----
+  const La=Hp*.39*ws,up=La*.47,fo=La*.43,shy=yS+4;
+  const arm=(sd,sl)=>{const sx=cx+sd*(SW-1),ex=cx+sd*(SW+2.5),ey=shy+up,wx=cx+sd*(SW+3.5),wy=ey+fo;const c=sl?tr:sk,cs=sl?mixc(tr,"#000000",.25):skD;
+    const r1=3.6+bd*.7+m*.3,r2=2.9+bd*.4,r3=2.3;limb(sx,shy,r1+1,ex,ey,r2+1,"#120e18");limb(ex,ey,r2+1,wx,wy,r3+1,"#120e18");limb(sx,shy,r1,ex,ey,r2,c,cs,sl?null:skL);limb(ex,ey,r2,wx,wy,r3,sk,skD,null);R(ex-1,ey,2,1,skD);
+    E(wx,wy+3,2.8,3.2,sk);R(wx+sd*1.5,wy+2,1,4,skD);
+    const wr=L.wrist?tc(L.wrist):null;if(wr)R(wx-3,wy-3,6,3,wr);return{wx,wy}};
+  // ---- torso: skin, then the tank top ----
+  for(let y=yS;y<=yW+1;y++){const u=(y-yS)/(yW-yS),hw=SW-1-(SW-1-WW)*Math.pow(u,1.2);R(cx-hw,y,hw*2,1,sk)}
+  for(let y=yS;y<=yW+2;y++){const u=(y-yS)/(yW-yS),hw=SW-1-(SW-1-WW)*Math.pow(u,1.2),arm=y<yS+11?Math.round(4.5-(y-yS)*.35):0,cut=hw-arm-1;
+    const nk=back?(y<yS+2?3:0):(y<yS+8?Math.round(5.5-(y-yS)*.7):0);
+    if(y<yS+3){R(cx-cut,y,cut-nk-(back?0:0),1,jy);R(cx+nk,y,cut-nk,1,jy);if(!back){R(cx-cut,y,1,1,tr);R(cx+cut-1,y,1,1,tr)}}
+    else{if(nk>0){R(cx-cut,y,cut-nk,1,jy);R(cx+nk,y,cut-nk,1,jy);R(cx-nk-1,y,1,1,tr);R(cx+nk,y,1,1,tr)}else R(cx-cut,y,cut*2,1,jy);R(cx-cut,y,1,1,tr);R(cx+cut-1,y,1,1,tr);R(cx+cut-4,y,2,1,jD);R(cx-cut+1,y,1,1,jL)}}
+  if(!back){R(cx-6,yS+7,1,1,tr);R(cx+5,yS+7,1,1,tr);R(cx-1,yS+8,2,1,tr)}else R(cx-3,yS,6,1,tr);
+  R(cx-WW,yW+1,WW*2,1,jD);
+  // number / name
+  const num=String(o.num??"").slice(0,2),glyph=(s2,x,y,u,col)=>{let x0=x;for(const ch of String(s2).toUpperCase()){const gl=PXF[ch];if(gl)for(let i=0;i<15;i++)if(gl[i]==="1")R(x0+(i%3)*u,y+Math.floor(i/3)*u,u,u,col);x0+=4*u}};
+  if(num){const u=back?3:2,w=num.length*4*u-u,x=Math.round(cx-w/2),y=back?yS+12:yS+10;glyph(num,x+1,y+1,u,jD);glyph(num,x,y,u,tr)}
+  if(back&&o.name){const nm=String(o.name).split(" ").slice(-1)[0].toUpperCase().slice(0,10),w=nm.length*4-1;glyph(nm,Math.round(cx-w/2),yS+5,1,tr)}
+  const aL=arm(-1,(L.sleeve===2&&!back)||(L.sleeve===1&&back)),aR=arm(1,(L.sleeve===1&&!back)||(L.sleeve===2&&back));
+  // ---- neck ----
+  R(cx-3-bd-m*.3,yH+hh-3,7+bd*2+m*.6,6+breath,sk);R(cx+2+bd,yH+hh-3,2,6,skD);if(!back)R(cx-2,yH+hh+1,5,1,skD);
+  // ---- hair behind the head ----
+  const st=L.style??0;
+  if(st===1)E(cx,yH+5,13,10,hc);
+  if(st===4){[-1,1].forEach(sd=>{for(let y=yH+4;y<yS+6;y+=2){R(cx+sd*8-1,y,3,2,(y/2)%2?hc:hD)}});if(back)for(let x=-7;x<=7;x+=2)for(let y=yH+6;y<yS+5;y+=2)R(cx+x,y,2,2,((x+y)/2)%2?hc:hD)}
+  // ---- head ----
+  const HW=[8,11,13,14,15,16,16,16,16,16,16,16,15,15,14,13,12,10,8,6];HW.forEach((w,i)=>R(cx-w/2,yH+i,w,1,sk));for(let i=3;i<17;i++)R(cx+HW[i]/2-2,yH+i,2,1,skD);for(let i=3;i<11;i++)R(cx-HW[i]/2,yH+i,1,1,skL);
+  [-1,1].forEach(sd=>{R(cx+sd*8.5-1,yH+8,2,5,sk);R(cx+sd*8.5-(sd<0?0:1),yH+9,1,3,skD)});
+  const ey=yH+10;
+  if(!back){
+    R(cx-5,ey-1,4,1,skD);R(cx+1,ey-1,4,1,skD);
+    if(L.gog===1){R(cx-7,ey-1,14,1,"#1b1b22");R(cx-5,ey-1,4,4,"#1b1b22");R(cx+1,ey-1,4,4,"#1b1b22");R(cx-4,ey,2,2,"#9fd3ff");R(cx+2,ey,2,2,"#9fd3ff")}
+    else{R(cx-5,ey,3,2,"#f4efe8");R(cx+2,ey,3,2,"#f4efe8");R(cx-4,ey,1,2,"#2a1a10");R(cx+3,ey,1,2,"#2a1a10");R(cx-5,ey-1,3,1,skDD);R(cx+2,ey-1,3,1,skDD)}
+    if(L.gog===2){R(cx-6,ey-1,5,1,"#2a2a33");R(cx+1,ey-1,5,1,"#2a2a33");R(cx-6,ey+2,5,1,"#2a2a33");R(cx+1,ey+2,5,1,"#2a2a33");R(cx-1,ey,2,1,"#2a2a33")}
+    const brow=mixc(hc,skDD,.4);R(cx-6,ey-3,4,1,brow);R(cx+2,ey-3,4,1,brow);R(cx-5,ey-4,2,1,brow);R(cx+3,ey-4,2,1,brow);
+    R(cx,ey+1,1,3,skD);R(cx-1,ey+4,1,1,skDD);R(cx+1,ey+4,1,1,skDD);R(cx-1,ey+3,1,1,skL);
+    const lip=mixc(sk,"#5a2420",.5);R(cx-2,ey+6,5,1,lip);R(cx-1,ey+7,3,1,mixc(sk,"#ffffff",.08));R(cx-1,yH+18,3,1,skD);R(cx-3,yH+19,7,1,skD);
+    R(cx+4,ey+2,1,4,skD);
+    const bdC=L.beard||0;if(bdC===1){R(cx-3,ey+5,7,1,hc);R(cx-3,ey+6,1,1,hc);R(cx+3,ey+6,1,1,hc)}
+    else if(bdC===2){R(cx-3,ey+5,7,1,hc);R(cx-2,ey+8,5,3,hc);R(cx-1,ey+11,3,1,hc)}
+    else if(bdC===3){for(let i=1;i<10&&ey-yH+i<20;i++){R(cx-HW[ey-yH+i]/2,ey+i,2,1,hc);R(cx+HW[ey-yH+i]/2-2,ey+i,2,1,hc)}R(cx-6,ey+7,13,3,hc);R(cx-4,ey+9,9,1,hc);R(cx-3,ey+5,7,1,hc);R(cx-2,ey+6,5,1,lip);R(cx-1,ey+7,3,1,hD)}}
+  else if(L.beard===3){R(cx-7,ey+2,2,5,hc);R(cx+5,ey+2,2,5,hc)}
+  // ---- hair on top ----
+  if(st===0){for(let i=0;i<5;i++)R(cx-HW[i]/2,yH+i-1,HW[i],1,hc);R(cx-7,yH+4,2,4,hc);R(cx+5,yH+4,2,4,hc);if(back)for(let i=4;i<13;i++)R(cx-HW[i]/2,yH+i,HW[i],1,hc);R(cx-4,yH,4,1,hL);R(cx+2,yH+1,2,1,hD)}
+  else if(st===1){for(let i=0;i<4;i++)R(cx-HW[i]/2-1,yH+i,HW[i]+2,1,hc);if(back)E(cx,yH+7,12,8,hc);for(let k=0;k<26;k++){const a=k*2.4,r=4+(k%5)*2;R(cx+Math.cos(a)*r,yH+4+Math.sin(a)*r*.7-3,1,1,k%2?hL:hD)}}
+  else if(st===2){for(let y=yH-9;y<yH+4;y++)R(cx-7,y,14,1,hc);R(cx-7,yH-9,14,1,hL);R(cx+5,yH-8,2,11,hD);R(cx-7,yH+4,2,3,hc);R(cx+5,yH+4,2,3,hc);if(back)for(let i=4;i<12;i++)R(cx-HW[i]/2,yH+i,HW[i],1,hc)}
+  else if(st===3){R(cx-4,yH+1,3,1,skL);R(cx-3,yH+2,1,1,"#ffffff")}
+  else if(st===4){for(let i=0;i<5;i++)R(cx-HW[i]/2,yH+i-1,HW[i],1,hc);for(let x=-5;x<=5;x+=2)R(cx+x,yH-1,1,back?13:5,hL)}
+  else if(st===5){for(let y=yH-6;y<yH+4;y++)R(cx-2,y,5,1,hc);R(cx-2,yH-6,5,1,hL);for(let i=1;i<5;i++)for(let x=-6;x<7;x+=2)if(Math.abs(x)>2)R(cx+x,yH+i,1,1,mixc(hc,sk,.5))}
+  else if(st===6){for(let i=0;i<4;i++)R(cx-HW[i]/2-1,yH+i-1,HW[i]+2,1,hc);[[-5,-3],[-2,-4],[1,-4],[4,-3],[-6,0],[6,0],[-3,-1],[2,-2]].forEach(([x,y])=>{E(cx+x,yH+y+1,2,2,hc);R(cx+x-1,yH+y,1,1,hL)});if(back)for(let i=3;i<12;i++)R(cx-HW[i]/2,yH+i,HW[i],1,hc)}
+  else if(st===7){const bz=mixc(hc,sk,.4);for(let i=0;i<4;i++)R(cx-HW[i]/2,yH+i,HW[i],1,bz);for(let i=0;i<4;i++)for(let x=-5;x<6;x+=2)R(cx+x+(i%2),yH+i,1,1,hc);if(back)for(let i=4;i<11;i++)R(cx-HW[i]/2,yH+i,HW[i],1,bz);R(cx-6,yH+4,1,3,bz);R(cx+5,yH+4,1,3,bz)}
+  if(L.band){const bc=tc(L.band);R(cx-8,yH+4,16,3,bc);R(cx-8,yH+4,16,1,mixc(bc,"#ffffff",.3))}
+  // ---- ball in the shooting hand ----
+  const hand=back?aR:aL,bx=hand.wx+(back?4:-4),by=hand.wy+5;E(bx,by,7,7,"#e2702a");E(bx-2,by-2,3,2,"#f09a52");
+  const ang=t*1.6;g.fillStyle="#6a2a0c";for(let i=-7;i<=7;i++){const y=by+i,xx=Math.round(bx+Math.sin(ang)*Math.sqrt(Math.max(0,49-i*i))*.8);g.fillRect(xx,y,1,1)}R(bx-7,by,15,1,"#6a2a0c");
+  // ---- outline pass ----
+  const id=g.getImageData(0,0,SHW,SHH),d=id.data,out=new Uint8ClampedArray(d);const op=(x,y)=>x>=0&&y>=0&&x<SHW&&y<SHH&&d[(y*SHW+x)*4+3]>0;
+  for(let y=0;y<SHH;y++)for(let x=0;x<SHW;x++){if(op(x,y))continue;if(op(x-1,y)||op(x+1,y)||op(x,y-1)||op(x,y+1)){const i=(y*SHW+x)*4;out[i]=18;out[i+1]=14;out[i+2]=24;out[i+3]=255}}
+  id.data.set(out);g.putImageData(id,0,0);
+  const c=cv.getContext("2d");c.imageSmoothingEnabled=false;cv.width=SHW;cv.height=SHH;c.clearRect(0,0,SHW,SHH);
+  c.fillStyle="rgba(0,0,0,.35)";for(let dy=-2;dy<=2;dy++){const hw=Math.round(Math.sqrt(1-(dy*dy)/4.5)*20);c.fillRect(cx-hw,y0+dy,hw*2,1)}
+  c.drawImage(off,0,0);
+}
+let SHOWT=null;
+function showLoop(){clearTimeout(SHOWT);const cvs=document.querySelectorAll("canvas[data-show]");if(!cvs.length)return;const t=performance.now()/1000;
+  cvs.forEach(cv=>{try{drawShow(cv,{...JSON.parse(cv.dataset.show),t})}catch(e){console.error(e)}});SHOWT=setTimeout(showLoop,140)}
+
+/* ---------- RPG UI: MapleStory-style windows (Stat, Skills, Goals, Loadouts), creation flow, EXP bar ---------- */
+function rpgLook(){const p=rpgP();return p?(p.look||lookOf(p,p.pid)):(C.look??=lookFor(C.name))}
+function rpgJersey(){const p=rpgP();if(p&&p.tid>=0){const t=T(p.tid);return[t.color||"#2f6fd6","#f4f1ea"]}const t=C?.cl?.teams?.[C.school];return[t?.color||"#2f6fd6","#f4f1ea"]}
+function rpgNo(){const p=rpgP();return p?p.no:(C.no??"0")}
+function rpgName(){const p=rpgP();return p?p.name:C.name}
+function showData(view){const R=rpgS(),[j,t]=rpgJersey();return esc(JSON.stringify({look:rpgLook(),body:R.body,jersey:j,trim:t,num:rpgNo(),name:rpgName(),view:view||"front"}))}
+function skRow(k,s,R,age,edit){const v=s[k],base=skBase(k,R.body,age)+(rpgFlat(R)[k]||0),cost=skCost(v),free=rpgFree(R),can=edit&&free>=cost,dn=edit&&(R.alloc[k]||0)>0;
+  return`<div class="sk" data-k="${k}"><span class="sk-ic">${k.slice(0,3)}</span><span class="sk-n">${SKN_[k]}</span><span class="sk-bar"><i style="width:${Math.min(100,v)}%"></i>${v>100?`<i class="ov" style="width:${Math.min(100,(v-100)*4)}%"></i>`:""}</span><b class="sk-v">${v}</b>
+  ${edit?`<span class="sk-b"><button class="mp-b" data-act="rsk" data-k="${k}" data-n="-5" ${dn?"":"disabled"} aria-label="Lower ${SKN_[k]} by 5">-5</button><button class="mp-b" data-act="rsk" data-k="${k}" data-n="-1" ${dn?"":"disabled"} aria-label="Lower ${SKN_[k]}">-</button><button class="mp-b plus" data-act="rsk" data-k="${k}" data-n="1" ${can?"":"disabled"} aria-label="Raise ${SKN_[k]}">+</button><button class="mp-b plus" data-act="rsk" data-k="${k}" data-n="5" ${can?"":"disabled"} aria-label="Raise ${SKN_[k]} by 5">+5</button><small class="sk-c" title="Cost of the next point">${cost}</small></span>`:""}</div>`}
+function skGroups(R,age,edit){const s=rpgSkills(R,age);return SKG.map(g=>`<div class="mp-grp"><div class="mp-gh">${g}</div>${SKL.filter(x=>x[2]===g).map(x=>skRow(x[0],s,R,age,edit)).join("")}</div>`).join("")}
+function mpWin(title,body,opt={}){return`<div class="mp-win ${opt.cls||""}"><div class="mp-title"><b>${title}</b>${opt.right||""}${opt.close?`<button class="mp-x" data-act="${opt.close}" aria-label="Close">×</button>`:""}</div><div class="mp-body">${body}</div></div>`}
+function rpgSummary(R,age){const s=rpgSkills(R,age),a=skToA(s),pos=C?.pos||rpgP()?.pos||"SF",ovr=calcOvr(a,pos);
+  return`<div class="mp-sum"><div><small>Archetype</small><b>${archName(s,R.body.ht)}</b></div><div><small>Overall</small><b>${ovr}</b></div><div><small>Points left</small><b class="${rpgFree(R)>0?"hot":""}">${rpgFree(R)}</b></div><div><small>Height</small><b>${ftin(R.body.ht)}</b></div><div><small>Wingspan</small><b>${ftin(R.body.ws)}</b></div><div><small>Weight</small><b>${R.body.wt} lb</b></div></div>`}
+/* ---- creation: origin → body & look → skills → traits ---- */
+const CSTEPS=[["origin","Origin"],["body","Body & look"],["skills","Skills"],["traits","Traits"]];
+function mcCreate(){
+  C.rpg??=rpgNew();const R=C.rpg,st=C.cs||"origin",i=CSTEPS.findIndex(x=>x[0]===st),age=18;
+  C.look??=lookFor(C.name);C.no??=String(ri(0,55));C.pos??="SF";R.body.ht??=78;
+  const steps=`<nav class="mp-tabs">${CSTEPS.map(([k,l],j)=>`<button data-act="rstep" data-v="${k}" aria-current="${k===st}" ${j>i+1?"disabled":""}>${j+1}. ${l}</button>`).join("")}</nav>`;
+  const nav=`<div class="mp-nav">${i>0?`<button class="mp-btn" data-act="rstep" data-v="${CSTEPS[i-1][0]}">← Back</button>`:""}<span></span>${i<CSTEPS.length-1?`<button class="mp-btn main" data-act="rstep" data-v="${CSTEPS[i+1][0]}">Next: ${CSTEPS[i+1][1]} →</button>`:`<button class="mp-btn main" data-act="mcoffers" ${rpgFree(R)>0?`title="You still have ${rpgFree(R)} points to spend"`:""}>Start his story →</button>`}</div>`;
+  const yrs=[];for(let y=2024;y>=1969;y--)yrs.push(y);
+  let body="";
+  if(st==="origin")body=mpWin("Who is he?",`<div class="mp-form"><label>Name <input id="mc-name" class="mp-in" maxlength="24" value="${esc(C.name)}"></label>
+      ${C.legacy?`<div class="mp-note">Generation ${C.legacy.gen}. Son of ${esc(C.legacy.parent)}. He'll wear No. ${esc(C.legacy.no??"--")} and get a recruiting boost.</div>`:`<label>Freshman season <select id="mc-year" class="mp-in">${yrs.map(y=>`<option value="${y}" ${y===C.startY?"selected":""}>${sl(y)}</option>`).join("")}</select></label>`}</div>`)
+    +mpWin("Choose an origin",`<div class="mp-orig">${ORIGINS.map(o=>`<button class="mp-card ${R.origin===o.k?"picked":""}" data-act="rorig" data-v="${o.k}"><b>${o.n}</b>${o.tag?`<span class="chip">[${o.tag}]</span>`:""}<p>${o.bio}</p><small>${o.trait}</small>${o.sig?`<em>Signature: ${o.sig}</em>`:""}</button>`).join("")}</div>`);
+  else if(st==="body"){const hts=[];for(let h=66;h<=91;h++)hts.push(h);const wts=[];for(let w=150;w<=330;w+=5)wts.push(w);const wss=[];for(let w=R.body.ht-2;w<=R.body.ht+12;w++)wss.push(w);
+    body=`<div class="mp-two"><div class="mp-col">${mpWin("Body",`<div class="mp-form">
+      <div class="mp-lab">Position</div><div class="fid">${POS.map(p=>`<button data-act="mcpos" data-v="${p}" aria-pressed="${C.pos===p}">${p}</button>`).join("")}</div>
+      <label>Height <select class="mp-in" data-act="rbody" data-k="ht">${hts.map(h=>`<option value="${h}" ${h===R.body.ht?"selected":""}>${ftin(h)}</option>`).join("")}</select></label>
+      <label>Wingspan <select class="mp-in" data-act="rbody" data-k="ws">${wss.map(h=>`<option value="${h}" ${h===R.body.ws?"selected":""}>${ftin(h)}${h-R.body.ht>=6?" (long)":h-R.body.ht<=0?" (short)":""}</option>`).join("")}</select></label>
+      <label>Weight <select class="mp-in" data-act="rbody" data-k="wt">${wts.map(w=>`<option value="${w}" ${w===R.body.wt?"selected":""}>${w} lb</option>`).join("")}</select></label>
+      <div class="mp-note">Any height at any position. Height raises your floor for blocks, boards, interior defense and dunking, lowers it for speed and handle, and raises your ceiling: the taller you are, the higher you can climb. Wingspan helps steals, blocks and contests. Weight trades speed for strength.</div></div>`)}
+      ${mpWin("Look",avOpts(C.look,"mclook")+noSelect("mc-no",C.no)+`<div class="actions" style="margin-top:8px"><button class="mp-btn" data-act="mclookrand">Randomize</button></div>`)}</div>
+      <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas><canvas data-show='${showData("back")}' width="${SHW}" height="${SHH}"></canvas></div><div class="mp-show-s"><canvas class="av-sm" data-av='${esc(JSON.stringify({l:C.look,j:rpgJersey()[0],t:"#f4f1ea",h:R.body.ht}))}' width="40" height="56"></canvas><small>How he looks on the court</small></div>`)}</div></div>`}
+  else if(st==="skills")body=`<div class="mp-two"><div class="mp-col">${mpWin("Skills",`<div class="mp-pts"><span>${rpgTotal(R)} to start. The next point costs 1 under 60, 2 under 75, 3 under 85, 4 under 95, then more. No cap.</span><b>${rpgFree(R)}</b></div>
+      <div class="actions"><button class="mp-btn" data-act="rauto" data-v="shooter">Auto: Shooter</button><button class="mp-btn" data-act="rauto" data-v="slasher">Slasher</button><button class="mp-btn" data-act="rauto" data-v="playmaker">Playmaker</button><button class="mp-btn" data-act="rauto" data-v="twoway">Two-way</button><button class="mp-btn" data-act="rauto" data-v="big">Big</button><button class="mp-btn" data-act="rreset">Reset</button></div>${skGroups(R,age,true)}`)}</div>
+      <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>`+rpgSummary(R,age))}</div></div>`;
+  else body=mpWin("Traits (pick up to 2)",`<div class="mp-orig">${TRAITS.map(t=>{const on=R.traits.includes(t.k);return`<button class="mp-card ${on?"picked":""}" data-act="rtrait" data-v="${t.k}" ${!on&&R.traits.length>=2?"disabled":""}><b>${t.n}</b><p class="up">▲ ${t.up}</p><p class="dn">▼ ${t.down}</p></button>`}).join("")}</div>`)
+    +mpWin("Summary",rpgSummary(R,age)+`<div class="mp-note">You can respec for free at any time from the Character window (press C) and save three loadouts.</div>`);
+  return mcHead("Create your player. Choose an origin, build his body, spend 300 skill points.")+`<div class="mp">${steps}${body}${nav}</div>`;
+}
+/* ---- the Character window (in college and in the league) ---- */
+function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetTab||"stat");const t=C?.sheetTab||tab||"stat",age=rpgAge(),s=rpgSkills(R,age),ev=today();
+  const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],["loads","Loadouts"],["today","Today"]];
+  let body="";
+  if(t==="stat")body=`<div class="mp-two"><div class="mp-col">${mpWin(esc(rpgName()),`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>${rpgSummary(R,age)}<div class="mp-kv"><span>Level</span><b>${R.lv}</b><span>EXP</span><b>${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()}</b><span>Origin</span><b>${ORIGINS.find(o=>o.k===R.origin)?.n||"Custom"}</b><span>Traits</span><b>${R.traits.map(k=>TRAITS.find(x=>x.k===k)?.n).filter(Boolean).join(", ")||"None"}</b><span>Crate keys</span><b>${R.keys||0}</b><span>Rested EXP</span><b>${Math.round(R.rest||0).toLocaleString()}</b></div>`)}</div>
+    <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
+  else if(t==="skills")body=mpWin("Skills",`<div class="mp-pts"><button class="mp-btn sm" data-act="rrespec">Respec (free)</button><b>${rpgFree(R)}</b></div>${skGroups(R,age,true)}`);
+  else if(t==="goals"){const gs=rpgGoals(R);body=mpWin("Goals",`<div class="mp-goals">${gs.slice(0,8).map(g=>`<div class="mp-goal"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></div>`).join("")}</div>`)
+    +mpWin("Completed",`<ul class="mp-log">${(R.done||[]).slice(0,12).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>Nothing yet. Play a game.</li>"}</ul>`)}
+  else if(t==="loads")body=mpWin("Loadouts",`<div class="mp-note">Save your current build to a slot and swap builds any time: a shooter for the season, a two-way build for the playoffs.</div><div class="mp-loads">${[0,1,2].map(i=>{const L=R.loads?.[i];return`<div class="mp-load"><b>Slot ${i+1}</b><span>${L?`${esc(L.n)} · ${L.pts} pts`:"Empty"}</span><span class="actions"><button class="mp-btn sm" data-act="rsave" data-v="${i}">Save here</button>${L?`<button class="mp-btn sm main" data-act="rload" data-v="${i}">Load</button>`:""}</span></div>`}).join("")}</div>`);
+  else body=mpWin("Today's event",`<div class="mp-ev big"><span class="ic">${ev.ic}</span><div><b>${ev.n}</b><p>${ev.d}</p></div></div><div class="mp-week">${DAYEV.map((d,i)=>`<div class="${d===ev?"on":""}"><small>${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][i]}</small><span>${d.ic}</span><em>${d.n.replace(/ (Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/,"")}</em></div>`).join("")}</div><div class="mp-note">Rested EXP builds while you're away and is spent as bonus EXP on your next games. There are no streaks to lose.</div>`);
+  openModal(`<div class="mp mp-sheet"><div class="mp-top"><nav class="mp-tabs">${tabs.map(([k,l])=>`<button data-act="rsheet" data-v="${k}" aria-current="${k===t}">${l}</button>`).join("")}</nav><button class="mp-x" data-act="close" aria-label="Close">×</button></div>${body}</div>`);
+  showLoop();paintAvatars($("sheet"));
+}
+/* ---- the EXP bar shown under the header ---- */
+function rpgBar(){const R=rpgS();if(!R)return"";const pct=Math.min(100,R.exp/needXP(R.lv)*100),ev=today(),g=rpgGoals(R)[0],free=rpgFree(R);
+  return`<div class="rpgbar" id="rpgbar"><button class="rpg-lv" data-act="rsheet" data-v="stat" title="Character (C)">Lv <b>${R.lv}</b></button><button class="rpg-xp" data-act="rsheet" data-v="stat" aria-label="EXP ${Math.round(pct)}%"><i style="width:${pct}%"></i><span>EXP ${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()} (${pct.toFixed(1)}%)</span></button>
+  ${free>0?`<button class="rpg-sp hot" data-act="rsheet" data-v="skills" title="Skills (K)">+${free} SP</button>`:`<button class="rpg-sp" data-act="rsheet" data-v="skills" title="Skills (K)">Skills</button>`}
+  <button class="rpg-ev" data-act="rsheet" data-v="today" title="${esc(ev.d)}"><span>${ev.ic}</span>${ev.n}</button>${g?`<button class="rpg-goal" data-act="rsheet" data-v="goals" title="Goals (J)">◎ ${esc(g.t)} <small>${g.v.toLocaleString()}/${g.n.toLocaleString()}</small></button>`:""}</div>`}
+function rpgMount(){const R=rpgS();const old=$("rpgbar");if(!R){old?.remove();return}const html=rpgBar();if(old){old.outerHTML=html;return}
+  const anchor=document.querySelector("#mc:not([hidden]) .cl-top .hdr")||(!$("app")?.hidden&&$("hdr"));if(anchor)anchor.insertAdjacentHTML("afterend",html)}
+function rpgFlush(){const R=rpgS();if(!R)return;(R.toast||[]).splice(0).forEach((m,i)=>setTimeout(()=>toast(m),i*1600));
+  if(R.pend?.length){const ups=R.pend.splice(0),last=ups[ups.length-1],sp=ups.reduce((a,x)=>a+x.sp,0);let el=$("lvup-b");if(!el){el=document.createElement("div");el.id="lvup-b";document.body.appendChild(el)}
+    el.innerHTML=`<div class="lv-burst"></div><small>LEVEL UP</small><b>Lv ${last.lv}</b><p>+${sp} skill point${sp===1?"":"s"} · press K</p>`;el.className="show";clearTimeout(rpgFlush.t);rpgFlush.t=setTimeout(()=>{el.className=""},2400)}
+  rpgMount()}
+function rpgKeys(e){if(e.metaKey||e.ctrlKey||e.altKey)return;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA"||!$("live").hidden)return;if(!rpgS())return;
+  const k=e.key.toLowerCase();if(k==="c")openSheet("stat");else if(k==="k")openSheet("skills");else if(k==="j")openSheet("goals");else return;e.preventDefault()}
+
+/* ---------- MyCareer game shell: pixel gym scene + MapleStory HUD + windows ---------- */
+const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],rec:["Recruiting","U"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Inventory","I"],today:["Today","E"],log:["Game log","O"]};
+function csView(k){const cl=C.cl;switch(k){case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"rec":return clRec();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
+  case"log":{const s=C.season,last=s.games.slice().reverse();return`<section class="panel"><h3>${sl(cl.y)} game log</h3>${last.length?`<div class="tw"><table><thead><tr><th class="l">Result</th><th class="l">Opponent</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th></tr></thead><tbody>${last.map(g=>`<tr class="${g.w?"r-w":"r-l"}"><td class="l"><b class="${g.w?"wl-w":"wl-l"}">${g.w?"W":"L"}</b> ${g.us}-${g.them}</td><td class="l name">${g.home?"vs":"at"} ${esc(g.label||tLbl(cl,g.opp))}</td><td>${g.ln.min}</td><td class="hi">${g.ln.pts}</td><td>${g.ln.reb}</td><td>${g.ln.ast}</td><td>${g.ln.stl}</td><td>${g.ln.blk}</td><td>${g.ln.fgm??0}-${g.ln.fga??0}</td></tr>`).join("")}</tbody></table></div>`:"<p class='mp-note'>No games yet. Press Space to play.</p>"}</section>`}
+  case"inv":return`<div class="mp-note">The locker is coming next: sneakers, sleeves, headbands and more, earned from Locker Crates and quests. Crate keys so far: <b>${rpgS()?.keys||0}</b>.</div>`;
+  default:return""}}
+function csWinHtml(k){const R=rpgS();if(["stat","skills","quests","today"].includes(k)){C.sheetTab=k==="quests"?"goals":k;return null}
+  return`<div class="mp-win cs-w" data-win="${k}" style="left:${(C.winPos?.[k]?.x)??(60+Object.keys(C.wins||{}).indexOf(k)*28)}px;top:${(C.winPos?.[k]?.y)??(48+Object.keys(C.wins||{}).indexOf(k)*28)}px;width:${k==="rec"||k==="prog"||k==="sched"?"640px":"520px"}"><div class="mp-title" data-drag="${k}"><b>${CSWIN[k][0]}</b><button class="mp-x" data-act="cswin" data-v="${k}" data-close="1" aria-label="Close">×</button></div><div class="mp-body">${csView(k)}</div></div>`}
+function csToggle(k){if(["stat","skills","quests","today"].includes(k)){openSheet(k==="quests"?"goals":k);return}C.wins??={};
+  if(C.wins[k]){delete C.wins[k]}else{if(innerWidth<=760)C.wins={};C.wins[k]=1}csWins()}
+function csWins(){const host=$("cs-wins");if(!host)return;host.innerHTML=Object.keys(C.wins||{}).map(csWinHtml).filter(Boolean).join("");paintAvatars(host);saveC()}
+function csDragInit(){const host=$("cs-wins");if(!host||host.dataset.drag)return;host.dataset.drag=1;let d=null;
+  host.addEventListener("pointerdown",e=>{const t=e.target.closest("[data-drag]");const w=e.target.closest(".cs-w");host.querySelectorAll(".cs-w").forEach(x=>x.classList.remove("focus"));if(w){w.classList.add("focus");host.appendChild(w)}if(!t||e.target.closest("button")||innerWidth<=760)return;const win=t.parentElement,r=win.getBoundingClientRect(),hr=host.getBoundingClientRect();d={k:t.dataset.drag,win,dx:e.clientX-r.left,dy:e.clientY-r.top,hx:hr.left,hy:hr.top};win.setPointerCapture?.(e.pointerId);e.preventDefault()});
+  host.addEventListener("pointermove",e=>{if(!d)return;const x=clamp(e.clientX-d.dx-d.hx,0,innerWidth-120),y=clamp(e.clientY-d.dy-d.hy,0,innerHeight-160);d.win.style.left=x+"px";d.win.style.top=y+"px"});
+  host.addEventListener("pointerup",()=>{if(!d)return;(C.winPos??={})[d.k]={x:parseInt(d.win.style.left),y:parseInt(d.win.style.top)};saveC();d=null})}
+/* ---- the scene ---- */
+function csScene(){const cv=$("cs-cv");if(!cv||!C?.cl)return;const cl=C.cl;const W=cv.clientWidth||800,H=cv.clientHeight||400,sc=clamp(Math.round(Math.min(W/480,H/260)),2,3);const iw=Math.ceil(W/sc),ih=Math.ceil(H/sc);
+  if(cv.width!==iw||cv.height!==ih){cv.width=iw;cv.height=ih}const g=cv.getContext("2d");g.imageSmoothingEnabled=false;
+  const t=C.cl.teams[C.school],hc=t.color||"#2f6fd6",dk=mixc(hc,"#000000",.35),hour=new Date().getHours(),night=hour>=19||hour<6,eve=hour>=16&&hour<19;
+  let seed=hsh(C.school);const rr=()=>{seed=(Math.imul(seed,1103515245)+12345)>>>0;return(seed>>>8)/16777216};
+  const floorY=Math.round(ih*.68);
+  // wall
+  g.fillStyle=night?"#2a2f4a":"#e9e2cf";g.fillRect(0,0,iw,floorY);g.fillStyle=night?"#232841":"#d9d0b8";g.fillRect(0,floorY-18,iw,18);g.fillStyle=dk;g.fillRect(0,floorY-20,iw,3);
+  // bleachers (upper wall)
+  for(let r=0;r<4;r++){const y=14+r*11;g.fillStyle=r%2?mixc(hc,"#ffffff",.75):mixc(hc,"#ffffff",.6);g.fillRect(0,y,iw,10);g.fillStyle=mixc(hc,"#000000",.2);g.fillRect(0,y+9,iw,1);
+    for(let x=4;x<iw;x+=9){if(rr()<.35)continue;g.fillStyle=[hc,hc,"#f4f1ea","#2b2f40","#ffd166",mixc(hc,"#ffffff",.3)][Math.floor(rr()*6)];g.fillRect(x,y+3,5,5);g.fillStyle=SKN[Math.floor(rr()*6)];g.fillRect(x+1,y,3,3)}}
+  // windows with daylight
+  for(let x=10;x<iw-30;x+=70){g.fillStyle=night?"#0d1024":eve?"#ffd39a":"#bfe3ff";g.fillRect(x,2,40,10);g.fillStyle="#0004";g.fillRect(x+19,2,2,10)}
+  // banners
+  const nm=(C.school||"").toUpperCase().slice(0,12),conf=(t.conf||"").toUpperCase().slice(0,10);
+  const ban=(x,txt,col)=>{const w=Math.max(44,txt.length*4+10);g.fillStyle="#0005";g.fillRect(x+2,62,w,34);g.fillStyle=col;g.fillRect(x,60,w,32);g.fillStyle=mixc(col,"#ffffff",.5);g.fillRect(x,60,w,2);g.fillStyle="#1b1b22";g.beginPath();g.moveTo(x,92);g.lineTo(x+w,92);g.lineTo(x+w/2,100);g.fill();g.fillStyle=col;g.beginPath();g.moveTo(x,90);g.lineTo(x+w,90);g.lineTo(x+w/2,98);g.fill();glyphs(g,txt,x+5,68,"#ffffff");glyphs(g,String(C.y),x+Math.round(w/2)-8,80,mixc(col,"#ffffff",.7))};
+  ban(Math.round(iw*.12),nm,hc);ban(Math.round(iw*.12)+Math.max(44,nm.length*4+10)+8,conf,dk);if(C.cl.past?.length)ban(Math.round(iw*.12)+Math.max(44,nm.length*4+10)+Math.max(44,conf.length*4+10)+16,"CHAMPS",mixc(hc,"#ffd166",.5));
+  // scoreboard, door, trophy case
+  {const x=Math.round(iw*.5)-34,y=58;g.fillStyle="#1b1b22";g.fillRect(x,y,68,30);g.fillStyle="#3a3e4c";g.fillRect(x+1,y+1,66,28);g.fillStyle="#000";g.fillRect(x+4,y+4,26,10);g.fillRect(x+38,y+4,26,10);g.fillRect(x+4,y+17,60,9);
+    glyphs(g,"HOME",x+6,y+6,"#f4f1ea");glyphs(g,"GUEST",x+40,y+6,"#f4f1ea");glyphs(g,String(t.w).padStart(2,"0")+"-"+String(t.l).padStart(2,"0"),x+14,y+19,"#ff5a3c");glyphs(g,String(cl.day??0),x+48,y+19,"#ffd166")}
+  {const x=Math.round(iw*.82),y=floorY-54;g.fillStyle="#5a4632";g.fillRect(x-1,y-1,22,36);g.fillStyle="#8a6a4a";g.fillRect(x,y,20,34);g.fillStyle="#3a2a1a";g.fillRect(x+3,y+3,14,14);g.fillStyle="#bfe3ff";g.fillRect(x+4,y+4,12,12);g.fillStyle="#ffd166";g.fillRect(x+15,y+20,2,2);g.fillStyle="#1b1b22";g.fillRect(x-2,y-9,24,7);glyphs(g,"EXIT",x+3,y-8,"#8fe08f")}
+  {const n=(cl.past||[]).length,x=Math.round(iw*.04),y=floorY-58;g.fillStyle="#5a4632";g.fillRect(x,y,52,40);g.fillStyle="#2b2b33";g.fillRect(x+2,y+2,48,36);g.fillStyle="#bfe3ff44";g.fillRect(x+2,y+2,48,36);g.fillStyle="#8a6a4a";g.fillRect(x+2,y+19,48,2);
+    for(let i=0;i<Math.min(8,n+2);i++){const tx=x+6+(i%4)*11,ty=y+6+Math.floor(i/4)*17;g.fillStyle=i<n?"#ffd166":"#8a90a0";g.fillRect(tx+2,ty,3,6);g.fillRect(tx,ty+6,7,2);g.fillStyle=i<n?"#f5a623":"#5a5f70";g.fillRect(tx+1,ty-2,5,2)}glyphs(g,"TROPHIES",x+8,y+42,night?"#c9cfe0":"#4a4f5e")}
+  // hoop on the right wall
+  {const x=iw-46,y=floorY-78;g.fillStyle="#9aa1b5";g.fillRect(x+28,y-6,4,70);g.fillRect(x+6,y-6,26,3);g.fillStyle="#f4f6fb";g.fillRect(x,y-18,22,28);g.fillStyle="#cfd4de";g.fillRect(x+1,y-17,20,26);g.fillStyle="#ff8a3d";g.fillRect(x+6,y-4,10,8);g.fillStyle="#cfd4de";g.fillRect(x+8,y-2,6,4);g.fillStyle="#ff7a1f";g.fillRect(x-4,y+6,22,2);g.fillStyle="#eef2fa";for(let i=0;i<6;i++)g.fillRect(x-2+i*4,y+8,1,10)}
+  // floor
+  const tones=["#e4bb80","#dcb074","#e9c48c","#d5a86c"];for(let y=floorY;y<ih;y+=3){let x=-Math.floor(rr()*30);while(x<iw){const L=18+Math.floor(rr()*30);g.fillStyle=tones[Math.floor(rr()*4)];g.fillRect(Math.max(0,x),y,L,3);g.fillStyle="#a57440";if(x>0)g.fillRect(x,y,1,3);x+=L}}
+  g.fillStyle=hc+"cc";g.fillRect(0,floorY+Math.round((ih-floorY)*.55),iw,3);g.fillStyle="#f8f4ea";g.fillRect(0,floorY+Math.round((ih-floorY)*.55)-1,iw,1);
+  const grd=g.createLinearGradient(0,floorY,0,ih);grd.addColorStop(0,night?"rgba(0,0,20,.35)":"rgba(255,255,255,.12)");grd.addColorStop(1,night?"rgba(0,0,20,.1)":"rgba(0,0,0,.08)");g.fillStyle=grd;g.fillRect(0,floorY,iw,ih-floorY);
+  if(night){g.fillStyle="rgba(10,14,40,.28)";g.fillRect(0,0,iw,ih)}
+  // characters: coach, a teammate, you
+  const now=performance.now()/1000,by=floorY+Math.round((ih-floorY)*.42);
+  const put=(sp,x,y)=>{hlEll(g,x,y,8,2,"rgba(0,0,0,.3)");g.drawImage(sp,x-SOX,y-SOY)};
+  const coachLook={skin:SKN[2],hair:HAIR[5],style:7,beard:1,band:"",sleeve:0,wrist:"",socks:"",gog:0,build:1,shoe:"#16161c",jersey:"#2b2f40",trim:"#f4f1ea",num:"",tall:1,pose:"idle",fr:Math.floor(now*1.5)%2,face:"r"};
+  const cx=Math.round(iw*.5),tmX=Math.round(iw*.72),chX=Math.round(iw*.3);
+  put(hlSprite(coachLook),chX,by);
+  const tm=(C.cl.teams[C.school].roster||[]).map(id=>C.cl.players[id]).filter(p=>p&&p.pid!=="me").sort((a,b)=>b.ovr-a.ovr)[0];
+  if(tm){const[jy,tr]=[hc,"#f4f1ea"];put(hlSprite(hlOpts(lookOf(tm,tm.pid),jy,tr,tm.no,tm.ht,{pose:Math.floor(now)%6===0?"cele":"idle",fr:Math.floor(now*2)%2,face:"l"})),tmX,by)}
+  const me=C.cl.players.me,[jy,tr]=[hc,"#f4f1ea"];put(hlSprite(hlOpts(C.look||lookFor(C.name),jy,tr,C.no,C.ht,{pose:Math.floor(now*.5)%5===0?"drib":"idle",fr:Math.floor(now*3)%4,face:"f"})),cx,by);
+  const tags=$("cs-tags");if(tags){const px=x=>Math.round(x*sc),py=y=>Math.round(y*sc);tags.innerHTML=`<span class="cs-tag" style="left:${px(chX)}px;top:${py(by)+6}px">Coach</span>${tm?`<span class="cs-tag" style="left:${px(tmX)}px;top:${py(by)+6}px">${esc(shortNm(tm))}</span>`:""}<span class="cs-tag me" style="left:${px(cx)}px;top:${py(by)+6}px">Lv ${rpgS()?.lv||1} ${esc(shortNm({name:C.name}))}</span>`}
+}
+let CST=null;function csLoop(){clearTimeout(CST);if(!$("cs-cv"))return;csScene();CST=setTimeout(csLoop,160)}
+/* ---- the shell ---- */
+function mcCollege(){
+  const cl=C.cl;if(!cl||!cl.players.me){clJoin()}syncMe();const t=cl.teams[C.school],rk=apRk(cl,C.school),R=rpgS(),nx=myNext(cl),s=C.season;
+  const pct=R?Math.min(100,R.exp/needXP(R.lv)*100):0,ev=today(),free=R?rpgFree(R):0,gs=R?rpgGoals(R).slice(0,3):[];
+  const nxt=nx?`${nx.kind==="reg"?(nx.home?"vs ":"at "):`${esc(nx.lab)}: `}${tLbl(cl,nx.opp)}`:cl.phase==="done"?"Season complete":"Waiting on the next round";
+  const cc=C.cere?.[0],ccl={mm:"Midnight Madness",senior:"Senior Night",sel:"Selection Sunday",conf:"Conference champs",nc:"National champs"}[cc?.type];
+  const busy=C.clBusy;let act="";
+  if(cl.phase==="done")act=`<button class="mp-btn main" data-act="clwrap">Season wrap-up →</button>`;
+  else if(nx)act=`<button class="mp-btn" data-act="clwatch">▶ Watch</button><button class="mp-btn main" data-act="clsim" data-v="1" data-hold="clmenu">${cl.phase==="reg"?"Play next game":"Play next round"}<small>${esc(nxt)} · Space</small></button><button class="mp-btn" data-act="clmenu">Sim ⋯</button>`;
+  else act=`<button class="mp-btn main" data-act="clsim" data-v="${cl.phase==="reg"?"1":"end"}">${cl.phase==="reg"?"Next day":cl.phase==="ct"?"Sim to Selection Sunday":"Sim the tournament"}</button>`;
+  const keys=[["stat","Char","C"],["skills","Skills","K"],["inv","Locker","I"],["quests","Goals","J"],["roster","Team","T"],["sched","Sched","S"],["log","Log","O"],["poll","Top 25","R"],["stand","Stand","D"],["rec","Recruit","U"],["prog","Program","P"],["news","News","N"],["reel","Clips","H"],["goals","Trophy","G"]];
+  if(cl.ncaa)keys.push(["brk","Bracket","B"]);
+  setTimeout(()=>{csLoop();csWins();csDragInit()},0);
+  return`<div class="cs ${busy?"busy":""}">
+    <div class="cs-scene"><canvas id="cs-cv"></canvas><div id="cs-tags" class="cs-wins"></div>
+      <div class="cs-plate"><b>${rk?`#${rk} `:""}${esc(C.school)}</b><small>${CLASSN[C.cls-1]} · ${sl(C.y)} · ${esc(t.conf)} · ${clWhen(cl).split("·")[1]||""}</small><div class="rec">${t.w}-${t.l} <small style="font:600 12px var(--f-body)">${s.tot.gp?mcLine(s.tot):"No games yet"}</small></div>
+        <div class="actions"><button class="mp-btn sm" data-act="menu">Menu</button><button class="mp-btn sm" data-act="editlook">Edit look</button>${cc?`<button class="mp-btn sm go" data-act="ccere">🎉 ${ccl}</button>`:""}</div></div>
+      <div class="cs-quest"><div class="h"><span>Quest helper</span><span>${gs.length}/3</span></div>${gs.map(g=>`<button class="q" data-act="cswin" data-v="quests"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></button>`).join("")}</div>
+      <div id="cs-wins" class="cs-wins"></div>
+      <div class="cs-next">${act}</div></div>
+    <div class="cs-hud"><div class="cs-lv"><b><small>LV.</small>${R?.lv||1}</b><span>${esc(C.name)} · ${esc(archName(rpgSkills(R||rpgNew(),C.age||18),C.ht))}</span></div>
+      <button class="cs-xp" data-act="cswin" data-v="stat" aria-label="EXP"><i style="width:${pct}%"></i><span>EXP ${R?R.exp.toLocaleString():0} [${pct.toFixed(2)}%]</span></button>
+      <button class="cs-ev" data-act="cswin" data-v="today" title="${esc(ev.d)}"><b>${ev.ic}</b>${ev.n}</button>
+      <div class="cs-keys">${keys.map(([k,l,key])=>`<button class="cs-k ${k==="skills"&&free>0?"hot":""}" data-act="cswin" data-v="${k}" title="${CSWIN[k][0]} (${key})"><i>${key}</i>${k==="skills"&&free>0?`+${free}`:l}</button>`).join("")}</div></div></div>`;
+}
+function csKeys(e){if(!C||C.stage!=="college"||$("mc").hidden||!$("live").hidden)return false;if(e.metaKey||e.ctrlKey||e.altKey)return false;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return false;
+  if(e.key===" "&&$("modal").hidden){const b=document.querySelector('.cs-next [data-act="clsim"]');if(b){b.click();e.preventDefault();return true}}
+  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",u:"rec",p:"prog",n:"news",h:"reel",g:"goals",b:"brk",e:"today"};const k=map[e.key.toLowerCase()];if(!k)return false;
+  if(!$("modal").hidden){closeModal();if(["stat","skills","quests","today"].includes(k))return true}csToggle(k);e.preventDefault();return true}
+
+/*RPG_END*/
 function lvBasket(o,q){const homeRight=(LV.halves?q<=1:q<=2)!==!!LV.flip0;const bx=(o===0)===homeRight?88.75:5.25;return bx}
 function spot(bx,d,a){const dir=bx>47?1:-1,r=a*Math.PI/180;return{x:bx-dir*d*Math.cos(r),y:clamp(25+d*Math.sin(r),2,48)}}
 const SPOTS=[[24,0],[22,-55],[22,55],[12,-78],[8,72]];
@@ -3125,7 +3587,7 @@ function openMenu(){
         <p>${inLeague?`${sl(G.year)} · ${user().w}-${user().l}`:"Take over a real team in any era from 1970 to today and build a dynasty."}</p></button>
       ${col||car?`<button class="menu-card" data-act="m-newcareer" style="--e1:#9aa6c0;--e2:#f4f1ea;--e3:#1c2440"><span class="ty">+</span><small>MyCareer</small><b>New player</b><p>Start a fresh career. Your current college career will be replaced.</p></button>`:""}
       ${inLeague?`<button class="menu-card" data-act="m-newfr" style="--e1:#9aa6c0;--e2:#f4f1ea;--e3:#1c2440"><span class="ty">+</span><small>Franchise</small><b>New league</b><p>Pick a new era. Your current league will be replaced.</p></button>`:""}
-    </div><div class="actions" style="margin-top:14px"><button class="eras-x" data-act="saves">Manage saves</button></div><p class="note" style="color:#c9cfe0;margin-top:10px">${cloudLine()}</p></div>`;
+    </div><div class="actions" style="margin-top:14px">${rpgS()?`<button class="eras-x" data-act="m-sheet">Character sheet · respec</button>`:""}<button class="eras-x" data-act="saves">Manage saves</button></div><p class="note" style="color:#c9cfe0;margin-top:10px">${cloudLine()}</p></div>`;
 }
 function closeMenu(){$("menu").hidden=true;document.body.style.overflow=""}
 
@@ -3397,7 +3859,7 @@ const outChip=p=>p.inj>1?(p.playHurt&&G.phase==="playoffs"?'<span class="chip re
 const pName=(p,tags)=>`<button class="linkish" data-act="player" data-pid="${p.pid}">${esc(p.name)}</button>${p.lab?'<span class="chip lab">Lab</span>':""}${outChip(p)}${tags?durTag(p)+(p.rest&&p.tid===G.userTid?`<span class="chip">Rest: ${REST[p.rest][0]}</span>`:""):""}`;
 const tLabel=t=>`<span class="tsw" style="background:${t.color}"></span>${esc(t.abbr)}`;
 
-function render(){syncCareerTeam();renderHeader();renderTabs();renderView();renderBar();save();paintAvatars($("view"));if(G.showRecap&&G.recaps?.[0]){G.showRecap=false;openModal(recapHtml(G.recaps[0]))}}
+function render(){syncCareerTeam();renderHeader();renderTabs();renderView();renderBar();save();paintAvatars($("view"));rpgFlush();if(G.showRecap&&G.recaps?.[0]){G.showRecap=false;openModal(recapHtml(G.recaps[0]))}}
 function renderHeader(){
   const h=$("hdr");
   if(G.userTid==null){h.innerHTML=`<div class="who"><button class="menu-btn ico" data-act="menu" aria-label="Main menu">☰</button><div><div class="sub">${esc(G.source)} · ${sl(G.year)}</div><h1>Choose your franchise</h1></div></div><div class="rec">--</div>`;return}
@@ -3830,6 +4292,8 @@ document.addEventListener("click",e=>{
     case"delgo":deleteSaves(d.v).then(()=>{closeModal();toast("Deleted.");openMenu()});return;
     case"cloudsync":toast("Syncing…");cloudPush().then(()=>toast(CL.state==="on"?"Saved to the cloud.":"Cloud sync didn't finish. Try again in a bit.")).catch(()=>{});return;
     case"menu":mcClose();closeEras();closeModal();openMenu();return;
+    case"m-sheet":openSheet("skills");return;
+    case"cswin":{if(d.close){delete C.wins[d.v];csWins();return}csToggle(d.v);return}
     case"m-career":closeMenu();if(G?.career&&!G.career.retired&&P(G.career.pid)&&!(C&&C.stage!=="done"&&C.stage!=="create")){G.tab="me";render();return}if(!C||C.stage==="done")newCareer();mcOpen();return;
     case"m-newcareer":closeMenu();newCareer();mcOpen();return;
     case"m-fr":closeMenu();if(G&&G.userTid!=null){G.tab="home";render()}else openEras();return;
@@ -3850,14 +4314,27 @@ document.addEventListener("click",e=>{
     case"clrec":{const sc=$("mc").scrollTop;recAct(d.v,d.k);mcRender();$("mc").scrollTop=sc;return}
     case"clboard":{const b=C.cl.rec.board,i=b.indexOf(d.v),sc=$("mc").scrollTop;if(i>=0)b.splice(i,1);else if(b.length<10){b.push(d.v);const r=C.cl.rec.list.find(x=>x.id===d.v);if(r&&r.top[C.school]==null)r.top[C.school]=0}mcRender();$("mc").scrollTop=sc;return}
     case"noop":return;
-    case"mcpos":C.pos=d.v;const hr=HRANGE[C.pos];C.ht=Math.round((hr[0]+hr[1])/2);C.wt=Math.round((C.ht*7.4-345)/5)*5;mcRender();return;
+    case"mcpos":C.pos=d.v;rpgApply();mcRender();return;
     case"mcstartspin":C.name=($("mc-name").value.trim()||C.name).slice(0,24);if(!C.legacy)C.startY=+$("mc-year").value;C.ht=+$("mc-ht").value;C.wt=+$("mc-wt").value;C.stage="spin";C.slots={};C.cur=null;C.respins=2;mcRender();return;
     case"mcspin":{const pool=reelPool(),used=new Set(Object.values(C.slots).map(s=>s.n));let i;do{i=Math.floor(R()*pool.length)}while(used.has(pool[i].n));C.cur=i;mcRender();return}
     case"mcrespin":if(C.respins>0){C.respins--;C.cur=null;$("mc").querySelector('[data-act="mcspin"]')?.removeAttribute("disabled");const pool=reelPool();C.cur=Math.floor(R()*pool.length);mcRender()}return;
     case"mctake":{const cur=reelPool()[C.cur];C.slots[d.k]={n:cur.n,v:cur.a[d.k]};C.cur=null;mcRender();return}
     case"mcreset":C.slots={};C.cur=null;C.respins=2;mcRender();return;
-    case"mcoffers":{C.peakA={};K.forEach(k=>C.peakA[k]=C.slots[k].v);C.pot=Math.min(99,calcOvr(C.peakA,C.pos));C.stars=Math.min(5,(C.pot>=93?5:C.pot>=86?4:3)+(C.legacy?1:0));
-      C.age=18;C.y=C.startY;C.cls=1;C.a={};K.forEach(k=>C.a[k]=clamp(Math.round(C.peakA[k]-(26-C.age)*2.6*AGEW[k]),25,99));C.scoutN=Math.round(gauss()*4);C.offers=null;C.stage="offers";mcRender();return}
+    case"mcoffers":{if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);C.age=18;C.y=C.startY;C.cls=1;rpgApply();C.stars=Math.min(5,(C.pot>=93?5:C.pot>=86?4:3)+(C.legacy?1:0)+(C.rpg.origin==="legacy"?1:0));
+      C.scoutN=Math.round(gauss()*4);C.offers=null;C.stage="offers";C.rpg.last=Date.now();mcRender();return}
+    case"rstep":{if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);if($("mc-year")&&!C.legacy)C.startY=+$("mc-year").value;if($("mc-no"))C.no=$("mc-no").value;C.cs=d.v;mcRender();$("mc").scrollTop=0;return}
+    case"rorig":{C.rpg.origin=d.v;const og=ORIGINS.find(o=>o.k===d.v);C.rpg.tags=og?.tag?[og.tag]:[];if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);mcRender();return}
+    case"rsk":{const R=rpgS();if(!R)return;const age=rpgAge(),k=d.k;let n=+d.n;
+      if(n>0){while(n-->0){const v=rpgSkills(R,age)[k],c=skCost(v);if(rpgFree(R)<c)break;R.alloc[k]=(R.alloc[k]||0)+c}}
+      else{while(n++<0&&(R.alloc[k]||0)>0){const v=rpgSkills(R,age)[k]-1;R.alloc[k]=Math.max(0,R.alloc[k]-skCost(v))}}
+      rpgApply();if(rpgP())save();else saveC();if(!$("modal").hidden){const sc=$("sheet").scrollTop;openSheet();$("sheet").scrollTop=sc}else{const sc=$("mc").scrollTop;mcRender();$("mc").scrollTop=sc}return}
+    case"rauto":{autoBuild(C.rpg,18,d.v);rpgApply();mcRender();return}
+    case"rreset":{C.rpg.alloc={};rpgApply();mcRender();return}
+    case"rtrait":{const R=C.rpg,i=R.traits.indexOf(d.v);if(i>=0)R.traits.splice(i,1);else if(R.traits.length<2)R.traits.push(d.v);if(rpgFree(R)<0)R.traits.splice(R.traits.indexOf(d.v),1);rpgApply();mcRender();return}
+    case"rsheet":{if(C)C.sheetTab=d.v;openSheet(d.v);return}
+    case"rrespec":{const R=rpgS();R.alloc={};rpgApply();if(rpgP())save();else saveC();openSheet("skills");toast("All points refunded.");return}
+    case"rsave":{const R=rpgS(),age=rpgAge();(R.loads??=[null,null,null])[+d.v]={n:archName(rpgSkills(R,age),R.body.ht),pts:rpgSpent(R),alloc:{...R.alloc}};if(rpgP())save();else saveC();openSheet("loads");return}
+    case"rload":{const R=rpgS(),L=R.loads?.[+d.v];if(!L)return;R.alloc={...L.alloc};let guard=0;while(rpgFree(R)<0&&guard++<500){const k=Object.keys(R.alloc).sort((a,b)=>R.alloc[b]-R.alloc[a])[0];R.alloc[k]--}rpgApply();if(rpgP())save();else saveC();openSheet("skills");toast(`Loaded: ${L.n}`);return}
     case"mcschool":C.school=d.v;C.stage="college";seasonSetup();mcRender();return;
     case"mcgame":{const n=+d.n,s=C.season;for(let i=0;i<n&&s.games.length<31;i++)collegeGame(s.opps[s.games.length],false);mcRender();return}
     case"mctourney":{const s=C.season;while(s.games.length<31)collegeGame(s.opps[s.games.length],false);runTourney();closeSeason();
@@ -3872,7 +4349,7 @@ document.addEventListener("click",e=>{
     case"ccere":openCCere();return;
     case"ccerenext":C.cere.shift();if(C.cere.length)openCCere();else closeModal();saveC();mcRender();return;
     case"mcfid":C.fid=+d.v;mcRender();return;
-    case"mcback":C.stage=d.v;if(d.v==="spin")C.offers=null;mcRender();return;
+    case"mcback":C.stage=d.v;if(d.v==="create"||d.v==="spin"){C.stage="create";C.offers=null}mcRender();return;
     case"mcenterlegacy":mcEnterLegacy();return;
     case"legacy":startLegacy();return;
     case"mcenter":mcEnter().catch(()=>toast("Couldn't build the league. Check your connection and try again."));return;
@@ -3942,6 +4419,8 @@ document.addEventListener("click",e=>{
 });
 document.addEventListener("input",e=>{if(e.target.id==="mc-name"&&C){C.name=e.target.value.slice(0,24);return}if(e.target.id==="setup-fid")$("setup-fid-v").textContent=e.target.value+"%"});
 document.addEventListener("change",e=>{if(e.target.id==="importsave"&&e.target.files?.[0]){importSave(e.target.files[0]);return}
+  if(e.target.dataset.act==="rbody"&&C?.rpg){const k=e.target.dataset.k,v=+e.target.value;C.rpg.body[k]=v;if(k==="ht"){C.rpg.body.ws=clamp(C.rpg.body.ws,v-2,v+12)}rpgApply();mcRender();return}
+  if(e.target.id==="mc-no"&&C){C.no=e.target.value;mcRender();return}
   const el=e.target;
   if(el.id==="mc-no"){C.no=el.value;C.noSet=1;saveC();return}
   if(el.id==="lk-no"){const p=G?.career&&!G.career.retired&&P(G.career.pid);if(p){p.no=el.value;save();renderView();paintAvatars($("view"))}else{C.no=el.value;C.noSet=1;saveC()}return}
@@ -3968,7 +4447,7 @@ $("modal").addEventListener("click",e=>{if(e.target.id==="modal")closeModal()});
     if(e.target.closest("#view")&&$("modal").hidden&&G?.userTid!=null){swipeTab(dx<0?1:-1);return}
     if(e.target.closest("#mc .cl-body")&&C?.stage==="college")clSwipe(dx<0?1:-1)},{passive:true});
 })();
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&!$("modal").hidden)closeModal();
+document.addEventListener("keydown",e=>{if(csKeys(e))return;rpgKeys(e);if(e.key==="Escape"&&!$("modal").hidden)closeModal();
   if(!$("eras").hidden&&(e.key==="ArrowRight"||e.key==="ArrowLeft")&&e.target.tagName!=="SELECT"){ERA_I=(ERA_I+(e.key==="ArrowRight"?1:ERAS.length-1))%ERAS.length;renderEras(true);document.querySelector('.tile[aria-pressed="true"]')?.focus()}});
 
 /* ---------- boot ---------- */
@@ -3986,6 +4465,10 @@ openMenu();
 cloudBoot();
 if(G.hist)loadDB().then(render).catch(()=>toast("Couldn't load the history file. Some real-player details are hidden until it loads."));
 window.__hoopsState=()=>G;window.__C=()=>C;window.__clSim=v=>clSim(v);window.__ctab=v=>{C.ctab=v;mcRender()};window.__swipe=d=>swipeTab(d);window.__lvc=()=>{LV.wait={pid:Object.keys(LV.ps)[0],sht:70,need:'Down 2 · 0:12 left'};openClutch()};window.__clutchTest=n=>{let prompts=0,made=0,att=0;for(let i=0;i<n;i++){const ids=shuffle([...Array(G.teams.length).keys()]);const ctl=mkCtl(0,null);const g=liveGen(nbaSD(ids[0],ids[1]),nbaOpt(),ctl);let r,arg;while(!(r=g.next(arg)).done){arg=undefined;if(r.value&&r.value.clutch){prompts++;arg=1}}r.value.ev.filter(e=>e.clutch).forEach(e=>{att++;if(e.type==="make")made++})}return{prompts,att,made}};window.__lv=()=>LV;window.__dp=(c,p)=>drawPlayer(c,p,null);
+window.__showT=()=>{const d=document.createElement("div");d.style.cssText="position:fixed;inset:0;z-index:9999;background:#1a2440;display:flex;gap:6px;padding:10px;flex-wrap:wrap";document.body.appendChild(d);
+  const L=[{skin:4,hair:0,style:7,beard:3,band:1,build:1,shoe:0},{skin:0,hair:4,style:0,beard:1,shoe:1,socks:1},{skin:5,hair:0,style:1,beard:0,shoe:3,wrist:2},{skin:3,hair:0,style:4,beard:2,sleeve:2,shoe:0},{skin:2,hair:1,style:6,gog:1,shoe:2},{skin:1,hair:2,style:2,beard:0,band:2,socks:2}];
+  const B=[{ht:81,wt:250,ws:88},{ht:74,wt:185,ws:76},{ht:86,wt:270,ws:92},{ht:78,wt:215,ws:84},{ht:84,wt:240,ws:88},{ht:72,wt:175,ws:73}];
+  L.forEach((l,i)=>[0,1].forEach(v=>{const c=document.createElement("canvas");c.style.cssText="width:208px;height:344px;image-rendering:pixelated";d.appendChild(c);drawShow(c,{look:l,body:B[i],jersey:["#552583","#f4f1ea","#007a33","#c8102e","#1d428a","#000000"][i],trim:["#fdb927","#c8102e","#ffffff","#ffffff","#ffc72c","#ffffff"][i],num:[23,33,0,7,11,3][i],name:"James",view:v?"back":"front",t:0})}))};
 window.__liveTest=n=>{const out={pts:0,fga:0,fgm:0,tpa:0,fta:0,ast:0,reb:0,stl:0,blk:0,ot:0,g:0,top:[]};
   for(let i=0;i<n;i++){const ids=shuffle([...Array(G.teams.length).keys()]);const r=liveGame(ids[0],ids[1],true);out.g++;if(r.ot)out.ot++;
     for(const k in r.box)r.box[k].forEach(x=>{out.pts+=x.pts;out.fga+=x.fga;out.fgm+=x.fgm;out.tpa+=x.tpa;out.ast+=x.ast;out.reb+=x.reb;out.stl+=x.stl;out.blk+=x.blk;out.top.push(x.pts)})}

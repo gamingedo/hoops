@@ -1,5 +1,5 @@
 // DocMan2021 Hoops service worker: works offline, updates in the background.
-const V="hoops-0f59fee0f3",CORE=["./","index.html","league-data.json","manifest.webmanifest","icons/icon-192.png","icons/icon-512.png","icons/apple-touch-icon.png"];
+const V="hoops-97c0d20c96",CORE=["./","index.html","league-data.json","manifest.webmanifest","icons/icon-192.png","icons/icon-512.png","icons/apple-touch-icon.png"];
 self.addEventListener("install",e=>{e.waitUntil(caches.open(V).then(c=>c.addAll(CORE)))});
 self.addEventListener("message",e=>{if(e.data==="skip")self.skipWaiting()});
 self.addEventListener("activate",e=>{e.waitUntil(caches.keys().then(ks=>Promise.all(ks.filter(k=>k!==V&&k!=="hoops-fonts").map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
