@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="faa5c8246a";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="6976c95cf9";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -3486,8 +3486,8 @@ const ASSET="assets/";
 const HUBA={};function hubImg(p){if(HUBA[p])return HUBA[p];const im=new Image();im.decoding="async";im.src=ASSET+p;HUBA[p]=im;return im}
 const okImg=im=>im&&im.complete&&im.naturalWidth>0;
 /* keybinds */
-const KBDEF={left:["ArrowLeft"],right:["ArrowRight"],jump:["Alt"],interact:["ArrowUp","Enter"],run:["Shift"],play:[" "],down:["ArrowDown"]};
-const KBN={left:"Walk left",right:"Walk right",jump:"Jump",interact:"Enter / talk / use",run:"Run (hold)",play:"Play next game",down:"Crouch / read sign"};
+const KBDEF={left:["ArrowLeft"],right:["ArrowRight"],jump:["Alt"],interact:["ArrowUp","Enter"],play:[" "],down:["ArrowDown"]};
+const KBN={left:"Walk left",right:"Walk right",jump:"Jump",interact:"Enter / talk / use",play:"Play next game",down:"Crouch / read sign"};
 let KB=null;function kbLoad(){if(KB)return KB;try{KB={...KBDEF,...(JSON.parse(localStorage.getItem("hoopsKeys")||"{}"))}}catch(e){KB={...KBDEF}}return KB}
 function kbSave(){try{localStorage.setItem("hoopsKeys",JSON.stringify(KB))}catch(e){}}
 function kbIs(e,act){const k=kbLoad()[act]||[];return k.some(x=>x===e.key||x.toLowerCase()===e.key.toLowerCase()||x===e.code)}
@@ -3622,9 +3622,9 @@ function hubPointer(e){const cv=$("cs-cv");if(!cv)return;const m=hubMaps()[HUB.m
 function hubStep(dt){const m=hubMaps()[HUB.map];if(!m)return;const k=HUB.keys,run=k.run;let dir=0;if(k.left)dir-=1;if(k.right)dir+=1;
   if(dir===0&&HUB.target){const d=HUB.target.x-HUB.px;if(Math.abs(d)<3){const th=HUB.target.then;HUB.target=null;HUB.vx=0;th&&th()}else dir=Math.sign(d)}
   else if(dir!==0)HUB.target=null;
-  const spd=run?230:135;if(!HUB.dunk){HUB.vx=dir*spd;if(dir)HUB.face=dir;HUB.px=clamp(HUB.px+HUB.vx*dt,16,m.w-16)}
+  const spd=190;if(!HUB.dunk){HUB.vx=dir*spd;if(dir)HUB.face=dir;HUB.px=clamp(HUB.px+HUB.vx*dt,16,m.w-16)}
   if(HUB.py>0||HUB.vy>0){HUB.vy-=760*dt;HUB.py=Math.max(0,HUB.py+HUB.vy*dt);if(HUB.py===0)HUB.vy=0}
-  if(HUB.dunk&&(HUB.dunk.t0||0)){const a=(performance.now()-HUB.dunk.t0)/1000,n=HIP.anims.dunk[1],fr=Math.floor(a*HIP.anims.dunk[2]);HUB.anim="dunk";HUB.dunkFr=fr;HUB.face=HUB.dunk.dir;HUB.px=clamp(HUB.dunk.x0+(HUB.dunk.x1-HUB.dunk.x0)*Math.min(a/1.0,1),16,m.w-16);HUB.vx=0;if(fr>=n){HUB.dunk=null;HUB.dunkFr=null;hubFx("SLAM!","#ffd166")}}else if(HUB.py>0)HUB.anim="jump";else HUB.anim=dir?(run?"run":"walk"):"idle";
+  if(HUB.dunk&&(HUB.dunk.t0||0)){const a=(performance.now()-HUB.dunk.t0)/1000,n=HIP.anims.dunk[1],fr=Math.floor(a*HIP.anims.dunk[2]);HUB.anim="dunk";HUB.dunkFr=fr;HUB.face=HUB.dunk.dir;HUB.px=clamp(HUB.dunk.x0+(HUB.dunk.x1-HUB.dunk.x0)*Math.min(a/1.0,1),16,m.w-16);HUB.vx=0;if(fr>=n){HUB.dunk=null;HUB.dunkFr=null;hubFx("SLAM!","#ffd166")}}else if(HUB.py>0)HUB.anim="jump";else HUB.anim=dir?"run":"idle";
   if(HUB.map!==HUB.lastMap){HUB.lastMap=HUB.map}C.hubX=HUB.px;
   const R=rpgS();if(R){if(HUB.lastExp!=null&&R.exp>HUB.lastExp)hubFx("+"+(R.exp-HUB.lastExp).toLocaleString()+" EXP");HUB.lastExp=R.exp}}
 let HUBLAST=0;function hubFrame(ts){HUB.raf=0;const cv=$("cs-cv");if(!cv)return;const dt=Math.min(.05,(ts-(HUBLAST||ts))/1000);HUBLAST=ts;hubEnsure();hubStep(dt);hubDraw(cv);HUB.raf=requestAnimationFrame(hubFrame)}
