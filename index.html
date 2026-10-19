@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="ab82bb6f5b";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="faa5c8246a";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -3498,7 +3498,7 @@ function keybindsHtml(){const kb=kbLoad();return`<div class="mp-note">Click a ke
 let KBWAIT=null;function kbSet(v){const[a,i]=v.split(":");KBWAIT={a,i:+i};toast("Press a key for "+KBN[a]);csWins()}
 /* character sheets: Hoops in Pixel player atlas (paid pack), palette-swapped per look, cached */
 const CHC=new Map();
-const HIP={anims:{idle:[0,4,6],drib:[1,5,8],shoot:[2,7,10],dunk:[3,29,14],walk:[4,5,9],run:[5,7,13],jump:[6,6,10],slide:[7,5,8]}};// row, frames, fps
+const HIP={anims:{idle:[0,4,6],drib:[1,5,8],shoot:[2,7,10],dunk:[3,29,14],walk:[5,7,8],run:[5,7,13],jump:[6,6,10],slide:[7,5,8]}};// row, frames, fps
 const SKINR=[["#55301c","#3d2114"],["#7a482a","#5a331c"],["#a2653c","#7d4b2a"],["#c98d5e","#a66e45"],["#e7b48d","#c98d6a"],["#f6d3b5","#dba88a"]];// tone 0 dark .. 5 pale: [base,shade]
 const HAIRC=["#17121c","#2a1a10","#5a3a1a","#8a5a2a","#b8862e","#e0c060","#ae2334","#6b6f80"],HAIRN2=["Black","Dark brown","Brown","Auburn","Blond","Light blond","Red","Gray"];
 function charLook(o){const L=C?.look||{};const base={style:C?.hairStyle||"A",tone:clamp(5-(L.skin??2),0,5),hairc:C?.hairColor??0,jersey:"#2f6fd6",shorts:"#2f6fd6",shoes:"#f4f4f4"};return{...base,...(o||{})}}
