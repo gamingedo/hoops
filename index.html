@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="8d9978b677";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="2fad402cee";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -388,6 +388,9 @@ td{border-top:1px solid #ffffff12}
 .lk-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;padding:8px 10px;border-bottom:1px solid #e3e5ea;font-size:13px}.lk-item b{display:block}.lk-item small{display:block;color:#4a4f5e;font-size:11px}.lk-item p{margin:4px 0 0;font-size:12px;font-style:italic;color:#2b2b33}.lk-item small.cl{color:#8a5a00;margin-top:2px}
 .arch-card{display:grid;gap:12px;padding:6px}.arch-card small{font:700 11px Silkscreen,var(--f-mono);color:var(--led);letter-spacing:.1em;text-transform:uppercase}.arch-card p{margin:0;font:500 17px/1.55 var(--f-body);font-style:italic;color:#f4f1ea;border-left:4px solid var(--led);padding-left:12px}
 @media (max-width:600px){.lk-top{grid-template-columns:1fr}.lk-slots{grid-template-columns:repeat(2,1fr)}}
+.arch-card.quiet{background:#000;border-radius:8px;padding:16px}.arch-card.quiet small{color:#8a90a0}.arch-card.quiet p{border-left-color:#8a90a0;font-style:normal;color:#e8e8ec}
+.lr-box{display:flex;gap:12px;align-items:center;justify-content:space-between;background:#ffffff0d;border:1px solid #ffffff1c;border-radius:8px;padding:10px 12px}.lr-mods{display:flex;gap:8px;flex-wrap:wrap}.lr-mods span{font:600 12px var(--f-body);color:#c9cfe0;background:#ffffff10;border-radius:4px;padding:3px 8px}.lr-mods span b{color:var(--led)}.lr-dc{text-align:right}.lr-dc b{display:block;font:900 26px/1 var(--f-display);color:var(--led)}.lr-dc small{color:#c9cfe0;font-size:11px}
+.lr-res{display:flex;gap:14px;align-items:center;color:#fff;font:600 15px var(--f-body)}
 .kb-list{display:grid;gap:4px}.kb-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:6px 10px;font-size:13px;font-weight:600}.kb-key{min-width:64px;border:1px solid #4a4f5e;border-radius:5px;background:linear-gradient(180deg,#fff,#dde1e8);font:700 11px Silkscreen,var(--f-mono);padding:5px 8px;cursor:pointer;box-shadow:0 2px 0 #9aa1b1}
 .st-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:8px 10px;font-size:13px;font-weight:600}.st-row>span{min-width:48px;color:#4a4f5e}.st-row .sw-b{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #6b7080;cursor:pointer}.st-row .sw-b.on,.st-row .mp-btn.on{box-shadow:0 0 0 3px #f5a623}.st-row b{font:700 12px Silkscreen,var(--f-mono);min-width:70px;text-align:center}
 /* ===== game viewer ===== */
@@ -1438,7 +1441,7 @@ function scoutPot(){return Math.round(C.pot+(C.scoutN??0))}
 function stock(){const t=C.season?.tot,g=t?.gp||0;const prod=(g?prodScore():0)+(C.prep?6:0);
   const v=.5*scoutPot()+.5*calcOvr(C.a,C.pos)-8+prod*.25*(isJuco(C.school)?.3:1)+(C.awards.filter(a=>a.y===C.y).length*1.5)-Math.max(0,C.cls-1)*1.2-(isJuco(C.school)?10:0);
   let k=1;while(k<=60&&slotV(k)>v)k++;return k>60?null:k}
-function closeSeason(){
+function closeSeason(){try{if(typeof fateSeasonEnd==="function")fateSeasonEnd()}catch(e){}
   if(!frEligible(C.cl.y)&&C.cls===1){C.season.tot=freshLine();C.season.res=`Freshman team (varsity: ${C.season.res||"season over"})`}
   C.nil=nilValue();if(C.nil)C.nilTot=(C.nilTot||0)+C.nil;
   const s=C.season,t=s.tot,g=t.gp||1,tm=C.cl.teams[C.school];
@@ -1533,7 +1536,7 @@ function mcOffers(){
 }
 function mcLine(t){const g=t.gp||1;return`${(t.pts/g).toFixed(1)} PTS · ${(t.reb/g).toFixed(1)} REB · ${(t.ast/g).toFixed(1)} AST · ${(t.stl/g).toFixed(1)} STL · ${(t.blk/g).toFixed(1)} BLK`}
 function mcDecide(){
-  const h=C.hist[C.hist.length-1],st=C.stock,last=C.cls>=ELIG,jucoOut=isJuco(C.school)&&C.cls>=2;
+  const h=C.hist[C.hist.length-1],st=C.stock,last=C.cls>=ELIG,jucoOut=(isJuco(C.school)&&C.cls>=2)||(C.forceJuco&&!isJuco(C.school));
   return mcHead(`${C.school} · ${sl(C.y)} season complete`)+`
   <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div class="kicker">${CLASSN[C.cls-1]} season · ${h.w}-${h.l}${h.seed?` · No. ${h.seed} seed`:""}</div><h2>${esc(h.res)}</h2>
     <p>${h.ppg} PTS · ${h.rpg} REB · ${h.apg} AST · ${h.spg} STL · ${h.bpg} BLK in ${h.gp} games. OVR now ${calcOvr(C.a,C.pos)}.</p>
@@ -1550,7 +1553,7 @@ function mcDecide(){
     ${last?`<p class="note" style="color:#c9cfe0">Five years. Your college eligibility is used up.</p>`:""}</div></section>`;
 }
 function mcDraft(){
-  const D=C.y+1,cls=DB.drafts[D]||[],pk=C.final,team=C.dteam;
+  const D=C.y+1,cls=DB.drafts[D]||[],pk=C.final,team=C.dteam;try{if(!C.fate?.flags?.dn){(C.fate??=fateInit()).flags.dn=1;fateDraftNight()}}catch(e){}
   const before=cls.filter(r=>r[2]<(pk||61)).slice(-6);
   if(C.legacy)return mcDraftLegacy();
   return mcHead(`${D} NBA Draft`)+`
@@ -1804,7 +1807,7 @@ function buildCL(y){
     fillRoster(cl,s)});
   makeSched(cl);apPoll(cl,true);newClass(cl);return cl;
 }
-function fillRoster(cl,s,walkon){const t=cl.teams[s],base=29+t.pres*.32;
+function fillRoster(cl,s,walkon){const t=cl.teams[s],base=27+t.pres*.31;
   while(t.roster.length<CRMAX){const cls=walkon?1:ri(1,4);addCP(cl,s,{cls,ovr:Math.round(base+(cls-2.5)*2+gauss()*3.5-(walkon?5:0))})}
   while(t.roster.length>CRMAX+1){const fk=t.roster.map(id=>cl.players[id]).filter(p=>!p.real&&p.pid!=="me").sort((a,b)=>a.ovr-b.ovr)[0];if(!fk)break;t.roster=t.roster.filter(id=>id!==fk.pid);delete cl.players[fk.pid]}}
 function makeSched(cl){
@@ -1848,7 +1851,7 @@ const apRk=(cl,s)=>{const i=cl.ap.indexOf(s);return i>=0?i+1:null};
 function clNews(cl,t,k){cl.news.unshift({t,k:k||"",d:clWhen(cl)});cl.news=cl.news.slice(0,120)}
 function clWhen(cl){return cl.phase==="reg"?`${sl(cl.y)} · Week ${Math.floor(cl.day/2)+1}`:cl.phase==="ct"?`${sl(cl.y)} · Championship Week`:cl.phase==="ncaa"?`${sl(cl.y)} · March Madness`:`${sl(cl.y)} · Offseason`}
 const tLbl=(cl,s)=>{const r=apRk(cl,s);return(r?`No. ${r} `:"")+s};
-function clSide(cl,s){const ps=cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&(frEligible(cl.y)||p.cls>1)).sort((a,b)=>cOvr(b)-cOvr(a)).slice(0,10),m=CMINS.slice(0,ps.length),sm=m.reduce((a,b)=>a+b,0)||1;
+function clSide(cl,s){const ps=cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&(frEligible(cl.y)||p.cls>1)&&!(p.pid==="me"&&C.susp>0)&&!p.inj).sort((a,b)=>cOvr(b)-cOvr(a)).slice(0,10),m=CMINS.slice(0,ps.length),sm=m.reduce((a,b)=>a+b,0)||1;
   return{t:cl.teams[s],ps:ps.map(p=>{const a={};const src=p.pid==="me"?C.a:p.a;K.forEach(k=>a[k]=Math.min(99,src[k]+COLB));return{pid:p.pid,name:p.name,pos:p.pos,ht:p.ht,wt:p.wt,a,ovr:cOvr(p)+COLB,sk:p.pid==="me"&&C.sk?Object.fromEntries(Object.entries(C.sk).map(([k,v])=>[k,Math.min(99,v+COLB)])):undefined}}),m:m.map(x=>x*200/sm)}}
 function playCL(cl,h,a,o){
   const L=cl.pre&&cl.pre.h===h&&cl.pre.a===a?cl.pre.L:liveCore([clSide(cl,h),clSide(cl,a)],clOpt(cl,o));
@@ -1867,7 +1870,7 @@ function playCL(cl,h,a,o){
   if(h===C.school||a===C.school){const home=h===C.school,us=home?hs:as,them=home?as:hs,opp=home?a:h,me=(box[C.school]||[]).find(r=>r.pid==="me");
     const ln=me?{min:me.min,pts:me.pts,reb:me.reb,ast:me.ast,stl:me.stl,blk:me.blk,fgm:me.fgm,fga:me.fga,tpm:me.tpm,tpa:me.tpa}:{min:0,pts:0,reb:0,ast:0,stl:0,blk:0};
     const s=C.season,t=s.tot;if(me){t.gp++;for(const kk of["min","pts","reb","ast","stl","blk"])t[kk]+=ln[kk]}
-    const mg={opp,us,them,w:us>them,ln,label:o.label||null,home,neutral:!!o.neutral,ork:apRk(cl,opp)};s.games.push(mg);if(o.label)s.tlog.push(mg);else mg.w?s.w++:s.l++;try{if(C.rpg){rpgRest(C.rpg);rpgGame(ln,mg.w,o.kind,mg)}}catch(e){console.error(e)}
+    if(C.susp>0)C.susp--;const mg={opp,us,them,w:us>them,ln,label:o.label||null,home,neutral:!!o.neutral,ork:apRk(cl,opp),k:o.kind};s.games.push(mg);if(o.label)s.tlog.push(mg);else mg.w?s.w++:s.l++;try{if(C.rpg){rpgRest(C.rpg);rpgGame(ln,mg.w,o.kind,mg)}}catch(e){console.error(e)}
     g.live=o.watch?{ev:L.ev,teams:[h,a],halves:true,no3:cl.y<1986,mine:me?"me":null,court:{r3:col3(cl.y),lane:12,corner:col3(cl.y)},college:true}:null;g.box=box;return g}
   return g;
 }
@@ -2138,7 +2141,7 @@ function clMenu(){const cl=C.cl;openModal(`<div class="sheet-h"><div><div class=
 function clTeamModal(s){openModal(`<div class="sheet-h"><div></div><button class="btn sm ghost" data-act="close">Close</button></div>${clRoster(s,false)}`)}
 function clSim(v){
   const cl=C.cl,stopAt={1:()=>true,week:()=>cl.phase!=="reg"||cl.day%2===0,ct:()=>cl.phase!=="reg",end:()=>cl.phase==="done"}[v]||(()=>true);
-  let n=0;do{clDay(false);n++}while(cl.phase!=="done"&&!stopAt()&&n<200);
+  let n=0;do{clDay(false);n++}while(cl.phase!=="done"&&!stopAt()&&n<200&&!(C.lifeQ&&C.lifeQ.length)&&!(C.archQ&&C.archQ.length));
   if(v==="1"||v===1){const g=C.season.games[C.season.games.length-1];if(g&&n===1&&g)toast(`${g.w?"W":"L"} ${g.us}-${g.them} ${g.label?esc(g.label):(g.home?"vs ":"at ")+g.opp} · ${g.ln.pts} pts`)}
   mcRender();
 }
@@ -2630,14 +2633,14 @@ function aiPortal(cl){if(cl.y<2018)return;const moves=[];
     ps.slice(7).forEach(p=>{if(R()<(portalOK(cl.y)?.18:.08)&&p.ovr>=44){const to=pick(Object.keys(cl.teams).filter(x=>x!==s&&cl.teams[x].roster.length<CRMAX&&Math.abs(cl.teams[x].pres-t.pres)<35));if(!to)return;
       t.roster=t.roster.filter(x=>x!==p.pid);cl.teams[to].roster.push(p.pid);p.sid=to;p.no=freeNo(cl,to);moves.push([p,s,to])}})}
   const top=moves.sort((a,b)=>b[0].ovr-a[0].ovr).slice(0,4);if(top.length)clNews(cl,`Transfer portal: ${top.map(([p,a,b])=>`${p.name} (${a} → ${b})`).join(", ")}${moves.length>4?` and ${moves.length-4} more`:""}.`,"rec")}
-function portalOffers(){const cl=C.cl,o=calcOvr(C.a,C.pos),h=C.hist[C.hist.length-1]||{ppg:0},want=clamp(25+o*.6+h.ppg*1.2*(isJuco(C.school)?.4:1),20,95)-(isJuco(C.school)?22:0);
+function portalOffers(){if(C.forceJuco&&!C.fate?.flags?.ret){return shuffle([...JUCOS]).slice(0,3)}const cl=C.cl,o=calcOvr(C.a,C.pos),h=C.hist[C.hist.length-1]||{ppg:0},want=clamp(25+o*.6+h.ppg*1.2*(isJuco(C.school)?.4:1),20,95)-(isJuco(C.school)?22:0);
   const sch=Object.keys(cl.teams).filter(s=>s!==C.school&&!cl.teams[s].juco).sort((a,b)=>Math.abs(cl.teams[a].pres-want)-Math.abs(cl.teams[b].pres-want));return shuffle(sch.slice(0,10)).slice(0,4).sort((a,b)=>cl.teams[b].pres-cl.teams[a].pres)}
 function mcPortal(){C.portal??=portalOffers();const cl=C.cl;
   return mcHead("Transfer portal")+`<section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="decide">← Back</button></div><div class="kicker">${sl(C.y)} offseason · immediate eligibility</div><h2>Pick your next school</h2>
     <p>Since 2021 players can transfer once and play right away. These programs called the moment your name hit the portal.</p>
     <div class="mc-offers">${C.portal.map(s=>{const t=cl.teams[s],me=calcOvr(C.a,C.pos),role=t.roster.filter(id=>cl.players[id]&&cl.players[id].ovr>me&&cl.players[id].cls<4).length;
       return`<div class="mc-offer"><div><b>${esc(s)}</b><small>${esc(t.conf)} · Program ${t.pres}${apRk(cl,s)?` · AP #${apRk(cl,s)}`:""} · ${role<=1?"Starter":role<=4?"Rotation":"Bench"}</small></div><p>${nilOK(cl.y)?`NIL collective offer: ${money((t.pres*1500+ri(0,20000))/1e6)}.`:""}</p><button class="start" data-act="mcportal" data-v="${esc(s)}">Transfer to ${esc(s)}</button></div>`}).join("")}</div></div></section>`}
-function moveMe(to){const cl=C.cl,from=C.school;cl.teams[from].roster=cl.teams[from].roster.filter(x=>x!=="me");const t=cl.teams[to];t.roster.push("me");
+function moveMe(to){if(isJuco(to))C.forceJuco=false;const cl=C.cl,from=C.school;cl.teams[from].roster=cl.teams[from].roster.filter(x=>x!=="me");const t=cl.teams[to];t.roster.push("me");
   if(t.roster.length>CRMAX){const fk=t.roster.map(id=>cl.players[id]).filter(p=>!p.real&&p.pid!=="me").sort((a,b)=>a.ovr-b.ovr)[0];if(fk){t.roster=t.roster.filter(x=>x!==fk.pid);delete cl.players[fk.pid]}}
   C.school=to;C.transfers=[...(C.transfers||[]),{y:cl.y,from,to}];clNews(cl,`Transfer: ${C.name} leaves ${from} for ${to}.`,"mine");
   cl.rec?.list.forEach(r=>{if(r.com===from)r.com=r.com;});cl.rec&&(cl.rec.board=[])}
@@ -3194,7 +3197,7 @@ function recruitOffers(){const cl=clEnsure(),stars=C.stars||3;if(stars<=1)return
   const band=stars>=5?[0,12]:stars===4?[8,40]:stars===3?[30,110]:[90,Math.max(96,ranked.length)];
   let offers=shuffle(ranked.slice(...band)).slice(0,stars===2?3:4);
   const fit=(ORIG_SCHOOLS[C.rpg?.origin]||[]).filter(s=>sch.includes(s)&&!offers.includes(s));
-  if(fit.length&&stars>=3){const want=fit.find(s=>stars>=5||pr(s)<=pr(ranked[band[1]-1])+10)||fit[0];offers[offers.length-1]=want}
+  if(fit.length&&stars>=3){const want=fit.find(s=>stars>=5||pr(s)<=pr(ranked[band[1]-1])+10);if(want)offers[offers.length-1]=want}
   return offers.sort((a,b)=>pr(b)-pr(a))}
 /* ---- the Prologue ---- */
 const PLG_F=["Marcus","Dre","Jalen","Kofi","Tobias","Elijah","Theo","Nico","Isaiah","Deshawn","Cam","Rashad","Luis","Micah","Omar","Jordan"],PLG_L=["Reed","Okafor","Bell","Vance","Mercer","Hale","Santos","Whitfield","Banks","Cole","Pryor","Holloway","Nwosu","Ferris","Greer","Lott","Adeyemi","Barlow","Castillo","Dunbar","Ellison","Foster","Gaines","Hightower","Irving","Jemison","Kincaid","Lowery","Mbeki","Navarro","Osei","Pettway","Quarles","Rucker","Sterling","Toussaint","Upshaw","Valdez","Winslow","Yarbrough"];
@@ -3331,8 +3334,8 @@ const DAYEV=[
  {k:"fri",n:"Friday Night Lights",d:"4x EXP from every game.",xp:4,ic:"4×"},
  {k:"sat",n:"Lucky Saturday",d:"1.5x EXP and 1.5x crate keys.",xp:1.5,drop:1.5,ic:"★"}];
 const today=()=>DAYEV[new Date().getDay()];
-const needXP=L=>Math.round(90+45*Math.pow(L,1.5));
-const skCost=v=>v<60?1:v<75?2:v<85?3:v<95?4:5+Math.floor((v-95)/10);
+const needXP=L=>Math.round(150+85*Math.pow(L,1.6));
+const skCost=v=>v<70?1:v<82?2:v<90?3:v<97?4:5+Math.floor((v-97)/10);
 /* ---- body-driven bases: height raises the floor on size skills and lowers it on quickness ---- */
 function skBase(k,b,age){
   const h=(b.ht-78)/3,w=((b.ws??b.ht+3)-b.ht-3)/2,m=(b.wt-(b.ht*2.85-22))/15,ag=age<=24?(age-18)*1.4:age<=30?8.4:8.4-(age-30)*2.4;
@@ -3373,7 +3376,7 @@ function rpgXP(R,amt,why){if(!R||amt<=0)return 0;amt=Math.round(amt);R.exp+=amt;
 /* one game for your player: line = {min,pts,reb,ast,stl,blk,fgm,fga,tpm}, w = won */
 function rpgGame(ln,w,kind,mg){const R=rpgS();if(!R||!ln)return;const ev=today();
   if(!ln.min){rpgXP(R,15*ev.xp,"Practice reps");return}
-  let x=55+4*ln.pts+3*ln.reb+4*ln.ast+6*((ln.stl||0)+(ln.blk||0))+(w?40*(ev.winx||1):0)+(kind&&kind!=="reg"?40:0);
+  let x=35+2.6*ln.pts+2.2*ln.reb+2.6*ln.ast+4*((ln.stl||0)+(ln.blk||0))+(w?26*(ev.winx||1):0)+(kind&&kind!=="reg"?40:0);if((C?.stars||3)<=2)x*=1.35;if(typeof isJuco==="function"&&C&&isJuco(C.school))x*=.8;
   if((R.traits||[]).includes("showman")&&ln.pts>=25)x*=1.15;x*=ev.xp;
   let bonus=0;if(R.rest>0){bonus=Math.min(R.rest,x);R.rest-=bonus}
   const r=R.rec??={g:0,maxPts:0,maxAst:0,maxReb:0,maxSB:0,dd:0,st:0,bestSt:0,pts:0,w:0};r.g++;r.pts+=ln.pts;r.maxPts=Math.max(r.maxPts,ln.pts);r.maxAst=Math.max(r.maxAst,ln.ast);r.maxReb=Math.max(r.maxReb,ln.reb);r.maxSB=Math.max(r.maxSB,(ln.stl||0)+(ln.blk||0));
@@ -3417,14 +3420,14 @@ function slots(){attnInit();return C.stage==="done"?4:C.attn>=70?3:C.attn>=40?2:
 function judgment(){const s=C.sk||{};return Math.round(((s.SIQ||50)-50)/10+((s.VIS||50)-50)/20+(((C.bonds?.mother?.lv)||50)-50)/25)}
 /* game hook: called from rpgGame */
 function attnGame(ln,w,kind,mg){attnInit();let n=0;const why=[];
-  if(ln.pts>=35){n+=4;why.push("35-point game")}else if(ln.pts>=25){n+=2;why.push("25-point game")}
+  if(ln.pts>=35){n+=3;why.push("35-point game")}else if(ln.pts>=28){n+=1;why.push("28-point game")}
   if(kind&&kind!=="reg"&&w){n+=kind==="ncaa"?10:4;why.push(kind==="ncaa"?"tournament win":"March")}
   if(mg&&mg.ork&&mg.ork<=10&&w&&!apRk(C.cl,C.school)){n+=4;why.push("upset")}
-  const gp=C.season?.tot?.gp||0;if((ln.pts>=30||(mg&&mg.ork&&mg.ork<=5&&w))&&gp-(C.lastViral||-9)>=6){const roll=1+Math.floor(R()*20),mod=((C.rpg?.traits||[]).includes("showman")?2:0)+(C.bonds?.friend?.k==="manager"?2:0);if(roll+mod>=16){C.lastViral=gp;const v=6+Math.floor(R()*9);n+=v;why.push("the clip went viral");C.spon.log.unshift({t:`A clip from the ${mg?.opp||"game"} game passed a million views.`,y:C.y})}}
+  const gp=C.season?.tot?.gp||0;if((ln.pts>=30||(mg&&mg.ork&&mg.ork<=5&&w))&&gp-(C.lastViral||-9)>=6){const roll=1+Math.floor(R()*20),mod=((C.rpg?.traits||[]).includes("showman")?2:0)+(C.bonds?.friend?.k==="manager"?2:0);if(roll+mod>=17){C.lastViral=gp;const v=5+Math.floor(R()*8);n+=v;why.push("the clip went viral");C.spon.log.unshift({t:`A clip from the ${mg?.opp||"game"} game passed a million views.`,y:C.y})}}
   if(n)attnAdd(n,why.join(", "));
-  sponsorMoment(ln,w,kind,mg)}
+  sponsorMoment(ln,w,kind,mg);if(mg&&typeof fateAfterGame==="function")fateAfterGame(mg,ln)}
 /* weekly hook: rankings, decay, payouts */
-function attnWeek(){attnInit();const rk=apRk(C.cl,C.school);let n=-1;if(rk)n+=rk<=5?3:1;attnAdd(n,rk?`AP #${rk}`:"quiet week");C.week=(C.week||0)+1;
+function attnWeek(){attnInit();const rk=apRk(C.cl,C.school);let n=-1.5;if(rk)n+=rk<=3?2:rk<=10?1.5:1;attnAdd(n,rk?`AP #${rk}`:"quiet week");C.week=(C.week||0)+1;
   for(const d of C.spon.active){d.wk=(d.wk||0)+1;if(d.pay.crate&&d.wk%4===0){C.rpg.keys=(C.rpg.keys||0)+d.pay.crate;C.spon.log.unshift({t:`${d.name}: ${d.pay.crate} crate key${d.pay.crate>1?"s":""} arrived.`,y:C.y})}if(d.pay.cash){C.cash+=d.pay.cash/4}if(d.pay.attn&&d.wk%2===0)attnAdd(d.pay.attn,d.name)}
   C.posted=false}
 /* social media: one post a week, a Judgment roll */
@@ -3500,8 +3503,8 @@ function sponsorDecline(k){attnInit();const i=C.spon.offers.findIndex(o=>o.k===k
 function sponsorDrop(k){attnInit();const i=C.spon.active.findIndex(o=>o.k===k);if(i<0)return;const s=C.spon.active.splice(i,1)[0];repAdd(-4,"a broken deal");C.spon.log.unshift({t:`Walked away from ${s.n}. Reputation −4.`,y:C.y});saveC();csWins()}
 /* ===== the Architect speaks (non-blocking card, queued) ===== */
 function archSay(txt,title,opt){attnInit();(C.archQ??=[]).push({txt,title,...(opt||{})});setTimeout(archFlush,0)}
-function archFlush(){if(!C?.archQ?.length||!$("modal").hidden||!$("live").hidden)return;const m=C.archQ.shift();saveC();
-  openModal(`<div class="arch-card"><small>The Architect · ${esc(m.title||"")}</small><p>${esc(m.txt)}</p><div class="actions">${m.offer?`<button class="btn" data-act="spacc" data-v="${esc(m.offer)}">Accept</button><button class="btn ghost" data-act="spdec" data-v="${esc(m.offer)}">Decline</button><button class="btn ghost" data-act="close">Decide later</button>`:`<button class="btn" data-act="close">Continue</button>`}</div></div>`)}
+function archFlush(){if(!$("modal").hidden||!$("live").hidden)return;if(!C?.archQ?.length){if(typeof lifeFlush==="function")lifeFlush();return}const m=C.archQ.shift();saveC();
+  openModal(`<div class="arch-card ${m.quiet?"quiet":""}"><small>${m.quiet?"":"The Architect · "}${esc(m.title||"")}</small><p>${esc(m.txt)}</p><div class="actions">${m.offer?`<button class="btn" data-act="spacc" data-v="${esc(m.offer)}">Accept</button><button class="btn ghost" data-act="spdec" data-v="${esc(m.offer)}">Decline</button><button class="btn ghost" data-act="close">Decide later</button>`:`<button class="btn" data-act="close">Continue</button>`}</div></div>`)}
 /* ===== windows ===== */
 function attnHtml(){attnInit();const a=C.attn,tier=a>=70?"National":a>=40?"Regional":a>=15?"Local":"Nobody knows your name";
   return`<div class="at-top"><div class="at-meter"><i style="width:${a}%"></i><span>ATTENTION ${a}</span></div><div class="mp-kv"><span>Tier</span><b>${tier}</b><span>Slots</span><b>${C.spon.active.length} / ${slots()}</b><span>Reputation</span><b>${C.rep}</b><span>Swagger</span><b>${C.swag||0}</b><span>Sent home</span><b>$${Math.round(C.cash).toLocaleString()}</b></div></div>
@@ -3560,6 +3563,83 @@ function lockerHtml(){attnInit();const g=C.gear,R0=C.rpg;
   return`<div class="lk-top"><div class="lk-crate"><b>${R0.keys||0}</b><small>crate keys</small><button class="mp-btn ${R0.keys>0?"main":""}" data-act="crate" ${R0.keys>0?"":"disabled"}>Open a crate</button><small class="mp-lab">Pity: Rare within ${Math.max(0,10-g.pity.r)} · Epic within ${Math.max(0,40-g.pity.e)}</small></div><div class="lk-slots">${SLOTS.map(slot).join("")}</div></div>
   <div class="mp-grp"><div class="mp-gh">Bag · ${g.bag.length}</div>${g.bag.length?g.bag.map(it=>{const d=ITEMS[it.k];return`<div class="lk-item"><div><b style="color:${RAR[d.r][1]}">${esc(d.n)}</b><small>${RAR[d.r][0]} · ${d.slot} · ${Object.entries(d.mods).map(([k,v])=>`${k} ${v>0?"+":""}${v}`).join(", ")}</small><p>${esc(d.bs)}</p>${it.from?`<small class="cl">From ${esc(it.from)}, ${sl(it.got)}</small>`:""}</div><button class="mp-btn sm go" data-act="equip" data-v="${it.k}">Equip</button></div>`}).join(""):`<div class="mp-note">Empty. Crates come from games (half a key per win), goals, and sponsors.</div>`}</div>`}
 window.__attn={attnAdd,openCrate,grantItem,sponsorMoment};
+
+/* ---------- LIFE ROLLS + THE FATE DECK ---------- */
+/* A life roll is a visible d20 against a DC with named modifiers, off the court. The Fate deck is three tragedies and
+   three graces drawn hidden at creation; each fires only off something you did or rolled, never in the first six games,
+   never two in a season. When the hardest cards land, the Architect drops the jokes for one screen. */
+const FATE={
+  knee:{t:"The Knee",kind:"trag",quiet:true},diag:{t:"The Diagnosis",kind:"trag",quiet:true},party:{t:"The Party",kind:"trag"},letter:{t:"The Letter",kind:"trag",quiet:true},
+  replace:{t:"The Replacement",kind:"trag"},clause:{t:"The Clause",kind:"trag"},emptygym:{t:"The Empty Gym",kind:"trag",quiet:true},record:{t:"The Record",kind:"trag"},trade:{t:"The Trade",kind:"trag"},
+  walkon:{t:"The Walk-On",kind:"grace"},call:{t:"The Call",kind:"grace"},page:{t:"The Page",kind:"grace"},sunday:{t:"The Sunday",kind:"grace"},ret:{t:"The Return",kind:"grace"},kid:{t:"The Kid",kind:"grace"},apology:{t:"The Apology",kind:"grace"},vantage:{t:"The Vantage Offer",kind:"grace"},oldman:{t:"The Old Man",kind:"grace"}};
+function fateInit(){if(C.fate)return C.fate;const T=Object.keys(FATE).filter(k=>FATE[k].kind==="trag"&&k!=="trade"),G=Object.keys(FATE).filter(k=>FATE[k].kind==="grace"&&!["vantage","oldman"].includes(k));
+  C.fate={deck:[...shuffle(T).slice(0,3),...shuffle(G).slice(0,3)],fired:{},lastY:null,lastRollG:-9,flags:{}};return C.fate}
+const inDeck=k=>fateInit().deck.includes(k)&&!C.fate.fired[k];
+function fateFire(k){const F=fateInit();F.fired[k]=C.y;F.lastY=C.y}
+const canFate=()=>{const F=fateInit();const gp=C.season?.tot?.gp||0;return gp>=6&&F.lastY!==C.y};
+const bond=k=>C.bonds?.[k];const bondAdd=(k,n)=>{if(C.bonds?.[k])C.bonds[k].lv=clamp((C.bonds[k].lv||0)+n,-100,100)};
+/* ---- the roll card ---- */
+function lifeRoll(o){(C.lifeQ??=[]).push(o);setTimeout(lifeFlush,0)}
+function lifeFlush(){if(!C?.lifeQ?.length||!$("modal").hidden||!$("live").hidden)return;const o=C.lifeQ[0];C.lifeCur=o;saveC();
+  const mod=o.mods.reduce((a,m)=>a+m[1],0),pct=Math.round(clamp((21+mod-o.dc)/20,.05,.95)*100);
+  openModal(`<div class="arch-card ${o.quiet?"quiet":""}"><small>${o.quiet?"":"The Architect · "}${esc(o.title)}</small><p>${esc(o.txt)}</p>
+    <div class="lr-box"><div class="lr-mods">${o.mods.map(m=>`<span>${esc(m[0])} <b>${m[1]>0?"+":""}${m[1]}</b></span>`).join("")||"<span>No modifiers</span>"}</div><div class="lr-dc"><b>DC ${o.dc}</b><small>${pct}% to pass</small></div></div>
+    <div class="actions"><button class="btn" data-act="lifego">Roll the d20</button>${o.skip?`<button class="btn ghost" data-act="lifeskip">${esc(o.skip)}</button>`:""}</div></div>`)}
+function lifeGo(){const o=C.lifeCur;if(!o)return;const roll=kroll(null,"life"),mod=o.mods.reduce((a,m)=>a+m[1],0),tot=roll+mod,ok=roll===20||(roll!==1&&tot>=o.dc);
+  const res=o.resolve(ok,roll,tot);C.lifeQ.shift();C.lifeCur=null;saveC();
+  $("sheet").innerHTML=`<div class="arch-card ${o.quiet?"quiet":""}"><small>${esc(o.title)} · ${roll===20?"NATURAL 20":roll===1?"NATURAL 1":ok?"PASSED":"FAILED"}</small><div class="lr-res"><div class="pm-die"><b>${roll}</b></div><div><b>${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot}</b> vs DC ${o.dc}</div></div><p>${esc(res)}</p><div class="actions"><button class="btn" data-act="close">Continue</button></div></div>`;
+  if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const h=$("cs-hud");if(h)mcRender()},0)}
+function lifeSkip(){const o=C.lifeCur;if(!o)return;const res=o.onSkip?o.onSkip():"";C.lifeQ.shift();C.lifeCur=null;saveC();if(res)$("sheet").innerHTML=`<div class="arch-card"><small>${esc(o.title)}</small><p>${esc(res)}</p><div class="actions"><button class="btn" data-act="close">Continue</button></div></div>`;else closeModal()}
+/* ---- hooks ---- */
+function fateAfterGame(mg,ln){try{fateInit();const gp=C.season?.tot?.gp||0;if(gp<6)return;const F=C.fate;const rival=bond("rival");
+  // rival head-to-head
+  if(rival&&rival.school&&(mg.opp===rival.school)){rival.hh[mg.w?0:1]++;if(mg.w){attnAdd(2,"beat the rival");rpgXP(C.rpg,Math.round(needXP(C.rpg.lv)*.15),`Beat ${rival.name}`);if(inDeck("page")&&!mg.home&&canFate()){fateFire("page");grantItem("page4","the rival's gym");archSay(`You won in his building. In the hallway behind the visitors' room there is a frame with nothing in it, and behind the frame there is a page. It is not a play. It is Page Four, and it is yours now. His family kept it for forty years without knowing what it was.`,"The Page")}}
+    else if(inDeck("record")&&mg.k&&mg.k!=="reg"&&canFate()){fateFire("record");archSay(`${rival.name} scored ${ri(31,41)} in your building and ended your season. The record was yours. It is his. Some cards are only true.`,"The Record")}}
+  if(gp-F.lastRollG<4)return;
+  // the party: the night of an upset or a 30-point game
+  const big=ln.pts>=30||(mg.w&&mg.ork&&mg.ork<=8&&!apRk(C.cl,C.school));
+  if(big&&R()<.5){F.lastRollG=gp;const partyCard=inDeck("party")&&canFate();
+    lifeRoll({title:"The party",txt:`${ln.pts>=30?`${ln.pts} points.`:"An upset."} There is a house on the edge of campus with every light on and your name is the reason. ${bond("friend")?bond("friend").name.split(" ")[0]+" is already there. ":""}Judgment roll. Go, and roll. Or go home.`,mods:[["Judgment",judgment()],...(bond("mother")?[["Your mother's voice",Math.round(((bond("mother").lv||50)-50)/25)]]:[])],dc:12,skip:"Go home",
+      onSkip:()=>{repAdd(1,"went home");return"You went home. Nothing happened. That is the whole point of going home, and nobody will ever thank you for it."},
+      resolve:(ok,roll)=>{if(ok){C.swag=(C.swag||0)+1;attnAdd(2,"a good night");return roll===20?"Natural 20. You were the best person at the party, which is a thing people will say for years. +1 Swagger. Attention +2.":"You stayed an hour, took the photos, left before anything. +1 Swagger. Attention +2."}
+        if(roll===1||partyCard){if(partyCard)fateFire("party");return theFall()}
+        C.susp=(C.susp||0)+2;repAdd(-8,"the photo");attnAdd(3,"the photo");return"There is a photo. It is not illegal. It is just you, at 2 a.m., holding something, and the program has a policy. Two games on the bench. Reputation −8. Attention +3, which is the problem with Attention."}})}
+  // the agent at the gate: road games, 4-5 star
+  else if((C.stars||3)>=4&&!mg.home&&R()<.15){F.lastRollG=gp;lifeRoll({title:"The agent at the gate",txt:"A man in a quarter-zip is waiting by the bus with an envelope and a first name. He says he knew your mother. He did not. Judgment roll to walk past.",mods:[["Judgment",judgment()],["Reputation",Math.round(((C.rep||50)-50)/10)]],dc:13,
+      resolve:(ok,roll)=>{if(ok){repAdd(2,"walked past");return"You walked past. He said he'd be in touch. He will. Reputation +2."}C.fate.flags.file=true;repAdd(-5,"the envelope");return"You took the envelope. You did not open it. Compliance will ask about the envelope in a year, in a room with no windows. There is a file now. The file has a tab."}})}
+  // the professor: midterms
+  else if((C.rpg?.origin==="scholar"||judgment()<0)&&gp>=10&&gp<=14&&!F.flags.mid&&R()<.6){F.flags.mid=C.y;lifeRoll({title:"The professor",txt:"Midterms. The professor has noticed that you exist mostly on television. Judgment roll to be eligible on Friday.",mods:[["Judgment",judgment()],...(C.rpg?.origin==="scholar"?[["Scholar",3]]:[])],dc:11,
+      resolve:(ok,roll)=>{if(ok){bondAdd("mother",3);return roll===20?"Natural 20. You wrote the thing the night before and it was good, which is worse for everyone who studied.":"Eligible. Your mother is told, and does not say anything, and is pleased."}C.susp=(C.susp||0)+1;bondAdd("coach",-5);return"Academic probation. One game in the stands in a shirt you had to borrow. Coach does not look at you during the anthem."}})}
+  // the knee: the friend, on your roster, in a game that did not matter
+  const fr=bond("friend");if(fr&&fr.pid&&!fr.hurt&&inDeck("knee")&&canFate()&&mg.w&&Math.abs(mg.us-mg.them)>=15&&C.cl.players[fr.pid]&&C.cl.teams[C.school].roster.includes(fr.pid)&&R()<.35){fateFire("knee");fr.hurt=C.y;C.cl.players[fr.pid].inj=true;F.lastRollG=gp;
+    archSay(`${fr.name} went up for a rebound with four minutes left in a game you won by ${Math.abs(mg.us-mg.them)}. He landed on nobody. The sound was small. He is done, this year and probably every year. You were on the floor.`,"The Knee",{quiet:true});
+    lifeRoll({title:"The hospital",quiet:true,txt:"There is a bus back to campus and there is a hospital across the street. Trust roll.",mods:[["Trust",Math.round(((fr.lv||30))/10)]],dc:8,skip:"Take the bus",onSkip:()=>{bondAdd("friend",-40);return"You took the bus. The Architect records that you had a game."},
+      resolve:ok=>{if(ok){bondAdd("friend",40);grantItem("wristband","the night you went");return"You went. You sat there until they made you leave. The wristband is in your Locker. Only one exists per playthrough."}bondAdd("friend",-10);return"You went. He was asleep. You left a note that said something stupid. He kept the note."}})}
+  // the walk-on hits the shot
+  if(inDeck("walkon")&&canFate()&&mg.w&&Math.abs(mg.us-mg.them)<=2&&mg.ln.pts<15&&R()<.5){fateFire("walkon");C.swag=(C.swag||0);grantItem("walkontowel","the walk-on");archSay(`He hit the shot. Not you. ${["Sam","Eli","Marcus","Deon"][hsh(C.name)%4]}, nine minutes a game, the kid who rebounds for you at 6 a.m. The whole building knows it. He gave you his towel afterward and said "keep it," which is the nicest thing anyone says in this game.`,"The Walk-On")}
+  // the sunday: calling your mother (approximated by rested EXP streaks)
+  if(inDeck("sunday")&&canFate()&&(C.rpg?.rest||0)>needXP(C.rpg.lv)*.9&&R()<.4){fateFire("sunday");bondAdd("mother",15);C.fate.flags.sunday=C.y;archSay(`Your mother came to a game. Just the one. She sat behind the bench in her work clothes and did not cheer, because she was watching. Home crowd doubled, for her, for the rest of the year.`,"The Sunday")}
+  // the diagnosis
+  const co=bond("coach");if(co&&inDeck("diag")&&canFate()&&(co.lv||0)>=60&&mg.w&&gp>=12&&R()<.25){fateFire("diag");co.sick=C.y;archSay(`${co.name} told you after a win so you could not be angry. It is his heart. He is going to keep coaching. He asked you not to tell your mother, which means he has already told your mother.`,"The Diagnosis",{quiet:true})}
+  }catch(e){console.error(e)}}
+/* ---- the fall ---- */
+function theFall(){C.fallen=C.y;C.susp=(C.susp||0)+6;C.stars=1;C.rpg.stars=1;repAdd(-30,"the arrest");attnAdd(12,"the arrest");
+  const dropped=C.spon.active.filter(d=>!d.person).map(d=>d.n);C.spon.active=C.spon.active.filter(d=>d.person);C.spon.log.unshift({t:`Dropped in writing: ${dropped.join(", ")||"nobody, because nobody had signed you yet"}.`,y:C.y});
+  if(!C.bonds.coach){const cast=plgCast();C.bonds.coach={...cast.coach,lv:40,follows:true,met:"courthouse"}}
+  const co=C.bonds.coach,comes=(co.lv||0)>=40;
+  archSay(`A fight that was not yours, a car that was, and a parking lot with cameras. The charge will be reduced. The scholarship will not. You are suspended six games and the program will "review your status," which is a sentence with one ending. ${dropped.length?dropped.join(", ")+" dropped you by email. ":""}${comes?`${co.name} was at the courthouse at 7 a.m. Nobody called him.`:`Nobody came to the courthouse.`}`,"The fall",{quiet:true});
+  lifeRoll({title:"The courtroom",quiet:true,txt:`Reputation and ${comes?co.name+"'s testimony":"a public defender who has eleven other cases today"}. The roll decides whether this year ends in a JUCO or in a calendar.`,mods:[["Reputation",Math.round(((C.rep||50)-50)/10)],...(comes?[["Coach's testimony",3]]:[]),...(bond("mother")?[["Your mother in the second row",1]]:[])],dc:15,
+    resolve:(ok,roll)=>{C.forceJuco=true;if(ok){bondAdd("coach",20);return`Probation. Stars reset to one. The scholarship is gone at the end of the season and the only letters that will come are from junior colleges. ${comes?co.name+" has already called them. He may have exaggerated.":"You will make the calls yourself."} The game continues from the bottom, with the same narrator.`}
+      C.fate.flags.yearAway=true;bondAdd("mother",10);return"A year away. The game continues with a calendar and a phone. You will be older than everyone on the JUCO roster and better than all of them, which is not the compliment it sounds like."}});
+  return"The night ended in a parking lot with cameras."}
+/* season end + draft hooks */
+function fateSeasonEnd(){try{fateInit();const co=bond("coach");if(co&&co.sick&&!co.gone&&C.y-co.sick>=1&&R()<.5){co.gone=C.y;archSay(`${co.name} died in ${["March","April","the week after the banquet","a Tuesday"][hsh(C.name+"d")%4]}. The funeral was small and the gym was full. There is a clipboard in your Locker. He does not know you have seen the page at the back.`,"Coach",{quiet:true});grantItem("clipboard","the funeral")}
+  if(C.fallen&&inDeck("ret")&&C.y-C.fallen>=1&&(C.hist[C.hist.length-1]?.ppg||0)>=15){fateFire("ret");C.fate.flags.ret=true;archSay(`A school that passed on you called back. I have the list of the ones that did not. It is long and I will read it to you whenever you want.`,"The Return")}
+  }catch(e){console.error(e)}}
+function fateDraftNight(){try{fateInit();const co=bond("coach");if(inDeck("call")&&Object.values(C.bonds||{}).some(b=>(b.lv||0)>=80)){fateFire("call");archSay("The phone rang before the pick. Someone you did right by, with a job, a jersey, a ride. You did not need it. That is why they called.","The Call")}
+  if(co&&inDeck("emptygym")&&(co.lv||0)<30&&!co.gone){fateFire("emptygym");archSay(`${co.name} is not here. He is watching at home. I have nothing to add.`,"The Empty Gym",{quiet:true})}
+  else if(co&&!co.gone&&(co.lv||0)>=60)archSay(`${co.name} is in the room. He wore the suit from the funeral he hasn't had yet. He says that every year.`,"Draft night")}catch(e){console.error(e)}}
+window.__fate={fateInit,theFall,lifeRoll};
 
 /* ---------- Showcase model: a detailed pixel figure for creation and the character sheet ---------- */
 const SHW=104,SHH=172;
@@ -3789,7 +3869,7 @@ function mcCreate(){
       <div class="mp-note">Any height at any position. Height raises your floor for blocks, boards, interior defense and dunking, lowers it for speed and handle, and raises your ceiling: the taller you are, the higher you can climb. Wingspan helps steals, blocks and contests. Weight trades speed for strength.</div></div>`)}
       ${mpWin("Look",avOpts(C.look,"mclook")+noSelect("mc-no",C.no)+`<div class="actions" style="margin-top:8px"><button class="mp-btn" data-act="mclookrand">Randomize</button></div>`)}</div>
       <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas><canvas data-show='${showData("back")}' width="${SHW}" height="${SHH}"></canvas></div><div class="mp-show-s"><canvas class="av-sm" data-av='${esc(JSON.stringify({l:C.look,j:rpgJersey()[0],t:"#f4f1ea",h:R.body.ht}))}' width="40" height="56"></canvas><small>How he looks on the court</small></div>`)}</div></div>`}
-  else if(st==="skills")body=`<div class="mp-two"><div class="mp-col">${mpWin("Skills",`<div class="mp-pts"><span>${rpgTotal(R)} to start (${"★".repeat(R.stars||3)}). The next point costs 1 under 60, 2 under 75, 3 under 85, 4 under 95, then more. No cap.</span><b>${rpgFree(R)}</b></div>
+  else if(st==="skills")body=`<div class="mp-two"><div class="mp-col">${mpWin("Skills",`<div class="mp-pts"><span>${rpgTotal(R)} to start (${"★".repeat(R.stars||3)}). The next point costs 1 under 70, 2 under 82, 3 under 90, 4 under 97, then more. No cap.</span><b>${rpgFree(R)}</b></div>
       <div class="actions"><button class="mp-btn" data-act="rauto" data-v="shooter">Auto: Shooter</button><button class="mp-btn" data-act="rauto" data-v="slasher">Slasher</button><button class="mp-btn" data-act="rauto" data-v="playmaker">Playmaker</button><button class="mp-btn" data-act="rauto" data-v="twoway">Two-way</button><button class="mp-btn" data-act="rauto" data-v="big">Big</button><button class="mp-btn" data-act="rreset">Reset</button></div>${skGroups(R,age,true)}`)}</div>
       <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>`+rpgSummary(R,age))}</div></div>`;
   else body=mpWin("Traits (pick up to 2)",`<div class="mp-orig">${TRAITS.map(t=>{const on=R.traits.includes(t.k);return`<button class="mp-card ${on?"picked":""}" data-act="rtrait" data-v="${t.k}" ${!on&&R.traits.length>=2?"disabled":""}><b>${t.n}</b><p class="up">▲ ${t.up}</p><p class="dn">▼ ${t.down}</p></button>`}).join("")}</div>`)
@@ -4433,7 +4513,7 @@ window.addEventListener("pagehide",()=>{saveNow();if(CL.on)cloudPush().catch(()=
    RENDER
    ===================================================================== */
 let toastT;function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3200)}
-function closeModal(){$("modal").hidden=true;$("sheet").innerHTML="";if(G&&$("view"))paintAvatars($("view"));if(typeof archFlush==="function"&&C?.archQ?.length)setTimeout(archFlush,120)}
+function closeModal(){$("modal").hidden=true;$("sheet").innerHTML="";if(G&&$("view"))paintAvatars($("view"));if(typeof archFlush==="function"&&C&&(C.archQ?.length||C.lifeQ?.length))setTimeout(archFlush,120)}
 function openModal(html){$("sheet").innerHTML=html;$("modal").hidden=false;$("sheet").scrollTop=0}
 const outChip=p=>p.inj>1?(p.playHurt&&G.phase==="playoffs"?'<span class="chip red">Playing hurt</span>':`<span class="chip red">Out ${p.inj-1}</span>`):"";
 const pName=(p,tags)=>`<button class="linkish" data-act="player" data-pid="${p.pid}">${esc(p.name)}</button>${p.lab?'<span class="chip lab">Lab</span>':""}${outChip(p)}${tags?durTag(p)+(p.rest&&p.tid===G.userTid?`<span class="chip">Rest: ${REST[p.rest][0]}</span>`:""):""}`;
@@ -4882,6 +4962,7 @@ document.addEventListener("click",e=>{
       if(d.act==="mclookrand")C.look=lookFor(Math.random());else{C.look??={};C.look[d.k]=+d.v}const sc=$("mc").scrollTop;mcRender();$("mc").scrollTop=sc;return}
     case"editlook":lookModal();return;
     case"credits":openModal(creditsHtml());return;
+    case"lifego":lifeGo();return;case"lifeskip":lifeSkip();return;
     case"spacc":closeModal();sponsorAccept(d.v);return;case"spdec":closeModal();sponsorDecline(d.v);return;case"spdrop":sponsorDrop(d.v);return;case"post":socialPost();return;case"crate":openCrate();return;case"equip":equip(d.v);return;case"uneq":unequip(d.v);return;
     case"posspick":possPick(+d.v);return;case"possauto":possAuto();return;case"pmset":pmSet(d.v);return;
     case"kbset":kbSet(d.v);return;case"kbreset":KB={...KBDEF};kbSave();csWins();return;case"stset":styleSet(d.v);return;
