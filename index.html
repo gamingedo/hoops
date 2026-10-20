@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="af7854f711";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="6dacb2c686";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -537,6 +537,12 @@ body{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
   .lv{max-width:none;grid-template-columns:auto minmax(220px,1fr);grid-auto-rows:min-content;column-gap:12px;padding-block:6px}
   .lv-court{grid-column:1;grid-row:1/span 7;align-self:start}.lv>*:not(.lv-court){grid-column:2}
   .lv-feed{max-height:52vh}
+}
+@media (min-width:1000px) and (min-height:541px){
+  .lv{max-width:none;grid-template-columns:auto minmax(300px,1fr);grid-auto-rows:min-content;column-gap:16px;padding-block:8px;align-items:start}
+  .lv-top{grid-column:1/span 2;grid-row:1}
+  .lv-court{grid-column:1;grid-row:2;align-self:start}.lv-me{grid-column:1;grid-row:3}.lv-ctl{grid-column:1;grid-row:4}
+  .lv-tabs{grid-column:2;grid-row:2;align-self:start;z-index:1}#lv-coach,.lv-feed,#lv-box{grid-column:2;grid-row:2/span 3;margin-top:44px;max-height:calc(100vh - 170px);overflow:auto;align-self:start}
 }
 .lv-feed li.mine{border-color:#ffd16677;background:#ffd16614}
 
@@ -2472,7 +2478,9 @@ function lvBench(){const el=$("lv-coach"),c=LV.ctl,k=c.side,st=c.st,r=lvMyR();if
   const can=!on&&r.pf<FO-1&&!r.p.inj&&L.f<.4&&el2-(c.readyAt||-999)>=120&&!LV.genDone;
   el.innerHTML=`<div class="coach"><div class="bench-hd"><div><div class="label">Your role</div><b>${role}</b><small> · ${plan}</small></div><div><div class="label">Right now</div>${lvMeStatus()}</div></div>
     <p class="note">${why}</p>
-    <div class="actions"><button class="btn sm" data-act="lvready" ${can?"":"disabled"}>${on?"You're in":"Tell coach you're ready"}</button>${c.want?`<span class="chip">Coach: "Next dead ball."</span>`:""}${c.readyMsg&&!c.want?`<span class="chip">Coach: "${esc(c.readyMsg)}"</span>`:""}</div>
+    <div class="label">Huddle · what you ask Coach to run</div><div class="fid">${OFFS.map(([v,l])=>`<button data-act="lvoff" data-v="${v}" aria-pressed="${c.off===v}">${l}</button>`).join("")}</div>
+    <div class="fid" style="margin-top:6px">${DEFS.map(([v,l])=>`<button data-act="lvdef" data-v="${v}" aria-pressed="${c.def===v}">${l}</button>`).join("")}</div>
+    <div class="actions"><button class="btn sm" data-act="lvto" ${c.to<=0||LV.genDone?"disabled":""}>Timeout · ${c.to} left</button>${c.boost>0?`<span class="chip good">Fired up: ${c.boost} trips</span>`:""}<button class="btn sm" data-act="lvready" ${can?"":"disabled"}>${on?"You're in":"Tell coach you're ready"}</button>${c.want?`<span class="chip">Coach: "Next dead ball."</span>`:""}${c.readyMsg&&!c.want?`<span class="chip">Coach: "${esc(c.readyMsg)}"</span>`:""}</div>
     <div class="label">On the floor</div><div class="lineup">${onA.map(row).join("")}</div>
     <div class="label">Bench</div><div class="lineup">${bench.map(row).join("")}</div>
     <p class="note">How minutes work: your spot in the rotation (OVR rank on the roster) sets a minutes plan. Coach subs you out when your legs go or you're ahead of plan, and back in when they return. Starters close the game. Play well and the plan grows next game; foul trouble shrinks it tonight.</p></div>`}
@@ -3082,9 +3090,11 @@ function hlSprite(o){if(!(o.fr>=0))o={...o,fr:Math.abs(Math.floor(o.fr))||0};con
 const wx=x=>(x+HL.X0)*HL.PPF,wy=y=>HL.CROWD+HL.FAR+y*HL.VS;
 function sp(x,y,z=0){return{x:Math.round(wx(x)-(LV.camX||0)),y:Math.round(wy(y)-z*HL.ZS-(LV.camY||0))}}
 function lvResize(){const c=$("lv-c");if(!c||!LV)return;const land=innerWidth>innerHeight&&innerHeight<=540;let w,h;
+  const wide=!land&&innerWidth>=1000;
   if(land){w=Math.min(innerWidth*.68,(innerHeight-16)*1.75);h=Math.min(innerHeight-16,w*.66);c.parentElement.style.width=w+"px"}
+  else if(wide){w=Math.min(innerWidth*.6,(innerHeight-150)*1.9,1100);h=Math.min(innerHeight-150,w*.62);c.parentElement.style.width=Math.round(w)+"px"}
   else{c.parentElement.style.width="";w=c.parentElement.clientWidth||360;h=w*.8}
-  const d=Math.max(1,window.devicePixelRatio||1),IW=clamp(Math.round(w*d/3),300,720),IH=Math.round(IW*h/w);
+  const d=Math.max(1,window.devicePixelRatio||1),IW=clamp(Math.round(w*d/3),300,720);let IH=Math.round(IW*h/w);if(IH>HL.FH){IH=HL.FH;h=Math.round(IH*w/IW)}
   c.width=IW;c.height=IH;c.style.width=Math.round(w)+"px";c.style.height=Math.round(h)+"px";Object.assign(LV,{W:IW,H:IH});if(!LV.floor)hlFloor()}
 function hlCam(dt){const cur=LV.ev[Math.min(LV.i,LV.ev.length-1)],bx=cur&&cur.o!=null?lvBasket(cur.o,cur.q):LV.ball.x,fx=LV.ball.x*.72+bx*.28;
   const tx=clamp(wx(fx)-LV.W/2,0,HL.FW-LV.W),ty=clamp(wy(LV.ball.y)-LV.ball.z*HL.ZS*.25-LV.H*.56,0,Math.max(0,HL.FH-LV.H));
