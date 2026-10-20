@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="4b79bb2349";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="734d5503a8";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -653,6 +653,23 @@ body{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
 .g-re{border:0;background:none;cursor:pointer;font-size:12px;padding:0 2px;color:#4a4f5e}.g-act{display:flex;flex-wrap:wrap;gap:6px}.g-filt{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}.g-filt .mp-btn.on{background:linear-gradient(180deg,#ffd76a,#f5a623)}
 #sheet:has(.g-top){max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
 @media(max-width:600px){.g-top{grid-template-columns:1fr}.g-slots{grid-template-columns:1fr}}
+.lv-clutch.pm{overflow:auto;align-content:safe center}@media(min-width:900px){.lv-clutch.pm .pm-opts,.lv-clutch.pm .pm-h,.lv-clutch.pm .pm-meta,.lv-clutch.pm .pm-chips,.lv-clutch.pm .pm-res2{width:min(740px,94%)}.lv-clutch.pm .pm-o{padding:5px 9px}.lv-clutch.pm .pm-opts{gap:4px}}.pm-o .pn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}.pm-o .pcs{display:flex;flex-wrap:wrap;gap:2px 4px;margin-top:2px}.pc{font-size:10.5px;line-height:1.35;padding:0 5px;border-radius:9px;background:#ffffff14;white-space:nowrap}.pc.up{color:#6cb8ff}.pc.dn{color:#ffa24c}.pc.b{color:#c9cfe0;opacity:.8}.pm-o .pn{display:block;opacity:.75}
+.pm-res2{display:grid;gap:8px;padding:6px 2px}.pm-lab{font:800 16px var(--f-display);text-transform:uppercase}.pm-meter{position:relative;height:26px;border-radius:13px;background:#ffa24c55;overflow:hidden;border:1px solid #ffffff33}.pm-meter .zone{position:absolute;left:0;top:0;bottom:0;background:#6cb8ffaa}.pm-meter .z1{position:absolute;left:8px;top:4px;font:800 12px var(--f-mono);color:#06121f}
+.pm-meter .ndl{position:absolute;top:-2px;bottom:-2px;width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 8px #fff;transition:left .25s ease-out}.pm-meter .ndl.sweep{animation:pmSweep .32s ease-in-out infinite alternate}@keyframes pmSweep{from{left:3%}to{left:97%}}
+.pm-verd{display:grid;gap:2px}.pm-verd b{font:900 26px var(--f-display);letter-spacing:.04em}.pm-verd.ok b{color:#6cb8ff}.pm-verd.no b{color:#ffa24c}.pm-verd.big b{font-size:38px;color:#ffd166;animation:pmPop .5s ease-out}.pm-verd span{font-weight:700}.pm-verd small{opacity:.85}.pm-verd .mth{font-family:var(--f-mono);opacity:.6}@keyframes pmPop{from{transform:scale(1.6);opacity:0}to{transform:scale(1);opacity:1}}
+.pg-card{display:grid;gap:8px;padding:14px 16px;border-radius:10px;border:2px solid #3a4560;background:#0f1626;color:#f4f1ea}.pg-card>small{font:700 11px Silkscreen,var(--f-mono);color:#9fb4dc;letter-spacing:.06em}.pg-card h3{margin:0;font:900 26px var(--f-display);text-transform:uppercase}.pg-card p{margin:0}
+.pg-card.gold{border-color:#ffd166;box-shadow:0 0 0 2px #ffd16655,0 0 24px #ffd16633}.pg-card.boss{border-color:#ffd166;background:linear-gradient(180deg,#2a1d05,#0f1626);box-shadow:0 0 0 3px #ffd166aa,0 0 40px #ffd16655}.pg-card.boss h3{color:#ffd166}
+.pg-raid{margin:0;padding-left:18px;display:grid;gap:4px}.pg-raid li{color:#ffa24c}.pg-easy{color:#6cb8ff}.pg-drop b{color:#ffd166}.pg-card h3.w{color:#6cb8ff}.pg-card h3.l{color:#ffa24c}
+.pg-xp{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center}.pg-bar{height:12px;border-radius:6px;background:#ffffff1a;overflow:hidden}.pg-bar i{display:block;height:100%;background:#ffd166;animation:pgFill 1.1s ease-out .2s forwards}@keyframes pgFill{to{width:var(--to)}}.pg-up{font:900 14px var(--f-display);color:#ffd166}.pg-money{color:#6cb8ff;font-weight:700}.pg-none{opacity:.8}.pg-next{opacity:.9;font-size:13px}
+.rv{display:grid;justify-items:center;gap:4px;padding:16px;border-radius:10px;border:3px solid var(--rc);background:radial-gradient(circle at 50% 30%,color-mix(in srgb,var(--rc) 30%,#0f1626),#0f1626);color:#f4f1ea;text-align:center;animation:rvIn .35s ease-out}.rv.inline{padding:10px}
+.rv>*{opacity:0;animation:rvUp .35s ease-out forwards}.rv .rv-t{opacity:.8;animation:none;font:700 10px Silkscreen,var(--f-mono)}.rv-r{font:900 22px var(--f-display);color:var(--rc);text-transform:uppercase;letter-spacing:.08em}.rv-n{font:800 18px var(--f-display)}.rv-s{opacity:1;animation:none}.rv-s i{font-style:normal;font-size:20px;color:#ffffff30;opacity:0;animation:rvUp .25s ease-out forwards;display:inline-block}.rv-s i.on{color:#ffd166}
+.rv-m{font-weight:800}.rv-m small{display:block;font-weight:400;opacity:.75}.rv-sub{font-size:13px;background:#ffffff14;border-radius:6px;padding:2px 8px}.rv-sub.rule{background:#ffd16633;color:#ffd166}.rv-legendary,.rv-epic{box-shadow:0 0 30px color-mix(in srgb,var(--rc) 60%,transparent)}
+@keyframes rvUp{from{opacity:0;transform:translateY(8px) scale(.9)}to{opacity:1;transform:none}}@keyframes rvIn{from{transform:rotateY(90deg)}to{transform:none}}
+.g-free{color:#1a6e2f;font-weight:700}
+.cs-bar{display:flex;gap:6px;align-items:stretch;flex:1 1 100%;flex-wrap:nowrap}.cs-play{flex:2 1 260px;display:grid;text-align:left;gap:2px;padding:10px 14px;border-radius:8px;border:2px solid #8a5a00;background:linear-gradient(180deg,#ffd76a,#f5a623);color:#2a1800;font:900 17px var(--f-display);text-transform:uppercase;cursor:pointer;box-shadow:0 3px 0 #8a5a00}.cs-play small{font:600 12px var(--f-body);text-transform:none;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cs-b{flex:1 1 90px;padding:10px 8px;border-radius:8px;border:1px solid #5a5f70;background:#11151f;color:#e8ebf2;font:800 14px var(--f-display);text-transform:uppercase;cursor:pointer}.cs-b.more{flex:0 0 44px}.cs-b.hot{border-color:#ffd166;color:#ffd166}.cs-b em{font-style:normal;margin-left:4px;color:#ffd166}
+.ss-tabs{margin:-4px 0 8px}
+@media(max-width:760px){.cs-bar{flex-wrap:wrap}.cs-play{flex:1 1 100%}.cs-b{flex:1 1 20%;font-size:12px;padding:9px 4px}}
 .cs-ev.hot{border-color:#ffd166;color:#ffd166}.drill-steps{display:grid;gap:6px;margin:8px 0}.drill-step{border:1px solid #2a3550;border-radius:8px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 8px}.drill-step em{grid-column:1/-1;font-style:normal;opacity:.85}.drill-step.cur{border-color:#ffd166}.drill-step.ok{border-color:#6cb8ff;background:rgba(108,184,255,.08)}.drill-step.no{border-color:#ffa24c;background:rgba(255,162,76,.08)}
 </style>
 </head>
@@ -877,7 +894,7 @@ function simDay(watch){
   healDay();let ug=null;
   const resters=user().roster.map(P).filter(p=>p.rest>0&&!p.inj&&R()<(p.rest===2?.2:.1));
   resters.forEach(p=>{p.resting=true;p.restG=(p.restG||0)+1});
-  for(const [h,a] of G.schedule[G.day]){const mine=h===G.userTid||a===G.userTid;const g=G.preRes&&G.preRes.h===h&&G.preRes.a===a?liveCommit(h,a,false,G.preRes.L):watch&&mine?liveGame(h,a,false):playGame(h,a,false);if(mine)ug=g}
+  for(const [h,a] of G.schedule[G.day]){const mine=h===G.userTid||a===G.userTid;const g=G.preRes&&G.preRes.h===h&&G.preRes.a===a?liveCommit(h,a,false,G.preRes.L):(G.career&&!G.career.retired)||(mine&&watch)?liveGame(h,a,false):playGame(h,a,false);if(mine)ug=g}
   resters.forEach(p=>p.resting=false);
   if(ug)recordUser(ug,`Game ${user().w+user().l}`);
   G.day++;chatterDay();if(G.career&&!G.career.retired&&G.day%7===0&&typeof C!=="undefined"&&C){try{attnWeek()}catch(e){console.error(e)}}
@@ -891,11 +908,11 @@ const pg=(p,k)=>p.stats.gp?p.stats[k]/p.stats.gp:0;
 const wpct=t=>t.w/((t.w+t.l)||1);
 const mvpScore=p=>pg(p,"pts")+pg(p,"reb")*.6+pg(p,"ast")*.8+pg(p,"stl")+pg(p,"blk")+wpct(T(p.tid))*22+p.ovr*.15;
 function endRegular(){
-  const act=Object.values(G.players).filter(p=>p.tid>=0&&p.stats.gp>=50);
+  const gpMin=Math.min(50,Math.round(seasonLen()*.6)),act=Object.values(G.players).filter(p=>p.tid>=0&&p.stats.gp>=gpMin);
   const mvpS=mvpScore;
   const dpoyS=p=>pg(p,"stl")*2.2+pg(p,"blk")*2.2+pg(p,"reb")*.3+p.a.DEF*.12+wpct(T(p.tid))*5;
   const mvp=best(act,mvpS),dpoy=best(act,dpoyS);
-  const roy=best(Object.values(G.players).filter(p=>p.tid>=0&&p.rookieYear===G.year&&p.stats.gp>=40),p=>pg(p,"pts")+pg(p,"reb")*.5+pg(p,"ast")*.7+p.ovr*.1);
+  const roy=(G.career&&!G.career.retired)?null:best(Object.values(G.players).filter(p=>p.tid>=0&&p.rookieYear===G.year&&p.stats.gp>=40),p=>pg(p,"pts")+pg(p,"reb")*.5+pg(p,"ast")*.7+p.ovr*.1);
   G.season={mvp:mvp?.pid,dpoy:dpoy?.pid,roy:roy?.pid};
   recSeason();
   [[mvp,"MVP"],[dpoy,"DPOY"],[roy,"ROY"]].forEach(([p,a])=>{if(p){p.awards.push({y:G.year,a});news(`${p.name} (${T(p.tid).abbr}) wins ${a}.`)}});
@@ -915,7 +932,7 @@ function playIn(s,c){
   const top=[...s.slice(0,6),w78,w8];return[...top,...s.filter(t=>!top.includes(t))];
 }
 function initPlayoffs(){
-  const N=poSize(),pin=N===8&&(G.hist?G.year>=2020:true);
+  const N=poSize(),pin=N===8&&(G.hist?G.year>=2020:true)&&!(G.career&&!G.career.retired);
   const cs=c=>{let s=seeds(c);if(pin&&s.length>=10)s=playIn(s,c);return s.slice(0,N)};
   const E=cs("E"),W=cs("W");
   const mk=(s,c)=>PAIRS[N].filter(([x,y])=>s[y]!=null).map(([x,y])=>({hi:s[x],lo:s[y],hs:x+1,ls:y+1,wh:0,wl:0,conf:c}));
@@ -924,31 +941,42 @@ function initPlayoffs(){
   Object.values(G.players).forEach(p=>p.inj=Math.max(0,p.inj-3));
   news(made?`You made the playoffs as the ${E.includes(G.userTid)?"East":"West"} #${(E.includes(G.userTid)?E:W).indexOf(G.userTid)+1} seed.`:"You missed the playoffs.","team");
 }
-const sDone=s=>s.wh===4||s.wl===4,sWin=s=>s.wh===4?s.hi:s.lo;
+const poW=()=>(G.career&&!G.career.retired)?3:4,sDone=s=>s.wh===poW()||s.wl===poW(),sWin=s=>s.wh===poW()?s.hi:s.lo;
 function playoffDay(watch){let watched=null;
   const po=G.po,cur=po.rounds[po.round];healDay();
   for(const s of cur){
     if(sDone(s))continue;const g=s.wh+s.wl,hiHome=[0,1,4,6].includes(g);
-    const mine=s.hi===G.userTid||s.lo===G.userTid,fn0=watch&&mine?liveGame:playGame,fn=(x,y,po)=>G.preRes&&G.preRes.h===x&&G.preRes.a===y?liveCommit(x,y,true,G.preRes.L):fn0(x,y,po);const res=hiHome?fn(s.hi,s.lo,true):fn(s.lo,s.hi,true);if(watch&&mine)watched=res;
+    const mine=s.hi===G.userTid||s.lo===G.userTid,fn0=(G.career&&!G.career.retired)||(mine&&watch)?liveGame:playGame,fn=(x,y,po)=>G.preRes&&G.preRes.h===x&&G.preRes.a===y?liveCommit(x,y,true,G.preRes.L):fn0(x,y,po);const res=hiHome?fn(s.hi,s.lo,true):fn(s.lo,s.hi,true);if(watch&&mine)watched=res;
     const hiWon=hiHome?res.hs>res.as:res.as>res.hs;if(hiWon)s.wh++;else s.wl++;
-    if(s.hi===G.userTid||s.lo===G.userTid){recordUser(res,`${roundName(po.round)} · Game ${g+1}`);if(sDone(s)){news(sWin(s)===G.userTid?`You won the ${roundName(po.round)} ${Math.max(s.wh,s.wl)}-${Math.min(s.wh,s.wl)}.`:`You were eliminated in the ${roundName(po.round)}.`);try{if(G.career&&!G.career.retired&&typeof C!=="undefined"&&C&&typeof gearS==="function"&&gearS()){const fin=po.round===po.nr-1,won=sWin(s)===G.userTid;if(won)nilAdd([15000,30000,60000,150000][Math.min(3,po.round+(4-po.nr))],`for winning the ${roundName(po.round)}`);if(fin){const it=won?gearFinals():gearRoll("boss");if(it)toast(`${won?"The Finals":"Finals"}: ${GRAR[it.rar][0]} ${gName(it)} ${gStars(it)}`)}saveC()}}catch(e){console.error(e)}}}
+    if(s.hi===G.userTid||s.lo===G.userTid){recordUser(res,`${roundName(po.round)} · Game ${g+1}`);if(sDone(s)){news(sWin(s)===G.userTid?`You won the ${roundName(po.round)} ${Math.max(s.wh,s.wl)}-${Math.min(s.wh,s.wl)}.`:`You were eliminated in the ${roundName(po.round)}.`);poReward(s,po);}}
   }
   if(cur.every(sDone))advanceRound();
   return watched;
 }
+function poReward(s,po){try{if(G.career&&!G.career.retired&&typeof C!=="undefined"&&C&&typeof gearS==="function"&&gearS()){const fin=po.round===po.nr-1,won=sWin(s)===G.userTid;if(won)nilAdd([15000,30000,60000,150000][Math.min(3,po.round+(4-po.nr))],`for winning the ${roundName(po.round)}`);if(won&&fin){const it=gearGive("legendary",5,"the Finals");gearRing(T(sWin(s)===s.hi?s.lo:s.hi));if(it)gearShow(it,"Champion")}else if(!won){const ri=Math.min(3,po.round+(4-po.nr));const it=gearGive(ri===0?"rare":"epic",null,`the ${roundName(po.round)}`);if(it)gearShow(it,"Playoff box")}saveC()}}catch(e){console.error(e)}}
+window.__poReward=(round,won)=>{const po={round,nr:4},s={hi:G.userTid,lo:G.teams.find(t=>t.tid!==G.userTid).tid,wh:won?3:0,wl:won?0:3};poReward(s,po);return JSON.stringify({rings:(gearS().rings||[]).length,bag:gearS().bag.length,last:gearS().log.slice(0,3).map(x=>x.t)})};
 function advanceRound(){
   const po=G.po,cur=po.rounds[po.round];
   cur.forEach(s=>{if(s.hi===G.userTid||s.lo===G.userTid){if(sWin(s)===G.userTid)po.userBest=po.round+1;else po.userOut=true}});
   if(po.round===po.nr-1){po.champ=sWin(cur[0]);endPlayoffs();return}
   let next=[];
-  const pair=(a,b,c)=>{const x={tid:sWin(a),seed:a.wh===4?a.hs:a.ls},y={tid:sWin(b),seed:b.wh===4?b.hs:b.ls};
+  const pair=(a,b,c)=>{const x={tid:sWin(a),seed:a.wh===poW()?a.hs:a.ls},y={tid:sWin(b),seed:b.wh===poW()?b.hs:b.ls};
     const xb=c==="F"?(T(x.tid).w>T(y.tid).w||(T(x.tid).w===T(y.tid).w&&x.seed<=y.seed)):x.seed<y.seed;const [h,l]=xb?[x,y]:[y,x];
     return{hi:h.tid,lo:l.tid,hs:h.seed,ls:l.seed,wh:0,wl:0,conf:c}};
   if(po.round<po.nr-2){for(const c of["E","W"]){const cs=cur.filter(s=>s.conf===c);for(let i=0;i<cs.length;i+=2)next.push(pair(cs[i],cs[i+1],c))}}
   else next=[pair(cur.find(s=>s.conf==="E"),cur.find(s=>s.conf==="W"),"F")];
   po.rounds.push(next);po.round++;
+  try{if(po.round===po.nr-1&&G.career&&!G.career.retired){const s=next[0];if(s.hi===G.userTid||s.lo===G.userTid)bossSwap(s.hi===G.userTid?s.lo:s.hi)}}catch(e){console.error(e)}
 }
 const resultLabel=b=>b<0?"Missed playoffs":["Lost in First Round","Lost in Conf. Semis","Lost in Conf. Finals","Lost in NBA Finals","Champion"][b];
+const BOSSY=[2017,1996,2001,1986,2014,2013,1987,2008,2016,2023];
+function bossSwap(tid){const t=T(tid);if(!DB?.champs||t._boss)return;const n=Math.max(0,((typeof C!=="undefined"&&C&&C.seasonN)||1)-1),y=BOSSY[n%BOSSY.length],fid=DB.champs[y];if(!fid)return;
+  const ps=Object.keys(DB.seasons).filter(rid=>{const r=realRow(rid,y);return r&&r[1]===fid}).map(rid=>realPlayer(rid,y,tid)).filter(Boolean).sort((a,b)=>b.ovr-a.ovr).slice(0,13);if(ps.length<8){ps.forEach(p=>delete G.players[p.pid]);return}
+  const era=franchiseEra(fid,y)||[0,0,"Champions","",t.abbr];t._boss={roster:[...t.roster],city:t.city,name:t.name,abbr:t.abbr,color:t.color,y,pids:ps.map(p=>p.pid)};
+  t.roster=ps.map(p=>p.pid);ps.forEach(p=>{p.boss=true;p.inj=0;p.stats=emptyStats()});t.city=`${y} ${era[2]}`;t.name=era[3];t.abbr=era[4]||t.abbr;t.color=DB.teams[fid]?.color||t.color;
+  G.bossLog={y,name:`${t.city} ${t.name}`};news(`The Finals: the ${t.city} ${t.name} are waiting. The champions of ${y}, at full strength.`,"team");
+  try{if(typeof archSay==="function")archSay([`~The Finals. The ${t.city} ${t.name}.`,`~Their star holds the title. Once a quarter one of his shots is PERFECT. Every quarter ends like the fourth.`],"The boss",{quiet:true,sys:true})}catch(e){}}
+function bossRestore(){for(const t of G.teams){const b=t._boss;if(!b)continue;b.pids.forEach(pid=>delete G.players[pid]);t.roster=b.roster;t.city=b.city;t.name=b.name;t.abbr=b.abbr;t.color=b.color;delete t._boss}}
 function endPlayoffs(){
   const po=G.po,champ=T(po.champ);
   const fm=best(champ.roster.map(P),p=>p.ovr+R()*4);fm.awards.push({y:G.year,a:"Finals MVP"});
@@ -964,7 +992,7 @@ function endPlayoffs(){
   G.presser=null;
   try{if(po.champ===G.userTid)cere({type:"title",y:G.year,fmvp:fm.name,team:{city:champ.city,name:champ.name,color:champ.color}});chalCheck(po.champ);if(G.rivalRec&&G.rivalRec.w>=3&&!G.rivalRec.l)(G.feats??={}).sweep=1;achScan()}catch(e){console.error(e)}
   for(const pid in G.players){const p=G.players[pid];p.playHurt=false;if(p.tid>=0&&p.stats.gp>0){p.career.push({y:G.year,t:T(p.tid).abbr,tid:p.tid,...p.stats});p.peak=Math.max(p.peak||0,p.ovr);if(p.tid===G.userTid)p.everUser=true}p.stats=emptyStats()}
-  if(G.owner<10&&G.history.length>=2){G.phase="fired";news("You have been fired as general manager.");return}
+  if(G.owner<10&&G.history.length>=2&&!(G.career&&!G.career.retired)){G.phase="fired";news("You have been fired as general manager.");return}
   initDraft();G.phase="draft";
 }
 
@@ -1044,7 +1072,7 @@ function develop(p){
 }
 const careerPts=p=>(p.prior?.pts||0)+p.career.reduce((a,s)=>a+s.pts,0);
 function toFA(p){if(p.tid>=0){const t=T(p.tid);t.roster=t.roster.filter(x=>x!==p.pid)}p.tid=-1;p.contract=null}
-function retire(p){
+function retire(p){if(G.career&&!G.career.retired&&p.pid===G.career.pid)return;
   const mine=p.tid===G.userTid;
   if(p.tid>=0){const t=T(p.tid);t.roster=t.roster.filter(x=>x!==p.pid)}
   if(mine)news(`${p.name} retired after ${p.career.length} season${p.career.length===1?"":"s"}.`);
@@ -1080,6 +1108,7 @@ function offseason(){
   if(G.resign.length){G.phase="resign";news(`${G.resign.length} of your contracts expired. Decide who to bring back.`)}
   else{G.phase="fa";news("Free agency is open.");faBuzz()}
 }
+const _endPO=endPlayoffs;endPlayoffs=function(){_endPO();try{bossRestore()}catch(e){console.error(e)}};
 function resignDone(){G.resign.forEach(r=>{const p=P(r.pid);if(p&&p.tid===G.userTid&&p.contract.exp<G.year)toFA(p)});G.resign=null;G.phase="fa";news("Free agency is open.");faBuzz()}
 function aiFreeAgency(){
   if(G.hist&&DB){const fd=G.hist.fid;Object.values(G.players).filter(p=>p.tid===-1&&p.rid).forEach(p=>{const rr=realRow(p.rid,G.year);if(!rr||R()>=fd)return;
@@ -1104,6 +1133,7 @@ function startSeason(){
   for(const pid in G.players){const p=G.players[pid];p.inj=0;p.stats=emptyStats();p.restG=0;p.playHurt=false;p.resting=false}
   G.seasonTrades=[];G.recNew=[];
   for(const pid in G.players){const p=G.players[pid];const c=p.career[p.career.length-1];p.lastPpg=c&&c.gp?c.pts/c.gp:(p.rid&&DB?(realRow(p.rid,G.year-1)?.[4]??null):null)}
+  try{if(G.career&&!G.career.retired&&typeof C!=="undefined"&&C&&C.stage==="done"){seasonRoll();G.lgNorm=lgNormCalc();G.ppp=1.13}}catch(e){console.error(e)}
   G.schedule=makeSchedule();G.day=0;G.results=[];G.lastBox=null;G.po=null;G.draft=null;G.resign=null;G.season=null;
   G.expWins=expectedWins(G.userTid);G.phase="season";G.tab="home";snapWeek();G.presser=null;calcChem();
   news(`The ${sl(G.year)} season tips off. The owner expects about ${G.expWins} wins.`);
@@ -1117,7 +1147,7 @@ let DB=null,DBP=null,FIRSTS=null;
 const SK=9;
 function loadDB(){if(DB)return Promise.resolve(DB);if(!DBP)DBP=fetch("league-data.json").then(r=>{if(!r.ok)throw new Error("HTTP "+r.status);return r.json()}).then(d=>{DB=d;FIRSTS={};for(const k in d.seasons)FIRSTS[k]=d.seasons[k][0][0];return d}).catch(e=>{DBP=null;throw e});return DBP}
 const eraOn=()=>G.hist&&G.settings.eraRules!==false&&DB;
-function seasonLen(){return eraOn()?(DB.era[G.year]?.[1]||82):82}
+function seasonLen(){if(typeof G!=="undefined"&&G&&(G.career&&!G.career.retired))return 16;return eraOn()?(DB.era[G.year]?.[1]||82):82}
 function eraPts(){if(!eraOn())return 112;const e=DB.era[G.year]?.[0];return e||DB.era["2025"][0]}
 function no3(){return !!(eraOn()&&G.year<1979)}
 function realRow(rid,y){const ss=DB?.seasons[rid];if(!ss)return null;for(const s of ss)if(s[0]===y)return s;return null}
@@ -1485,20 +1515,20 @@ function careerGrow(a,peak,age,focus){if(C?.rpg&&a===C.a)return;
 function mcReturnGo(){careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;rpgApply();C.y++;C.cls++;seasonSetup();C.stage="college";
   if(C.legacy){mcRender();legacyToNextSeason().then(mcRender);return}mcRender()}
 function mcDeclareGo(prep){if(!prep)careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;rpgApply();const st=C.stock;let fin=st?Math.round(st+gauss()*(1.5+st/8)):null;if(fin!=null)fin=clamp(fin,1,60);
-  if(!st&&R()<.25)fin=ri(45,60);if(C.legacy&&fin&&fin>nPicks())fin=null;C.final=fin;const row=fin?(DB.drafts[C.y+1]||[]).find(r=>r[2]===fin):null;
+  if(!st&&R()<.25)fin=ri(45,60);if(C.legacy&&fin&&fin>nPicks())fin=null;C.grade??=draftGrade();fin=gradePick(C.grade.gr);C.final=fin;const row=fin?(DB.drafts[C.y+1]||[]).find(r=>r[2]===fin):null;
   const fe=row&&row[3]?franchiseEra(row[3],C.y+1):null;C.dteam=fe?`${fe[2]} ${fe[3]}`:"an NBA team";C.stage="draft";mcRender()}
 function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"SG",ht:77,wt:205,startY:START_Y,slots:{},cur:null,respins:2,hist:[],awards:[],focus:null};saveC()}
 
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v49";
+const BUILD="v50";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
   el.style.setProperty("--e1","#ff8a3d");el.style.setProperty("--e2","#ffd166");el.style.setProperty("--e3","#16264a");
-  const v={create:mcCreate,spin:mcCreate,prologue:mcPrologue,offers:mcOffers,college:mcCollege,decide:mcDecide,draft:mcDraft,portal:mcPortal}[C.stage]||mcCreate;
-  const html=v();el.innerHTML=C.stage==="college"?html:`<div class="eras-in">${html}</div>`;saveC();paintAvatars(el);showLoop();rpgFlush();if(C.stage==="prologue")setTimeout(plgLoop,0);
+  const v={create:mcCreate,spin:mcCreate,offers:mcOffers,college:mcCollege,decide:mcDecide,draft:mcDraft,nbapick:mcNbaPickView}[C.stage]||mcCreate;
+  const html=v();el.innerHTML=C.stage==="college"?html:`<div class="eras-in">${html}</div>`;saveC();paintAvatars(el);showLoop();rpgFlush();
 }
 function mcCreate(){
   const [lo,hi]=HRANGE[C.pos];C.ht=clamp(C.ht,lo,hi);
@@ -1566,21 +1596,14 @@ function mcOffers(){
 }
 function mcLine(t){const g=t.gp||1;return`${(t.pts/g).toFixed(1)} PTS · ${(t.reb/g).toFixed(1)} REB · ${(t.ast/g).toFixed(1)} AST · ${(t.stl/g).toFixed(1)} STL · ${(t.blk/g).toFixed(1)} BLK`}
 function mcDecide(){
-  const h=C.hist[C.hist.length-1],st=C.stock,last=C.cls>=ELIG,jucoOut=(isJuco(C.school)&&C.cls>=2)||(C.forceJuco&&!isJuco(C.school));
+  const h=C.hist[C.hist.length-1],G2=C.grade||(C.grade=draftGrade()),gi=GRADES[G2.gr];
   return mcHead(`${C.school} · ${sl(C.y)} season complete`)+`
-  <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div class="kicker">${CLASSN[C.cls-1]} season · ${h.w}-${h.l}${h.seed?` · No. ${h.seed} seed`:""}</div><h2>${esc(h.res)}</h2>
-    <p>${h.ppg} PTS · ${h.rpg} REB · ${h.apg} AST · ${h.spg} STL · ${h.bpg} BLK in ${h.gp} games. OVR now ${calcOvr(C.a,C.pos)}.</p>
+  <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div class="kicker">The college season · ${h.w}-${h.l}${h.seed?` · No. ${h.seed} seed`:""}</div><h2>${esc(h.res)}</h2>
+    <p>${h.ppg} PTS · ${h.rpg} REB · ${h.apg} AST · ${h.spg} STL · ${h.bpg} BLK in ${h.gp} games.</p>
     ${h.aw.length?`<div class="facts">${h.aw.map(a=>`<span>🏆 ${esc(a)}</span>`).join("")}</div>`:""}
     ${C.season.tlog.length?`<ul class="news">${C.season.tlog.map(g=>`<li>${esc(g.label)}: <b>${g.w?"W":"L"} ${g.us}-${g.them}</b> · ${g.ln.pts} pts</li>`).join("")}</ul>`:""}
-    ${C.season.champ&&C.season.champ!==C.school?`<p class="note" style="color:#c9cfe0">${esc(C.season.champ)} won the national title.</p>`:""}
-    ${h.ap?`<p class="note" style="color:#c9cfe0">Final AP poll: No. ${h.ap}.</p>`:""}
-    ${C.cl?.rec?`<p class="note" style="color:#c9cfe0">Next year's recruiting class: ${C.cl.rec.list.filter(r=>r.com===C.school).map(r=>`${"★".repeat(r.stars)} ${esc(r.name)} (${r.pos})`).join(", ")||"nobody signed"}.</p>`:""}
-    <div class="kicker" style="margin-top:6px">Draft stock</div><h2 style="font-size:clamp(26px,4vw,40px)">${st?`Projected #${st}`:"Not projected to be drafted"}</h2>
-    <p>${st?(DB.drafts[C.y+1]?`In the real ${C.y+1} draft, pick #${st} was ${esc(DB.drafts[C.y+1]?.find(r=>r[2]===st)?.[1]||"someone")}.`:`Scouts have you going in the ${st<=14?"lottery":st<=30?"first round":"second round"}.`):"Another year could raise your stock."}</p>
-    <div class="label" style="color:#c9cfe0">Summer training focus</div><div class="fid">${FOCI.map(([k,l])=>`<button data-act="mcfocus" data-v="${k}" aria-pressed="${C.focus===k}">${l}</button>`).join("")}</div>
-    ${C.nil?`<p class="note" style="color:#c9cfe0">💰 ${nilDeals(C.nil)}. Coming back keeps the money flowing.</p>`:""}
-    <div class="go"><button class="start" data-act="mcdeclare">Declare for the ${C.y+1} draft</button>${last||jucoOut?"":`<button class="opt" data-act="mcreturn">Return as a ${CLASSN[C.cls]}</button>`}${!last&&(isJuco(C.school)||(portalOK(C.y+1)&&!(C.transfers||[]).length))?`<button class="opt" data-act="mcportalgo">${isJuco(C.school)?"Transfer up (portal)":"Enter the transfer portal"}</button>`:""}</div>${jucoOut?`<p class="note" style="color:#c9cfe0">Two years is the junior college limit. The portal or the draft.</p>`:""}
-    ${last?`<p class="note" style="color:#c9cfe0">Five years. Your college eligibility is used up.</p>`:""}</div></section>`;
+    <div class="grade-card g-${G2.gr}"><b>${G2.gr}</b><div><small>Draft grade</small><p>${esc(gi.d)}</p><small>Production ${G2.eff} a game · ${Math.round(G2.wp*100)}% wins · tournament ${G2.tr} · awards ${G2.aw}</small></div></div>
+    <div class="go"><button class="start" data-act="mcdeclare">Go to the ${C.y+1} draft</button></div></div></section>`;
 }
 function mcDraft(){
   const D=C.y+1,cls=DB.drafts[D]||[],pk=C.final,team=C.dteam;try{if(false){}}catch(e){}
@@ -1842,7 +1865,7 @@ function fillRoster(cl,s,walkon){const t=cl.teams[s],base=27+t.pres*.31;
   while(t.roster.length>CRMAX+1){const fk=t.roster.map(id=>cl.players[id]).filter(p=>!p.real&&p.pid!=="me").sort((a,b)=>a.ovr-b.ovr)[0];if(!fk)break;t.roster=t.roster.filter(id=>id!==fk.pid);delete cl.players[fk.pid]}}
 function makeSched(cl){
   const all=Object.keys(cl.teams),confs={};all.forEach(s=>(confs[cl.teams[s].conf]??=[]).push(s));
-  const NC=12,DAYS=31,days=[],rr={},cd={};
+  const NC=4,DAYS=12,days=[],rr={},cd={};
   for(const c in confs){const t=shuffle([...confs[c]]);if(t.length%2)t.push(null);const n=t.length,rounds=[];
     for(let r=0;r<n-1;r++){const pr=[];for(let i=0;i<n/2;i++)pr.push([t[i],t[n-1-i]]);rounds.push(pr);t.splice(1,0,t.pop())}
     rr[c]=rounds;cd[c]=Math.min(DAYS-NC,2*(confs[c].length-1))}
@@ -1916,7 +1939,7 @@ function clDay(watch){
   const cl=C.cl;let mine=null;
   if(cl.phase==="reg"){for(const [h,a] of cl.sched[cl.day]||[]){const me=h===C.school||a===C.school;const g=playCL(cl,h,a,{watch:watch&&me,kind:"reg"});if(me)mine=g}
     if(C.cls===4&&mine){const lh=cl.sched.reduce((m,d,i)=>d.some(p=>p[0]===C.school)?i:m,-1);if(cl.day===lh)ccere({type:"senior",y:cl.y,line:`You finish your home career with ${C.season.tot.pts} points this season.`})}
-    cl.day++;if(cl.day%2===0||cl.day>=cl.sched.length){recWeek(cl);apPoll(cl);try{attnWeek()}catch(e){console.error(e)}}if(cl.day>=cl.sched.length)startCT(cl)}
+    cl.day++;if(cl.day%2===0||cl.day>=cl.sched.length){recWeek(cl);apPoll(cl);try{attnWeek()}catch(e){console.error(e)}}if(cl.day>=cl.sched.length){cl.ct={};selection(cl)}}
   else if(cl.phase==="ct")mine=ctRound(cl,watch);
   else if(cl.phase==="ncaa")mine=ncaaRound(cl,watch);
   return mine;
@@ -1940,11 +1963,11 @@ function ctRound(cl,watch){
   return mine;
 }
 function regionNames(cl){return["East","West","South",cl.y+1<1985?"Mideast":"Midwest"]}
-const NCR=["First Round","Second Round","Sweet 16","Elite Eight","Final Four","National Championship"],NORD=[1,16,8,9,5,12,4,13,6,11,3,14,7,10,2,15];
+const CRAID=[1,1,2,3,4,5];const NCR=["First Round","Second Round","Sweet 16","Elite Eight","Final Four","National Championship"],NORD=[1,16,8,9,5,12,4,13,6,11,3,14,7,10,2,15];
 function selection(cl){
   apPoll(cl);const sc=cl.apS,champs=Object.values(cl.ct).map(x=>x.champ).filter(s=>!cl.teams[s].juco);
   const atl=Object.keys(cl.teams).filter(s=>!champs.includes(s)&&!cl.teams[s].juco).sort((a,b)=>sc[b]-sc[a]).slice(0,64-champs.length);
-  const field=[...champs,...atl].sort((a,b)=>sc[b]-sc[a]),regs=[[],[],[],[]];
+  const field=[...champs,...atl].sort((a,b)=>sc[b]-sc[a]),regs=[[],[],[],[]];if(!field.includes(C.school)){field[field.length-1]=C.school;clNews(cl,`${C.school} takes the last spot in the field.`,"mine")}
   field.forEach((t,i)=>{const line=Math.floor(i/4),pos=i%4,r=line%2?3-pos:pos;regs[r].push({t,seed:line+1})});
   cl.ncaa={regs:regionNames(cl),seeds:{},rounds:[],round:0,alive:regs.flatMap((r,ri)=>NORD.map(sd=>{const e=r.find(x=>x.seed===sd);return{...e,reg:ri}}))};
   cl.ncaa.alive.forEach(e=>cl.ncaa.seeds[e.t]={seed:e.seed,reg:e.reg});cl.phase="ncaa";C.season.phase="ncaa";
@@ -1957,7 +1980,7 @@ function selection(cl){
 function ncaaRound(cl,watch){
   const n=cl.ncaa,al=n.alive,nx=[],res=[];let mine=null;const r=n.round;
   for(let i=0;i<al.length;i+=2){const A=al[i],B=al[i+1],me=A.t===C.school||B.t===C.school,o=A.t===C.school?B:A;
-    const g=playCL(cl,A.t,B.t,{neutral:true,kind:"ncaa",watch:watch&&me,label:me?`${NCR[r]} vs (${o.seed}) ${o.t}`:null});
+    const g=playCL(cl,A.t,B.t,{neutral:true,kind:"ncaa",watch:watch&&me,raid:me?CRAID[r]:0,label:me?`${NCR[r]} vs (${o.seed}) ${o.t}`:null});
     const w=g.hs>g.as?A:B,l=w===A?B:A;nx.push(w);res.push({a:A,b:B,hs:g.hs,as:g.as});
     if(me){mine=g;if(w.t!==C.school)C.season.res=`Lost in the ${NCR[r]}`}
     if(r<=1&&l.seed-w.seed<=-5)clNews(cl,`Bracket buster: (${w.seed}) ${w.t} upsets (${l.seed}) ${l.t}, ${Math.max(g.hs,g.as)}-${Math.min(g.hs,g.as)}.`,"upset");}
@@ -2361,8 +2384,9 @@ function liveCore(SD,opt){const hp=typeof C!=="undefined"&&C&&C.stage==="college
   let ctl=null;if(hp!=null&&!opt.noHero)for(const k of[0,1])if(SD[k].ps.some(p=>String(p.pid)===String(hp))){ctl=mkCtl(k,hp);ctl.mode="sim";ctl.greed=1}
   const g=liveGen(SD,opt,ctl);let r;while(!(r=g.next()).done){}return r.value}
 function nbaSD(h,a){const S=[strength(T(h)),strength(T(a))];return[{t:T(h),ps:S[0].ps,m:S[0].m},{t:T(a),ps:S[1].ps,m:S[1].m}]}
-function nbaOpt(){G.ppp??=1.0;return{per:[720,720,720,720],ot:300,poss:eraPts()/G.ppp,tf:threeF(),no3x:no3(),clock:24,ref:71,pro:true}}
-function clOpt(cl,o){return{per:[1200,1200],ot:300,poss:colPts(cl.y)/cl.ppp,tf:colTF(cl.y),no3x:cl.y<1986,quiet:!o.watch,ref:65,home:o.neutral?0:.018,half:true,clock:colClock(cl.y),fo:5,bonus:7}}
+function raidLvl(){if(!(G.career&&!G.career.retired)||G.phase!=="playoffs"||!G.po)return 0;const r=G.po.round-(G.po.nr-4);return[1,2,4,5][clamp(r,0,3)]}
+function nbaOpt(){G.ppp??=1.0;return{per:[720,720,720,720],ot:300,poss:eraPts()/G.ppp,tf:threeF(),no3x:no3(),clock:24,ref:71+((G.career&&!G.career.retired&&G.lgBoost)||0),pro:true,raid:raidLvl(),boss:raidLvl()>0}}
+function clOpt(cl,o){return{raid:o.raid||0,boss:!!o.raid,per:[1200,1200],ot:300,poss:colPts(cl.y)/cl.ppp,tf:colTF(cl.y),no3x:cl.y<1986,quiet:!o.watch,ref:65,home:o.neutral?0:.018,half:true,clock:colClock(cl.y),fo:5,bonus:7}}
 const OFFS=[["bal","Balanced"],["iso","Feed the star"],["pnr","Pick & roll"],["three","Let it fly"],["inside","Pound inside"]],DEFS=[["man","Man"],["zone","Zone"],["press","Full-court press"]];
 /* ---------- starting a watchable game ---------- */
 function mkCtl(side,hero){return{side,off:"bal",def:"man",boost:0,to:4,cl:0,hero}}
@@ -2378,7 +2402,7 @@ function watchNext(){
 function nbaLive(h,a,playoff,label){
   const SD=nbaSD(h,a),side=h===G.userTid?0:1,mine=G.career&&!G.career.retired?G.career.pid:null,hero=(SD[side].ps.find(p=>p.pid===mine)||best(SD[side].ps,p=>p.ovr))?.pid;
   const ctl=mkCtl(side,hero);ctl.mode=mine?(playMode()==="sim"?"watch":playMode()):"watch";const gen=liveGen(SD,{...nbaOpt(),boss:!!playoff},ctl);gen.next();
-  render();openLive({gen,ctl,teams:[h,a],mine,label,year:G.year,no3:no3(),onDone:L=>{if(mine&&typeof C!=="undefined"&&C)C._played=ctl.mode!=="watch";G.preRes={h,a,L};if(G.phase==="season")simDay(false);else if(G.phase==="playoffs")playoffDay(false);G.preRes=null;save()}});
+  render();openLive({gen,ctl,teams:[h,a],mine,label,year:G.year,no3:no3(),onDone:L=>{if(mine&&typeof C!=="undefined"&&C)C._played=ctl.mode!=="watch";G.preRes={h,a,L};if(G.phase==="season")simDay(false);else if(G.phase==="playoffs")playoffDay(false);G.preRes=null;save();if(mine&&typeof C!=="undefined"&&C)setTimeout(postGame,60)}});
 }
 function myPair(cl){
   if(cl.phase==="reg"){const p=(cl.sched[cl.day]||[]).find(x=>x.includes(C.school));return p?{h:p[0],a:p[1],neutral:false}:null}
@@ -2388,10 +2412,10 @@ function myPair(cl){
 function clWatch(){
   const cl=C.cl;let guard=0;while(cl.phase==="reg"&&!myPair(cl)&&guard++<40)clDay(false);
   const pr=myPair(cl);if(!pr){mcRender();return toast("No game to watch right now.")}
-  const SD=[clSide(cl,pr.h),clSide(cl,pr.a)],side=pr.h===C.school?0:1,ctl=mkCtl(side,"me");ctl.mode=playMode()==="sim"?"watch":playMode();const gen=liveGen(SD,{...clOpt(cl,{neutral:pr.neutral,watch:true}),boss:cl.phase!=="reg"},ctl);gen.next();
+  const SD=[clSide(cl,pr.h),clSide(cl,pr.a)],side=pr.h===C.school?0:1,ctl=mkCtl(side,"me");ctl.mode=playMode()==="sim"?"watch":playMode();const gen=liveGen(SD,{...clOpt(cl,{neutral:pr.neutral,watch:true,raid:cl.phase==="ncaa"?CRAID[cl.ncaa.round]:0}),boss:cl.phase!=="reg"},ctl);gen.next();
   XW={players:cl.players,teams:cl.teams};mcRender();
   openLive({gen,ctl,teams:[pr.h,pr.a],mine:"me",college:true,halves:true,no3:cl.y<1986,court:{r3:col3(cl.y),lane:12,corner:col3(cl.y)},year:cl.y,label:cl.phase==="reg"?"Regular season":cl.phase==="ct"?"Conference tournament":"NCAA Tournament",
-    onDone:L=>{C._played=ctl.mode!=="watch";cl.pre={h:pr.h,a:pr.a,L};clDay(false);cl.pre=null;saveC()}});
+    onDone:L=>{const pl=ctl.mode!=="watch";C._played=pl;cl.pre={h:pr.h,a:pr.a,L};clDay(false);cl.pre=null;saveC();setTimeout(postGame,60)}});
 }
 /* ---------- viewer ---------- */
 function eraClass(y){return y<1980?"era70":y<1990?"era80":y<2000?"era90":y<2010?"era00":""}
@@ -2815,11 +2839,9 @@ function viewMe(){
     ${c.retired?`<section class="panel"><h3>What's next</h3><p>Your GM job stays with the ${t?esc(t.name):"team"} unless you start a new player.</p>
       <div class="actions" style="margin-top:10px"><button class="btn" data-act="legacy">Continue the legacy: his son</button><button class="btn ghost" data-act="m-newcareer">New player, new league</button></div></section>`:""}
     ${c.retired?`<section class="panel"><h3>Career verdict</h3><h2 style="color:var(--led);font:900 34px var(--f-display);text-transform:uppercase">${verdict(l)}</h2><p>${l.mvp} MVP · ${l.a1}× All-NBA 1st · ${l.as}× All-Star · ${l.rings} ring${l.rings===1?"":"s"} · ${l.pts.toLocaleString()} points${gi>=0?` · GOAT rank #${gi+1}`:""}</p></section>`:`
-    <section class="panel"><h3>Decisions</h3>
-      <div class="label" style="margin-bottom:6px">Summer training focus</div><div class="actions">${FOCI.map(([k,lb])=>`<button class="btn xs ${p.focus===k?"":"ghost"}" data-act="cfocus" data-v="${k}" aria-pressed="${p.focus===k}">${lb}</button>`).join("")}</div>
-      <p class="note">Each offseason your focus attribute gets extra work on top of normal growth.</p>
+    <section class="panel"><h3>Your party</h3><p class="note">Your team is your party. One trade request a season.</p>
       <div class="actions" style="margin-top:12px">${canReq?`<button class="btn sm ghost" data-act="creq" data-v="contender">Request trade to a contender</button><button class="btn sm ghost" data-act="creq" data-v="any">Request any trade</button>`:""}
-        ${p.age>=30?`<button class="btn sm ghost" data-act="cretire-ask">Retire</button>`:""}</div>
+</div>
       <div id="cret-zone"></div></section>`}
     <section class="panel"><h3>Legacy</h3><div class="kv"><div><b>${l.mvp}</b><span>MVP</span></div><div><b>${l.as}</b><span>All-Star</span></div><div><b>${l.rings}</b><span>Rings</span></div><div><b>${gi>=0?"#"+(gi+1):"--"}</b><span>GOAT rank</span></div></div>
       <div class="meter" style="margin-top:10px"><i style="width:${clamp(Math.round(l.score/25*100),2,100)}%"></i></div><p class="note">${l.score>=25?"Hall of Fame résumé locked in.":`Hall of Fame progress: ${Math.round(l.score/25*100)}%.`} Legacy ${Math.round(l.score)}.</p></section>
@@ -2887,12 +2909,29 @@ function mcEnterFuture(D){const dr=G.draft;C.draftY=D;try{const R=C.rpg;if(R&&(R
   p.peakA={...C.peakA};p.focus=C.focus;p.everUser=true;p.look={...(C.look||lookFor(C.name))};if(C.rpg){p.rpg=C.rpg;p.sk=C.sk}dr.prospects.push(p.pid);
   revealLottery(true);dr.started=true;const slot=C.final?Math.min(C.final,nPicks())-1:null;
   while(dr.i<nPicks()){if(dr.i===slot){draftPick(dr.order[dr.i],p.pid);continue}draftPick(dr.order[dr.i],aiChoice())}
-  if(p.tid<0){const t=[...G.teams].sort((a,b)=>a.roster.length-b.roster.length)[0];p.tid=t.tid;t.roster.push(p.pid);p.contract={amt:MINSAL,exp:G.year+1};p.rookieYear=D;p.draft={y:D,pick:null,round:null,t:t.abbr}}
-  const t=T(p.tid);if(t.roster.length>RMAX)toFA(best(t.roster.map(P).filter(x=>x!==p),x=>-value(x)));
-  G.career={pid:p.pid,name:C.name,college:{school:C.school,hist:C.hist,awards:C.awards},draft:{y:D,pick:C.final,team:`${t.city} ${t.name}`,fid:t.fid}};G.reel=[...(C.reel||[]),...(G.reel||[])].slice(0,60);
-  news(C.final?`${C.name} goes #${C.final} to the ${t.name} in the ${D} draft.`:`${C.name} goes undrafted and signs with the ${t.name}.`,"draft");
-  G.userTid=t.tid;t.roster.forEach(x=>P(x).everUser=true);news(`You're the GM of the ${t.city} ${t.name}, the team that drafted ${C.name}. Where he goes, you go.`,"team");
-  C.stage="done";saveC();mcClose();G.tab="me";render()}
+  const gr=(C.grade||draftGrade()).gr,byW=[...G.teams].sort((a,b)=>(b.w-b.l)-(a.w-a.l));let opts;
+  if(gr==="S")opts=[byW[0].tid,...shuffle(G.teams.filter(t=>t.tid!==byW[0].tid)).slice(0,2).map(t=>t.tid)];
+  else if(gr==="A")opts=shuffle([...G.teams]).slice(0,3).map(t=>t.tid);
+  else if(gr==="B")opts=shuffle([...G.teams]).slice(0,2).map(t=>t.tid);
+  else if(gr==="C")opts=[p.tid>=0?p.tid:pick(G.teams).tid];
+  else opts=G.teams.map(t=>t.tid);
+  C.npPid=p.pid;C.npOpts=opts;C.stage="nbapick";saveC();mcRender()}
+function mcNbaPickView(){const gr=(C.grade||draftGrade()).gr,gi=GRADES[gr],p=P(C.npPid);
+  return mcHead(`${C.draftY} NBA Draft`)+`<section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div class="kicker">Draft night · grade ${gr}</div>
+    <h2>${C.final?`Pick #${C.final}`:"Undrafted"}</h2><p>${esc(gi.d)}</p>
+    <div class="mc-offers">${C.npOpts.map(tid=>{const t=T(tid),top=t.roster.map(P).filter(Boolean).sort((a,b)=>b.ovr-a.ovr).slice(0,3);
+      return`<div class="mc-offer"><div><b>${esc(t.city)} ${esc(t.name)}</b><small>Last season ${t.w}-${t.l} · best players ${top.map(x=>esc(x.name)+" "+x.ovr).join(", ")}</small></div><button class="start" data-act="nbapick" data-v="${tid}">${C.npOpts.length>1?"Sign here":"Join them"}</button></div>`}).join("")}</div>
+    <p class="note" style="color:#c9cfe0">Everyone resets to the pro floor at the draft: every skill starts at 65, and you rebuild with 500 points plus every point your college levels paid out.</p></div></section>`}
+function mcNbaPick(tid){const p=P(C.npPid),t=T(tid);if(!p||!t||!C.npOpts.includes(tid))return;const D=C.draftY,gr=(C.grade||draftGrade()).gr;
+  G.teams.forEach(o=>{if(o.tid!==tid)o.roster=o.roster.filter(x=>x!==p.pid)});if(!t.roster.includes(p.pid))t.roster.push(p.pid);p.tid=tid;p.rookieYear=D;
+  const n=C.final;p.contract=n?(n<=nTeams()?{amt:r1(Math.max(2,11-(n-1)*(9/nTeams()))),exp:D+2}:{amt:MINSAL,exp:D+1}):{amt:MINSAL,exp:D+1};p.draft={y:D,pick:n||null,round:n?(n<=nTeams()?1:2):null,t:t.abbr};
+  if(t.roster.length>RMAX)toFA(best(t.roster.map(P).filter(x=>x!==p),x=>-value(x)));
+  G.career={pid:p.pid,name:C.name,college:{school:C.school,hist:C.hist,awards:C.awards},draft:{y:D,pick:n,team:`${t.city} ${t.name}`,fid:t.fid,grade:gr}};G.reel=[...(C.reel||[]),...(G.reel||[])].slice(0,60);
+  news(n?`${C.name} goes #${n} in the ${D} draft and signs with the ${t.name}.`:`${C.name} goes undrafted and signs with the ${t.name}.`,"draft");
+  G.userTid=t.tid;t.roster.forEach(x=>P(x).everUser=true);news(`You run the ${t.city} ${t.name} now. Your team is your party.`,"team");
+  C.seasonN=0;G.lgBoost=0;try{proRespec()}catch(e){console.error(e)}
+  try{const box=gearGive(GRADES[gr].box,null,"draft night");if(box)gearShow(box,`Grade ${gr} starter box`)}catch(e){console.error(e)}
+  C.stage="done";saveC();mcClose();G.tab="me";render();try{openSheet("skills")}catch(e){}}
 function mcEnterLegacy(){
   const D=C.y+1,dr=G.draft;
   const p=mkPlayer({name:C.name,pos:C.pos,age:C.age,a:{...C.a},pot:C.pot,tid:-3,no:C.no??C.legacy.no??String(ri(0,55)),ht:C.ht,wt:C.wt});
@@ -3272,58 +3311,26 @@ function recruitOffers(){const cl=clEnsure(),stars=C.rpg?.stars||C.stars||3;
   const fit=(ORIG_SCHOOLS[C.rpg?.origin]||[]).filter(s=>sch.includes(s)&&!offers.includes(s));
   if(fit.length&&stars>=3){const want=fit.find(s=>stars>=5||pr(s)<=pr(ranked[band[1]-1])+10);if(want)offers[offers.length-1]=want}
   return offers.sort((a,b)=>pr(b)-pr(a))}
-/* ---- the Prologue ---- */
-const PLG_F=["Marcus","Dre","Jalen","Kofi","Tobias","Elijah","Theo","Nico","Isaiah","Deshawn","Cam","Rashad","Luis","Micah","Omar","Jordan"],PLG_L=["Reed","Okafor","Bell","Vance","Mercer","Hale","Santos","Whitfield","Banks","Cole","Pryor","Holloway","Nwosu","Ferris","Greer","Lott","Adeyemi","Barlow","Castillo","Dunbar","Ellison","Foster","Gaines","Hightower","Irving","Jemison","Kincaid","Lowery","Mbeki","Navarro","Osei","Pettway","Quarles","Rucker","Sterling","Toussaint","Upshaw","Valdez","Winslow","Yarbrough"];
-const nm=seed=>PLG_F[hsh(seed)%PLG_F.length]+" "+PLG_L[hsh(seed+"l")%PLG_L.length];
-function plgCast(){return C.plgCast??={}}
-const plgFirst=()=>String(C.name||"you").split(" ")[0];
-function plgPanels(){return[]}
-function mcPrologue(){const P=plgPanels(),i=clamp(C.plg||0,0,P.length-1),p=P[i],picks=C.plgPick??={};
-  if(p.auto)for(const k in p.auto)picks[k]=p.auto[k];
-  const need=p.pick&&picks[p.pick]==null;
-  setTimeout(()=>plgDraw(p.scene),0);
-  return`<div class="plg"><div class="plg-scene"><canvas id="plg-cv"></canvas><div class="plg-cap"><small>Prologue · ${i+1} / ${P.length}</small><b>${esc(p.title)}</b></div></div>
-    <div class="plg-txt"><div class="arch">${archP(p.txt)}</div>
-    ${p.pick?`<div class="plg-opts">${p.opts.map((o,j)=>`<button class="mp-card ${picks[p.pick]===j?"picked":""}" data-act="plgpick" data-v="${p.pick}:${j}"><b>${esc(o.name)}</b><span class="chip">${esc(o.role)}</span><p>${esc(o.d)}</p>${o.perk?`<small>${esc(o.perk)}</small>`:""}</button>`).join("")}</div>`:""}
-    <div class="mp-nav">${i>0?`<button class="mp-btn" data-act="plgnav" data-v="-1">← Back</button>`:`<button class="mp-btn" data-act="mcback" data-v="create">← Creation</button>`}<span></span><button class="mp-btn main" data-act="plgnav" data-v="1" ${need?"disabled":""}>${i<P.length-1?"Next →":(C.stars||5)>=3?"Open the letters →":"Open the letter →"}</button></div></div></div>`}
-function plgNav(d){const P=plgPanels();const n=(C.plg||0)+d;if(n>=P.length){plgFinish();return}C.plg=Math.max(0,n);saveC();mcRender()}
-function plgPick(v){const[k,j]=v.split(":");(C.plgPick??={})[k]=+j;saveC();mcRender()}
-function plgFinish(){C.bonds={};C.plgDone=true;C.offers=null;C.stage="offers";saveC();mcRender()}
 function bondsSeed(){}
-function plgDraw(kind){const cv=$("plg-cv");if(!cv)return;const W=cv.clientWidth||800,H=cv.clientHeight||300,sc=clamp(Math.round(Math.min(W/400,H/180)),1,3),iw=Math.ceil(W/sc),ih=Math.ceil(H/sc);
-  if(cv.width!==iw*sc||cv.height!==ih*sc){cv.width=iw*sc;cv.height=ih*sc}const g=cv.getContext("2d");g.setTransform(sc,0,0,sc,0,0);g.imageSmoothingEnabled=false;const floorY=Math.round(ih*.76),hc="#2f6fd6";
-  let seed=hsh(kind+C.name);const rr=()=>{seed=(Math.imul(seed,1103515245)+12345)>>>0;return(seed>>>8)/16777216};
-  if(kind==="room"){g.fillStyle="#090b14";g.fillRect(0,0,iw,ih);g.fillStyle="#141a2c";g.fillRect(0,floorY,iw,ih-floorY);
-    const dx=Math.round(iw*.5),dy=floorY-22;g.fillStyle="#2a2234";g.fillRect(dx-70,dy,140,8);g.fillRect(dx-66,dy+8,6,22);g.fillRect(dx+60,dy+8,6,22);
-    g.fillStyle="#cfd8ff";g.fillRect(dx-22,dy-18,44,18);g.fillStyle="#6cb8ff";g.fillRect(dx-20,dy-16,40,13);g.fillStyle="#0e1a33";for(let i=0;i<5;i++)g.fillRect(dx-17,dy-14+i*2.6,10+(i%3)*8,1);
-    g.fillStyle="rgba(108,184,255,.08)";g.fillRect(dx-90,dy-60,180,70);
-    const sh=charSheet(charLook({jersey:"#30364a",shorts:"#30364a",skin:1}));if(sh)drawChar(g,sh,"idle",0,dx+34,floorY+6,-1,2);
-    g.fillStyle="#000c";g.fillRect(0,0,iw,ih*.06);return}
-  if(kind==="closet"){g.fillStyle="#0c0e16";g.fillRect(0,0,iw,ih);g.fillStyle="#1d1a16";g.fillRect(0,floorY,iw,ih-floorY);
-    const sx=Math.round(iw*.5);g.fillStyle="#2b2620";for(let i=0;i<3;i++)g.fillRect(sx-80,floorY-40-i*34,160,5);
-    g.fillStyle="#8a6a3c";g.fillRect(sx-30,floorY-20,60,20);g.fillStyle="#6a4f2c";g.fillRect(sx-30,floorY-20,60,3);
-    g.fillStyle="#1a1a1a";g.fillRect(sx-16,floorY-30,32,10);g.fillStyle="#6cb8ff";g.fillRect(sx-14,floorY-29,28,7);
-    g.fillStyle="rgba(108,184,255,.10)";g.fillRect(sx-60,floorY-70,120,50);
-    g.fillStyle="#3a3a44";g.fillRect(sx+70,floorY-54,4,8);g.fillStyle="#222";g.fillRect(sx+66,floorY-46,12,12);return}
-  if(kind==="night"){g.fillStyle="#0b0f1a";g.fillRect(0,0,iw,ih);const city=hubImg("bg/city_night.png");if(okImg(city)){const k=ih/city.naturalHeight,w=city.naturalWidth*k;for(let x=0;x<iw;x+=w)g.drawImage(city,x,0,w,ih)}
-    g.fillStyle="#1a1a24";g.fillRect(0,floorY,iw,ih-floorY);g.fillStyle="#ffd16633";g.fillRect(iw*.5-40,floorY-60,80,60);const sh=charSheet(charLook({jersey:"#2b2f40",shorts:"#2b2f40"}));if(sh)drawChar(g,sh,"idle",performance.now()/1000,iw*.5,floorY,-1,2);
-    g.fillStyle="#000a";g.fillRect(0,0,iw,ih*.08);return}
-  if(kind==="arch"){g.fillStyle="#05070f";g.fillRect(0,0,iw,ih);for(let i=0;i<60;i++){g.fillStyle=`rgba(255,209,102,${.2+rr()*.6})`;g.fillRect(Math.floor(rr()*iw),Math.floor(rr()*ih*.7),1,1)}
-    g.fillStyle="#1b1b22";g.fillRect(0,floorY,iw,ih-floorY);g.fillStyle="#ffd166";glyphs(g,"THE ARCHITECT",Math.round(iw/2-52),Math.round(ih*.4),"#ffd166",2);const sh=charSheet(charLook({jersey:hc,shorts:hc}));if(sh)drawChar(g,sh,"idle",performance.now()/1000,iw*.5,floorY,1,2);return}
-  if(kind==="table"){g.fillStyle="#eadfc7";g.fillRect(0,0,iw,ih);g.fillStyle="#d9ccae";g.fillRect(0,floorY-40,iw,40);g.fillStyle="#6b4a2f";g.fillRect(iw*.2,floorY-20,iw*.6,14);g.fillStyle="#4a3220";g.fillRect(iw*.2,floorY-6,6,ih-floorY);g.fillRect(iw*.8-6,floorY-6,6,ih-floorY);
-    const n=(C.stars||5)>=4?11:(C.stars||5)===3?3:1;for(let i=0;i<n;i++){g.fillStyle="#fff";g.fillRect(iw*.22+i*(iw*.56/Math.max(1,n-1||1))*(n>1?1:0)+(n===1?iw*.26:0),floorY-34,22,14);g.fillStyle="#2f6fd6";g.fillRect(iw*.22+i*(iw*.56/Math.max(1,n-1||1))*(n>1?1:0)+(n===1?iw*.26:0)+3,floorY-31,16,2)}
-    g.fillStyle="#a57440";g.fillRect(0,floorY,iw,ih-floorY);const sh=charSheet(charLook({jersey:hc,shorts:hc}));if(sh)drawChar(g,sh,"idle",performance.now()/1000,iw*.5,floorY+30,1,2);return}
-  // gym: full / half / empty
-  g.fillStyle="#eadfc7";g.fillRect(0,0,iw,floorY);g.fillStyle="#d9d0b8";g.fillRect(0,0,iw,60);g.fillStyle="#1d2238";g.fillRect(0,floorY-40,iw,40);g.fillStyle=hc;g.fillRect(0,floorY-14,iw,5);
-  const fill=kind==="full"?.95:kind==="half"?.35:.04;
-  for(let r=0;r<4;r++){const y=floorY-56-r*22,x0=40+r*8,x1=iw-40-r*8;g.fillStyle=r%2?"#b9c7e0":"#a7b7d4";g.fillRect(x0,y,x1-x0,20);g.fillStyle="#0003";g.fillRect(x0,y+19,x1-x0,2);
-    for(let x=x0+8;x<x1-10;x+=18){if(rr()>fill)continue;const sk=SKN[Math.floor(rr()*6)];g.fillStyle=[hc,"#f4f1ea","#2b2f40","#ffd166","#c8102e"][Math.floor(rr()*5)];g.fillRect(x,y+4,10,13);g.fillStyle=sk;g.fillRect(x+2,y-4,6,8);g.fillStyle="#17121c";g.fillRect(x+1,y-6,8,4);if(kind==="full"&&rr()<.3){g.fillStyle="#fff";g.fillRect(x+3,y-1,4,3)}}}
-  const tones=["#e4bb80","#dcb074","#e9c48c","#d5a86c"];for(let y=floorY;y<ih;y+=5){let x=-Math.floor(rr()*30);while(x<iw){const L=30+Math.floor(rr()*50);g.fillStyle=tones[Math.floor(rr()*4)];g.fillRect(Math.max(0,x),y,L,5);x+=L}}
-  const me=charSheet(charLook({jersey:hc,shorts:hc}));if(me)drawChar(g,me,"drib",performance.now()/1000,iw*.5,floorY+20,1,2);
-  if(kind==="empty"){const co=charSheet(charLook({style:"A",tone:2,hairc:7,jersey:"#2b2f40",shorts:"#2b2f40",shoes:"#222222"}));if(co)drawChar(g,co,"idle",performance.now()/1000,iw*.5+90,floorY+20,-1,2);g.fillStyle="#8a90a0";g.fillRect(iw*.12,floorY-10,10,30);g.fillStyle="#ffd166";g.fillRect(iw*.12-4,floorY+16,18,8)}
-  if(kind==="full"){for(let i=0;i<3;i++){const sh=charSheet(charLook({style:i%2?"B":"A",tone:(i*2+1)%6,hairc:i,jersey:"#f4f1ea",shorts:"#2b2f40"}));if(sh)drawChar(g,sh,"idle",performance.now()/1000+i,iw*.2+i*40,floorY+24,1,2)}}
-}
-let PLGT=null;function plgLoop(){clearTimeout(PLGT);if(!$("plg-cv"))return;const P=plgPanels();plgDraw(P[clamp(C.plg||0,0,P.length-1)].scene);PLGT=setTimeout(plgLoop,120)}
+/* ---------- the draft grade (PLAN §1a): the college season ends with S–D ---------- */
+const GRADES={S:{d:"Top three pick. Choose from three teams, one of them a contender. A legendary starter box.",box:"legendary",pick:[1,3]},
+  A:{d:"Lottery pick. Choose from three teams. An epic starter box.",box:"epic",pick:[4,10]},
+  B:{d:"First round. Choose from two teams. A rare starter box.",box:"rare",pick:[11,20]},
+  C:{d:"Second round. One team calls. An uncommon starter box.",box:"uncommon",pick:[31,45]},
+  D:{d:"Undrafted. Sign a minimum deal with any team you want. A common starter box.",box:"common",pick:null}};
+function draftGrade(){const s=C.season||{},t=s.tot||{},g=t.gp||1,eff=((t.pts||0)+(t.reb||0)*1.2+(t.ast||0)*1.5+((t.stl||0)+(t.blk||0))*2)/g;
+  const tm=C.cl?.teams?.[C.school]||{w:0,l:0},wp=tm.w/Math.max(1,tm.w+tm.l),res=s.res||"";
+  const tr=/National champions/.test(res)?30:/National Championship/.test(res)?24:/Final Four/.test(res)?18:/Elite Eight/.test(res)?12:/Sweet 16/.test(res)?8:/Second Round/.test(res)?4:/First Round/.test(res)?1:0;
+  const aw=(s.awards||[]).length*2.5,score=eff*1.1+wp*20+tr+aw;
+  return{gr:score>=92?"S":score>=75?"A":score>=58?"B":score>=42?"C":"D",score:Math.round(score),eff:Math.round(eff*10)/10,wp,tr,aw}}
+function gradePick(gr){const p=GRADES[gr]?.pick;return p?ri(p[0],p[1]):null}
+/* the forced respec at the draft: pro floor 65, 500 points plus every point the college levels paid */
+function proRespec(){const R=C.rpg;if(!R)return;R.floor=NBA_FLOOR;R.ref=SKREF_NBA;R.ceil=SKCEIL;R.cap=LVCAP;R.spBase=NBA_SP;R.alloc={};R.pro=true;rpgApply();
+  archSay([`~The draft. Every skill is 65 now, the pro floor.`,`~You have ${rpgFree(R)} points to build with. Spend them.`],"The respec",{quiet:true,sys:true})}
+/* a new season is a content patch: cap +10, ceiling +3, the league +3, the next boss */
+function seasonRoll(){if(!C||!C.rpg)return;C.seasonN=(C.seasonN||0)+1;const n=C.seasonN,R=C.rpg;R.cap=LVCAP+10*(n-1);R.ceil=SKCEIL+3*(n-1);if(typeof G!=="undefined"&&G)G.lgBoost=3*(n-1);
+  const boss=typeof BOSSY!=="undefined"&&DB?.champs?BOSSY[(n-1)%BOSSY.length]:null,fe=boss?franchiseEra(DB.champs[boss],boss):null;
+  if(n<=1){try{saveC()}catch(e){}return}archSay([`~Season ${n}.`,`~Level cap ${R.cap}. Skill ceiling ${R.ceil}. Gear drops up to ${Math.min(6,3+n)}★.`,`~The league got better. Everyone is three points stronger.`,fe?`~The Finals boss: the ${boss} ${fe[2]} ${fe[3]}.`:""].filter(Boolean),"Patch notes",{quiet:true,sys:true});try{saveC()}catch(e){}}
 
 /* =====================================================================
    MYCAREER RPG CORE: skills (point-buy), body, origins, traits, EXP, levels,
@@ -3358,10 +3365,10 @@ const SKL=[
 const SKG=["Shooting","Finishing","Playmaking","Defense","Rebounding","Athletic","Intangibles"],SKK=SKL.map(s=>s[0]),SKN_=Object.fromEntries(SKL.map(s=>[s[0],s[1]]));
 const PHYS=new Set(["SPD","ACC","VRT","STR","STA"]),MIND=new Set(["SIQ","VIS","CLU"]);
 const SP0=300;
-const XP_COL=.85,XP_NBA=13.3,XP_PLAYED=2;
+const XP_COL=2.9,XP_NBA=30,XP_PLAYED=2;
 const lvCap=()=>{const R=rpgS();return(R&&R.cap)||LVCAP};
 const ORIGINS=[
- {k:"legacy",n:"The Legacy Kid",tag:"Name on the back",bio:"Everybody already knows the name.",trait:"Starts with 20 Attention: sponsors find you in your first season. Their best defender guards you: −1 on every move you make to create. Shape: mid-range, shot IQ, clutch. Lv 5: Heat Check or Name Recognition.",sk:{MID:6,SIQ:4,CLU:4},attn:20},
+ {k:"legacy",n:"The Legacy Kid",tag:"Name on the back",bio:"Everybody already knows the name.",trait:"Deal offers start in your first season. Their best defender guards you: every move you make to create −5%. Shape: mid-range, shot IQ, clutch. Lv 5: Heat Check or Name Recognition.",sk:{MID:6,SIQ:4,CLU:4},attn:20},
  {k:"bloom",n:"The Late Bloomer",tag:"Growth",bio:"Nobody has a file on you yet.",trait:"+10% skill points every level. Shape: vertical and dunk. Lv 5: Second Jump or Late Burst.",sk:{VRT:6,DNK:4},spg:.10},
  {k:"blacktop",n:"The Blacktop Prodigy",tag:"Flair",bio:"Park legend, holes in the fundamentals.",trait:"Your dunks swing momentum one more. Shape: handle and dunk, worse free throws. Lv 5: Ankle Breaker or Downhill.",sk:{HND:6,DNK:4,FT:-3}},
  {k:"import",n:"The Import",tag:"Fundamentals",bio:"Old-school footwork from overseas.",trait:"Shape: passing and court vision. Lv 5: Vision or Fadeaway.",sk:{PAS:6,VIS:6}},
@@ -3428,9 +3435,9 @@ function rpgGame(ln,w,kind,mg){const R=rpgS();if(!R||!ln)return;
   const bonus=0;
   const r=R.rec??={g:0,maxPts:0,maxAst:0,maxReb:0,maxSB:0,dd:0,st:0,bestSt:0,pts:0,w:0};r.g++;r.pts+=ln.pts;r.maxPts=Math.max(r.maxPts,ln.pts);r.maxAst=Math.max(r.maxAst,ln.ast);r.maxReb=Math.max(r.maxReb,ln.reb);r.maxSB=Math.max(r.maxSB,(ln.stl||0)+(ln.blk||0));
   if([ln.pts,ln.reb,ln.ast,ln.stl||0,ln.blk||0].filter(v=>v>=10).length>=2)r.dd++;if(w){r.w++;r.st++;r.bestSt=Math.max(r.bestSt,r.st)}else r.st=0;
-  rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${played?" · played":""}`);rpgGoalsCheck(R);try{originCheck()}catch(e){}if(window.__autoPrac)try{pracAuto()}catch(e){console.error(e)}
-  try{if(typeof C!=="undefined"&&C){attnGame(ln,w,kind,mg);gearGame(ln,w,kind,mg)}}catch(e){console.error(e)}
-  R.lastGame={x:Math.round(x+bonus),b:Math.round(bonus)};if(typeof jobCheck==="function")setTimeout(jobCheck,0)}
+  const lv0=R.lv,ex0=R.exp;rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${played?" · played":""}`);rpgGoalsCheck(R);try{originCheck()}catch(e){}if(window.__autoPrac)try{pracAuto()}catch(e){console.error(e)}
+  try{if(typeof C!=="undefined"&&C){attnGame(ln,w,kind,mg);gearGame(ln,w,kind,mg,played)}}catch(e){console.error(e)}
+  R.lastGame={x:Math.round(x+bonus),lv0,ex0,lv1:R.lv,ex1:R.exp,w:!!w,ln:{pts:ln.pts,reb:ln.reb,ast:ln.ast}};if(typeof jobCheck==="function")setTimeout(jobCheck,0)}
 /* ---- goals: always three within reach ---- */
 const GOALS=[
  ["pts","Score {n} in a game",[12,18,24,30,36,42,50,60],r=>r.rec?.maxPts||0],
@@ -3444,7 +3451,7 @@ const GOALS=[
  ["sp","Spend your skill points (have fewer than {n} left)",[5],r=>rpgFree(r)<5?1:0,1]];
 function rpgGoals(R){R.goals??={};const out=[];for(const[k,txt,ns,f,flag]of GOALS){const i=R.goals[k]||0;if(i>=ns.length)continue;const n=ns[i],v=f(R);out.push({k,t:txt.replace("{n}",n.toLocaleString()),n:flag?1:n,v:flag?(v?1:0):Math.min(v,n),i,pct:flag?(v?1:0):Math.min(1,v/n)})}
   return out.sort((a,b)=>b.pct-a.pct)}
-function rpgGoalsCheck(R){if(!R)return;let any=true,guard=0;while(any&&guard++<20){any=false;for(const g of rpgGoals(R))if(g.pct>=1){R.goals[g.k]=g.i+1;const xp=Math.round(needXP(R.lv)*.25);(R.done??=[]).unshift({t:g.t,x:xp});R.done=R.done.slice(0,30);
+function rpgGoalsCheck(R){return;if(!R)return;let any=true,guard=0;while(any&&guard++<20){any=false;for(const g of rpgGoals(R))if(g.pct>=1){R.goals[g.k]=g.i+1;const xp=Math.round(needXP(R.lv)*.25);(R.done??=[]).unshift({t:g.t,x:xp});R.done=R.done.slice(0,30);
       R.exp+=xp;R.xpTot=(R.xpTot||0)+xp;(R.xpSrc??={}).goal=(R.xpSrc.goal||0)+xp;while(R.lv<lvCap()&&R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
       (R.toast??=[]).push(`Goal complete: ${g.t} (+${xp.toLocaleString()} EXP)`);any=true}}}
 /* ---- new careers start here ---- */
@@ -3488,18 +3495,18 @@ function bodyEdges(kind,R){R=R||C?.rpg;if(!R?.body)return[];const out=[],ht=R.bo
   return out}
 /* ---------- origins: a starting shape and one perk at Lv 5 ---------- */
 const OPERKS={
-  heatcheck:{n:"Heat Check",d:"+1 on jumpers and threes right after you make one.",f:(k,c)=>(QR_KEYS.has(k)&&c?.lastMade)?1:0},
-  namerec:{n:"Name Recognition",d:"+1 drawing fouls and finishing at the rim. The refs know who you are.",f:k=>(k==="drawfoul"||k==="rim"||k==="layup"||k==="layhelp")?1:0},
-  secondjump:{n:"Second Jump",d:"+1.5 crashing the glass, +1 on layups.",f:k=>k==="crash"?1.5:(k==="rim"||k==="layup")?1:0},
-  lateburst:{n:"Late Burst",d:"+1 on every roll in the second half.",f:(k,c)=>c?.half2?1:0},
-  anklebreaker:{n:"Ankle Breaker",d:"+1 on crossovers and hesitations.",f:k=>(k==="cross"||k==="hesi")?1:0},
-  downhill:{n:"Downhill",d:"+1 on every drive.",f:k=>k==="drive"?1:0},
-  vision:{n:"Vision",d:"+1 on every pass and on calling for the ball.",f:k=>(k==="pass"||k==="callfor")?1:0},
-  fadeaway:{n:"Fadeaway",d:"+1.5 on forced jumpers, +1 on hooks.",f:k=>k==="forced"?1.5:(k==="hook"||k==="post")?1:0},
-  screenreader:{n:"Screen Reader",d:"+1.5 on calling and setting screens.",f:k=>k==="screen"?1.5:0},
-  discipline:{n:"Discipline",d:"+1 on hands up and help rotations.",f:k=>(k==="hands"||k==="rotate")?1:0},
-  iceveins:{n:"Ice Veins",d:"+1 on every roll in the last two minutes of a close game.",f:(k,c)=>c?.clutch?1:0},
-  contact:{n:"Contact",d:"+1 drawing fouls and on layups through the help.",f:k=>(k==="drawfoul"||k==="layhelp")?1:0}};
+  heatcheck:{n:"Heat Check",d:"Jumpers and threes right after you make one +5%.",f:(k,c)=>(QR_KEYS.has(k)&&c?.lastMade)?1:0},
+  namerec:{n:"Name Recognition",d:"Drawing fouls and finishing at the rim +5%. The refs know who you are.",f:k=>(k==="drawfoul"||k==="rim"||k==="layup"||k==="layhelp")?1:0},
+  secondjump:{n:"Second Jump",d:"Crashing the glass +8%, layups +5%.",f:k=>k==="crash"?1.5:(k==="rim"||k==="layup")?1:0},
+  lateburst:{n:"Late Burst",d:"Every roll in the second half +5%.",f:(k,c)=>c?.half2?1:0},
+  anklebreaker:{n:"Ankle Breaker",d:"Crossovers and hesitations +5%.",f:k=>(k==="cross"||k==="hesi")?1:0},
+  downhill:{n:"Downhill",d:"Every drive +5%.",f:k=>k==="drive"?1:0},
+  vision:{n:"Vision",d:"Passes and calling for the ball +5%.",f:k=>(k==="pass"||k==="callfor")?1:0},
+  fadeaway:{n:"Fadeaway",d:"Forced jumpers +8%, hooks +5%.",f:k=>k==="forced"?1.5:(k==="hook"||k==="post")?1:0},
+  screenreader:{n:"Screen Reader",d:"Calling and setting screens +8%.",f:k=>k==="screen"?1.5:0},
+  discipline:{n:"Discipline",d:"Hands up and help rotations +5%.",f:k=>(k==="hands"||k==="rotate")?1:0},
+  iceveins:{n:"Ice Veins",d:"Every roll in the last two minutes of a close game +5%.",f:(k,c)=>c?.clutch?1:0},
+  contact:{n:"Contact",d:"Drawing fouls and layups through the help +5%.",f:k=>(k==="drawfoul"||k==="layhelp")?1:0}};
 const OPOOL={legacy:["heatcheck","namerec"],bloom:["secondjump","lateburst"],blacktop:["anklebreaker","downhill"],import:["vision","fadeaway"],
   scholar:["screenreader","discipline"],comeback:["iceveins","contact"],custom:["downhill","vision"]};
 function originEdges(kind,ctx,R){R=R||C?.rpg;if(!R)return[];const out=[];const p=R.oPerk&&OPERKS[R.oPerk];if(p){const v=p.f(kind,ctx||{});if(v)out.push([p.n,v])}
@@ -3507,7 +3514,7 @@ function originEdges(kind,ctx,R){R=R||C?.rpg;if(!R)return[];const out=[];const p
   return out}
 /* every edge on one of your rolls: body, origin. kind = option key or shot type */
 function myEdges(kind,ctx,type){const R=C?.rpg;if(!R)return[];const jm=k=>typeof jobMods==="function"?jobMods(k):[];const ge=k=>typeof gearEdges==="function"?gearEdges(k,ctx,null):[];const a=[...bodyEdges(kind,R),...originEdges(kind,ctx,R)];for(const e of [...jm(kind),...ge(kind)])if(!a.some(x=>x[0]===e[0]))a.push(e);
-  if(type&&type!==kind){for(const e of [...bodyEdges(type,R),...originEdges(type,ctx,R),...jm(type),...ge(type)])if(!a.some(x=>x[0]===e[0]))a.push(e)}return a}
+  if(type&&type!==kind){for(const e of [...bodyEdges(type,R),...originEdges(type,ctx,R),...jm(type),...ge(type)])if(!a.some(x=>x[0]===e[0]))a.push(e)}const DK=["hands","steal","block","charge","rotate","lane","help"];if(ctx&&ctx.raid>=2&&!DK.includes(kind)&&!a.some(x=>x[0]==="Their best defender"))a.push(["Their best defender",-1]);if(ctx&&ctx.starOn&&!DK.includes(kind))a.push([ctx.starOn,-1]);return a}
 function originCheck(){try{const R=C?.rpg;if(!R||R.oPerk||R.oOffered||(R.lv||1)<5)return;R.oOffered=true;const pool=OPOOL[R.origin]||OPOOL.custom;
   lifeRoll({title:"Level five",quiet:true,txt:[`~Level five. One edge, your choice. It stays with you.`],mods:[],dc:0,opts:pool.map(k=>({t:OPERKS[k].n,d:OPERKS[k].d,go:()=>{R.oPerk=k;saveC();return[`~${OPERKS[k].n}. It is on your card now.`]}}))})}catch(e){console.error(e)}}
 /* ---------- practice: two drills per game week, each a short chain of rolls ---------- */
@@ -3521,11 +3528,7 @@ function pracWeek(){if(C?.stage==="college"&&C.cl){const cl=C.cl;return cl.phase
   if(typeof G!=="undefined"&&G?.career&&!G.career.retired&&(G.phase==="season"||G.phase==="playoffs"))return"n"+G.year+"-"+(G.phase==="season"?Math.floor(G.day/7):"po"+(G.po?.round??0));return null}
 function pracLeft(){const w=pracWeek();if(!w)return 0;const P=(C.prac??={w:null,used:0});if(P.w!==w){P.w=w;P.used=0}return Math.max(0,2-P.used)}
 function drillMod(k){const R=rpgS(),s=rpgSkills(R,rpgAge()),d=DRILLS[k],ref=grRef(R);return Math.round(d.sk.reduce((a,x)=>a+(s[x]-ref),0)/d.sk.length/10*2)/2}
-function openDrill(){const R=rpgS();if(!R)return;const left=pracLeft();
-  if(!left){openModal(`<div class="arch-card quiet"><small>Practice</small><p>${pracWeek()?"Both practice slots are used this week. The next game week brings two more.":"Practice opens when the season is on."}</p><div class="actions"><button class="btn" data-act="close">Close</button></div></div>`);return}
-  C.drill=null;openModal(`<div class="arch-card quiet"><small>Practice · ${left} of 2 left this week</small><p>Pick a drill. Three rolls, each harder than the last. Every success pays EXP; a perfect drill pays a skill point.</p>
-    <div class="lr-opts">${Object.entries(DRILLS).map(([k,d])=>{const m=drillMod(k);return`<button class="lr-opt" data-act="drillgo" data-v="${k}"><b>${d.n}</b><small>${d.sk.map(x=>SKN_[x]).join(" and ")} · your edge ${m>=0?"+":""}${m} · DC ${DRILL_DC.join(", ")}</small></button>`}).join("")}</div>
-    <div class="actions"><button class="btn ghost" data-act="close">Not now</button></div></div>`)}
+function openDrill(){try{openSheet("inv")}catch(e){}}
 function drillHtml(){const D=C.drill,d=DRILLS[D.k];return`<div class="arch-card quiet"><small>Practice · ${d.n}</small>
   <div class="drill-steps">${d.steps.map((s,i)=>{const r=D.res[i];return`<div class="drill-step ${r?r.ok?"ok":"no":i===D.res.length?"cur":""}"><b>${i+1}. ${esc(s)}</b><span>DC ${DRILL_DC[i]}</span>${r?`<em>${r.d} ${D.mod>=0?"+":"−"} ${Math.abs(D.mod)} = ${r.d+D.mod} · ${r.d===20?"natural 20":r.d===1?"natural 1":r.ok?"good":"missed"}</em>`:""}</div>`}).join("")}</div>
   ${D.res.length<3?`<div class="actions"><button class="btn" data-act="drillroll">Roll the d20 (${D.mod>=0?"+":""}${D.mod})</button></div>`:`<p>${esc(D.out)}</p><div class="actions"><button class="btn" data-act="close">Done</button></div>`}</div>`}
@@ -3595,6 +3598,7 @@ const archP=r=>(Array.isArray(r)?r:[r]).map(x=>{x=String(x);if(x.startsWith("*")
   const m=x.match(/^([A-Z][A-Z .'’-]{0,18}):\s(.*)$/s);if(m)return`<p class="dlg"><b class="who ${m[1]==="YOU"?"me":""}">${esc(m[1])}</b>${esc(m[2])}</p>`;return`<p>${esc(x)}</p>`}).join("");
 function archSay(txt,title,opt){attnInit();try{if(opt&&opt.sys)SFX.text()}catch(e){}(C.archQ??=[]).push({txt,title,...(opt||{})});setTimeout(archFlush,0)}
 function archFlush(){if(!$("modal").hidden||!$("live").hidden)return;if(!C?.archQ?.length){if(typeof lifeFlush==="function")lifeFlush();return}const m=C.archQ.shift();saveC();
+  if(m.reveal){const it=typeof gearFind==="function"?gearFind(m.reveal):null;if(it){openModal(`<div class="arch-card quiet">${revealHtml(it,m.title)}<div class="actions"><button class="btn" data-act="close">Continue</button></div></div>`);try{SFX[GRARS.indexOf(it.rar)>=3?"level":"text"]()}catch(e){}return}return archFlush()}
   openModal(`<div class="arch-card ${m.quiet?"quiet":""}"><small>${m.quiet?"":"System · "}${esc(m.title||"")}</small>${archP(m.txt)}<div class="actions">${m.offer?`<button class="btn" data-act="spacc" data-v="${esc(m.offer)}">Accept</button><button class="btn ghost" data-act="spdec" data-v="${esc(m.offer)}">Decline</button><button class="btn ghost" data-act="close">Decide later</button>`:`<button class="btn" data-act="close">Continue</button>`}</div></div>`)}
 /* ===== window ===== */
 function attnHtml(){attnInit();const a=C.attn,tier=a>=70?"National":a>=40?"Regional":a>=15?"Local":"Nobody knows your name";const S=k=>typeof GSETS!=="undefined"&&GSETS[k]?GSETS[k].n+" set":"";
@@ -3625,13 +3629,13 @@ const GRAR={common:["Common","#8a90a0",1],uncommon:["Uncommon","#2fa84a",2],rare
 const GRARS=["common","uncommon","rare","epic","legendary"];
 /* sets: 2-piece edge, 4-piece rule */
 const GSETS={
-  apex:{n:"Apex",two:{on:["dunk","rodunk"],val:.5,lab:"Apex (2)"},four:{rule:"dunkMomPlus",t:"A made dunk swings momentum one more."},tt:"+0.5 on dunks"},
-  crispy:{n:"CRISPY",two:{on:["hands"],val:.5,lab:"CRISPY (2)"},four:{rule:"shadow",t:"Your man shoots at −1 all game."},tt:"+0.5 on contests"},
-  kinetic:{n:"Kinetic",two:{ctx:"clutch",val:.5,lab:"Kinetic (2)"},four:{rule:"clutchReroll1",t:"Natural 1s are rerolled in the last two minutes."},tt:"+0.5 on every roll in the last two minutes"},
+  apex:{n:"Apex",two:{on:["dunk","rodunk"],val:.5,lab:"Apex (2)"},four:{rule:"dunkMomPlus",t:"A made dunk swings momentum one more."},tt:"Dunks +3%"},
+  crispy:{n:"CRISPY",two:{on:["hands"],val:.5,lab:"CRISPY (2)"},four:{rule:"shadow",t:"Your man's shots −5% all game."},tt:"Contests +3%"},
+  kinetic:{n:"Kinetic",two:{ctx:"clutch",val:.5,lab:"Kinetic (2)"},four:{rule:"clutchReroll1",t:"In the last two minutes, a SLIP is rolled again."},tt:"Every roll in the last two minutes +3%"},
   truform:{n:"TruForm",two:{stat:"drain",val:.1,lab:"TruForm (2)"},four:{rule:"zeroDefEnergy",t:"Defensive cards cost no energy."},tt:"Energy drains 10% slower"},
-  harbor:{n:"Harbor",two:{on:["pass"],val:.5,lab:"Harbor (2)"},four:{rule:"teamOpenPlus1",t:"Teammates get +1 on shots off your passes."},tt:"+0.5 on passes"},
-  summit:{n:"Summit",two:{ctx:"boss",val:1,lab:"Summit (2)"},four:{rule:"bossPlus1",t:"+1 more in playoff and tournament games."},tt:"+1 in playoff and tournament games"},
-  vantage:{n:"Vantage",legend:true,two:{all:true,val:1,lab:"Vantage (2)"},four:{rule:"noNat1",t:"Natural 1s never happen."},tt:"+1 on everything"}};
+  harbor:{n:"Harbor",two:{on:["pass"],val:.5,lab:"Harbor (2)"},four:{rule:"teamOpenPlus1",t:"Teammates +5% on shots off your passes."},tt:"Passes +3%"},
+  summit:{n:"Summit",two:{ctx:"boss",val:1,lab:"Summit (2)"},four:{rule:"bossPlus1",t:"Another +5% in playoff and tournament games."},tt:"Every roll +5% in playoff and tournament games"},
+  vantage:{n:"Vantage",legend:true,two:{all:true,val:1,lab:"Vantage (2)"},four:{rule:"noNat1",t:"You never SLIP."},tt:"Everything +5%"}};
 const GSETK=Object.keys(GSETS);
 const GBASE={1:400,2:900,3:2000,4:4500,5:10000,6:22000};
 function gearS(){if(typeof C==="undefined"||!C)return null;const G0=(C.gearv2??={bag:[],eq:{},pity:{c:0,r:0,e:0},nil:0,log:[],seq:0,sort:"grade",filt:"all"});if(C.cash&&!G0.cashMoved){G0.nil+=Math.round(C.cash);G0.cashMoved=true}if(C.gear&&!G0.oldMoved){const n=(C.gear.bag||[]).length+Object.values(C.gear.eq||{}).filter(Boolean).length;G0.nil+=n*2000;G0.oldMoved=true;if(n)G0.log.unshift({t:`The old Locker was retired: ${n} items became $${(n*2000).toLocaleString()}.`});delete C.gear}return G0}
@@ -3655,11 +3659,16 @@ function gearRoll(kind){const G0=gearS();if(!G0)return null;const p=G0.pity;p.c+
   const nba=C.stage!=="college";let g=nba?2+Math.floor(Math.random()*3):1+Math.floor(Math.random()*3);if(boss)g++;if(!nba)g=Math.min(g,3);if(finals)g=5;g=Math.min(g,finals?5:gradeCap());
   const fav=C.spon?.active?.map(d=>d.set).filter(Boolean)||[];const set=fav.length&&Math.random()<fav.length/6&&rar!=="legendary"?pick(fav):null;
   const it=gearMake({rar,grade:g,set});G0.bag.push(it);G0.log.unshift({t:`${GRAR[rar][0]} ${gName(it)} ${gStars(it)}${kind&&kind!=="game"?" ("+(finals?"the Finals":boss?"boss game":"box")+")":""}`});G0.log=G0.log.slice(0,20);return it}
-function gearGame(ln,w,kind,mg){const G0=gearS();if(!G0||!ln||!ln.min)return;const boss=(C.stage==="college"&&((mg&&mg.ork&&mg.ork<=25)||(kind&&kind!=="reg")))||(C.stage!=="college"&&kind==="po");
-  if(Math.random()<.7||boss){const it=gearRoll(boss?"boss":"game");if(it&&GRARS.indexOf(it.rar)>=2)toast(`${GRAR[it.rar][0]} drop: ${gName(it)} ${gStars(it)}`)}}
+function gearGame(ln,w,kind,mg,played){const G0=gearS();if(!G0||!ln||!ln.min)return;const boss=(C.stage==="college"&&((mg&&mg.ork&&mg.ork<=25)||(kind&&kind!=="reg")))||(C.stage!=="college"&&kind==="po");
+  G0.post=null;if(Math.random()<.7||boss){const it=gearRoll(boss?"boss":"game");if(!it)return;if(played)G0.post=it.id;else if(GRARS.indexOf(it.rar)>=2)gearShow(it,`${GRAR[it.rar][0]} drop`)}}
 function gearBox(why){const G0=gearS();if(!G0)return null;const J=typeof jobS==="function"?jobS():null;
   if(J&&J.perks&&J.perks.length&&Math.random()<.2){const k=pick(J.perks);J.rank??={};if((J.rank[k]||0)<3){J.rank[k]=(J.rank[k]||0)+1;const n=perkDef(k)?.n||k;G0.log.unshift({t:`Perk shard: ${n} is rank ${J.rank[k]} (${why})`});return{shard:k}}}
   const it=gearRoll("box");return it}
+/* a box of a set rarity (playoff exits, the title, the draft) */
+function gearGive(rar,grade,why){const G0=gearS();if(!G0)return null;const nba=C.stage!=="college";let g=grade||(nba?2+Math.floor(Math.random()*3):1+Math.floor(Math.random()*3));g=Math.min(g,rar==="legendary"?5:Math.max(gradeCap(),g));
+  const it=gearMake({rar,grade:g});G0.bag.push(it);G0.log.unshift({t:`${GRAR[rar][0]} ${gName(it)} ${gStars(it)} (${why||"box"})`});G0.log=G0.log.slice(0,20);return it}
+/* rings: one per title, each +5% on every roll in playoff and tournament games */
+function gearRing(opp){const G0=gearS();if(!G0)return;(G0.rings??=[]).push({y:(typeof G!=="undefined"&&G?.year)||C.y,vs:opp?`${opp.city} ${opp.name}`:""});G0.log.unshift({t:`Championship ring, ${G0.rings[G0.rings.length-1].y+1}.`})}
 function gearFinals(){const it=gearRoll("finals");return it}
 /* edges the engine reads */
 function gearEq(){const G0=gearS();return G0?GSLOTS.map(s=>G0.eq[s]).filter(Boolean):[]}
@@ -3669,6 +3678,7 @@ function gearEdges(kind,ctx,type){const out=[],add=(n,v)=>{const i=out.findIndex
     for(const s of g.subs)if(s.k===kind||(type&&s.k===type))add(GSUBN[s.k],s.v)}
   const sc=gearSetCount();for(const k in sc){const S=GSETS[k];if(sc[k]>=2){const t=S.two;if(t.all||(t.on&&(t.on.includes(kind)||(type&&t.on.includes(type))))||(t.ctx&&ctx&&ctx[t.ctx]))add(t.lab,t.val)}
     if(sc[k]>=4&&S.four.rule==="bossPlus1"&&ctx&&ctx.boss)add("Summit (4)",1)}
+  const G0=gearS();if(G0&&G0.rings&&G0.rings.length&&ctx&&ctx.boss)add(G0.rings.length>1?`Rings (${G0.rings.length})`:"Ring",G0.rings.length);
   return out.map(x=>[x[0],Math.round(x[1]*2)/2]).filter(x=>x[1])}
 function gearStat(k){let v=0;for(const g of gearEq()){if(GMAIN[g.main].stat===k)v+=gMainVal(g)}const sc=gearSetCount();for(const s in sc)if(sc[s]>=2&&GSETS[s].two.stat===k)v+=GSETS[s].two.val;return v}
 function gearRule(key){const sc=gearSetCount();for(const k in sc){if(sc[k]>=4&&GSETS[k].four.rule===key)return 1;if(GSETS[k].legend&&sc[k]>=1&&GSETS[k].four.rule===key)return 1}for(const g of gearEq())if(g.rar==="legendary"&&GSETS[g.set].four.rule===key)return 1;return null}
@@ -3679,9 +3689,10 @@ const gCost=g=>Math.round(GBASE[g.grade]*(1+.35*g.rank));
 function gearFind(id){const G0=gearS();return G0.bag.find(x=>x.id===id)||GSLOTS.map(s=>G0.eq[s]).find(x=>x&&x.id===id)}
 function gearPower(id){const G0=gearS(),g=gearFind(id);if(!g||g.rank>=12)return;const c=gCost(g);if(G0.nil<c){toast(`Not enough NIL money. $${c.toLocaleString()} to power up.`);return}
   G0.nil-=c;g.spent+=c;g.rank++;let note="";if(g.rank%3===0){const open=GSUB.filter(k=>!GMAIN[g.main].on.includes(k)&&!g.subs.some(s=>s.k===k));
-    if(g.subs.length<4&&open.length&&Math.random()<.35){const k=pick(open);g.subs.push({k,v:.5});note=` New substat: ${GSUBN[k]} +0.5.`}else{const s=pick(g.subs);s.v+=.5;note=` ${GSUBN[s.k]} +0.5.`}}
+    if(g.subs.length<4&&open.length&&Math.random()<.35){const k=pick(open);g.subs.push({k,v:.5});note=` New substat: ${GSUBN[k]} +3%.`}else{const s=pick(g.subs);s.v+=.5;note=` ${GSUBN[s.k]} +3%.`}}
   G0.log.unshift({t:`${gName(g)} +${g.rank}.${note}`});toast(`+${g.rank}.${note}`);saveC()}
-function gearReapp(id,i){const G0=gearS(),g=gearFind(id);if(!g||!g.subs[i])return;const c=g.rank?Math.round(GBASE[g.grade]*(1+.35*(g.rank-1))):GBASE[g.grade];if(G0.nil<c){toast(`Not enough NIL money. $${c.toLocaleString()} to reappraise.`);return}
+function freeReLeft(){const G0=gearS(),w=typeof pracWeek==="function"?pracWeek():null;if(!G0||!w)return 0;if(G0.freeW!==w){G0.freeW=w;G0.freeN=1}return G0.freeN||0}
+function gearReapp(id,i){const G0=gearS(),g=gearFind(id);if(!g||!g.subs[i])return;const free=freeReLeft()>0;const c=free?0:g.rank?Math.round(GBASE[g.grade]*(1+.35*(g.rank-1))):GBASE[g.grade];if(free)G0.freeN--;if(G0.nil<c){toast(`Not enough NIL money. $${c.toLocaleString()} to reappraise.`);return}
   const open=GSUB.filter(k=>!GMAIN[g.main].on.includes(k)&&!g.subs.some(s=>s.k===k));if(!open.length)return;G0.nil-=c;g.spent+=c;const was=g.subs[i].k;g.subs[i].k=pick(open);G0.log.unshift({t:`${gName(g)}: ${GSUBN[was]} became ${GSUBN[g.subs[i].k]}.`});saveC()}
 function gearSalvage(id){const G0=gearS(),i=G0.bag.findIndex(x=>x.id===id);if(i<0)return;const g=G0.bag.splice(i,1)[0];const v=Math.round(g.spent*.3+300*g.grade);G0.nil+=v;G0.log.unshift({t:`Salvaged ${gName(g)} for $${v.toLocaleString()}.`});saveC()}
 function gearMerge(grade){const G0=gearS();grade=+grade;if(grade>=6)return;const fee=GBASE[grade];const five=G0.bag.filter(x=>x.grade===grade).sort((a,b)=>GRARS.indexOf(a.rar)-GRARS.indexOf(b.rar)||a.rank-b.rank).slice(0,5);
@@ -3692,10 +3703,10 @@ function gearEquip(id){const G0=gearS(),i=G0.bag.findIndex(x=>x.id===id);if(i<0)
 function gearUnequip(slot){const G0=gearS(),g=G0.eq[slot];if(!g)return;delete G0.eq[slot];G0.bag.push(g);saveC()}
 /* the Locker */
 function gFits(g){const c=typeof jobCls==="function"?jobCls():null;if(!c)return true;const want={scorer:["three","mid","str","draw","vert"],playmaker:["pass","clutch","handle","accel"],defense:["block","perd","intd","vert","reb"]}[(typeof jobS==="function"&&jobS().cls)||""]||[];return GSLOTMAIN[g.slot].length===1||want.includes(g.main)}
-function gRow(g,eq){const col=GRAR[g.rar][1];const subs=g.subs.map((s,i)=>`<span class="g-sub">${GSUBN[s.k]} +${s.v}${!eq?`<button class="g-re" data-act="greapp" data-v="${g.id}" data-i="${i}" title="Reappraise: reroll this stat">↻</button>`:""}</span>`).join("");
+function gRow(g,eq){const col=GRAR[g.rar][1];const subs=g.subs.map((s,i)=>`<span class="g-sub">${GSUBN[s.k]} +${pctOf(s.v)}%${!eq?`<button class="g-re" data-act="greapp" data-v="${g.id}" data-i="${i}" title="Reappraise: reroll this stat">↻</button>`:""}</span>`).join("");
   const rule=g.rar==="legendary"?`<span class="g-sub g-rule">${esc(GSETS[g.set].four.t)}</span>`:"";
   return`<div class="g-row" style="--rc:${col}"><div class="g-head"><b>${esc(gName(g))}</b><i>${gStars(g)}${g.rank?` +${g.rank}`:""}</i><small style="color:${col}">${GRAR[g.rar][0]}</small></div>
-    <div class="g-main">${GMAIN[g.main].n} +${gMainVal(g)}<small> · ${GSLOTN[g.slot]} · ${GSETS[g.set].n} set: ${GSETS[g.set].tt}</small></div><div class="g-subs">${subs}${rule}</div>
+    <div class="g-main">${GMAIN[g.main].n} +${pctOf(gMainVal(g))}%<small> · ${GSLOTN[g.slot]} · ${GSETS[g.set].n} set: ${GSETS[g.set].tt}</small></div><div class="g-subs">${subs}${rule}</div>
     <div class="g-act">${eq?`<button class="mp-btn sm" data-act="guneq" data-v="${g.slot}">Take off</button>`:`<button class="mp-btn sm go" data-act="gequip" data-v="${g.id}">Equip</button>`}<button class="mp-btn sm" data-act="gpower" data-v="${g.id}" ${g.rank>=12?"disabled":""}>${g.rank>=12?"Maxed":`Power up $${gCost(g).toLocaleString()}`}</button>${eq?"":`<button class="mp-btn sm" data-act="gsalv" data-v="${g.id}">Salvage $${(Math.round(g.spent*.3+300*g.grade)).toLocaleString()}</button>`}</div></div>`}
 function lockerHtml(){const G0=gearS();if(!G0)return"";const p=G0.pity,sc=gearSetCount();
   const slots=GSLOTS.map(s=>{const g=G0.eq[s];return`<div class="g-slot ${g?"":"empty"}"><small>${GSLOTN[s]}</small>${g?gRow(g,true):`<i>Empty · ${GSLOTMAIN[s].map(k=>GMAIN[k].n).join(" / ")}</i>`}</div>`}).join("");
@@ -3704,7 +3715,7 @@ function lockerHtml(){const G0=gearS();if(!G0)return"";const p=G0.pity,sc=gearSe
   bag.sort((a,b)=>b.grade-a.grade||GRARS.indexOf(b.rar)-GRARS.indexOf(a.rar)||b.rank-a.rank);
   const grades=[1,2,3,4,5];const counts={};for(const g of G0.bag)counts[g.grade]=(counts[g.grade]||0)+1;
   return`<div class="g-top"><div class="g-nil"><b>$${G0.nil.toLocaleString()}</b><small>NIL money · powers up, reappraises, merges</small></div>
-    <div class="g-pity"><small>Pity</small><span>Uncommon in ${Math.max(0,4-p.c)}</span><span>Rare in ${Math.max(0,12-p.r)}</span><span>Epic in ${Math.max(0,40-p.e)}</span><small>${C.stage==="college"?"College drops top out at 3★":`Grade cap ${gradeCap()}★ this season · the Finals drops 5★`}</small></div></div>
+    <div class="g-pity">${freeReLeft()?`<span class="g-free">Free reroll this week: tap ↻ on any stat</span>`:""}<small>Pity</small><span>Uncommon in ${Math.max(0,4-p.c)}</span><span>Rare in ${Math.max(0,12-p.r)}</span><span>Epic in ${Math.max(0,40-p.e)}</span><small>${C.stage==="college"?"College drops top out at 3★":`Grade cap ${gradeCap()}★ this season · the Finals drops 5★`}</small></div></div>
     <div class="g-sets">${sets}</div>
     <div class="g-slots">${slots}</div>
     <div class="mp-grp"><div class="mp-gh">Bag · ${G0.bag.length}</div>
@@ -3716,6 +3727,49 @@ function gearAct(act,d){const G0=gearS();if(!G0)return false;
   switch(act){case"gequip":gearEquip(d.v);break;case"guneq":gearUnequip(d.v);break;case"gpower":gearPower(d.v);break;case"greapp":gearReapp(d.v,+d.i);break;case"gsalv":gearSalvage(d.v);break;case"gmerge":gearMerge(d.v);break;case"gfilt":G0.filt=d.v;break;default:return false}
   try{openSheet("inv")}catch(e){}return true}
 window.__gear={gearS,gearRoll,gearBox,gearMake,gearEdges,gearRule,gearStat,nilAdd,GSETS,GMAIN};
+
+/* ---------- loop.js: the pre-game card, the post-game ladder, the drop reveal, pity on the Play button (PLAN §5 hooks 1–4) ---------- */
+const RAIDTXT={2:"They scheme for you. Their best defender guards you every trip.",3:"Scouting report. Your favorite move starts the game already seen.",4:"Their star carries two perks against you.",5:"The boss. Once a quarter one of their star's shots is PERFECT, and every quarter ends like the fourth."};
+function pityLine(){const G0=typeof gearS==="function"?gearS():null;if(!G0)return"";const p=G0.pity,u=Math.max(1,4-p.c),r=Math.max(1,12-p.r),e=Math.max(1,40-p.e);return e<=3?`Epic in ${e}`:r<=6?`Rare in ${r}`:`Uncommon in ${u}`}
+/* who is next, from either world */
+function nextOpp(){try{
+  if(C.stage==="college"){const cl=C.cl,pr=myPair(cl);if(!pr)return null;const opp=pr.h===C.school?pr.a:pr.h,t=cl.teams[opp],best=(t.roster||[]).map(id=>cl.players[id]).filter(Boolean).sort((a,b)=>b.ovr-a.ovr)[0];
+    const raid=cl.phase==="ncaa"?CRAID[cl.ncaa.round]:0,seed=cl.ncaa?.seeds?.[opp]?.seed,rk=apRk(cl,opp);
+    return{name:`${seed?`(${seed}) `:rk?`#${rk} `:""}${opp}`,label:cl.phase==="ncaa"?NCR[cl.ncaa.round]:`Game ${C.season.games.filter(g=>!g.label).length+1} of ${cl.sched.filter(d=>d.some(p=>p.includes(C.school))).length}`,best:best?`${best.name} (${best.pos})`:"",raid,boss:raid>0||(rk&&rk<=25),home:cl.phase==="reg"&&pr.h===C.school}}
+  if(typeof G!=="undefined"&&G?.career){let h,a,label;
+    if(G.phase==="season"){const d=G.schedule.slice(G.day).find(x=>x.some(g=>g.includes(G.userTid)));if(!d)return null;[h,a]=d.find(g=>g.includes(G.userTid));label=`Game ${user().w+user().l+1} of ${seasonLen()}`}
+    else if(G.phase==="playoffs"&&G.po){const s=G.po.rounds[G.po.round].find(x=>(x.hi===G.userTid||x.lo===G.userTid)&&!sDone(x));if(!s)return null;const g=s.wh+s.wl;[h,a]=[0,1,4,6].includes(g)?[s.hi,s.lo]:[s.lo,s.hi];label=`${roundName(G.po.round)} · Game ${g+1} · ${s.hi===G.userTid?s.wh:s.wl}-${s.hi===G.userTid?s.wl:s.wh}`}
+    else return null;const opp=h===G.userTid?a:h,t=T(opp),best=t.roster.map(P).filter(Boolean).sort((x,y)=>y.ovr-x.ovr)[0],raid=raidLvl();
+    return{name:`${t.city} ${t.name} (${t.w}-${t.l})`,label,best:best?`${best.name} (${best.ovr})`:"",raid,boss:raid>0,home:h===G.userTid}}
+  }catch(e){console.error(e)}return null}
+function preGame(){const n=nextOpp(),G0=typeof gearS==="function"?gearS():null;
+  if(!n){if(C.stage==="college")clWatch();else watchNext();return}
+  const raidL=[2,3,4,5].filter(r=>n.raid>=r).map(r=>`<li>${esc(RAIDTXT[r])}</li>`).join("");
+  openModal(`<div class="pg-card ${n.raid>=5?"boss":n.boss?"gold":""}"><small>${esc(n.label)}${n.raid?` · Raid round ${n.raid===5?"BOSS":n.raid}`:""}</small><h3>${n.home?"vs":"at"} ${esc(n.name)}</h3>
+    ${n.best?`<p>Their best player: <b>${esc(n.best)}</b></p>`:""}${raidL?`<ul class="pg-raid">${raidL}</ul>`:n.raid===1?`<p class="pg-easy">A normal opponent. Win big.</p>`:""}
+    <p class="pg-drop">${n.boss?"Boss game: drops are one rarity better.":"Gear drops seven games in ten."} <b>${esc(pityLine())}</b></p>
+    <div class="actions"><button class="btn" data-act="tipoff">Tip off</button><button class="btn ghost" data-act="close">Not now</button></div></div>`);
+  if(G0)G0.nilTip=G0.nil}
+function tipOff(){closeModal();if(C.stage==="college")clWatch();else watchNext()}
+/* the post-game ladder: EXP, money, the drop, pity, the next opponent */
+function postGame(){if($("live")&&!$("live").hidden){setTimeout(postGame,400);return}if(!$("modal").hidden){setTimeout(postGame,400);return}try{const R=rpgS(),G0=gearS();if(!R||!G0)return;const L=R.lastGame||{},it=G0.post?gearFind(G0.post):null;G0.post=null;
+  const need0=needXP(L.lv0||R.lv),p0=Math.min(100,(L.ex0||0)/need0*100),p1=Math.min(100,R.exp/needXP(R.lv)*100),up=(L.lv1||R.lv)>(L.lv0||R.lv),money=G0.nilTip!=null?G0.nil-G0.nilTip:0;G0.nilTip=null;
+  const n=nextOpp();const ln=L.ln||{};
+  openModal(`<div class="pg-card post"><small>Final</small><h3 class="${L.w?"w":"l"}">${L.w?"WIN":"LOSS"}</h3><p>${ln.pts??0} points · ${ln.reb??0} rebounds · ${ln.ast??0} assists</p>
+    <div class="pg-xp"><div class="pg-bar"><i style="width:${up?0:p0}%;--to:${p1}%"></i></div><b>+${(L.x||0).toLocaleString()} EXP</b>${up?`<span class="pg-up">Level ${R.lv}</span>`:""}</div>
+    ${money>0?`<p class="pg-money">+$${money.toLocaleString()} NIL money</p>`:""}
+    ${it?revealHtml(it,"Drop",true):`<p class="pg-none">No drop this game. ${esc(pityLine())}.</p>`}
+    ${n?`<p class="pg-next">Next: ${esc(n.label)} · ${n.home?"vs":"at"} ${esc(n.name)}${n.raid?` · <b>raid round ${n.raid===5?"BOSS":n.raid}</b>`:""}</p>`:""}
+    <div class="actions">${n?`<button class="btn" data-act="pgnext">Next game</button>`:""}<button class="btn ghost" data-act="close">Done</button></div></div>`);
+  if(it)try{SFX[GRARS.indexOf(it.rar)>=3?"level":"text"]()}catch(e){}}catch(e){console.error(e)}}
+/* the reveal: rarity color, stars tick in, main stat, substats one at a time */
+function revealHtml(it,title,inline){const col=GRAR[it.rar][1],slow=GRARS.indexOf(it.rar)>=3?1.7:1,d=i=>`style="animation-delay:${(i*.18*slow).toFixed(2)}s"`;let k=0;
+  return`<div class="rv ${inline?"inline":""} rv-${it.rar}" style="--rc:${col}"><small class="rv-t">${esc(title||"Drop")}</small><b class="rv-r" ${d(k++)}>${GRAR[it.rar][0]}</b><div class="rv-n" ${d(k++)}>${esc(gName(it))}</div>
+    <div class="rv-s">${[...Array(6)].map((_,i)=>`<i class="${i<it.grade?"on":""}" ${d(k++)}>★</i>`).join("")}</div>
+    <div class="rv-m" ${d(k++)}>${GMAIN[it.main].n} +${pctOf(gMainVal(it))}% <small>${GSLOTN[it.slot]} · ${GSETS[it.set].n} set</small></div>
+    ${it.subs.map(s=>`<div class="rv-sub" ${d(k++)}>${GSUBN[s.k]} +${pctOf(s.v)}%</div>`).join("")}${it.rar==="legendary"?`<div class="rv-sub rule" ${d(k++)}>${esc(GSETS[it.set].four.t)}</div>`:""}</div>`}
+function gearShow(it,title){if(!it)return;(C.archQ??=[]).push({reveal:it.id,title:title||"Drop"});setTimeout(archFlush,0)}
+window.__loop={nextOpp,preGame,postGame,revealHtml,pityLine};
 
 /* ---------- life.js: the choice card and the d20 card outside of games (job advancements, sponsor offers). ---------- */
 function lifeRoll(o){(C.lifeQ??=[]).push(o);setTimeout(lifeFlush,0)}
@@ -3835,14 +3889,22 @@ const PV={to:.16,toS:.0022,toD:.0016,dc:{three:15,mid:14.5,rim:12,dunk:12,post:1
 const PROFC=new Map();
 const GI={PG:1,G:.9,SG:.8,GF:.65,SF:.5,F:.4,PF:.2,FC:.1,C:0};
 /* derive the 24 skills for a CPU player from his coarse attributes, size and a seeded personality */
+const PROFRAW={on:false};
+/* career NBA: every skill re-centred so the league average sits at the engine reference, then the season boost */
+function lgNormCalc(){if(typeof G==="undefined"||!G?.teams)return null;PROFRAW.on=true;const sum={},n={v:Date.now()};let c=0;try{for(const t of G.teams)for(const pid of t.roster.map(x=>G.players[x]).filter(Boolean).sort((a,b)=>b.ovr-a.ovr).slice(0,8).map(p=>p.pid)){const p=G.players[pid];if(!p||p.sk||(G.career&&p.pid===G.career.pid))continue;const s=prof(p);c++;for(const k in s)sum[k]=(sum[k]||0)+s[k]}}finally{PROFRAW.on=false}
+  if(!c)return null;for(const k in sum)n[k]=(LGREF[k]??71)-sum[k]/c;return n}
+/* the real league's rotation-player skill shape (2025-26, NBA.com-derived): the calibration target for FG 46%, 3P 36% */
+const REALROT={CLS:71,MID:70,THR:71,FT:67,SIQ:71,LAY:73,DNK:71,PST:57,DRW:68,HND:70,PAS:70,VIS:70,PER:76,INT:71,STL:67,BLK:56,ORB:64,DRB:70,SPD:72,ACC:72,VRT:72,STR:67,STA:76,CLU:71};
+const LGREF={CLS:66,MID:65,THR:66,FT:67,SIQ:68,LAY:68,DNK:66,PST:55,DRW:66,HND:69,PAS:69,VIS:69,PER:79,INT:74,STL:67,BLK:56,ORB:64,DRB:70,SPD:72,ACC:72,VRT:72,STR:67,STA:76,CLU:71};
 function prof(p){if(!p)return null;if(p.sk)return p.sk;if(p.pid==="me"&&typeof C!=="undefined"&&C?.sk)return C.sk;
-  const a=p.a||{},key=p.pid+"|"+(p.ovr||0)+"|"+[a.SHT,a.FIN,a.PLY,a.DEF,a.REB,a.ATH].join(",");let s=PROFC.get(key);if(s)return s;
+  const car=typeof G!=="undefined"&&G&&G.career&&!G.career.retired&&!p.cl,bossP=!!p.boss,lgb=(car&&G.lgBoost)||0,nrm=car&&!bossP&&G.lgNorm&&!PROFRAW.on?G.lgNorm:null,a=p.a||{},key=p.pid+"|"+(p.ovr||0)+"|"+lgb+"|"+(bossP?"B":"")+"|"+(nrm?nrm.v:0)+"|"+(PROFRAW.on?"r":"")+"|"+[a.SHT,a.FIN,a.PLY,a.DEF,a.REB,a.ATH].join(",");let s=PROFC.get(key);if(s)return s;
   const h=(hgt(p)-79),hs=hsh("pf"+p.pid),t=i=>(((hs>>>(i*2))&3)/3-.5),gi=GI[p.pos]??.5,IQ=a.IQ??(a.SHT*.4+a.PLY*.6),wt=p.wt||Math.round(hgt(p)*2.85-22);
   const r=x=>clamp(Math.round(x),20,99);
   s={THR:r(a.SHT+t(0)*16-h*1.2+(gi-.5)*8),MID:r(a.SHT+t(1)*8),CLS:r(.5*a.SHT+.5*a.FIN+h*1.5),FT:r(a.SHT*.75+14+t(2)*8-h*1.2),SIQ:r(IQ*.7+a.SHT*.3),
     LAY:r(a.FIN+t(3)*6-h*.5),DNK:r(a.FIN*.65+a.ATH*.35+h*3+t(4)*8),PST:r(a.FIN*.55+22+h*3+t(5)*10+(1-gi)*8-8),DRW:r(a.FIN*.5+a.ATH*.25+15+t(6)*10),
     HND:r(a.PLY-h*2+t(7)*6),PAS:r(a.PLY+t(8)*6),VIS:r(IQ*.6+a.PLY*.4),PER:r(a.DEF-h*1.5+a.ATH*.1-4),INT:r(a.DEF+h*2+(1-gi)*6-4),STL:r(a.DEF*.6+a.ATH*.3+t(9)*8+gi*4),BLK:r(a.DEF*.4+a.ATH*.3+h*3.5+t(10)*8+6),
     ORB:r(a.REB*.9+h+t(11)*8),DRB:r(a.REB+h),SPD:r(a.ATH-h*2),ACC:r(a.ATH-h*1.5+t(12)*6),VRT:r(a.ATH+t(13)*8),STR:r(40+(wt-210)/4+h*2+a.REB*.3),STA:r(55+a.ATH*.3+t(14)*10),CLU:r(IQ+t(15)*12)};
+  if(nrm)for(const k in s)s[k]=Math.round(s[k]+(nrm[k]||0));if(car&&bossP)for(const k in s)s[k]=Math.round(s[k]+(LGREF[k]??71)-(REALROT[k]??71));if(lgb&&!PROFRAW.on)for(const k in s)s[k]+=lgb;
   if(PROFC.size>3000)PROFC.clear();PROFC.set(key,s);return s}
 const usageP=s=>Math.pow((s.THR*.2+s.MID*.2+s.LAY*.2+s.DNK*.1+s.PST*.1+s.HND*.1+s.SIQ*.1)/60,3.2);
 function enMax(r){const s=prof(r.p);const ge=(typeof LV!=="undefined"&&LV?.ctl?.hero!=null&&String(r.p.pid)===String(LV.ctl.hero))||r.p.pid==="me"?(typeof gearStat==="function"?gearStat("energy")*4:0):0;return Math.round(40+s.STA*.8+ge)}
@@ -3905,43 +3967,48 @@ function ktrack(state,key,hit){if(!state)return;const st=state.k??={};st[key]=hi
 /* ===== minigame UI (inside the live viewer) ===== */
 function openPoss(){const w=LV.wait;if(!w)return;const el=$("lv-clutch");LV.pm={step:"pick",opts:w.opts,t0:performance.now()};LV.playing=false;
   el.innerHTML=possHtml(w);el.hidden=false;el.classList.add("pm");}
-function possHtml(w){const o=LV.pm;const hdr=w.chain?`<div class="pm-h"><div><b>${esc(w.sitName)}</b><small>${esc(w.title)} · ${esc(w.sub)}</small></div><div class="pm-vs"><small>Guarded by</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>
-    <div class="pm-meta"><span>Energy <b>${w.meta.en}</b>/${w.meta.em}</span><span>Momentum <b class="${w.meta.mom>=3?"up":w.meta.mom<=-3?"dn":""}">${w.meta.mom>0?"+":""}${w.meta.mom}</b></span>${w.offball?"":`<span>Move ${Math.min(5,w.meta.moves+1)} of 5</span>`}</div>${w.chips&&w.chips.length?`<div class="pm-chips">${w.chips.map(c=>`<span class="${c.info?"i":c.ok?"ok":"no"}">${esc(c.t)}${c.info?"":c.ok?" ✓":" ✗"}</span>`).join("")}</div>`:""}`
+/* the card: odds, payoff, and the factors as plain percentages. The d20 stays underneath. */
+const pctOf=v=>(v<0?-1:1)*Math.round(Math.abs(v)*5);
+const showMath=()=>typeof C!=="undefined"&&C&&C.showMath===true;
+function chipsHtml(x){const ms=(x.mods||[]).filter(m=>m[1]);if(!ms.length)return"";const base=x.noroll?"":`<span class="pc b">Base ${Math.round(pMake(1,x.dc)*100)}%</span>`;
+  return base+ms.map(m=>{const v=pctOf(m[1]);return`<span class="pc ${v>0?"up":"dn"}">${v>0?"▲":"▼"} ${esc(m[0])} ${v>0?"+":"−"}${Math.abs(v)}%</span>`}).join("")}
+function possHtml(w){const o=LV.pm;const cap=w.meta?.cap||5;const hdr=w.chain?`<div class="pm-h"><div><b>${esc(w.sitName)}</b><small>${esc(w.title)} · ${esc(w.sub)}</small></div><div class="pm-vs"><small>Guarded by</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>
+    <div class="pm-meta"><span>Energy <b>${w.meta.en}</b>/${w.meta.em}</span><span>Momentum <b class="${w.meta.mom>=3?"up":w.meta.mom<=-3?"dn":""}">${w.meta.mom>0?"+":""}${w.meta.mom}</b></span>${w.offball?"":`<span>Move ${Math.min(cap,w.meta.moves+1)} of ${cap}</span>`}</div>${w.chips&&w.chips.length?`<div class="pm-chips">${w.chips.map(c=>`<span class="${c.info?"i":c.ok?"ok":"no"}">${esc(c.t)}${c.info?"":c.ok?" ✓":" ✗"}</span>`).join("")}</div>`:""}`
     :`<div class="pm-h"><div><b>${esc(w.title)}</b><small>${esc(w.sub)}</small></div><div class="pm-vs"><small>${w.def?"Guarding":"Guarded by"}</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>`;
-  if(o.step==="pick")return hdr+`<div class="pm-opts">${w.opts.map((x,i)=>`<button class="pm-o ${x.perk?"perk":""} ${x.kind==="setup"?"setup":""}" data-act="posspick" data-v="${i}"><i>${i+1}</i><span><b>${esc(x.lab)}</b><small>${x.mods.map(m=>`${m[0]} ${m[1]>0?"+":""}${m[1]}`).join(" · ")||"No modifiers"}${x.note?` · ${esc(x.note)}`:""}</small></span><em>${x.noroll?`<b>—</b><small>No roll</small>`:`<b>${Math.round(x.pct*100)}%</b><small>DC ${x.dc} · ${x.mod>=0?"+":""}${x.mod}</small>`}</em></button>`).join("")}</div><div class="pm-foot"><button class="pm-auto" data-act="possauto">Let the coach pick (Esc)</button><span>Press 1–${w.opts.length}</span></div>`;
-  const x=o.pick;const die=`<div class="pm-die ${o.step==="roll"?"spin":""}" id="pm-die"><b>${o.step==="roll"?"?":o.roll}</b></div>`;
-  if(o.step==="roll"||o.step==="tap")return hdr+`<div class="pm-res">${die}<div class="pm-sum"><b>${esc(x.lab)}</b><div>d20 <span id="pm-r">${o.roll??"…"}</span> ${x.mod>=0?"+":""}${x.mod} ${o.step==="tap"?`+ timing <span id="pm-t">?</span>`:""} vs DC ${x.dc}</div></div></div>${o.step==="tap"?`<div class="cl-bar2 pm-bar"><i class="zone" style="left:${50-o.zone*50}%;width:${o.zone*100}%"></i><i class="ndl" id="cl-ndl"></i></div><div class="cl-tap">TAP (Space) ON THE GOLD</div>`:""}`;
-  return hdr+`<div class="pm-res">${die}<div class="pm-sum"><b class="${o.made?"ok":"no"}">${esc(o.verdict)}</b><div>${o.roll}${x.mod>=0?" + ":" − "}${Math.abs(x.mod)}${o.tap!=null?` ${o.tap>=0?"+":"−"} ${Math.abs(o.tap)}`:""} = <b>${o.total}</b> vs DC ${x.dc}${o.why?` · ${esc(o.why)}`:""}</div></div></div>`}
+  if(o.step==="pick")return hdr+`<div class="pm-opts">${w.opts.map((x,i)=>{const pts=x.kind==="finish"||x.kind==="pass"?`${x.pts||2} pts`:x.kind==="setup"?"move":"";
+    return`<button class="pm-o ${x.perk?"perk":""} ${x.kind==="setup"?"setup":""}" data-act="posspick" data-v="${i}"><i>${i+1}</i><span><b>${esc(x.lab)}</b>${x.note?`<small class="pn">${esc(x.note)}</small>`:""}<span class="pcs">${chipsHtml(x)}</span></span><em>${x.noroll?`<b>—</b><small>Sure thing</small>`:`<b>${Math.round(x.pct*100)}%</b><small>${pts}${showMath()?` · DC ${x.dc} · ${x.mod>=0?"+":""}${x.mod}`:""}</small>`}</em></button>`}).join("")}</div><div class="pm-foot"><button class="pm-auto" data-act="possauto">Let the coach pick (Esc)</button><span>Press 1–${w.opts.length}</span></div>`;
+  const x=o.pick,pc=Math.round(clamp((21+x.mod+1-x.dc)/20,.05,.95)*100);
+  const pos=o.roll==null?null:clamp((20-o.roll+.5)/20*100,2,98);
+  const meter=`<div class="pm-meter"><i class="zone" style="width:${pc}%"></i><i class="ndl ${o.step==="roll"?"sweep":""}" id="pm-ndl" style="${pos!=null?`left:${pos}%`:""}"></i><span class="z1">${pc}%</span></div>`;
+  if(o.step==="roll"||o.step==="tap")return hdr+`<div class="pm-res2"><b class="pm-lab">${esc(x.lab)}</b>${meter}</div>`;
+  const big=o.roll===20?"PERFECT":o.roll===1?"SLIP":o.verdict,sub=o.roll===20?"It was going in no matter what.":o.roll===1?"It went wrong no matter the odds.":!o.made&&o.total===x.dc-1?"Just short.":o.made&&o.total>=x.dc+5?"Clean.":"";
+  const ms=(x.mods||[]).filter(m=>m[1]);const why=o.made?ms.filter(m=>m[1]>0).sort((a,b)=>b[1]-a[1])[0]:ms.filter(m=>m[1]<0).sort((a,b)=>a[1]-b[1])[0];
+  return hdr+`<div class="pm-res2"><b class="pm-lab">${esc(x.lab)}</b>${meter}<div class="pm-verd ${o.made?"ok":"no"} ${o.roll===20||o.roll===1?"big":""}"><b>${esc(big)}</b>${sub?`<span>${esc(sub)}</span>`:""}${why&&o.roll!==20&&o.roll!==1?`<small>${o.made?"▲":"▼"} ${esc(why[0])}</small>`:""}${showMath()?`<small class="mth">d20 ${o.roll} ${x.mod>=0?"+":"−"} ${Math.abs(x.mod)} + 1 = ${o.total} vs DC ${x.dc}</small>`:""}</div></div>`}
 function possPick(i){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;const x=w.opts[i];if(!x)return;
   if(x.noroll){LV.arg={k:x.k,made:true,opt:x};LV.wait=null;LV.pm=null;LV.cl=null;const el=$("lv-clutch");el.hidden=true;el.classList.remove("pm");LV.playing=true;return}
   o.pick=x;o.step="roll";o.roll=null;$("lv-clutch").innerHTML=possHtml(w);
-  let n=0;const tick=()=>{if(!LV?.pm)return;const d=$("pm-die");if(d)d.querySelector("b").textContent=1+Math.floor(Math.random()*20);if(++n<10)setTimeout(tick,55);else{o.roll=kroll(LV.ctl,"me");$("pm-die").querySelector("b").textContent=o.roll;$("pm-r")&&($("pm-r").textContent=o.roll);
-    if(w.timing&&!x.pass){o.step="tap";o.zone=clamp(.12+(w.skl-40)/400,.1,.26);o.t0=performance.now();o.sp=clamp(5.2-(w.skl-50)*.03,3.2,6);$("lv-clutch").innerHTML=possHtml(w);LV.cl={t0:o.t0,sp:o.sp,zone:o.zone};o.auto=setTimeout(()=>possTap(true),3000)}else possResolve(w,null)}};setTimeout(tick,60)}
+  setTimeout(()=>{if(!LV?.pm)return;o.roll=kroll(LV.ctl,"me");possResolve(w,null)},o.pick.kind==="finish"?650:450)}
 function possTap(auto){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="tap")return;clearTimeout(o.auto);const x=LV.cl?.x??0,d=Math.abs(x-.5),z=(o.zone||.12)/2;
   const tap=auto?-1:d<=z?4:d<=z+.08?2:d<=z+.16?0:-2;possResolve(w,tap)}
-function possResolve(w,tap){try{SFX.dice()}catch(e){}const o=LV.pm,x=o.pick;if(x.job&&typeof jobMarkUsed==="function")jobMarkUsed(x.job);o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
+function possResolve(w,tap){const o=LV.pm,x=o.pick;if(x.job&&typeof jobMarkUsed==="function")jobMarkUsed(x.job);o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
   if(o.roll===1&&typeof gearNat1==="function"&&gearNat1(LV.ctl)){o.roll=1+Math.floor(Math.random()*20);o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.rer=1}
   const nat20=o.roll===20,nat1=o.roll===1;o.made=nat1?false:nat20?true:o.total>=x.dc;
-  o.verdict=x.kind==="setup"?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?"SUCCESS":"STOPPED"):x.kind==="offball"?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?"GOT IT":"NOTHING THERE"):x.kind==="help"?(o.made?"GOT THERE":"TOO LATE"):x.def?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?(x.k==="hands"?"CONTESTED":x.k==="steal"?"STEAL":x.k==="block"?"BLOCKED":"CHARGE"):(x.k==="hands"?"LATE":x.k==="steal"?"HE IS BY YOU":x.k==="block"?"BIT ON IT":"BLOCKING FOUL")):x.pass?(o.made?"GOOD PASS":"PICKED OFF"):nat20?"NATURAL 20 — AND ONE":nat1?"NATURAL 1":o.made?(tap===4?"PERFECT · SPLASH":"GOOD"):"MISS";
+  o.verdict=x.kind==="setup"?(o.made?"WORKED":"STOPPED"):x.kind==="offball"?(o.made?"GOT IT":"NOTHING THERE"):x.kind==="help"?(o.made?"GOT THERE":"TOO LATE"):x.def?(o.made?(x.k==="hands"?"CONTESTED":x.k==="steal"?"STEAL":x.k==="block"?"BLOCKED":"CHARGE"):(x.k==="hands"?"LATE":x.k==="steal"?"HE IS BY YOU":x.k==="block"?"BIT ON IT":"BLOCKING FOUL")):x.pass?(o.made?"GOOD PASS":"PICKED OFF"):o.made?"MADE":"MISSED";
   o.why=!o.made&&!nat1?(x.mods.find(m=>m[1]<0)?"":"the defender got a hand up"):"";
-  ktrack(LV.ctl,"me",o.made);$("lv-clutch").innerHTML=possHtml(w);
-  setTimeout(()=>{if(!LV)return;LV.arg={k:x.k,made:o.made,nat20,nat1,tap,roll:o.roll,total:o.total,opt:x};LV.wait=null;LV.pm=null;LV.cl=null;const el=$("lv-clutch");el.hidden=true;el.classList.remove("pm");LV.playing=true},nat20||nat1?1300:850)}
+  try{if(nat20||o.made)SFX.swish?.();if(nat20)SFX.level?.()}catch(e){}ktrack(LV.ctl,"me",o.made);$("lv-clutch").innerHTML=possHtml(w);
+  setTimeout(()=>{if(!LV)return;LV.arg={k:x.k,made:o.made,nat20,nat1,tap,roll:o.roll,total:o.total,opt:x};LV.wait=null;LV.pm=null;LV.cl=null;const el=$("lv-clutch");el.hidden=true;el.classList.remove("pm");LV.playing=true},nat20||nat1?1800:1150)}
 function possAuto(){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;if(w.chain){const x=w.offball?w.opts.find(z=>z.k==="callfor"):chainAuto(w.opts,.5,w.meta?.moves||0);return possPick(Math.max(0,w.opts.indexOf(x)))}let bi=0,bv=-1;w.opts.forEach((x,i)=>{const v=x.def?(x.k==="hands"?1:x.pct*.9):x.pass?x.pct*1.4:x.pct*x.pts+x.foul*1.3;if(v>bv){bv=v;bi=i}});possPick(bi)}
 function possKey(e){if(!LV?.pm)return false;const o=LV.pm;if(o.step==="pick"){const n=parseInt(e.key);if(n>=1&&n<=(LV.wait?.opts.length||0)){possPick(n-1);return true}if(e.key==="Escape"){possAuto();return true}}
   if(o.step==="tap"&&(e.key===" "||e.key==="Enter")){possTap(false);return true}return false}
 /* settings */
 const PLAYMODES=[["touches","My touches","You decide every possession that comes to you."],["every","Every possession","You run the offense: shoot or kick it out, each trip."],["clutch","Clutch only","Hands-off until the last two minutes of a close game."],["watch","Watch","Sit back and watch the pixel broadcast."],["sim","Sim","Instant result. Best for grinding a week."]];
 function playMode(){return C?.playMode||"touches"}
-function settingsHtml(){const pm=playMode();return`<div class="mp-note">How you play your games. Space uses this mode.</div>
+function settingsHtml(){const pm=playMode();return`<div class="mp-note">How you play your games.</div>
   <div class="st-col">${PLAYMODES.map(([k,n,d])=>`<button class="st-opt ${pm===k?"on":""}" data-act="pmset" data-v="mode:${k}"><b>${n}</b><small>${d}</small></button>`).join("")}</div>
-  <div class="st-row"><span>Off-ball cards (NBA)</span><button class="mp-btn sm ${C.offAll!==true?"on":""}" data-act="pmset" data-v="offall:0">When it matters</button><button class="mp-btn sm ${C.offAll===true?"on":""}" data-act="pmset" data-v="offall:1">Every trip</button><small class="mp-lab">When it matters = late and close, a run, or momentum. College always shows them.</small></div>
-  <div class="st-row"><span>Timing tap</span><button class="mp-btn sm ${C.timing===true?"on":""}" data-act="pmset" data-v="timing:1">On</button><button class="mp-btn sm ${C.timing!==true?"on":""}" data-act="pmset" data-v="timing:0">Off</button><small class="mp-lab">Off = flat +1, never a penalty</small></div>
-  <div class="st-row"><span>Karmic dice</span><button class="mp-btn sm ${C.karmic!==false?"on":""}" data-act="pmset" data-v="karmic:1">On</button><button class="mp-btn sm ${C.karmic===false?"on":""}" data-act="pmset" data-v="karmic:0">Off</button><small class="mp-lab">Softens long streaks, both teams</small></div>
-  <div class="st-row"><span>On the bench</span><button class="mp-btn sm ${C.benchFF!==false?"on":""}" data-act="pmset" data-v="bench:1">Skip ahead</button><button class="mp-btn sm ${C.benchFF===false?"on":""}" data-act="pmset" data-v="bench:0">Watch</button><small class="mp-lab">Fast-forwards until you check back in</small></div>
-  <div class="st-row"><span>Defensive calls</span><button class="mp-btn sm ${(C.defCalls||"on")==="on"?"on":""}" data-act="pmset" data-v="def:on">My matchup</button><button class="mp-btn sm ${C.defCalls==="clutch"?"on":""}" data-act="pmset" data-v="def:clutch">Clutch only</button><button class="mp-btn sm ${C.defCalls==="off"?"on":""}" data-act="pmset" data-v="def:off">Off</button><small class="mp-lab">Steal, block, charge, or hands up when your man has it</small></div>
-  <div class="st-row"><span>Sound</span><button class="mp-btn sm ${C.sfx!==false?"on":""}" data-act="pmset" data-v="sfx:1">On</button><button class="mp-btn sm ${C.sfx===false?"on":""}" data-act="pmset" data-v="sfx:0">Off</button><small class="mp-lab">Dice, net, rim, whistle</small></div>
-  <div class="st-row"><span>Game speed</span>${[2,4,8].map(s=>`<button class="mp-btn sm ${(C.lvSpeed||4)===s?"on":""}" data-act="pmset" data-v="speed:${s}">${s}×</button>`).join("")}</div>`}
-function pmSet(v){const[k,val]=v.split(":");if(k==="mode")C.playMode=val;else if(k==="timing")C.timing=val==="1";else if(k==="offall")C.offAll=val==="1";else if(k==="karmic")C.karmic=val==="1";else if(k==="speed")C.lvSpeed=+val;else if(k==="bench")C.benchFF=val==="1";else if(k==="sfx")C.sfx=val==="1";else if(k==="def")C.defCalls=val;saveC();csWins();if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const b=document.querySelector('.cs-next');if(b)mcRender()},0)}
+  <div class="st-row"><span>Game speed</span>${[2,4,8].map(s=>`<button class="mp-btn sm ${(C.lvSpeed||4)===s?"on":""}" data-act="pmset" data-v="speed:${s}">${s}×</button>`).join("")}</div>
+  <div class="st-row"><span>Sound</span><button class="mp-btn sm ${C.sfx!==false?"on":""}" data-act="pmset" data-v="sfx:1">On</button><button class="mp-btn sm ${C.sfx===false?"on":""}" data-act="pmset" data-v="sfx:0">Off</button></div>
+  <div class="st-row"><span>Show the math</span><button class="mp-btn sm ${C.showMath===true?"on":""}" data-act="pmset" data-v="math:1">On</button><button class="mp-btn sm ${C.showMath!==true?"on":""}" data-act="pmset" data-v="math:0">Off</button><small class="mp-lab">The numbers under every percent</small></div>`}
+function pmSet(v){const[k,val]=v.split(":");if(k==="mode")C.playMode=val;else if(k==="timing")C.timing=val==="1";else if(k==="offall")C.offAll=val==="1";else if(k==="karmic")C.karmic=val==="1";else if(k==="speed")C.lvSpeed=+val;else if(k==="bench")C.benchFF=val==="1";else if(k==="sfx")C.sfx=val==="1";else if(k==="math")C.showMath=val==="1";else if(k==="def")C.defCalls=val;saveC();csWins();if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const b=document.querySelector('.cs-next');if(b)mcRender()},0)}
 
 /* calibration harness (tests only) */
 window.__cal=function(n=40,yr){const cl=C.cl;if(yr){cl.y=yr}const ids=Object.keys(cl.teams),A={fga:0,fgm:0,tpa:0,tpm:0,fta:0,ftm:0,tov:0,stl:0,blk:0,ast:0,reb:0,pts:0,poss:0,g:0,ot:0},P=[];
@@ -3973,7 +4040,7 @@ ST.job3Done=()=>SP_(`~Master. The word is accurate.`);
 ST.job4=()=>SP_(`~Level sixty-five.`,`~Everything you do is a little better now. That is the whole message.`);
 ST.job4Done=()=>SP_(`~Legend. Keep going.`);
 ST.job1Late=()=>SP_(`~Level ten was a while ago. Pick.`);
-ST.clsLine=k=>({scorer:"+0.5 on every shot. Move: Step-back, once a quarter.",playmaker:"+0.5 on passes. Move: the lob when the help comes, once a quarter.",defense:"+0.5 on every defensive roll. Move: Lock him up, once a quarter."})[k];
+ST.clsLine=k=>({scorer:"Every shot +3%. Move: Step-back, once a quarter.",playmaker:"Passes +3%. Move: the lob when the help comes, once a quarter.",defense:"Every defensive roll +3%. Move: Lock him up, once a quarter."})[k];
 ST.num=n=>({30:"thirty",40:"forty",50:"fifty",60:"sixty"})[n]||String(n);
 ST.kindName=k=>({edge:"edge",move:"new move",rule:"rule",link:"link"})[k]||k;
 ST.perkPick=L=>SP_(`~Level ${ST.num(L)}. One more. Pick it.`);
@@ -3982,69 +4049,69 @@ ST.perkDone=p=>SP_(`~${p.n}. It is on your card.`);
 ST.perks={
  euro:{n:"Euro Step",t:"When the help comes, sidestep it into an open lane. Once a quarter. A miss is a charge."},
  contact:{n:"And-One",t:"At the rim, the foul comes half again as often."},
- downhill:{n:"Downhill",t:"+1.5 on drives."},
- posterizer:{n:"Posterizer",t:"+1.5 on dunks, run-outs included."},
- softtouch:{n:"Soft Touch",t:"+1.5 on floaters and layups through the help."},
- pullup:{n:"Pull-up Artist",t:"+1.5 on pull-up and step-back jumpers."},
+ downhill:{n:"Downhill",t:"Drives +8%."},
+ posterizer:{n:"Posterizer",t:"Dunks +8%, run-outs included."},
+ softtouch:{n:"Soft Touch",t:"Floaters and layups through the help +8%."},
+ pullup:{n:"Pull-up Artist",t:"Pull-up and step-back jumpers +8%."},
  creator:{n:"Shot Creator",t:"The first time you get space, it does not cost a move."},
- toughshot:{n:"Tough Shot Maker",t:"+2 on forced jumpers after you pick up your dribble."},
+ toughshot:{n:"Tough Shot Maker",t:"Forced jumpers after you pick up your dribble +10%."},
  fade:{n:"Fadeaway",t:"A fadeaway jumper from the block, from space, or with your dribble picked up. Once a quarter."},
- hesipull:{n:"Hesi Pull-up",t:"+1.5 on hesitations."},
+ hesipull:{n:"Hesi Pull-up",t:"Hesitations +8%."},
  deep:{n:"Deep Range",t:"A deep three from the top that ignores the set defender. Once a quarter."},
- catchshoot:{n:"Catch and Shoot",t:"+1.5 on catch-and-shoot threes."},
+ catchshoot:{n:"Catch and Shoot",t:"Catch-and-shoot threes +8%."},
  step3:{n:"Step-back Three",t:"A step-back three with space, in the lane, or when the help comes. Once a quarter."},
- heater:{n:"Heater",t:"After two makes in a row, +1.5 on threes until you miss."},
- trigger:{n:"Quick Trigger",t:"+1 on pull-up threes."},
- dropstep:{n:"Drop Step",t:"+1.5 on drop steps."},
- hookshot:{n:"Hook Shot",t:"+1.5 on hooks."},
- spincycle:{n:"Spin Cycle",t:"+1.5 on spins."},
+ heater:{n:"Heater",t:"After two makes in a row, threes +8% until you miss."},
+ trigger:{n:"Quick Trigger",t:"Pull-up threes +5%."},
+ dropstep:{n:"Drop Step",t:"Drop steps +8%."},
+ hookshot:{n:"Hook Shot",t:"Hooks +8%."},
+ spincycle:{n:"Spin Cycle",t:"Spins +8%."},
  faceup:{n:"Face Up",t:"A face-up jumper from the block with an open look. Once a quarter."},
- postpass:{n:"Inside Out",t:"Teammates get +1 on shots off your passes."},
- curl:{n:"Curl",t:"+1.5 on calling for the ball."},
- backdoor:{n:"Backdoor",t:"+1.5 on cuts."},
- corner:{n:"Corner Three",t:"+1.5 on catch-and-shoot threes and spot-ups."},
- gravity:{n:"Gravity",t:"When you are on the floor without the ball, teammates get +0.5 on their shots."},
+ postpass:{n:"Inside Out",t:"Teammates +5% on shots off your passes."},
+ curl:{n:"Curl",t:"Calling for the ball +8%."},
+ backdoor:{n:"Backdoor",t:"Cuts +8%."},
+ corner:{n:"Corner Three",t:"Catch-and-shoot threes and spot-ups +8%."},
+ gravity:{n:"Gravity",t:"When you are on the floor without the ball, teammates' shots +3%."},
  nodeny:{n:"Hard to Deny",t:"Calling for the ball never takes the denial penalty."},
- tablesetter:{n:"Table Setter",t:"Teammates get +1 on shots off your passes."},
- vision:{n:"Vision",t:"+1.5 on kick-outs, skip passes and dump-offs."},
+ tablesetter:{n:"Table Setter",t:"Teammates +5% on shots off your passes."},
+ vision:{n:"Vision",t:"Kick-outs +8%, skip passes and dump-offs."},
  tempo:{n:"Tempo",t:"Resetting the offense costs three seconds and no energy."},
  coach:{n:"Coach on the Floor",t:"Your timeouts wipe out their momentum completely."},
  readcov:{n:"Read the Coverage",t:"Before you call the screen, the card tells you whether they will switch, hedge or drop."},
- hesitation:{n:"Hesitation",t:"+1.5 on hesitations."},
- crossover:{n:"Crossover",t:"+1.5 on crossovers."},
+ hesitation:{n:"Hesitation",t:"Hesitations +8%."},
+ crossover:{n:"Crossover",t:"Crossovers +8%."},
  shifty:{n:"Shifty",t:"They need one more look before they have seen it."},
- scorefirst:{n:"Score First",t:"+1 on pull-up threes and pull-up jumpers."},
+ scorefirst:{n:"Score First",t:"Pull-up threes and pull-up jumpers +5%."},
  comboStep:{n:"Step-back",t:"A step-back jumper with space or in the lane. Once a quarter."},
- navigator:{n:"Screen Navigator",t:"+1.5 on calling for screens."},
+ navigator:{n:"Screen Navigator",t:"Calling for screens +8%."},
  switchhunt:{n:"Switch Hunter",t:"Screens get you a switch more often."},
- pocket:{n:"Pocket Pass",t:"+1.5 on dump-offs."},
- lobcity:{n:"Lob City",t:"+1.5 on lobs."},
- dho:{n:"Hand-off",t:"+1.5 on hand-offs."},
+ pocket:{n:"Pocket Pass",t:"Dump-offs +8%."},
+ lobcity:{n:"Lob City",t:"Lobs +8%."},
+ dho:{n:"Hand-off",t:"Hand-offs +8%."},
  push:{n:"Push It",t:"After your team gets a defensive rebound, you sometimes start the next trip on a run-out."},
  outlet:{n:"Outlet",t:"When a teammate gets a steal, half the time you start on the run-out."},
- breakfinish:{n:"Finisher",t:"+1.5 on run-out dunks and layups."},
- hitahead:{n:"Hit Ahead",t:"+1 on kick-outs."},
+ breakfinish:{n:"Finisher",t:"Run-out dunks and layups +8%."},
+ hitahead:{n:"Hit Ahead",t:"Kick-outs +5%."},
  swing:{n:"Swing",t:"Your made threes swing momentum one more."},
- clamps:{n:"Clamps",t:"+1.5 on contests."},
+ clamps:{n:"Clamps",t:"Contests +8%."},
  disciplined:{n:"Disciplined",t:"A missed steal does not leave him open."},
  tireless:{n:"Tireless",t:"Defensive cards cost no energy."},
  shutdown:{n:"Shut Him Down",t:"Once a game, a contest at +5."},
- shadow:{n:"Shadow",t:"Your man shoots at −1 all game, whether you get a card or not."},
- wall:{n:"Wall",t:"+1.5 on blocks."},
+ shadow:{n:"Shadow",t:"Your man's shots −5% all game, whether you get a card or not."},
+ wall:{n:"Wall",t:"Blocks +8%."},
  vertical:{n:"Verticality",t:"A missed block is never a foul."},
  swatstart:{n:"Swat to Start",t:"When your team rebounds your block, you start on the run-out."},
- chargetaker:{n:"Charge Taker",t:"+1.5 on taking charges."},
- anchor:{n:"Anchor",t:"+1.5 on help rotations."},
- quickhands:{n:"Quick Hands",t:"+1.5 on steals."},
- lanes:{n:"Passing Lanes",t:"+1.5 on jumping passing lanes."},
+ chargetaker:{n:"Charge Taker",t:"Taking charges +8%."},
+ anchor:{n:"Anchor",t:"Help rotations +8%."},
+ quickhands:{n:"Quick Hands",t:"Steals +8%."},
+ lanes:{n:"Passing Lanes",t:"Jumping passing lanes +8%."},
  recover:{n:"Recover",t:"A missed steal does not leave him open."},
- picksix:{n:"Pick Six",t:"+1 on run-out dunks and layups."},
+ picksix:{n:"Pick Six",t:"Run-out dunks and layups +5%."},
  leakout:{n:"Leak Out",t:"When a teammate gets a steal, half the time you start on the run-out."},
- crasher:{n:"Crash",t:"+1.5 on crashing the glass."},
+ crasher:{n:"Crash",t:"Crashing the glass +8%."},
  putback:{n:"Putback",t:"When you crash and get the rebound, you go straight back up from under the rim."},
- screener:{n:"Screen Setter",t:"+1.5 on screens."},
- helpside:{n:"Help Side",t:"+1 on help rotations and jumping lanes."},
- talker:{n:"Talker",t:"With you on the floor, their shots are at −0.5."}};
+ screener:{n:"Screen Setter",t:"Screens +8%."},
+ helpside:{n:"Help Side",t:"Help rotations and jumping lanes +5%."},
+ talker:{n:"Talker",t:"With you on the floor, their shots −3%."}};
 
 /* ---------- sfx.js: small synthesized sounds. No files, no licenses. Off switch in Play settings. ---------- */
 let AC=null;const sfxOn=()=>typeof C!=="undefined"&&C&&C.sfx!==false;
@@ -4144,28 +4211,31 @@ function jobMarkUsed(k){const J=jobS(),g=`${C.y}-${LV?.gameId||0}`,q=jobQ(),u=J.
 /* advancement: a card with a choice */
 function jobCheck(){try{const R=rpgS();if(!R||!C)return;const J=jobS(),lv=R.lv,O=J.offered;
   if(!J.cls&&lv>=JOBLV[0]&&!O[10]){O[10]=1;lifeRoll({title:"Level ten",quiet:true,txt:J.late10?ST.job1Late():ST.job1(),mods:[],dc:0,opts:Object.keys(CLASSES).map(k=>({t:CLASSES[k].n,d:CLASSES[k].d+" "+ST.clsLine(k),go:()=>{J.cls=k;saveC();return ST.job1Done(CLASSES[k])}}))});return}
-  if(J.cls&&!J.spec&&lv>=JOBLV[1]&&!O[20]){O[20]=1;const c=CLASSES[J.cls];lifeRoll({title:"Level twenty",quiet:true,txt:ST.job2(c),mods:[],dc:0,opts:Object.keys(c.specs).map(k=>({t:c.specs[k].n,d:c.specs[k].d+` +${c.specs[k].edge.val} on ${c.specs[k].edge.on.map(perkOnName).join(", ")}.`,go:()=>{J.spec=k;saveC();return ST.job2Done(c.specs[k])}}))});return}
+  if(J.cls&&!J.spec&&lv>=JOBLV[1]&&!O[20]){O[20]=1;const c=CLASSES[J.cls];lifeRoll({title:"Level twenty",quiet:true,txt:ST.job2(c),mods:[],dc:0,opts:Object.keys(c.specs).map(k=>({t:c.specs[k].n,d:c.specs[k].d+` ${cap1(c.specs[k].edge.on.map(perkOnName).join(", "))} +${pctOf(c.specs[k].edge.val)}%.`,go:()=>{J.spec=k;saveC();return ST.job2Done(c.specs[k])}}))});return}
   if(J.spec)for(const L of PERKLV){if(lv>=L&&!O[L]){O[L]=1;const pool=Object.keys(jobSpec().pool).filter(k=>!J.perks.includes(k));if(!pool.length)continue;
     lifeRoll({title:`Level ${ST.num(L)}`,quiet:true,txt:ST.perkPick(L),mods:[],dc:0,opts:pool.map(k=>{const p=perkDef(k);return{t:p.n,d:`${p.text} (${ST.kindName(p.kind)})`,go:()=>{J.perks.push(k);saveC();return ST.perkDone(p)}}})});return}}
   if(J.spec&&!J.m3&&lv>=JOBLV[2]&&!O[45]){O[45]=1;lifeRoll({title:"Level forty-five",quiet:true,txt:ST.job3(),mods:[],dc:0,opts:[{t:"Master",d:"Every class, specialization and perk edge is half again as strong.",go:()=>{J.m3=true;saveC();return ST.job3Done()}}]});return}
-  if(J.m3&&!J.m4&&lv>=JOBLV[3]&&!O[65]){O[65]=1;lifeRoll({title:"Level sixty-five",quiet:true,txt:ST.job4(),mods:[],dc:0,opts:[{t:"Legend",d:"+0.5 on every roll. Every move perk gets a second use.",go:()=>{J.m4=true;saveC();return ST.job4Done()}}]});return}
+  if(J.m3&&!J.m4&&lv>=JOBLV[3]&&!O[65]){O[65]=1;lifeRoll({title:"Level sixty-five",quiet:true,txt:ST.job4(),mods:[],dc:0,opts:[{t:"Legend",d:"Every roll +3%. Every move perk gets a second use.",go:()=>{J.m4=true;saveC();return ST.job4Done()}}]});return}
   if(lv>=JOBLV[0]&&!J.cls&&O[10]&&!J.late10){J.late10=1;delete O[10];setTimeout(jobCheck,0)}}catch(e){console.error(e)}}
 const PERK_ON={three:"threes",mid:"jumpers",rim:"layups",dunk:"dunks",post:"post shots",drive:"drives",layhelp:"layups through help",pass:"passes",cross:"crossovers",hesi:"hesitations",pull3:"pull-up threes",pullmid:"pull-up jumpers",
   screen:"screens",handoff:"hand-offs",rodunk:"run-out dunks",rolay:"run-out layups",hands:"contests",steal:"steals",block:"blocks",charge:"charges",rotate:"rotations",lane:"jumping lanes",crash:"crashing the glass",
   callfor:"calling for the ball",cut:"cuts",cs3:"catch-and-shoot threes",seal:"seals",spot:"spot-ups",kick:"kick-outs",skip:"skip passes",dump:"dump-offs",lob:"lobs",floater:"floaters",forced:"forced jumpers",stepback:"step-backs",
   dropstep:"drop steps",hook:"hooks",spin:"spins"};
-const perkOnName=k=>PERK_ON[k]||k;
+const perkOnName=k=>PERK_ON[k]||k;const cap1=t=>t?t[0].toUpperCase()+t.slice(1):t;
 /* sheet: class, specialization, perks, slots */
 function jobPanel(){const c=jobCls();if(!c)return`<div class="mp-note">None yet. Level 10 picks a class: Scorer, Playmaker or Defense.</div>`;const J=jobS(),s=jobSpec(),mul=J.m3?1.5:1,eq=jobEq(),R=rpgS();
   const nxt=!J.spec?20:PERKLV.find(L=>!J.offered[L])||(!J.m3?45:!J.m4?65:null);
   const line=(n,t,on)=>`<div class="jp-row ${on===false?"off":""}"><b>${esc(n)}</b><span>${esc(t)}</span></div>`;
-  return`<div class="jp">${line(c.n,`+${c.edge.val*mul} on ${c.edge.on.map(perkOnName).join(", ")}. Move: ${PMOVE[c.move].lab}, once a quarter.`)}
-    ${s?line(s.n,`+${s.edge.val*mul} on ${s.edge.on.map(perkOnName).join(", ")}.`):""}
+  return`<div class="jp">${line(c.n,`${cap1(c.edge.on.map(perkOnName).join(", "))} +${pctOf(c.edge.val*mul)}%. Move: ${PMOVE[c.move].lab}, once a quarter.`)}
+    ${s?line(s.n,`${cap1(s.edge.on.map(perkOnName).join(", "))} +${pctOf(s.edge.val*mul)}%.`):""}
     ${R?.oPerk&&typeof OPERKS!=="undefined"?line(OPERKS[R.oPerk].n,OPERKS[R.oPerk].d+" (origin)"):""}
     ${J.perks.map(k=>{const p=perkDef(k),on=eq.includes(k);return`<div class="jp-row ${on?"":"off"}"><b>${esc(p.n)}</b><span>${esc(p.text)}</span>${J.perks.length>Math.max(0,perkSlots()-(R?.oPerk?1:0))?`<button class="mp-btn sm" data-act="jobeq" data-v="${k}">${on?"Unequip":"Equip"}</button>`:""}</div>`}).join("")}
-    <div class="mp-note">Perk slots: ${eq.length+(R?.oPerk?1:0)} of ${perkSlots()} (${C?.stage==="college"?"three in college":"five in the NBA"}).${J.m4?" Legend: +0.5 on everything, every move twice.":J.m3?" Master: edges x1.5.":""} ${nxt?`Next: Lv ${nxt}.`:"Nothing left to unlock."}</div></div>`}
+    <div class="mp-note">Perk slots: ${eq.length+(R?.oPerk?1:0)} of ${perkSlots()} (${C?.stage==="college"?"three in college":"five in the NBA"}).${J.m4?" Legend: every roll +3%, every move twice.":J.m3?" Master: every edge half again as big.":""} ${nxt?`Next: Lv ${nxt}.`:"Nothing left to unlock."}</div></div>`}
 function jobEqToggle(k){const J=jobS(),off=(J.off??=[]);if(jobEq().includes(k)){off.push(k)}else{J.off=off.filter(x=>x!==k);const cap=Math.max(0,perkSlots()-(C?.rpg?.oPerk?1:0)),eq=J.perks.filter(x=>!J.off.includes(x));if(eq.length>cap){const drop=eq.find(x=>x!==k);if(drop)J.off.push(drop)}}saveC()}
 window.__jobs={jobS,jobCheck,CLASSES,jobMods,jobRule,jobLinks,jobMoves,perkDef,jobEq};
+
+/* raid round 4+: the opposing star carries two perks (deterministic per player) */
+function starPerks(p){const ks=Object.keys(ST.perks||{});if(!ks.length)return["Clamps","Heater"];const h=hsh("sp"+p.pid);const a=ST.perks[ks[h%ks.length]].n;let b=ST.perks[ks[(h>>>7)%ks.length]].n;if(b===a)b=ST.perks[ks[(h%ks.length+1)%ks.length]].n;return[a,b]}
 
 /* ---------- chain.js: the possession chain (PLAN.md §2). Pure option builders and the auto policy.
    The driver that walks the chain lives in liveGen (franchise.html), because it needs the game's closures.
@@ -4178,7 +4248,7 @@ const chHalf=v=>Math.round(v*2)/2;
 const chSk=v=>chHalf(((v??65)-PV.ref)/PV.skl);
 const chSum=m=>m.reduce((a,x)=>a+x[1],0);
 function chFin(o){if(o.rk3)(o.mods??=[]).push(["Rank 3",1]);o.mods=(o.mods||[]).filter(m=>m[1]!==0);o.mod=chSum(o.mods);o.pct=o.noroll?1:pMake(o.mod+1,o.dc);o.pts=o.pts??0;return o}
-function chSeenPen(E,k){const n=(E.seen&&E.seen.k===k?E.seen.n:0)+1-(typeof jobRule==="function"&&jobRule("seenHalved3")?1:0);return n>=4?-2:n>=3?-1:0}
+function chSeenPen(E,k){const n=(E.seen&&E.seen.k===k?E.seen.n:0)+1-(typeof jobRule==="function"&&jobRule("seenHalved3")?1:0);let p=n>=4?-2:n>=3?-1:0;if(E.scout===k)p=Math.min(p,-1);return p}
 const CH_DEAL=["cross","hesi","jab","pump","screen","handoff"];
 /* which setup gets dealt at the top this possession, weighted by the player's game */
 function chDeal(s){const w={cross:s.HND,hesi:(s.HND+s.SIQ)/2,jab:s.SIQ*.8,pump:(s.SIQ+s.THR)/2*.8,screen:62,handoff:s.PAS*.8};
@@ -4332,7 +4402,7 @@ function mcCreate(){
 }
 /* ---- the Character window (in college and in the league) ---- */
 function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetTab||"stat");const t=C?.sheetTab||tab||"stat",age=rpgAge(),s=rpgSkills(R,age);
-  const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],["inv","Locker"],["attn","Deals"]];
+  const tabs=[["stat","Stat"],["skills","Skills"],["inv","Locker"],["attn","Deals"]];
   let body="";
   if(t==="stat")body=`<div class="mp-two"><div class="mp-col">${mpWin(esc(rpgName()),`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>${rpgSummary(R,age)}<div class="mp-kv"><span>Level</span><b>${R.lv}</b><span>EXP</span><b>${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()}</b><span>Origin</span><b>${ORIGINS.find(o=>o.k===R.origin)?.n||"Custom"}</b><span>Stars</span><b>${"★".repeat(R.stars||3)}</b><span>NIL money</span><b>$${(typeof gearS==="function"&&gearS()?.nil||0).toLocaleString()}</b></div>`)}</div>
     <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${mpWin(typeof jobName==="function"&&jobName()?"Class · "+esc(jobName()):"Class",typeof jobPanel==="function"?jobPanel():"")}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
@@ -4349,7 +4419,7 @@ function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetT
 function rpgBar(){const R=rpgS();if(!R)return"";const pct=Math.min(100,R.exp/needXP(R.lv)*100),g=rpgGoals(R)[0],free=rpgFree(R);
   return`<div class="rpgbar" id="rpgbar"><button class="rpg-lv" data-act="rsheet" data-v="stat" title="Character (C)">Lv <b>${R.lv}</b></button><button class="rpg-xp" data-act="rsheet" data-v="stat" aria-label="EXP ${Math.round(pct)}%"><i style="width:${pct}%"></i><span>EXP ${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()} (${pct.toFixed(1)}%)</span></button>
   ${free>0?`<button class="rpg-sp hot" data-act="rsheet" data-v="skills" title="Skills (K)">+${free} SP</button>`:`<button class="rpg-sp" data-act="rsheet" data-v="skills" title="Skills (K)">Skills</button>`}
-  ${typeof pracWeek==="function"&&pracWeek()?`<button class="rpg-sp${pracLeft()?" hot":""}" data-act="drill" title="Practice: two drills per game week">Practice (${pracLeft()})</button>`:""}${g?`<button class="rpg-goal" data-act="rsheet" data-v="goals" title="Goals (J)">◎ ${esc(g.t)} <small>${g.v.toLocaleString()}/${g.n.toLocaleString()}</small></button>`:""}</div>`}
+  ${typeof pracWeek==="function"&&pracWeek()?`<button class="rpg-sp${typeof freeReLeft==="function"&&freeReLeft()?" hot":""}" data-act="drill" title="One free substat reroll every game week">Free reroll (${typeof freeReLeft==="function"?freeReLeft():0})</button>`:""}</div>`}
 function rpgMount(){const R=rpgS();const old=$("rpgbar");if(!R){old?.remove();return}const html=rpgBar();if(old){old.outerHTML=html;return}
   const anchor=document.querySelector("#mc:not([hidden]) .cl-top .hdr")||(!$("app")?.hidden&&$("hdr"));if(anchor)anchor.insertAdjacentHTML("afterend",html)}
 function rpgFlush(){const R=rpgS();if(!R)return;(R.toast||[]).splice(0).forEach((m,i)=>setTimeout(()=>toast(m),i*1600));
@@ -4360,14 +4430,16 @@ function rpgKeys(e){if(e.metaKey||e.ctrlKey||e.altKey)return;const tag=e.target?
   const k=e.key.toLowerCase();if(k==="c")openSheet("stat");else if(k==="k")openSheet("skills");else if(k==="j")openSheet("goals");else return;e.preventDefault()}
 
 /* ---------- MyCareer game shell: pixel gym scene + MapleStory HUD + windows ---------- */
-const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"]};
-function csView(k){const cl=C.cl;switch(k){case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
+const CSWIN={season:["Season","S"],more:["More","W"],roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"]};
+const SEASONTABS=[["sched","Schedule"],["stand","Standings"],["poll","Top 25"],["brk","Bracket"],["roster","Team"],["news","News"],["reel","Clips"],["case","Trophies"]];
+function csView(k){const cl=C.cl;switch(k){case"season":{const st=C.seasonTab||(cl.ncaa?"brk":"sched");return`<nav class="mp-tabs ss-tabs">${SEASONTABS.filter(([x])=>x!=="brk"||cl.ncaa).map(([x,l])=>`<button data-act="sstab" data-v="${x}" aria-current="${x===st}">${l}</button>`).join("")}</nav>${csView(st)}`}
+  case"more":return`<div class="stack" style="gap:8px">${cl.phase==="reg"?`<button class="btn" data-act="clsim" data-v="week">Sim a week</button>`:""}${cl.phase!=="done"?`<button class="btn" data-act="clsim" data-v="end">Sim through the tournament</button>`:""}<button class="btn ghost" data-act="cswin" data-v="play">Play settings</button><button class="btn ghost" data-act="cswin" data-v="style">Look and style</button><button class="btn ghost" data-act="cswin" data-v="keys">Keybinds</button><button class="btn ghost" data-act="menu">Main menu</button></div>`;case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
   case"log":{const s=C.season,last=s.games.slice().reverse();return`<section class="panel"><h3>${sl(cl.y)} game log</h3>${last.length?`<div class="tw"><table><thead><tr><th class="l">Result</th><th class="l">Opponent</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th></tr></thead><tbody>${last.map(g=>`<tr class="${g.w?"r-w":"r-l"}"><td class="l"><b class="${g.w?"wl-w":"wl-l"}">${g.w?"W":"L"}</b> ${g.us}-${g.them}</td><td class="l name">${g.home?"vs":"at"} ${esc(g.label||tLbl(cl,g.opp))}</td><td>${g.ln.min}</td><td class="hi">${g.ln.pts}</td><td>${g.ln.reb}</td><td>${g.ln.ast}</td><td>${g.ln.stl}</td><td>${g.ln.blk}</td><td>${g.ln.fgm??0}-${g.ln.fga??0}</td></tr>`).join("")}</tbody></table></div>`:"<p class='mp-note'>No games yet. Press Space to play.</p>"}</section>`}
   case"keys":return keybindsHtml();case"style":return styleHtml();case"case":return caseHtml();case"play":return settingsHtml();case"attn":return attnHtml();
   case"inv":return lockerHtml();
   default:return""}}
 function csWinHtml(k){const R=rpgS();if(["stat","skills","quests","today"].includes(k)){C.sheetTab=k==="quests"?"goals":k;return null}
-  return`<div class="mp-win cs-w" data-win="${k}" style="left:${(C.winPos?.[k]?.x)??(60+Object.keys(C.wins||{}).indexOf(k)*28)}px;top:${(C.winPos?.[k]?.y)??(48+Object.keys(C.wins||{}).indexOf(k)*28)}px;width:${k==="rec"||k==="prog"||k==="sched"?"640px":k==="keys"||k==="style"||k==="play"?"420px":k==="inv"||k==="attn"?"560px":"520px"}"><div class="mp-title" data-drag="${k}"><b>${CSWIN[k][0]}</b><button class="mp-x" data-act="cswin" data-v="${k}" data-close="1" aria-label="Close">×</button></div><div class="mp-body">${csView(k)}</div></div>`}
+  return`<div class="mp-win cs-w" data-win="${k}" style="left:${(C.winPos?.[k]?.x)??(60+Object.keys(C.wins||{}).indexOf(k)*28)}px;top:${(C.winPos?.[k]?.y)??(48+Object.keys(C.wins||{}).indexOf(k)*28)}px;width:${k==="rec"||k==="prog"||k==="sched"||k==="season"?"680px":k==="keys"||k==="style"||k==="play"?"420px":k==="inv"||k==="attn"?"560px":"520px"}"><div class="mp-title" data-drag="${k}"><b>${CSWIN[k][0]}</b><button class="mp-x" data-act="cswin" data-v="${k}" data-close="1" aria-label="Close">×</button></div><div class="mp-body">${csView(k)}</div></div>`}
 function csToggle(k){if(["stat","skills","quests","inv","attn"].includes(k)){openSheet(k==="quests"?"goals":k);return}C.wins??={};
   if(C.wins[k]){delete C.wins[k]}else{if(innerWidth<=760)C.wins={};C.wins[k]=1}csWins()}
 function csWins(){const host=$("cs-wins");if(!host)return;host.innerHTML=Object.keys(C.wins||{}).map(csWinHtml).filter(Boolean).join("");paintAvatars(host);saveC()}
@@ -4380,31 +4452,26 @@ function csLoop(){hubStart()}
 /* ---- the shell ---- */
 function mcCollege(){
   const cl=C.cl;if(!cl||!cl.players.me){clJoin()}syncMe();const t=cl.teams[C.school],rk=apRk(cl,C.school),R=rpgS(),nx=myNext(cl),s=C.season;
-  const pct=R?Math.min(100,R.exp/needXP(R.lv)*100):0,free=R?rpgFree(R):0,gs=R?rpgGoals(R).slice(0,3):[];
+  const pct=R?Math.min(100,R.exp/needXP(R.lv)*100):0,free=R?rpgFree(R):0;
   const nxt=nx?`${nx.kind==="reg"?(nx.home?"vs ":"at "):`${esc(nx.lab)}: `}${tLbl(cl,nx.opp)}`:cl.phase==="done"?"Season complete":"Waiting on the next round";
-  const cc=C.cere?.[0],ccl={mm:"Midnight Madness",senior:"Senior Night",sel:"Selection Sunday",conf:"Conference champs",nc:"National champs"}[cc?.type];
-  const busy=C.clBusy;let act="";
-  if(cl.phase==="done")act=`<button class="mp-btn main" data-act="clwrap">Season wrap-up →</button>`;
-  else if(nx){const pm=playMode(),pmn=PLAYMODES.find(x=>x[0]===pm)?.[1]||"";act=`<button class="mp-btn" data-act="cswin" data-v="play" title="Play settings (W)">${esc(pmn)}</button><button class="mp-btn main" data-act="${pm==="sim"?"clsim":"clwatch"}" data-v="1" data-hold="clmenu">${cl.phase==="reg"?"Play next game":"Play next round"}<small>${esc(nxt)} · Space</small></button><button class="mp-btn" data-act="clmenu">Sim ⋯</button>`}
-  else act=`<button class="mp-btn main" data-act="clsim" data-v="${cl.phase==="reg"?"1":"end"}">${cl.phase==="reg"?"Next day":cl.phase==="ct"?"Sim to Selection Sunday":"Sim the tournament"}</button>`;
-  const keys=[["stat","Char","C"],["skills","Skills","K"],["inv","Locker","I"],["quests","Goals","J"],["roster","Team","T"],["sched","Sched","S"],["log","Log","O"],["poll","Top 25","R"],["stand","Stand","D"],["prog","Program","P"],["news","News","N"],["reel","Clips","H"],["case","Trophy","G"]];
-  if(cl.ncaa)keys.push(["brk","Bracket","B"]);keys.push(["attn","Deals","M"],["play","Play","W"],["style","Style","V"],["keys","Keys","Y"]);
+  const cc=C.cere?.[0],ccl={mm:"Midnight Madness",sel:"Selection Sunday",nc:"National champs"}[cc?.type];
+  const busy=C.clBusy,pm=playMode();let play;
+  if(cl.phase==="done")play=`<button class="cs-play" data-act="clwrap">Season wrap-up →<small>Your draft grade is ready</small></button>`;
+  else if(nx)play=`<button class="cs-play" data-act="${pm==="sim"?"clsim":"clwatch"}" data-v="1" data-hold="clmenu">▶ ${cl.phase==="reg"?"Play next game":"Play next round"}<small>${nxt} · ${esc(pityLine())}</small></button>`;
+  else play=`<button class="cs-play" data-act="clsim" data-v="${cl.phase==="reg"?"1":"end"}">${cl.phase==="reg"?"Next day":"Sim the tournament"}<small>${esc(pityLine())}</small></button>`;
   setTimeout(()=>{csLoop();csWins();csDragInit();archFlush()},0);
   return`<div class="cs ${busy?"busy":""}">
     <div class="cs-scene"><canvas id="cs-cv"></canvas><div id="cs-tags" class="cs-wins"></div>
-      <div class="cs-plate"><b>${rk?`#${rk} `:""}${esc(C.school)}</b><small>${CLASSN[C.cls-1]} · ${sl(C.y)} · ${esc(t.conf)} · ${clWhen(cl).split("·")[1]||""}</small><div class="rec">${t.w}-${t.l} <small style="font:600 12px var(--f-body)">${s.tot.gp?mcLine(s.tot):"No games yet"}</small></div>
-        <div class="actions"><button class="mp-btn sm" data-act="menu">Menu</button><button class="mp-btn sm" data-act="editlook">Edit look</button>${cc?`<button class="mp-btn sm go" data-act="ccere">🎉 ${ccl}</button>`:""}</div></div>
-      <div class="cs-quest"><div class="h"><span>Quest helper</span><span>${gs.length}/3</span></div>${gs.map(g=>`<button class="q" data-act="cswin" data-v="quests"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></button>`).join("")}</div>
-      <div id="cs-wins" class="cs-wins"></div>
-      <div class="cs-next">${act}</div>${hubPad()}</div>
+      <div class="cs-plate"><b>${rk?`#${rk} `:""}${esc(C.school)}</b><small>${sl(C.y)} · ${esc(t.conf)} · ${cl.phase==="ncaa"?NCR[cl.ncaa.round]:cl.phase==="done"?"Season over":`Game ${s.games.filter(g=>!g.label).length} of 12`}</small><div class="rec">${t.w}-${t.l} <small style="font:600 12px var(--f-body)">${s.tot.gp?mcLine(s.tot):"No games yet"}</small></div>
+        ${cc?`<div class="actions"><button class="mp-btn sm go" data-act="ccere">🎉 ${ccl||"Moment"}</button></div>`:""}</div>
+      <div id="cs-wins" class="cs-wins"></div>${hubPad()}</div>
     <div class="cs-hud"><div class="cs-lv"><b><small>LV.</small>${R?.lv||1}</b><span>${esc(C.name)} · ${esc((typeof jobName==="function"&&jobName())||archName(rpgSkills(R||rpgNew(),C.age||18),C.ht))}</span></div>
-      <button class="cs-xp" data-act="cswin" data-v="stat" aria-label="EXP"><i style="width:${pct}%"></i><span>EXP ${R?R.exp.toLocaleString():0} [${pct.toFixed(2)}%]</span></button>
-      <button class="cs-ev${pracLeft()?" hot":""}" data-act="drill" title="Practice: two drills per game week (E)"><b>${pracLeft()}</b>Practice</button><button class="cs-ev" data-act="cswin" data-v="attn" title="Attention"><b>${(attnInit(),C.attn)}</b>ATTN · ${C.spon.active.length}/${slots()} deals${C.spon.offers.length?` · <span style="color:#ffd166">${C.spon.offers.length} offer${C.spon.offers.length>1?"s":""}</span>`:""}</button>
-      <div class="cs-keys">${keys.map(([k,l,key])=>`<button class="cs-k ${k==="skills"&&free>0?"hot":""}" data-act="cswin" data-v="${k}" title="${CSWIN[k][0]} (${key})"><i>${key}</i>${k==="skills"&&free>0?`+${free}`:l}</button>`).join("")}</div></div></div>`;
+      <button class="cs-xp" data-act="cswin" data-v="stat" aria-label="EXP"><i style="width:${pct}%"></i><span>EXP ${R?R.exp.toLocaleString():0} [${pct.toFixed(1)}%]</span></button>
+      <div class="cs-bar">${play}<button class="cs-b" data-act="cswin" data-v="inv">Locker</button><button class="cs-b ${free>0?"hot":""}" data-act="cswin" data-v="stat">Character${free>0?`<em>+${free}</em>`:""}</button><button class="cs-b" data-act="cswin" data-v="season">Season</button><button class="cs-b more" data-act="cswin" data-v="more" aria-label="More">⋯</button></div></div></div>`;
 }
 function csKeys(e){if(!C||C.stage!=="college"||$("mc").hidden||!$("live").hidden)return false;if(hubKeyDown(e))return true;if(e.metaKey||e.ctrlKey||e.altKey)return false;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return false;
-  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn"};if(e.key.toLowerCase()==="e"){if(!$("modal").hidden)closeModal();else openDrill();e.preventDefault();return true}const k=map[e.key.toLowerCase()];if(!k)return false;
-  if(!$("modal").hidden){closeModal();if(["stat","skills","quests","inv","attn"].includes(k))return true}csToggle(k);e.preventDefault();return true}
+  const map={c:"stat",k:"skills",i:"inv",s:"season",m:"attn",w:"more"};if(e.key.toLowerCase()==="e"){if(!$("modal").hidden)closeModal();else openDrill();e.preventDefault();return true}const k=map[e.key.toLowerCase()];if(!k)return false;
+  if(!$("modal").hidden){closeModal();if(["stat","skills","inv","attn"].includes(k))return true}csToggle(k);e.preventDefault();return true}
 
 /* ---------- HUB: walkable side-scroller maps (MapleStory-style) ---------- */
 const ASSET="assets/";
@@ -4557,7 +4624,7 @@ function hubKeyDown(e){if(!hubActive())return false;const tag=e.target?.tagName;
   if(kbIs(e,"left")){HUB.keys.left=1;e.preventDefault();return true}if(kbIs(e,"right")){HUB.keys.right=1;e.preventDefault();return true}if(kbIs(e,"run")){HUB.keys.run=1;return true}
   if(kbIs(e,"jump")){if(HUB.py===0){HUB.vy=300;HUB.py=.01}e.preventDefault();return true}
   if(kbIs(e,"interact")){if(!$("modal").hidden)return false;hubInteract();e.preventDefault();return true}
-  if(kbIs(e,"play")&&$("modal").hidden){const b=document.querySelector('.cs-next .mp-btn.main');if(b){b.click();e.preventDefault();return true}}
+  if(kbIs(e,"play")&&$("modal").hidden){const b=document.querySelector('.cs-play');if(b){b.click();e.preventDefault();return true}}
   return false}
 function hubKeyUp(e){if(kbIs(e,"left"))HUB.keys.left=0;if(kbIs(e,"right"))HUB.keys.right=0;if(kbIs(e,"run"))HUB.keys.run=0}
 document.addEventListener("keyup",hubKeyUp);window.addEventListener("blur",()=>{HUB.keys={}});
@@ -4689,7 +4756,7 @@ function* liveGen(SD,opt,ctl){
   const R2=SD.map(s=>s.ps.map((p,i)=>{const r={p,tgt:s.m[i],min:0,pf:0,st:i<5,stint:0,hot:[],b:{min:0,pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0,tpm:0,tpa:0,ftm:0,fta:0}};r.en=enMax(r);return r}));
   const on=[R2[0].slice(0,5),R2[1].slice(0,5)],sc=[0,0],ev=[];let tfoul=[0,0];
   const avgDur=tot/(2*opt.poss);let nposs=0;let q=1,t=per[0],o=R()<.5?0:1,elapsed=0;
-  PV.ref=opt.ref||65;PV.dcAdj=opt.pro?-.1:-.2;PV.to=opt.pro?.125:.16;PV.blk=opt.pro?.33:.5;PV.ftB=opt.pro?.775:.72;PV.foul.rim=opt.pro?.22:.26;const US=ctl?ctl.side:-1;if(ctl){ctl.st={R2,on:()=>on,ev,el:()=>elapsed,sc};if(ctl.karmic==null)ctl.karmic=typeof C!=="undefined"&&C?C.karmic!==false:true}
+  PV.ref=opt.ref||65;PV.dcAdj=opt.pro?-.1:-.2;PV.to=opt.pro?.125:.16;PV.blk=opt.pro?.33:.5;PV.ftB=opt.pro?.775:.72;PV.foul.rim=opt.pro?.22:.26;const US=ctl?ctl.side:-1;const RAID=opt.raid||0;let STAR=null,starPerfQ=0;if(RAID>=4&&US>=0){const op=[...R2[1-US]].sort((a,b)=>(b.p.ovr||0)-(a.p.ovr||0))[0];if(op)STAR={r:op,perks:typeof starPerks==="function"?starPerks(op.p):["Clamps","Heater"]}}if(ctl){ctl.st={R2,on:()=>on,ev,el:()=>elapsed,sc};if(ctl.karmic==null)ctl.karmic=typeof C!=="undefined"&&C?C.karmic!==false:true}
   const best1=arr=>arr.reduce((b,r)=>r.p.ovr>b.p.ovr?r:b,arr[0]);
   const push=opt.quiet?()=>{}:(type,txt,x={})=>ev.push({q,t:Math.max(0,Math.round(t)),o,type,txt,sc:[...sc],on:[on[0].map(r=>r.p.pid),on[1].map(r=>r.p.pid)],...x});
   const ftp=p=>clamp(PV.ftB+(prof(p).FT-PV.ref)*PV.ftS,.4,.95);
@@ -4719,13 +4786,13 @@ function* liveGen(SD,opt,ctl){
     const shooters=mates.length&&mates.reduce((a,m)=>a+m.s.THR,0)/mates.length>=66,PD=D.map(x=>prof(x.p));
     return{P,s,d,h:prof(helpR.p),df,helpR,meR,mates,big,shooters,no3x,mom:chMom(),seen:ctl?ctl.seen:null,perks:chPerks(),dh:hgt(meR.p)-hgt(df.p),dhH:hgt(meR.p)-hgt(helpR.p),
       dSTL:PD.reduce((a,x)=>a+x.STL,0)/PD.length,dPERavg:PD.reduce((a,x)=>a+x.PER,0)/PD.length,mm:big?prof((D[O.indexOf(big.r)]||df).p):d,
-      cap:CLK<=24?4:5,ctx:{home:o===0&&HOME>0,clutch,boss:!!opt.boss,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,hot2:meR.hot.length>=2&&meR.hot.slice(-2).every(x=>x),fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
+      cap:CLK<=24?4:5,scout:RAID>=3&&typeof C!=="undefined"&&C&&C.moveUse?Object.entries(C.moveUse).sort((a,b)=>b[1]-a[1])[0]?.[0]:null,ctx:{raid:RAID,starOn:STAR&&df===STAR.r?`Their star (${STAR.perks.join(", ")})`:null,home:o===0&&HOME>0,clutch,boss:!!opt.boss,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,hot2:meR.hot.length>=2&&meR.hot.slice(-2).every(x=>x),fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
   const chCard=(E,P,lead,extra)=>({opts:null,chain:true,sit:P.sit,sitName:CH_SIT[P.sit]||"",chips:P.log.slice(-6),title:lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`,
-    sub:`${chClk()} · shot clock ${Math.max(0,Math.round(P.clk))}${P.flags.hurry?" · Hurry":""}${P.late&&lead===-3&&t<=30?" · Down three: a two does not tie":""}`,meta:{en:Math.round(E.meR.en),em:enMax(E.meR),mom:ctl?ctl.mom||0:0,moves:P.n},dname:E.df.p.name,dnote:`PER ${E.d.PER} · INT ${E.d.INT} · STL ${E.d.STL}`,
-    timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(E.s.THR,E.s.MID,E.s.LAY),...(extra||{})});
+    sub:`${chClk()} · shot clock ${Math.max(0,Math.round(P.clk))}${P.flags.hurry?" · Hurry":""}${P.late&&lead===-3&&t<=30?" · Down three: a two does not tie":""}`,meta:{en:Math.round(E.meR.en),em:enMax(E.meR),mom:ctl?ctl.mom||0:0,moves:P.n,cap:E.cap||5},dname:E.df.p.name,dnote:`PER ${E.d.PER} · INT ${E.d.INT} · STL ${E.d.STL}`,
+    timing:false,skl:Math.max(E.s.THR,E.s.MID,E.s.LAY),...(extra||{})});
   const chNote=(P,meR)=>{const l=P.log.filter(x=>!x.info).map(x=>x.t);if(l.length>1)push("chain",l.join(" → ")+".",{sh:meR.p.pid,me:1})};
   const chainRun=function*(meR,inter,start,clutch,lead){if(ctl)ctl.touches=(ctl.touches||0)+1;
-    const P={sit:start==="putback"?"lane":start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"||start==="putback"?4:0),n:0,flags:start==="putback"?{under:true}:{},log:[],deal:chDeal(prof(meR.p)),lead,late:q>=np&&t<=120};if(P.late&&lead<0){P.clk=Math.min(P.clk,12);P.flags.hurry=1}
+    const P={sit:start==="putback"?"lane":start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"||start==="putback"?4:0),n:0,flags:start==="putback"?{under:true}:{},log:[],deal:chDeal(prof(meR.p)),lead,late:(q>=np||RAID>=5)&&t<=120};if(P.late&&lead<0){P.clk=Math.min(P.clk,12);P.flags.hurry=1}
     for(let guard=0;guard<14;guard++){
       const E=chEnv(meR,P,clutch);let opts=chainOpts(E);if(!opts.length){P.n=9;opts=chainOpts(E)}
       let ans=null;
@@ -4734,7 +4801,7 @@ function* liveGen(SD,opt,ctl){
       const x=ans.opt,df=E.df,ok=ans.made,nat1=ans.nat1;
       if(x.job&&typeof jobMarkUsed==="function")jobMarkUsed(x.job);
       P.clk-=x.sec||2;if(x.en)enSpend(meR,x.en);
-      if(x.kind==="setup"){P.n++;if(ctl&&x.k!=="reset")ctl.seen=ctl.seen&&ctl.seen.k===x.k?{k:x.k,n:ctl.seen.n+1}:{k:x.k,n:1};
+      if(x.kind==="setup"){P.n++;if(typeof C!=="undefined"&&C&&x.k!=="reset"&&x.k!=="milk")(C.moveUse??={})[x.k]=(C.moveUse[x.k]||0)+1;if(ctl&&x.k!=="reset")ctl.seen=ctl.seen&&ctl.seen.k===x.k?{k:x.k,n:ctl.seen.n+1}:{k:x.k,n:1};
         P.log.push({t:x.lab,ok});
         const TO=why=>{meR.b.tov=(meR.b.tov||0)+1;if(why==="stripped")df.b.stl++;chNote(P,meR);
           push(why==="stripped"?"stl":"to",why==="stripped"?`${df.p.name} strips ${lname(meR.p)}. Steal.`:why==="charge"?`Charge on ${meR.p.name}. ${E.helpR.p.name} was set.`:`Travel on ${meR.p.name}.`,{h:meR.p.pid,d:df.p.pid,me:1});o=1-o;return false};
@@ -4771,7 +4838,7 @@ function* liveGen(SD,opt,ctl){
     return false};
   const play=function*(){
     const O=on[o],D=on[1-o];nposs++;const uo=o===US,ud=US>=0&&!uo,co=uo?ctl.off:"bal",cd=ud?ctl.def:"man";
-    const lead=sc[o]-sc[1-o],late=q>=np&&t<360,clutch=q>=np&&t<=120&&Math.abs(lead)<=6;if(ctl)ctl.clutchNow=q>=np&&t<=120;
+    const lead=sc[o]-sc[1-o],late=q>=np&&t<360,clutch=(q>=np||RAID>=5)&&t<=120&&Math.abs(lead)<=6;if(ctl)ctl.clutchNow=(q>=np||RAID>=5)&&t<=120;
     const paceF=late&&lead<-6?.78:late&&lead>8?1.18:1;
     const dur=clamp(avgDur*rnd(.55,1.5)*paceF,4,CLK);t-=dur;elapsed+=dur;sinceSub+=dur;
     [...O,...D].forEach(r=>{r.min+=dur/60;r.b.min+=dur/60;r.stint+=dur/60;const s=prof(r.p),gd=ctl&&ctl.hero!=null&&String(r.p.pid)===String(ctl.hero)&&typeof gearStat==="function"?gearStat("drain"):0;r.en=Math.max(0,r.en-dur/60*(1.7-(s.STA-PV.ref)/80)*(1-gd))});R2[0].concat(R2[1]).forEach(r=>{if(!O.includes(r)&&!D.includes(r)){r.stint=Math.max(0,r.stint-dur/40);r.en=Math.min(enMax(r),r.en+dur/60*3.6)}});
@@ -4817,7 +4884,7 @@ function* liveGen(SD,opt,ctl){
       if(ud&&ctl&&ctl.hero!=null&&String(dp.pid)===String(ctl.hero)&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&(defOn==="on"||(defOn==="clutch"&&clutch))){
         const opts=defOptions(s,d,ctx),clk=`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
         if(q>=np&&t<=120&&lead>0)opts.push({k:"foul",lab:"Foul to stop the clock",mods:[],mod:0,dc:0,pct:1,pts:0,def:true,noroll:true,note:"He shoots two. The clock stops."});
-        const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Down ${lead}`:`Up ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}`,timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(d.PER,d.STL,d.BLK)}};
+        const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Down ${lead}`:`Up ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}${STAR&&sh===STAR.r?` · Their star: ${STAR.perks.join(", ")}`:""}`,timing:false,skl:Math.max(d.PER,d.STL,d.BLK)}};
         if(da&&da.k==="foul"){df.pf++;tfoul[1-o]++;push("foul",`${dp.name} fouls ${p.name} on purpose. The clock stops.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
         if(da&&da.k!=="hands"&&!(typeof jobRule==="function"&&jobRule("zeroDefEnergy")))enSpend(df,2);if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});ctl.runout=true;o=1-o;return}if(!(typeof jobRule==="function"&&jobRule("noBite"))){ctx.open=true;ctx.contest=false;df.stint+=.6}}
         else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(!(typeof jobRule==="function"&&jobRule("noBlockFoul"))&&(da.nat1||R()<.35))forceFoul=true;else{ctx.open=true;ctx.contest=false}}
@@ -4833,7 +4900,7 @@ function* liveGen(SD,opt,ctl){
       const w=shotWeights(s,d,ctx,{tf,no3x,co,cd});type=wpick(Object.keys(w),k=>w[k]);if(forceBlk&&type==="three")type=s.LAY>=s.MID?"rim":"mid";
       const mmv=ctl&&US>=0?(o===US?chMom():-chMom()):0,scr=ctl&&o===US&&ctl.screenB?1:0,tax=ctl&&o!==US&&ctl.dunkTax?1:0;if(scr)ctl.screenB=0;if(tax)ctl.dunkTax=false;
       const hero=ctl&&ctl.hero!=null?String(ctl.hero):null,gv=hero&&o===US&&meR&&sh!==meR&&(typeof jobRule==="function"&&jobRule("gravity"))?.5:0,tdp=hero&&ud&&D.some(r=>String(r.p.pid)===hero)&&(typeof jobRule==="function"&&jobRule("teamDefPlus"))?.5:0,shd=hero&&ud&&String(dp.pid)===hero&&(typeof jobRule==="function"&&jobRule("shadow"))?1:0;
-      const mod=modSum(shotMods(type,s,ctx))+1+hb*8+mmv+scr+gv-tdp-shd,dc=shotDC(type,d,ctx)+tax,roll=kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
+      const mod=modSum(shotMods(type,s,ctx))+1+hb*8+mmv+scr+gv-tdp-shd+(STAR&&sh===STAR.r?1:0),dc=shotDC(type,d,ctx)+tax,roll=(RAID>=5&&STAR&&sh===STAR.r&&starPerfQ!==q&&(clutch||R()<.3))?(starPerfQ=q,push("chain",`${p.name}: PERFECT. The title holder takes over.`,{sh:p.pid}),20):kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
       fouled=forceBlk?false:forceFoul?true:roll===20?true:R()<PV.foul[type]*(1+(s.DRW-PV.ref)/60)*(made?.5:1.3)*(co==="inside"?1.2:1);
       const cont=yield* finish(sh,df,p,dp,type,made,fouled,ctx,{forceBlk,me:forceBlk||forceFoul?1:0});if(!cont)return;
     }
@@ -5063,7 +5130,7 @@ function renderHeader(){
   const h=$("hdr");
   if(G.userTid==null){h.innerHTML=`<div class="who"><button class="menu-btn ico" data-act="menu" aria-label="Main menu">☰</button><div><div class="sub">${esc(G.source)} · ${sl(G.year)}</div><h1>Choose your franchise</h1></div></div><div class="rec">--</div>`;return}
   const u=user(),oc=G.owner>=60?"var(--good)":G.owner>=30?"var(--led)":"var(--bad)";
-  const sub=G.phase==="season"?`${sl(G.year)} · Game ${u.w+u.l} of 82`:`${sl(G.year)} · ${phaseName()}`;
+  const sub=G.phase==="season"?`${sl(G.year)} · Game ${u.w+u.l} of ${seasonLen()}`:`${sl(G.year)} · ${phaseName()}`;
   h.innerHTML=`<div class="who"><button class="menu-btn ico" data-act="menu" aria-label="Main menu">☰</button><span class="sw" style="background:${u.color}"></span><div style="min-width:0"><div class="sub">${sub}</div><h1>${esc(u.city)} ${esc(u.name)}</h1></div></div>
     <div class="rec" aria-label="Record">${u.w}-${u.l}</div>
     <div class="owner"><span class="label">Owner</span><div class="bar"><i style="width:${G.owner}%;background:${oc}"></i></div><b style="color:${oc}">${G.owner}</b></div>`;
@@ -5071,10 +5138,14 @@ function renderHeader(){
 const ICO={home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',team:'<path d="M8 3l4 2 4-2 4 3-2 4-2-1v12H8V9L6 10 4 6z"/>',lg:'<path d="M7 4h10v4a5 5 0 0 1-10 0zM5 5H3v2a3 3 0 0 0 3 3M19 5h2v2a3 3 0 0 1-3 3M12 13v4M8 21h8M9 17h6v4H9z"/>',leg:'<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/>',more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',sched:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',poll:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',rec:'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M19 8v6M16 11h6"/>'};
 const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[k]||""}</svg>`;
 const GROUPS=[["home","Home",["home"]],["team","Team",["me","roster","trade","fa"]],["lg","League",["standings","leaders","news"]],["leg","Legacy",["legacy","goals","trophy","reel","history"]],["more","More",["league"]]];
-const grpOf=t=>GROUPS.find(g=>g[2].includes(t))||GROUPS[0];
-function visTabs(){return GROUPS.flatMap(g=>g[2]).filter(t=>t!=="me"||G.career)}
+const CAREERON=()=>!!(G&&G.career&&!G.career.retired);
+const NGROUPS=[["play","Play",["me"]],["season","Season",["standings","home","roster","news","trophy","reel","fa"]]];
+const grps=()=>CAREERON()?NGROUPS:GROUPS;
+const grpOf=t=>grps().find(g=>g[2].includes(t))||grps()[0];
+function visTabs(){return grps().flatMap(g=>g[2]).filter(t=>(t!=="me"||G.career)&&(t!=="fa"||!CAREERON()||!["season","playoffs"].includes(G.phase)))}
 function swipeTab(dir){const v=visTabs(),i=v.indexOf(G.tab);const n=v[i+dir];if(!n)return;G.tab=n;(G.lastSub??={})[grpOf(n)[0]]=n;render();window.scrollTo(0,0)}
 function renderNav(){const n=$("bnav");if(G.userTid==null){n.hidden=true;return}n.hidden=false;const cur=grpOf(G.tab)[0];
+  if(CAREERON()){const free=(()=>{try{return rpgFree(rpgS())}catch(e){return 0}})();n.innerHTML=`<button data-act="tab" data-v="me" aria-current="${cur==="play"}">${icon("home")}<span>Play</span></button><button data-act="rsheet" data-v="inv">${icon("team")}<span>Locker</span></button><button data-act="rsheet" data-v="stat">${icon("leg")}<span>Character${free>0?" +"+free:""}</span></button><button data-act="tab" data-v="${G.lastSub?.season||"standings"}" aria-current="${cur==="season"}">${icon("lg")}<span>Season</span></button>`;return}
   n.innerHTML=GROUPS.map(([k,l,tabs])=>{const go=(G.lastSub?.[k]&&visTabs().includes(G.lastSub[k]))?G.lastSub[k]:tabs.find(t=>visTabs().includes(t));return`<button data-act="tab" data-v="${go}" aria-current="${cur===k}">${icon(k)}<span>${l}</span></button>`}).join("")}
 const TABS=[["me","My Player"],["home","Home"],["news","News"],["roster","Roster"],["standings","Standings"],["leaders","Leaders"],["trade","Trade"],["fa","Free agents"],["legacy","Legacy"],["history","History"],["reel","Highlights"],["goals","Goals"],["trophy","Trophies"],["league","Settings"]];
 function renderTabs(){const g=grpOf(G.tab),sub=TABS.filter(t=>g[2].includes(t[0])&&visTabs().includes(t[0]));
@@ -5089,8 +5160,8 @@ function renderBar(){
   if(G.userTid==null){$("bar").hidden=true;return}$("bar").hidden=false;
   switch(G.phase){
     case"preseason":case"fa":h=`<span class="status">${user().roster.length}/15 players · ${money(payroll(G.userTid))}</span><button class="btn" data-act="start">Start ${sl(G.year)}</button>`;break;
-    case"season":h=`<button class="btn ghost sq" data-act="watch" aria-label="Watch the next game">▶<small>Watch</small></button><button class="btn main" data-act="sim" data-n="1" data-hold="simmenu">Play next game<small>Hold for more</small></button><button class="btn ghost sq" data-act="simmenu" aria-label="Sim options">⋯<small>Sim</small></button>`;break;
-    case"playoffs":h=`<button class="btn ghost sq" data-act="watch" aria-label="Watch the next game">▶<small>Watch</small></button><button class="btn main" data-act="po" data-n="1" data-hold="pomenu">Next playoff game<small>Hold for more</small></button><button class="btn ghost sq" data-act="pomenu" aria-label="Playoff sim options">⋯<small>Sim</small></button>`;break;
+    case"season":if(CAREERON()){h=`<button class="btn main" data-act="watch">▶ Play next game<small>${esc((nextOpp()||{}).name||"")} · ${esc(pityLine())}</small></button><button class="btn ghost sq" data-act="sim" data-n="1">⏭<small>Sim 1</small></button><button class="btn ghost sq" data-act="simmenu" aria-label="Sim options">⋯<small>Sim</small></button>`;break}h=`<button class="btn ghost sq" data-act="watch" aria-label="Watch the next game">▶<small>Watch</small></button><button class="btn main" data-act="sim" data-n="1" data-hold="simmenu">Play next game<small>Hold for more</small></button><button class="btn ghost sq" data-act="simmenu" aria-label="Sim options">⋯<small>Sim</small></button>`;break;
+    case"playoffs":if(CAREERON()){const n0=nextOpp();h=n0?`<button class="btn main" data-act="watch">▶ ${esc(n0.label)}<small>${esc(n0.name)}${n0.raid?` · raid round ${n0.raid===5?"BOSS":n0.raid}`:""} · ${esc(pityLine())}</small></button><button class="btn ghost sq" data-act="po" data-n="1">⏭<small>Sim 1</small></button><button class="btn ghost sq" data-act="pomenu" aria-label="Playoff sim options">⋯<small>Sim</small></button>`:`<button class="btn main" data-act="po" data-n="1" data-hold="pomenu">Sim the rest of the playoffs<small>Your season is over</small></button>`;break}h=`<button class="btn ghost sq" data-act="watch" aria-label="Watch the next game">▶<small>Watch</small></button><button class="btn main" data-act="po" data-n="1" data-hold="pomenu">Next playoff game<small>Hold for more</small></button><button class="btn ghost sq" data-act="pomenu" aria-label="Playoff sim options">⋯<small>Sim</small></button>`;break;
     case"draft":h=G.draft.lot&&G.draft.lot.shown<G.draft.lot.order.length?`<button class="btn" data-act="reveal">Reveal next pick</button><button class="btn ghost" data-act="reveal" data-all="1">Reveal all</button>`:userOnClock()?`<span class="status">You're on the clock</span><button class="btn ghost" data-act="autopick">Auto-pick</button>`:`<button class="btn" data-act="simdraft">${G.draft.started?"Sim to my next pick":"Start the draft"}</button>`;break;
     case"resign":h=`<span class="status">${G.resign.filter(r=>P(r.pid)?.tid===G.userTid&&P(r.pid).contract.exp<G.year).length} undecided</span><button class="btn" data-act="resigndone">Done, open free agency</button>`;break;
     case"fired":h=`<button class="btn" data-act="newleague">Start a new league</button>`;break;
@@ -5511,7 +5582,7 @@ document.addEventListener("click",e=>{
     case"cltab":C.ctab=d.v;(C.clSub??={})[CGROUPS.find(g=>g[2].includes(d.v))[0]]=d.v;mcRender();$("mc").scrollTop=0;return;
     case"clsim":closeModal();clSim(d.v);return;
     case"clmenu":clMenu();return;
-    case"clwatch":clWatch();return;
+    case"clwatch":preGame();return;case"sstab":C.seasonTab=d.v;csWins();return;case"tipoff":tipOff();return;case"pgnext":closeModal();preGame();return;
     case"clwrap":clWrap();return;
     case"clteam":clTeamModal(d.v);return;
     case"clconf":C.cconf=d.v;mcRender();return;
@@ -5541,13 +5612,13 @@ document.addEventListener("click",e=>{
     case"rsave":{const R=rpgS(),age=rpgAge();(R.loads??=[null,null,null])[+d.v]={n:archName(rpgSkills(R,age),R.body.ht),pts:rpgSpent(R),alloc:{...R.alloc}};if(rpgP())save();else saveC();openSheet("loads");return}
     case"rload":{const R=rpgS(),L=R.loads?.[+d.v];if(!L)return;R.alloc={...L.alloc};let guard=0;while(rpgFree(R)<0&&guard++<500){const k=Object.keys(R.alloc).sort((a,b)=>R.alloc[b]-R.alloc[a])[0];R.alloc[k]--}rpgApply();if(rpgP())save();else saveC();openSheet("skills");toast(`Loaded: ${L.n}`);return}
     case"mcschool":C.school=d.v;C.stage="college";seasonSetup();bondsSeed();mcRender();return;
-    case"plgnav":plgNav(+d.v);return;case"plgpick":plgPick(d.v);return;case"drill":openDrill();return;case"jobeq":jobEqToggle(d.v);openSheet("stat");return;case"drillgo":drillGo(d.v);return;case"drillroll":drillRoll();rpgMount();return;case"rstars":{C.rpg.stars=+d.v;C.stars=+d.v;C.rpg.alloc={};saveC();mcRender();return}
+    case"drill":openDrill();return;case"jobeq":jobEqToggle(d.v);openSheet("stat");return;case"drillgo":drillGo(d.v);return;case"drillroll":drillRoll();rpgMount();return;case"rstars":{C.rpg.stars=+d.v;C.stars=+d.v;C.rpg.alloc={};saveC();mcRender();return}
     case"mcgame":{const n=+d.n,s=C.season;for(let i=0;i<n&&s.games.length<31;i++)collegeGame(s.opps[s.games.length],false);mcRender();return}
     case"mctourney":{const s=C.season;while(s.games.length<31)collegeGame(s.opps[s.games.length],false);runTourney();closeSeason();
       if(C.legacy){mcRender();legacyCatchUp(C.y+1).then(()=>{mcRender();toast(`Meanwhile in the NBA: the ${G.recaps?.[0]?.champ||"season"} wrapped up.`)});return}mcRender();return}
     case"mcfocus":C.focus=d.v;mcRender();return;
     case"mcreturn":mcReturnGo();return;
-    case"mcdeclare":mcDeclareGo();return;
+    case"mcdeclare":mcDeclareGo();return;case"nbapick":mcNbaPick(+d.v);return;
     case"mcprep":{C.school="High school";C.prep=true;C.cls=1;C.y=C.y-1;C.hist=[];C.season={y:C.y,games:[],w:0,l:0,tot:{gp:0,min:0,pts:0,reb:0,ast:0,stl:0,blk:0},tlog:[],awards:[]};C.stock=stock();mcDeclareGo(true);return}
     case"mcportalgo":C.stage="portal";C.portal=null;mcRender();return;
     case"mcportal":C.portalTo=d.v;mcReturnGo();return;
@@ -5589,7 +5660,7 @@ document.addEventListener("click",e=>{
     case"start":startSeason();break;
     case"sim":closeModal();runSim(isNaN(+d.n)?d.n:+d.n);break;
     case"simmenu":simMenu();return;
-    case"watch":watchNext();return;
+    case"watch":if(G.career&&!G.career.retired&&typeof C!=="undefined"&&C)preGame();else watchNext();return;
     case"lvclose":closeLive();return;
     case"lvplay":LV.playing=!LV.playing;b.textContent=LV.playing?"Pause":"Play";return;
     case"lvspeed":LV.speed=+d.v;document.querySelectorAll('[data-act="lvspeed"]').forEach(x=>x.className="btn sm "+(x===b?"":"ghost"));return;
@@ -5672,7 +5743,7 @@ C=await loadC();
 openMenu();
 cloudBoot();
 if(G.hist)loadDB().then(render).catch(()=>toast("Couldn't load the history file. Some real-player details are hidden until it loads."));
-window.__hoopsState=()=>G;window.__C=()=>C;window.__adv=(stop)=>autoAdvance(stop);window.__autoSpend=()=>{const R=rpgS();if(R){autoBuild(R,rpgAge(),"shooter");rpgApply()}};window.__simDay=()=>simDay(false);window.__sheet=t=>openSheet(t);window.__clSim=v=>clSim(v);window.__ctab=v=>{C.ctab=v;mcRender()};window.__swipe=d=>swipeTab(d);window.__lvc=()=>{LV.wait={pid:Object.keys(LV.ps)[0],sht:70,need:'Down 2 · 0:12 left'};openClutch()};window.__clutchTest=n=>{let prompts=0,made=0,att=0;for(let i=0;i<n;i++){const ids=shuffle([...Array(G.teams.length).keys()]);const ctl=mkCtl(0,null);const g=liveGen(nbaSD(ids[0],ids[1]),nbaOpt(),ctl);let r,arg;while(!(r=g.next(arg)).done){arg=undefined;if(r.value&&r.value.clutch){prompts++;arg=1}}r.value.ev.filter(e=>e.clutch).forEach(e=>{att++;if(e.type==="make")made++})}return{prompts,att,made}};window.__lv=()=>LV;window.__dp=(c,p)=>drawPlayer(c,p,null);
+window.__hoopsState=()=>G;window.__boss={swap:t=>bossSwap(t),restore:()=>bossRestore(),game:(h,a,raid)=>{const L=liveCore(nbaSD(h,a),{...nbaOpt(),raid,boss:raid>0});return JSON.stringify({sc:L.sc,ev:L.ev.filter(e=>/PERFECT/.test(e.txt||'')).length})}};window.__prof=p=>prof(p);window.__lgNorm=()=>{G.lgNorm=lgNormCalc();return G.lgNorm};window.__C=()=>C;window.__adv=(stop)=>autoAdvance(stop);window.__autoSpend=()=>{const R=rpgS();if(R){autoBuild(R,rpgAge(),"shooter");rpgApply()}};window.__simDay=()=>simDay(false);window.__sheet=t=>openSheet(t);window.__clSim=v=>clSim(v);window.__ctab=v=>{C.ctab=v;mcRender()};window.__swipe=d=>swipeTab(d);window.__lvc=()=>{LV.wait={pid:Object.keys(LV.ps)[0],sht:70,need:'Down 2 · 0:12 left'};openClutch()};window.__clutchTest=n=>{let prompts=0,made=0,att=0;for(let i=0;i<n;i++){const ids=shuffle([...Array(G.teams.length).keys()]);const ctl=mkCtl(0,null);const g=liveGen(nbaSD(ids[0],ids[1]),nbaOpt(),ctl);let r,arg;while(!(r=g.next(arg)).done){arg=undefined;if(r.value&&r.value.clutch){prompts++;arg=1}}r.value.ev.filter(e=>e.clutch).forEach(e=>{att++;if(e.type==="make")made++})}return{prompts,att,made}};window.__lv=()=>LV;window.__dp=(c,p)=>drawPlayer(c,p,null);
 window.__showT=()=>{const d=document.createElement("div");d.style.cssText="position:fixed;inset:0;z-index:9999;background:#1a2440;display:flex;gap:6px;padding:10px;flex-wrap:wrap";document.body.appendChild(d);
   const L=[{skin:4,hair:0,style:7,beard:3,band:1,build:1,shoe:0},{skin:0,hair:4,style:0,beard:1,shoe:1,socks:1},{skin:5,hair:0,style:1,beard:0,shoe:3,wrist:2},{skin:3,hair:0,style:4,beard:2,sleeve:2,shoe:0},{skin:2,hair:1,style:6,gog:1,shoe:2},{skin:1,hair:2,style:2,beard:0,band:2,socks:2}];
   const B=[{ht:81,wt:250,ws:88},{ht:74,wt:185,ws:76},{ht:86,wt:270,ws:92},{ht:78,wt:215,ws:84},{ht:84,wt:240,ws:88},{ht:72,wt:175,ws:73}];
