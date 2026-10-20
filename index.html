@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="2fad402cee";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="cdf10b857c";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -412,6 +412,8 @@ td{border-top:1px solid #ffffff12}
 .lv-card .n,.lv-me .n{font-size:12px;margin-bottom:3px}.lv-card .n span,.lv-me .n span{color:#9fb4dc}
 .lv-card .g,.lv-me .g{display:grid;gap:1px 12px;text-align:center}.lv-card .g b,.lv-me .g b{color:#9fb4dc;font-weight:400;font-size:10px}.lv-card .g i,.lv-me .g i{font-style:normal;font-size:15px}
 @media (max-width:480px){.lv-sb{font-size:11px}.lv-sb b{font-size:13px;min-width:26px}.lv-sb>*{padding:4px 5px}.lv-pop{font-size:22px}.lv-card .g i{font-size:13px}}
+.lv-me .fs{margin-top:4px;font-size:10px;color:#9fb4dc;letter-spacing:.02em}.lv-me .st{display:inline-block;padding:1px 5px;border-radius:3px;margin-right:4px;color:#06102a;font-size:9px}.lv-me .st.on,.coach .st.on{background:var(--good)}.lv-me .st.off,.coach .st.off{background:var(--bad)}
+.coach .bench-hd{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;font-size:13px}.coach .bench-hd b{font-size:15px}.coach .bench-hd small{color:#a9b1c7}.coach .st{display:inline-block;padding:1px 6px;border-radius:3px;margin-right:4px;color:#06102a;font:700 10px Silkscreen,var(--f-mono)}
 .lv-me{display:flex;gap:10px;align-items:center;background:#0b1a3c;border:2px solid #4a8fe0;box-shadow:inset 0 0 0 2px #06102a;border-radius:4px;padding:6px 10px 6px 6px;font:700 11px/1.2 Silkscreen,var(--f-mono);color:#fff}
 .lv-ctl,.lv-tabs{display:flex;gap:6px;flex-wrap:wrap}
 .lv-feed{max-height:42vh;overflow:auto}
@@ -2377,7 +2379,7 @@ function openLive(src){
     <div class="lv-me" id="lv-me" ${mine&&ps[mine]?"":"hidden"}></div>
     ${src.reel?`<div class="lv-ctl"><button class="btn sm" data-act="lvagain">▶ Play again</button><button class="btn sm ghost" data-act="lvclose">Done</button></div><ul id="lv-feed" hidden></ul><div id="lv-box" hidden></div>`:`
     <div class="lv-ctl"><button class="btn sm" data-act="lvplay" id="lv-play">Pause</button>${[1,2,4,8].map(s=>`<button class="btn sm ${s===2?"":"ghost"}" data-act="lvspeed" data-v="${s}">${s}×</button>`).join("")}<button class="btn sm ghost" data-act="lvq">${src.halves?"Next half":"Next quarter"}</button><button class="btn sm ghost" data-act="lvend">Skip to end</button>${ec?`<button class="btn sm ghost" data-act="lvera">${eraLookOn()?"Era look: on":"Era look: off"}</button>`:""}</div>
-    <div class="lv-tabs">${src.ctl?`<button class="btn xs" data-act="lvtab" data-v="coach" id="lvt-coach">Coach</button>`:""}<button class="btn xs ${src.ctl?"ghost":""}" data-act="lvtab" data-v="feed" id="lvt-feed">Play-by-play</button><button class="btn xs ghost" data-act="lvtab" data-v="box" id="lvt-box">Box score</button>${mine&&ps[mine]?`<button class="btn xs ghost" data-act="lvmine" id="lv-minebtn">My player only</button>`:""}</div>
+    <div class="lv-tabs">${src.ctl?(src.ctl.hero!=null&&mine!=null&&String(src.ctl.hero)===String(mine)?`<button class="btn xs" data-act="lvtab" data-v="coach" id="lvt-coach">Bench</button>`:`<button class="btn xs" data-act="lvtab" data-v="coach" id="lvt-coach">Coach</button>`):""}<button class="btn xs ${src.ctl?"ghost":""}" data-act="lvtab" data-v="feed" id="lvt-feed">Play-by-play</button><button class="btn xs ghost" data-act="lvtab" data-v="box" id="lvt-box">Box score</button>${mine&&ps[mine]?`<button class="btn xs ghost" data-act="lvmine" id="lv-minebtn">My player only</button>`:""}</div>
     <div id="lv-coach" ${src.ctl?"":"hidden"}></div><ul class="news lv-feed" id="lv-feed" ${src.ctl?"hidden":""}></ul><div id="lv-box" hidden></div>`}</div>`;
   lvResize();lvScore();if(src.ctl)lvCoach();requestAnimationFrame(lvFrame);
 }
@@ -2439,7 +2441,28 @@ function lvSkip(toQuarter){
   LV.skipping=false;LV.steps=null;LV.holder=null;LV.bt=null;if(LV.i>=LV.ev.length&&(!LV.gen||LV.genDone))LV.done=true;lvScore();
 }
 /* ---------- coaching panel ---------- */
-function lvCoach(){const el=$("lv-coach");if(!el||!LV?.ctl)return;const c=LV.ctl,k=c.side,st=c.st;if(!st)return;
+function lvMyR(){const c=LV?.ctl,st=c?.st;if(!st||LV.mine==null)return null;return st.R2[c.side].find(r=>String(r.p.pid)===String(LV.mine))||null}
+function lvRole(r){const tg=r.tgt||0;return tg>=26?["Starter",`coach's plan ≈ ${Math.round(tg)} min`]:tg>=12?["Rotation",`coach's plan ≈ ${Math.round(tg)} min`]:tg>=5?["Reserve",`spot minutes, ≈ ${Math.round(tg)}`]:["End of bench","garbage time unless you earn it"]}
+function lvLegs(r){const f=typeof fatigue==="function"?Math.max(fatigue(r),clamp((r.stint||0)/14,0,.6)):0;return{f,bars:"●".repeat(Math.round((1-f)*5))+"○".repeat(5-Math.round((1-f)*5)),word:f<.25?"fresh":f<.55?"fine":f<.8?"heavy":"gone"}}
+function lvMeStatus(){const r=lvMyR();if(!r)return"";const c=LV.ctl,on=c.st.on()[c.side].includes(r),L=lvLegs(r),mm=x=>`${Math.floor(x)}:${String(Math.round((x%1)*60)).padStart(2,"0")}`;
+  return on?`<span class="st on">ON THE FLOOR</span> stint ${mm(r.stint||0)} · legs ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min`:`<span class="st off">ON THE BENCH</span> legs ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min${r.pf>=5?" · foul trouble":""}`}
+function lvBench(){const el=$("lv-coach"),c=LV.ctl,k=c.side,st=c.st,r=lvMyR();if(!r)return lvCoach(true);const all=st.R2[k],onA=st.on()[k],bench=all.filter(x=>!onA.includes(x)),on=onA.includes(r),[role,plan]=lvRole(r),L=lvLegs(r),el2=st.el(),FO=LV.college?5:6;
+  const row=x=>`<div class="lu ${x===r?"sel":""} ${onA.includes(x)?"":"bn"}"><b>${esc(lname(x.p))}</b><small>${x===r?"YOU · ":""}${x.p.pos} · ${Math.round(x.b.min)} min · ${x.pf} PF · ${x.b.pts} pts${x.p.inj?" · hurt":x.pf>=FO?" · fouled out":""}</small></div>`;
+  const why=on?`You're out there. Stint ${Math.round(r.stint||0)} min, legs ${L.word}. The longer the stint, the heavier the legs and the worse the shot.`:r.pf>=FO?`Fouled out. That's the night.`:r.pf>=FO-1?`Foul trouble. Coach is protecting you for the end.`:L.f>.5?`Breather. Legs ${L.word}. You come back when they're back.`:r.b.min>=r.tgt*((el2+60)/(LV.college?2400:2880))+2?`You're ahead of your minutes. Coach is spreading them out.`:`Next dead ball, most likely. You're fresh and behind your minutes.`;
+  const can=!on&&r.pf<FO-1&&!r.p.inj&&L.f<.4&&el2-(c.readyAt||-999)>=120&&!LV.genDone;
+  el.innerHTML=`<div class="coach"><div class="bench-hd"><div><div class="label">Your role</div><b>${role}</b><small> · ${plan}</small></div><div><div class="label">Right now</div>${lvMeStatus()}</div></div>
+    <p class="note">${why}</p>
+    <div class="actions"><button class="btn sm" data-act="lvready" ${can?"":"disabled"}>${on?"You're in":"Tell coach you're ready"}</button>${c.want?`<span class="chip">Coach: "Next dead ball."</span>`:""}${c.readyMsg&&!c.want?`<span class="chip">Coach: "${esc(c.readyMsg)}"</span>`:""}</div>
+    <div class="label">On the floor</div><div class="lineup">${onA.map(row).join("")}</div>
+    <div class="label">Bench</div><div class="lineup">${bench.map(row).join("")}</div>
+    <p class="note">How minutes work: your spot in the rotation (OVR rank on the roster) sets a minutes plan. Coach subs you out when your legs go or you're ahead of plan, and back in when they return. Starters close the game. Play well and the plan grows next game; foul trouble shrinks it tonight.</p></div>`}
+function lvReady(){const c=LV.ctl,r=lvMyR();if(!r)return;const st=c.st,k=c.side,onA=st.on()[k],L=lvLegs(r),FO=LV.college?5:6;c.readyAt=st.el();
+  if(onA.includes(r)){c.readyMsg="You're in. Play.";return lvBench()}
+  if(r.pf>=FO-1){c.readyMsg="Not with those fouls. Sit.";return lvBench()}
+  if(L.f>=.4){c.readyMsg="Your legs are gone. Water.";return lvBench()}
+  const out=[...onA].filter(x=>x!==r).sort((a,b)=>(fatigue(b)+(b.p.pos===r.p.pos?.25:0)+(b.st?0:.1))-(fatigue(a)+(a.p.pos===r.p.pos?.25:0)+(a.st?0:.1)))[0];if(!out){c.readyMsg="Sit.";return lvBench()}
+  c.want=onA.map(x=>x===out?r.p.pid:x.p.pid);c.wantUntil=st.el()+300;c.subNow=true;c.readyMsg=null;toast(`Coach: "Get ${lname(out.p)}. You're in at the next dead ball."`);lvBench()}
+function lvCoach(force){const el=$("lv-coach");if(!el||!LV?.ctl)return;if(!force&&LV.mine!=null&&String(LV.ctl.hero)===String(LV.mine)&&LV.ctl.st&&lvMyR())return lvBench();const c=LV.ctl,k=c.side,st=c.st;if(!st)return;
   const on=st.on()[k].map(r=>r.p),all=st.R2[k],bench=all.filter(r=>!st.on()[k].includes(r)).map(r=>r);
   const pf=pid=>all.find(r=>String(r.p.pid)===String(pid));
   el.innerHTML=`<div class="coach">
@@ -4179,6 +4202,8 @@ function lvCard(pid){const el=$("lv-card");if(!el||!LV)return;const x=LV.ps[pid]
   el.innerHTML=`<canvas width="24" height="24"></canvas><div><div class="n">${esc(shortNm(p))} <span>| ${esc(p.pos||"")}${p.no!=null?" #"+esc(String(p.no)):""}</span></div><div class="g" style="grid-template-columns:repeat(3,auto)"><b>PTS</b><b>${three?"3PT":"FG"}</b><b>${three?"3PT%":"FG%"}</b><i>${b.pts||0}</i><i>${sh[0]}/${sh[1]}</i><i>${sh[1]?Math.round(100*sh[0]/sh[1]):0}%</i></div></div>`;
   drawPortrait(el.querySelector("canvas"),lookOf(p,pid),jy,tr,p.no);el.hidden=false;clearTimeout(lvCard.t);lvCard.t=setTimeout(()=>{const e2=$("lv-card");if(e2)e2.hidden=true},2600)}
 function lvApply(e){LV.lastE=e;if(LV.ctl&&$("lv-coach")&&!$("lv-coach").hidden&&(e.type==="sub"||e.type==="q"))setTimeout(lvCoach,0);
+  if(e.type==="sub"&&LV.mine!=null&&LV.ctl&&e.k===LV.ctl.side&&!LV.skipping){const nowOn=onHas(e.on[e.k],LV.mine);if(LV._wasOn!=null&&nowOn!==LV._wasOn){lvPop(nowOn?"YOU'RE IN":"BREATHER",e.k);if(!nowOn&&LV.ctl.mode&&LV.ctl.mode!=="watch")toast("Coach pulled you. Legs or minutes — check the Bench tab.")}LV._wasOn=nowOn}
+  else if(e.type==="start"&&LV.mine!=null&&LV.ctl)LV._wasOn=onHas(e.on[LV.ctl.side],LV.mine);
   const b=LV.box,add=(pid,k,v=1)=>{if(!pid)return;(b[pid]??={pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0,tpm:0,tpa:0});b[pid][k]+=v};
   if(e.type==="make"){if(e.o===0)LV.cheer=.9;if(!LV.skipping){LV.celeb={pid:e.sh,t:1.1};(LV.net??={})[lvBasket(e.o,e.q)]=1}add(e.sh,"pts",e.pts);add(e.sh,"fgm");add(e.sh,"fga");if(e.shot==="3"){add(e.sh,"tpm");add(e.sh,"tpa")}add(e.as,"ast")}
   else if(e.type==="miss"||e.type==="blk"){add(e.sh,"fga");if(e.shot==="3")add(e.sh,"tpa");if(e.type==="blk")add(e.d,"blk")}
@@ -4194,8 +4219,8 @@ function lvScore(){
   const np=LV.halves?2:4,per=!e?"":e.q>np?"OT"+(e.q-np>1?e.q-np:""):LV.halves?["1ST","2ND"][e.q-1]+" H":["1ST","2ND","3RD","4TH"][e.q-1],clk=e?`${Math.floor(e.t/60)}:${String(e.t%60).padStart(2,"0")}`:"";
   sb.innerHTML=`<span class="lv-t away" style="--tc:${a.color}">${esc(a.abbr)}</span><b>${e?e.sc[1]:0}</b><span class="lv-t" style="--tc:${h.color}">${esc(h.abbr)}</span><b>${e?e.sc[0]:0}</b><span class="lv-per">${LV.done&&!LV.reel?"FINAL":per}</span>${LV.done&&!LV.reel?"":`<span class="lv-clk">${clk}</span>`}`;
   if(LV.mine&&$("lv-me")){const b=LV.box[LV.mine]||{pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0},pm=P(LV.mine)||LV.ps[LV.mine]?.p,x=LV.ps[LV.mine],el=$("lv-me");
-    if(pm){if(!el.firstChild){el.innerHTML=`<canvas width="24" height="24"></canvas><div class="mi"><div class="n"></div><div class="g" style="grid-template-columns:repeat(6,auto)"></div></div>`;const[jy,tr]=hlJersey(x?.k??0);drawPortrait(el.querySelector("canvas"),lookOf(pm,LV.mine),jy,tr,pm.no)}
-    el.querySelector(".n").innerHTML=`${esc(shortNm(pm))} <span>| ${esc(pm.pos||"")}${pm.no!=null?" #"+esc(String(pm.no)):""}</span>`;el.querySelector(".g").innerHTML=["PTS","REB","AST","STL","BLK","FG"].map(k=>`<b>${k}</b>`).join("")+[b.pts,b.reb,b.ast,b.stl||0,b.blk||0,`${b.fgm}-${b.fga}`].map(v=>`<i>${v}</i>`).join("")}}
+    if(pm){if(!el.firstChild){el.innerHTML=`<canvas width="24" height="24"></canvas><div class="mi"><div class="n"></div><div class="g" style="grid-template-columns:repeat(6,auto)"></div><div class="fs"></div></div>`;const[jy,tr]=hlJersey(x?.k??0);drawPortrait(el.querySelector("canvas"),lookOf(pm,LV.mine),jy,tr,pm.no)}
+    el.querySelector(".n").innerHTML=`${esc(shortNm(pm))} <span>| ${esc(pm.pos||"")}${pm.no!=null?" #"+esc(String(pm.no)):""}</span>`;el.querySelector(".g").innerHTML=["PTS","REB","AST","STL","BLK","FG"].map(k=>`<b>${k}</b>`).join("")+[b.pts,b.reb,b.ast,b.stl||0,b.blk||0,`${b.fgm}-${b.fga}`].map(v=>`<i>${v}</i>`).join("");const fs=el.querySelector(".fs");if(fs&&LV.ctl?.st){const s=lvMeStatus();if(s!==LV._fs){LV._fs=s;fs.innerHTML=s}}}}
   if(!$("lv-box").hidden)lvBoxHtml();
 }
 function lvBoxHtml(){
@@ -5061,6 +5086,7 @@ document.addEventListener("click",e=>{
     case"lvto":if(LV.ctl.to>0){LV.ctl.to--;LV.ctl.boost=5;lvPop("TIMEOUT",LV.ctl.side);toast("Timeout. Your guys get a lift for the next few trips.")}lvCoach();return;
     case"lvsubout":LV.subOut=String(LV.subOut)===String(d.v)?null:d.v;lvCoach();return;
     case"lvsubin":lvSubIn(d.v);LV.ctl.subNow=true;return;
+    case"lvready":lvReady();return;
     case"cltap":if(LV?.pm?.step==="tap")possTap(false);else clutchTap(false);return;
     case"lvera":{const on=!eraLookOn();if(LV.college)C.eraLook=on;else G.settings.eraLook=on;const ct=document.querySelector(".lv-court");ct.className="lv-court "+(on?ct.dataset.era:"");b.textContent=on?"Era look: on":"Era look: off";return}
     case"lvagain":{const s=LV.src;LV=null;openReel(s.store,s.idx);return}
