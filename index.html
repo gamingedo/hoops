@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="6e73894fcf";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="963a15338a";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -359,7 +359,7 @@ td{border-top:1px solid #ffffff12}
 .cs-xp{flex:1 1 200px;min-width:140px;position:relative;height:22px;background:#000;border:1px solid #5a5f70;border-radius:3px;overflow:hidden;cursor:pointer;padding:0}.cs-xp i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#ffe08a,#f5a623);box-shadow:inset 0 -3px 0 #c76a0a}.cs-xp span{position:absolute;inset:0;display:grid;place-items:center;font:700 10px Silkscreen,var(--f-mono);color:#fff;text-shadow:1px 1px 0 #000}
 .cs-keys{display:flex;gap:3px;flex-wrap:wrap}.cs-k{display:grid;justify-items:center;gap:2px;width:52px;padding:4px 2px;border:1px solid #5a5f70;border-radius:5px;background:linear-gradient(180deg,#3a3e4c,#20232c);color:#fff;font:700 9px var(--f-body);text-transform:uppercase;letter-spacing:.04em;cursor:pointer;box-shadow:inset 0 1px 0 #6a7080}.cs-k i{font:700 13px Silkscreen,var(--f-mono);color:#ffd166;font-style:normal}.cs-k.hot{background:linear-gradient(180deg,#8fe08f,#2fa84a);border-color:#1c6b2e}.cs-k.hot i{color:#fff}
 .cs-ev{display:flex;gap:6px;align-items:center;padding:5px 9px;border:1px solid #5a5f70;border-radius:5px;background:#000;font-size:11px;color:#c9cfe0;cursor:pointer}.cs-ev b{font:700 12px Silkscreen,var(--f-mono);color:#ffd166}
-.cs-wins{position:absolute;inset:0;pointer-events:none}.cs-wins .mp-win{position:absolute;pointer-events:auto;min-width:300px;max-width:min(96vw,900px);max-height:min(82vh,760px);display:grid;grid-template-rows:auto 1fr;resize:both}.cs-wins .mp-body{overflow:auto;align-content:start}
+.cs-wins{position:absolute;inset:0;pointer-events:none}.cs-wins .mp-win{position:absolute;pointer-events:auto;min-width:300px;max-width:min(96vw,900px);max-height:min(82vh,760px);display:grid;grid-template-rows:auto 1fr;resize:both}.cs-wins .mp-body{overflow:auto;align-content:start;min-height:0}.mp-win>.mp-body{min-height:0}.mp-body .news li{background:#fff;color:#2b2b33;border:1px solid #e3e5ea}.mp-body .news li small,.mp-body .news li .muted{color:#5a6070}.lk-item{min-width:0}.lk-item p{margin:4px 0 0;font-size:12px;color:#4a5060}.lk-item>div{min-width:0}
 .cs-wins .mp-win.focus{box-shadow:inset 0 0 0 1px #fff,inset 0 0 0 2px #cfd3dc,0 0 0 2px #f5a623,0 12px 28px #000a}
 @media (max-width:760px){.cs-quest{display:none}.cs-plate{min-width:0;padding:4px 8px}.cs-plate .rec{font-size:16px}.cs-next{bottom:8px;width:calc(100% - 16px)}.cs-next .mp-btn.main{flex:1;padding:10px 12px;font-size:15px}.cs-keys{order:3;width:100%;justify-content:space-between}.cs-k{width:auto;flex:1}.cs-lv{min-width:0}.cs-lv span{display:none}.cs-wins .mp-win{left:4px!important;right:4px!important;top:4px!important;bottom:auto;max-width:none;max-height:calc(100% - 8px);width:auto!important;resize:none}}
 .cs-bub{position:absolute;transform:translate(-50%,-100%);background:#fff;color:#2b2b33;border:1px solid #2b2b33;border-radius:6px;padding:6px 9px;font:600 12px/1.3 var(--f-body);max-width:220px;box-shadow:0 3px 0 #0006;pointer-events:none}.cs-bub b{display:block;font:700 9px Silkscreen,var(--f-mono);color:#2f7fd6;margin-bottom:2px}.cs-bub::after{content:"";position:absolute;left:50%;bottom:-6px;width:8px;height:8px;background:#fff;border-right:1px solid #2b2b33;border-bottom:1px solid #2b2b33;transform:translateX(-50%) rotate(45deg)}
@@ -1478,7 +1478,7 @@ function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v44";
+const BUILD="v45";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -2470,12 +2470,12 @@ function lvSkip(toQuarter){
 /* ---------- coaching panel ---------- */
 function lvMyR(){const c=LV?.ctl,st=c?.st;if(!st||LV.mine==null)return null;return st.R2[c.side].find(r=>String(r.p.pid)===String(LV.mine))||null}
 function lvRole(r){const tg=r.tgt||0;return tg>=26?["Starter",`coach's plan ≈ ${Math.round(tg)} min`]:tg>=12?["Rotation",`coach's plan ≈ ${Math.round(tg)} min`]:tg>=5?["Reserve",`spot minutes, ≈ ${Math.round(tg)}`]:["End of bench","garbage time unless you earn it"]}
-function lvLegs(r){const f=typeof fatigue==="function"?Math.max(fatigue(r),clamp((r.stint||0)/14,0,.6)):0;return{f,bars:"●".repeat(Math.round((1-f)*5))+"○".repeat(5-Math.round((1-f)*5)),word:f<.25?"fresh":f<.55?"fine":f<.8?"heavy":"gone"}}
+function lvLegs(r){const m=enMax(r),e=Math.round(r.en??m),k=clamp(e/m,0,1),f=1-k;return{f,e,m,bars:"●".repeat(Math.round(k*5))+"○".repeat(5-Math.round(k*5)),word:k>.7?"full":k>.45?"okay":k>.25?"low":"empty"}}
 function lvMeStatus(){const r=lvMyR();if(!r)return"";const c=LV.ctl,on=c.st.on()[c.side].includes(r),L=lvLegs(r),mm=x=>`${Math.floor(x)}:${String(Math.round((x%1)*60)).padStart(2,"0")}`;
-  return on?`<span class="st on">ON THE FLOOR</span> stint ${mm(r.stint||0)} · legs ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min`:`<span class="st off">ON THE BENCH</span> legs ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min${r.pf>=5?" · foul trouble":""}`}
+  return on?`<span class="st on">ON THE FLOOR</span> stint ${mm(r.stint||0)} · energy ${L.e}/${L.m} ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min`:`<span class="st off">ON THE BENCH</span> energy ${L.e}/${L.m} ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min${r.pf>=5?" · foul trouble":""}`}
 function lvBench(){const el=$("lv-coach"),c=LV.ctl,k=c.side,st=c.st,r=lvMyR();if(!r)return lvCoach(true);const all=st.R2[k],onA=st.on()[k],bench=all.filter(x=>!onA.includes(x)),on=onA.includes(r),[role,plan]=lvRole(r),L=lvLegs(r),el2=st.el(),FO=LV.college?5:6;
   const row=x=>`<div class="lu ${x===r?"sel":""} ${onA.includes(x)?"":"bn"}"><b>${esc(lname(x.p))}</b><small>${x===r?"YOU · ":""}${x.p.pos} · ${Math.round(x.b.min)} min · ${x.pf} PF · ${x.b.pts} pts${x.p.inj?" · hurt":x.pf>=FO?" · fouled out":""}</small></div>`;
-  const why=on?`You're out there. Stint ${Math.round(r.stint||0)} min, legs ${L.word}. The longer the stint, the heavier the legs and the worse the shot.`:r.pf>=FO?`Fouled out. That's the night.`:r.pf>=FO-1?`Foul trouble. Coach is protecting you for the end.`:L.f>.5?`Breather. Legs ${L.word}. You come back when they're back.`:r.b.min>=r.tgt*((el2+60)/(LV.college?2400:2880))+2?`You're ahead of your minutes. Coach is spreading them out.`:`Next dead ball, most likely. You're fresh and behind your minutes.`;
+  const why=on?`You are out there. Energy ${L.e} of ${L.m}, ${L.word}. Every minute on the floor and every gamble spends it. Low energy is a penalty on every roll.`:r.pf>=FO?`Fouled out. That is the night.`:r.pf>=FO-1?`Foul trouble. Coach is protecting you for the end.`:L.f>.5?`Breather. Energy ${L.word}. You come back when it refills.`:r.b.min>=r.tgt*((el2+60)/(LV.college?2400:2880))+2?`You're ahead of your minutes. Coach is spreading them out.`:`Next dead ball, most likely. You're fresh and behind your minutes.`;
   const can=!on&&r.pf<FO-1&&!r.p.inj&&L.f<.4&&el2-(c.readyAt||-999)>=120&&!LV.genDone;
   el.innerHTML=`<div class="coach"><div class="bench-hd"><div><div class="label">Your role</div><b>${role}</b><small> · ${plan}</small></div><div><div class="label">Right now</div>${lvMeStatus()}</div></div>
     <p class="note">${why}</p>
@@ -2484,11 +2484,11 @@ function lvBench(){const el=$("lv-coach"),c=LV.ctl,k=c.side,st=c.st,r=lvMyR();if
     <div class="actions"><button class="btn sm" data-act="lvto" ${c.to<=0||LV.genDone?"disabled":""}>Timeout · ${c.to} left</button>${c.boost>0?`<span class="chip good">Fired up: ${c.boost} trips</span>`:""}<button class="btn sm" data-act="lvready" ${can?"":"disabled"}>${on?"You're in":"Tell coach you're ready"}</button>${c.want?`<span class="chip">Coach: "Next dead ball."</span>`:""}${c.readyMsg&&!c.want?`<span class="chip">Coach: "${esc(c.readyMsg)}"</span>`:""}</div>
     <div class="label">On the floor</div><div class="lineup">${onA.map(row).join("")}</div>
     <div class="label">Bench</div><div class="lineup">${bench.map(row).join("")}</div>
-    <p class="note">How minutes work: your spot in the rotation (OVR rank on the roster) sets a minutes plan. Coach subs you out when your legs go or you're ahead of plan, and back in when they return. Starters close the game. Play well and the plan grows next game; foul trouble shrinks it tonight.</p></div>`}
+    <p class="note">How minutes work: your spot in the rotation (OVR rank on the roster) sets a minutes plan. Coach subs you out when your energy runs low or you are ahead of plan, and back in when it refills. Energy comes from Stamina. Starters close the game. Foul trouble shrinks the plan tonight.</p></div>`}
 function lvReady(){const c=LV.ctl,r=lvMyR();if(!r)return;const st=c.st,k=c.side,onA=st.on()[k],L=lvLegs(r),FO=LV.college?5:6;c.readyAt=st.el();
   if(onA.includes(r)){c.readyMsg="You're in. Play.";return lvBench()}
   if(r.pf>=FO-1){c.readyMsg="Not with those fouls. Sit.";return lvBench()}
-  if(L.f>=.4){c.readyMsg="Your legs are gone. Water.";return lvBench()}
+  if(L.f>=.4){c.readyMsg="Your tank is empty. Water.";return lvBench()}
   const out=[...onA].filter(x=>x!==r).sort((a,b)=>(fatigue(b)+(b.p.pos===r.p.pos?.25:0)+(b.st?0:.1))-(fatigue(a)+(a.p.pos===r.p.pos?.25:0)+(a.st?0:.1)))[0];if(!out){c.readyMsg="Sit.";return lvBench()}
   c.want=onA.map(x=>x===out?r.p.pid:x.p.pid);c.wantUntil=st.el()+300;c.subNow=true;c.readyMsg=null;toast(`Coach: "Get ${lname(out.p)}. You're in at the next dead ball."`);lvBench()}
 function lvCoach(force){const el=$("lv-coach");if(!el||!LV?.ctl)return;if(!force&&LV.mine!=null&&String(LV.ctl.hero)===String(LV.mine)&&LV.ctl.st&&lvMyR())return lvBench();const c=LV.ctl,k=c.side,st=c.st;if(!st)return;
@@ -3392,7 +3392,7 @@ const DAYEV=[
  {k:"thu",n:"Training Thursday",d:"+3 bonus skill points on every level-up.",xp:1,spB:3,ic:"+SP"},
  {k:"fri",n:"Friday Night Lights",d:"4x EXP from every game.",xp:4,ic:"4×"},
  {k:"sat",n:"Lucky Saturday",d:"1.5x EXP and 1.5x crate keys.",xp:1.5,drop:1.5,ic:"★"}];
-const today=()=>DAYEV[new Date().getDay()];
+const today=()=>({k:"none",n:"",d:"",xp:1,q:1,rest:1,drop:1,winx:1,bond:1,spB:0,ic:""});
 const needXP=L=>L<=20?Math.round(150+85*Math.pow(L,1.6)):9600+(L-20)*500;
 const skCost=v=>v<70?1:v<82?2:v<90?3:v<97?4:5+Math.floor((v-97)/10);
 /* ---- body-driven bases: height raises the floor on size skills and lowers it on quickness ---- */
@@ -3815,7 +3815,10 @@ function prof(p){if(!p)return null;if(p.sk)return p.sk;if(p.pid==="me"&&typeof C
     ORB:r(a.REB*.9+h+t(11)*8),DRB:r(a.REB+h),SPD:r(a.ATH-h*2),ACC:r(a.ATH-h*1.5+t(12)*6),VRT:r(a.ATH+t(13)*8),STR:r(40+(wt-210)/4+h*2+a.REB*.3),STA:r(55+a.ATH*.3+t(14)*10),CLU:r(IQ+t(15)*12)};
   if(PROFC.size>3000)PROFC.clear();PROFC.set(key,s);return s}
 const usageP=s=>Math.pow((s.THR*.2+s.MID*.2+s.LAY*.2+s.DNK*.1+s.PST*.1+s.HND*.1+s.SIQ*.1)/60,3.2);
-function fatigue(r){const s=prof(r.p);const sta=s.STA+(r.p.pid==="me"&&typeof gearMods==="function"&&C?.gear?(gearMods().sta||0):0);return clamp(((r.stint||0)-(5+(sta-PV.ref)/7))/9,0,1)}
+function enMax(r){const s=prof(r.p);const sta=s.STA+(r.p.pid==="me"&&typeof gearMods==="function"&&C?.gear?(gearMods().sta||0):0);return Math.round(40+sta*.8)}
+function fatigue(r){if(r.en==null)return 0;const m=enMax(r);return clamp(((m-r.en)/m-.22)*1.5,0,1)}
+function enSpend(r,n){if(!r||r.en==null)return;r.en=Math.max(0,r.en-n)}
+window.enMax=enMax;window.enSpend=enSpend;
 /* DC and modifier for a shot type; ctx = {open,fat,clutch,hot,home,dh (shooter ht - defender ht)} */
 function shotDC(type,d,ctx){const K=PV.def;const base=PV.dc[type];
   const dd=type==="three"?(d.PER-PV.ref)/K:type==="mid"?(d.PER-PV.ref)/(K*1.2):type==="rim"?(d.INT-PV.ref)/K+(d.BLK-PV.ref)/30-ctx.dh*.12:type==="dunk"?(d.BLK-PV.ref)/K+(d.INT-PV.ref)/30-ctx.dh*.1:(d.INT-PV.ref)/(K*1.2)+(d.STR-PV.ref)/30-ctx.dh*.08;
@@ -3823,7 +3826,7 @@ function shotDC(type,d,ctx){const K=PV.def;const base=PV.dc[type];
 function shotMods(type,s,ctx){const K=PV.skl,m=[];const add=(n,v)=>{v=Math.round(v*2)/2;if(v)m.push([n,v])};
   if(type==="three")add("Three-point",(s.THR-PV.ref)/K);else if(type==="mid")add("Mid-range",(s.MID-PV.ref)/K);else if(type==="rim"){add("Layup",(s.LAY-PV.ref)/K);add("Acceleration",(s.ACC-PV.ref)/30);add("Strength",(s.STR-PV.ref)/40)}
   else if(type==="dunk"){add("Dunk",(s.DNK-PV.ref)/(K*.8));add("Vertical",(s.VRT-PV.ref)/25)}else{add("Post moves",(s.PST-PV.ref)/K);add("Strength",(s.STR-PV.ref)/30)}
-  add("Shot IQ",(s.SIQ-PV.ref)/40);if(ctx.open)add("Open look",PV.open);if(ctx.contest)add("Contested",-1);if(ctx.fat>0)add("Tired",-ctx.fat*PV.fat);
+  add("Shot IQ",(s.SIQ-PV.ref)/40);if(ctx.open)add("Open look",PV.open);if(ctx.contest)add("Contested",-1);if(ctx.fat>0)add("Low energy",-ctx.fat*PV.fat);
   if(ctx.clutch)add("Clutch",(s.CLU-PV.ref)/PV.clu);if(ctx.hot)add("Heating up",1);if(ctx.home)add("Home crowd",.5);
   if(ctx.me&&typeof gearShotMods==="function")for(const g of gearShotMods(type,ctx))add(g[0],g[1]);
   if(ctx.me&&typeof jobMods==="function")for(const g of jobMods(type))add(g[0],g[1]);
@@ -3845,7 +3848,7 @@ const TYPEN={three:"three",mid:"jumper",rim:"layup",dunk:"dunk",post:"post move"
 function possOptions(s,d,ctx,opt,mates){const out=[];const types=[["three","Pull-up three",3],["mid","Mid-range jumper",2],["rim","Drive to the rim",2],["dunk","Attack the rim (dunk)",2],["post","Post up",2]];
   for(const[k,lab,pts]of types){if(k==="three"&&opt.no3x)continue;if(k==="dunk"&&s.DNK<PV.ref-8&&ctx.sh<78)continue;if(k==="post"&&s.PST<PV.ref-8)continue;
     const mods=shotMods(k,s,ctx),dc=shotDC(k,d,ctx),mod=modSum(mods);out.push({k,lab,pts,mods,mod,dc,pct:pMake(mod+1,dc),foul:PV.foul[k]*(1+(s.DRW-PV.ref)/60)})}
-  if(mates&&mates.length){const best=mates.reduce((b,m)=>m.q>b.q?m:b,mates[0]);const mods=[["Passing",Math.round((s.PAS-PV.ref)/PV.skl*2)/2],["Court vision",Math.round((s.VIS-PV.ref)/25*2)/2]];if(ctx.fat>0)mods.push(["Tired",-Math.round(ctx.fat*2)/2]);
+  if(mates&&mates.length){const best=mates.reduce((b,m)=>m.q>b.q?m:b,mates[0]);const mods=[["Passing",Math.round((s.PAS-PV.ref)/PV.skl*2)/2],["Court vision",Math.round((s.VIS-PV.ref)/25*2)/2]];if(ctx.fat>0)mods.push(["Low energy",-Math.round(ctx.fat*2)/2]);
     if(ctx.me&&typeof jobMods==="function")jobMods("pass").forEach(g=>mods.push(g));
     const dc=9+Math.round((best.stl-PV.ref)/14),mod=modSum(mods);out.push({k:"pass",lab:`Kick to ${best.name} (${best.type==="three"?"open three":best.type==="rim"?"at the rim":"jumper"})`,pts:0,mods,mod,dc,pct:pMake(mod+1,dc),to:best,pass:true});
     if(ctx.me&&typeof jobActives==="function")for(const a of jobActives("off")){if(!a.pass||jobUsed(a.k))continue;const m2=[...mods,[a.lab,a.mod]],md=modSum(m2);out.push({k:"pass",lab:`${a.lab} → ${best.name}`,pts:0,mods:m2,mod:md,dc,pct:pMake(md+1,dc),to:best,pass:true,job:a.k,note:a.note})}}
@@ -3853,9 +3856,9 @@ function possOptions(s,d,ctx,opt,mates){const out=[];const types=[["three","Pull
   return out}
 /* defensive calls: what you do when your man has the ball */
 function defOptions(s,d,ctx){const sk=v=>Math.round((v-PV.ref)/PV.skl*2)/2,out=[];
-  const hm=[["Perimeter D",sk(d.PER)],["Interior D",sk(d.INT)*.5]];if(ctx.fat>0)hm.push(["Tired",-Math.round(ctx.fat*2)/2]);
+  const hm=[["Perimeter D",sk(d.PER)],["Interior D",sk(d.INT)*.5]];if(ctx.fat>0)hm.push(["Low energy",-Math.round(ctx.fat*2)/2]);
   out.push({k:"hands",lab:"Hands up, stay down",mods:hm,mod:modSum(hm),dc:10,pct:pMake(modSum(hm)+1,10),pts:0,def:true,note:"Contest. No risk."});
-  const sm=[["Steal",sk(d.STL)],["Quick hands",Math.round((d.PER-PV.ref)/25*2)/2]];if(ctx.fat>0)sm.push(["Tired",-Math.round(ctx.fat*2)/2]);const sdc=14+Math.round((s.HND-PV.ref)/6);
+  const sm=[["Steal",sk(d.STL)],["Quick hands",Math.round((d.PER-PV.ref)/25*2)/2]];if(ctx.fat>0)sm.push(["Low energy",-Math.round(ctx.fat*2)/2]);const sdc=14+Math.round((s.HND-PV.ref)/6);
   out.push({k:"steal",lab:"Gamble for the steal",mods:sm,mod:modSum(sm),dc:sdc,pct:pMake(modSum(sm)+1,sdc),pts:0,def:true,note:"Miss and he is open."});
   const bm=[["Block",sk(d.BLK)],["Height",clamp(Math.round(-ctx.dh/2*2)/2,-2,2)]];const bdc=14+Math.round((Math.max(s.LAY,s.DNK)-PV.ref)/8);
   out.push({k:"block",lab:"Go for the block",mods:bm,mod:modSum(bm),dc:bdc,pct:pMake(modSum(bm)+1,bdc),pts:0,def:true,note:"Miss and it is a foul a third of the time."});
@@ -4247,7 +4250,7 @@ function mpWin(title,body,opt={}){return`<div class="mp-win ${opt.cls||""}"><div
 function rpgSummary(R,age){const s=rpgSkills(R,age),a=skToA(s),pos=C?.pos||rpgP()?.pos||"SF",ovr=calcOvr(a,pos);
   return`<div class="mp-sum"><div><small>Archetype</small><b>${archName(s,R.body.ht)}</b></div><div><small>Overall</small><b>${ovr}</b></div><div><small>Points left</small><b class="${rpgFree(R)>0?"hot":""}">${rpgFree(R)}</b></div><div><small>Height</small><b>${ftin(R.body.ht)}</b></div><div><small>Wingspan</small><b>${ftin(R.body.ws)}</b></div><div><small>Weight</small><b>${R.body.wt} lb</b></div></div>`}
 /* ---- creation: origin → body & look → skills → traits ---- */
-const CSTEPS=[["origin","Origin"],["stars","Stars"],["body","Body & look"],["skills","Skills"],["traits","Traits"]];
+const CSTEPS=[["origin","Origin"],["stars","Stars"],["body","Body & look"],["skills","Skills"]];
 function mcCreate(){
   C.rpg??=rpgNew();const R=C.rpg,st=C.cs||"origin",i=CSTEPS.findIndex(x=>x[0]===st),age=18;
   C.look??=lookFor(C.name);C.no??=String(ri(0,55));C.pos??="SF";R.body.ht??=78;
@@ -4277,7 +4280,7 @@ function mcCreate(){
 }
 /* ---- the Character window (in college and in the league) ---- */
 function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetTab||"stat");const t=C?.sheetTab||tab||"stat",age=rpgAge(),s=rpgSkills(R,age),ev=today();
-  const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],["loads","Loadouts"],["today","Today"],...(C&&C.stage!=="college"&&C.bonds?[["bonds","Bonds"],["inv","Locker"],["attn","Fame"]]:[])];
+  const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],...(C&&C.stage!=="college"&&C.bonds?[["bonds","Bonds"],["inv","Locker"],["attn","Fame"]]:[])];
   let body="";
   if(t==="stat")body=`<div class="mp-two"><div class="mp-col">${mpWin(esc(rpgName()),`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>${rpgSummary(R,age)}<div class="mp-kv"><span>Level</span><b>${R.lv}</b><span>EXP</span><b>${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()}</b><span>Origin</span><b>${ORIGINS.find(o=>o.k===R.origin)?.n||"Custom"}</b><span>Traits</span><b>${R.traits.map(k=>TRAITS.find(x=>x.k===k)?.n).filter(Boolean).join(", ")||"None"}</b><span>Crate keys</span><b>${R.keys||0}</b><span>Rested EXP</span><b>${Math.round(R.rest||0).toLocaleString()}</b></div>`)}</div>
     <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${typeof jobName==="function"&&jobName()?mpWin("Job · "+esc(jobName()),`<div class="mp-note">${(()=>{const J=jobS(),P=JOBS[J.path],s=J.spec?P.spec[J.spec]:null;const acts=[P.act,...(s?[s.act]:[])],pas=[...P.pas,...(s?s.pas:[])];return`<b>Actives</b> (once a quarter): ${acts.map(a=>esc(a.lab)).join(", ")}.<br><b>Passives</b>: ${pas.map(x=>`${esc(x[1])} +${x[2]*(J.m3?1.5:1)} on ${x[0]}`).join(", ")}${J.m4?", Legend +0.5 on everything":""}.<br>Next: ${J.m4?"nothing left; that was the last one":"Lv "+(J.m3?65:J.spec?45:J.path?20:10)}.`})()}</div>`):mpWin("Job",`<div class="mp-note">None yet. The System will text you at level 10.</div>`)}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
@@ -4387,12 +4390,12 @@ const PAL={wall:"#eadfc7",wall2:"#d9ccae",pad:"#2b3a6b",trim:"#8a6a4a"};
 function hubMaps(){const cl=C.cl,t=cl.teams[C.school],hc=t.color||"#2f6fd6",dk=mixc(hc,"#000000",.35),hour=new Date().getHours(),sky=hour>=20||hour<6?"night":hour>=17?"sunset":hour>=6&&hour<9?"sunset":"day";
   const tm=(t.roster||[]).map(id=>cl.players[id]).filter(p=>p&&p.pid!=="me").sort((a,b)=>b.ovr-a.ovr)[0];
   const gym={id:"gym",name:esc(C.school)+" Gym",w:1240,floorFrac:.76,sky,hc,dk,
-    props:[{k:"door",x:44,img:"props2/door.png",label:"To the hallway",portal:"hall",spawn:1060,sign:"EXIT"},
+    props:[{k:"door",x:44,img:"props2/door.png",label:"To the shop",portal:"shop",spawn:520,sign:"SHOP"},
       {k:"trophy",x:150,img:"props2/trophycase.png",label:"Trophy case",act:"goals"},
       {k:"pennant",x:230,img:"props2/pennant.png",wall:true,wy:86},
       {k:"board",x:700,label:"Scoreboard",act:"sched",wall:true,board:true},
       {k:"bulletin",x:900,img:"props2/bulletin.png",label:"Team bulletin",act:"news",wall:true,wy:90},
-      {k:"hoop",x:1180,img:"props2/hoop_06.png",label:"Shoot around",act:"shoot"}],
+      ],
     npcs:[{id:"coach",name:"Coach "+(t.coach||"Harlan"),x:560,look:{style:"A",tone:2,hairc:7,jersey:"#2b2f40",shorts:"#2b2f40",shoes:"#222222"},face:1,lines:[`${C.name.split(" ")[0]}, you're ${t.w}-${t.l}. ${t.w>=t.l?"Keep the standard.":"We fix it in practice."}`,"Space plays the next game. Walk to the door for the hallway.","Shooters shoot. Passers pass. Know which one you are tonight."]},
       tm?{id:"tm",name:shortNm(tm),x:1000,look:charLook({style:hsh(tm.pid)%2?"B":"A",tone:5-clamp(+(lookOf(tm,tm.pid).skin??lookFor(tm.pid).skin)||0,0,5),hairc:hsh(tm.pid+"h")%6,jersey:hc,shorts:hc}),anim:"drib",face:-1,lines:[`${tm.ovr} overall and I still can't guard you in practice.`,"You see the Top 25? Check the R window.","Run it back after film."]}:null].filter(Boolean),
     spawn:380};
@@ -4404,7 +4407,12 @@ function hubMaps(){const cl=C.cl,t=cl.teams[C.school],hc=t.color||"#2f6fd6",dk=m
     npcs:[{id:"friend",name:"Dre",x:1480,look:{style:"B",tone:1,hairc:0,jersey:"#8a2be2",shorts:"#222222",shoes:"#ffffff"},face:-1,lines:["Yo. Film room's locked again. Coach took the key.","When you make it, don't forget who rebounded for you at 6 a.m.","Bonds system drops soon. I'm the first one. Be nice."]},
       {id:"student",name:"Jas",x:1900,look:{style:"A",tone:3,hairc:2,jersey:"#e06d8a",shorts:"#2b3a6b",shoes:"#ffffff"},face:-1,lines:["You're the basketball kid, right? Stats test is Friday.","The classroom opens next drop. Bring a pencil."]}],
     spawn:1060};
-  return{gym,hall}}
+  const shop={id:"shop",name:"The shop",w:720,floorFrac:.76,sky:"day",hc:"#6b4f2c",dk:"#2a1e12",
+    props:[{k:"out",x:40,img:"props2/door.png",label:"Back to the gym",portal:"gym",spawn:120,sign:"GYM"},
+      {k:"counter",x:360,label:"Counter — the shop opens with the next build. NIL money spends here.",act:"soon",wall:true,wy:120,w:200,h:60,invisible:true},
+      {k:"shelf",x:560,img:"props2/trophycase.png",label:"Shelves",act:"inv"}],
+    npcs:[{id:"clerk",name:"Sam",x:300,look:{style:"A",tone:3,hairc:1,jersey:"#3b5b3b",shorts:"#222222",shoes:"#ffffff"},face:1,lines:["Not open yet. Soon.","Bring money. Not the fake kind."]}],spawn:520};
+  return{gym,shop}}
 function hubGo(id,spawn){const m=hubMaps()[id];if(!m)return;HUB.map=id;HUB.px=spawn??m.spawn;HUB.vx=0;HUB.vy=0;HUB.py=0;HUB.target=null;HUB.talk=null;HUB.bubble=null;HUB.cam=0;C.hubMap=id;C.hubX=HUB.px;HUB.flash=1}
 function hubEnsure(){if(!HUB.map||!hubMaps()[HUB.map]){hubGo(C.hubMap||"gym",C.hubX)}}
 /* geometry helpers: all in scene px */
@@ -4417,7 +4425,7 @@ function hubDraw(cv){const m=hubMaps()[HUB.map];if(!m)return;const{sc,iw,ih}=hub
   // camera
   const cam=HUB.cam=clamp(HUB.px-iw/2,0,Math.max(0,m.w-iw));
   g.clearRect(0,0,iw,ih);
-  if(m.id==="gym")drawGym(g,m,iw,ih,floorY,cam,t);else drawBgMap(g,m,iw,ih,floorY,cam,t);
+  if(m.id==="gym"||!m.bg)drawGym(g,m,iw,ih,floorY,cam,t);else drawBgMap(g,m,iw,ih,floorY,cam,t);
   // props
   const ents=[];
   for(const p of m.props){const b=propBox(p,m,ih,floorY);if(p.board){drawBoard(g,b.x-cam,b.y,m);continue}
@@ -4579,7 +4587,7 @@ function lvCard(pid){const el=$("lv-card");if(!el||!LV)return;const x=LV.ps[pid]
   el.innerHTML=`<canvas width="24" height="24"></canvas><div><div class="n">${esc(shortNm(p))} <span>| ${esc(p.pos||"")}${p.no!=null?" #"+esc(String(p.no)):""}</span></div><div class="g" style="grid-template-columns:repeat(3,auto)"><b>PTS</b><b>${three?"3PT":"FG"}</b><b>${three?"3PT%":"FG%"}</b><i>${b.pts||0}</i><i>${sh[0]}/${sh[1]}</i><i>${sh[1]?Math.round(100*sh[0]/sh[1]):0}%</i></div></div>`;
   drawPortrait(el.querySelector("canvas"),lookOf(p,pid),jy,tr,p.no);el.hidden=false;clearTimeout(lvCard.t);lvCard.t=setTimeout(()=>{const e2=$("lv-card");if(e2)e2.hidden=true},2600)}
 function lvApply(e){LV.lastE=e;if(LV.ctl&&$("lv-coach")&&!$("lv-coach").hidden&&(e.type==="sub"||e.type==="q"))setTimeout(lvCoach,0);
-  if(e.type==="sub"&&LV.mine!=null&&LV.ctl&&e.k===LV.ctl.side&&!LV.skipping){const nowOn=onHas(e.on[e.k],LV.mine);if(LV._wasOn!=null&&nowOn!==LV._wasOn){try{SFX.whistle()}catch(x){}lvPop(nowOn?"YOU'RE IN":"BREATHER",e.k);if(!nowOn&&LV.ctl.mode&&LV.ctl.mode!=="watch")toast("Coach pulled you. Legs or minutes — check the Bench tab.")}LV._wasOn=nowOn}
+  if(e.type==="sub"&&LV.mine!=null&&LV.ctl&&e.k===LV.ctl.side&&!LV.skipping){const nowOn=onHas(e.on[e.k],LV.mine);if(LV._wasOn!=null&&nowOn!==LV._wasOn){try{SFX.whistle()}catch(x){}lvPop(nowOn?"YOU'RE IN":"BREATHER",e.k);if(!nowOn&&LV.ctl.mode&&LV.ctl.mode!=="watch")toast("Coach pulled you. Energy or minutes. Check the Bench tab.")}LV._wasOn=nowOn}
   else if(e.type==="start"&&LV.mine!=null&&LV.ctl)LV._wasOn=onHas(e.on[LV.ctl.side],LV.mine);
   const b=LV.box,add=(pid,k,v=1)=>{if(!pid)return;(b[pid]??={pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0,tpm:0,tpa:0});b[pid][k]+=v};
   if(e.type==="make"){if(e.o===0)LV.cheer=.9;if(!LV.skipping){try{if(LV.mine!=null&&String(e.sh)===String(LV.mine))SFX.swish()}catch(x){}LV.celeb={pid:e.sh,t:1.1};(LV.net??={})[lvBasket(e.o,e.q)]=1}add(e.sh,"pts",e.pts);add(e.sh,"fgm");add(e.sh,"fga");if(e.shot==="3"){add(e.sh,"tpm");add(e.sh,"tpa")}add(e.as,"ast")}
@@ -4634,7 +4642,7 @@ const lname=p=>p.name.split(" ").slice(-1)[0];
 const ORDN=["1st","2nd","3rd","4th"],onHas=(arr,pid)=>!!arr&&arr.some(x=>String(x)===String(pid));
 function* liveGen(SD,opt,ctl){
   const TM=SD.map(s=>s.t),no3x=opt.no3x,tf=opt.tf,per=opt.per,np=per.length,tot=per.reduce((a,b)=>a+b,0),PN=opt.half?"half":"quarter",FO=opt.fo||6,BON=opt.bonus||5,CLK=opt.clock||24,HOME=opt.home||0;
-  const R2=SD.map(s=>s.ps.map((p,i)=>({p,tgt:s.m[i],min:0,pf:0,st:i<5,stint:0,hot:[],b:{min:0,pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0,tpm:0,tpa:0,ftm:0,fta:0}})));
+  const R2=SD.map(s=>s.ps.map((p,i)=>{const r={p,tgt:s.m[i],min:0,pf:0,st:i<5,stint:0,hot:[],b:{min:0,pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0,tpm:0,tpa:0,ftm:0,fta:0}};r.en=enMax(r);return r}));
   const on=[R2[0].slice(0,5),R2[1].slice(0,5)],sc=[0,0],ev=[];let tfoul=[0,0];
   const avgDur=tot/(2*opt.poss);let nposs=0;let q=1,t=per[0],o=R()<.5?0:1,elapsed=0;
   PV.ref=opt.ref||65;PV.to=opt.pro?.125:.16;PV.blk=opt.pro?.33:.5;PV.ftB=opt.pro?.775:.72;PV.foul.rim=opt.pro?.22:.26;const US=ctl?ctl.side:-1;if(ctl){ctl.st={R2,on:()=>on,ev,el:()=>elapsed,sc};if(ctl.karmic==null)ctl.karmic=typeof C!=="undefined"&&C?C.karmic!==false:true}
@@ -4662,7 +4670,7 @@ function* liveGen(SD,opt,ctl){
     const lead=sc[o]-sc[1-o],late=q>=np&&t<360,clutch=q>=np&&t<=120&&Math.abs(lead)<=6;
     const paceF=late&&lead<-6?.78:late&&lead>8?1.18:1;
     const dur=clamp(avgDur*rnd(.55,1.5)*paceF,4,CLK);t-=dur;elapsed+=dur;sinceSub+=dur;
-    [...O,...D].forEach(r=>{r.min+=dur/60;r.b.min+=dur/60;r.stint+=dur/60});R2[0].concat(R2[1]).forEach(r=>{if(!O.includes(r)&&!D.includes(r))r.stint=Math.max(0,r.stint-dur/40)});
+    [...O,...D].forEach(r=>{r.min+=dur/60;r.b.min+=dur/60;r.stint+=dur/60;const s=prof(r.p);r.en=Math.max(0,r.en-dur/60*(2.3-(s.STA-PV.ref)/60))});R2[0].concat(R2[1]).forEach(r=>{if(!O.includes(r)&&!D.includes(r)){r.stint=Math.max(0,r.stint-dur/40);r.en=Math.min(enMax(r),r.en+dur/60*3.6)}});
     const PO=O.map(r=>prof(r.p)),PD=D.map(r=>prof(r.p));
     const avgS=(P,ks)=>P.reduce((a,s)=>a+ks.reduce((b,k)=>b+s[k],0)/ks.length,0)/P.length,avgFat=O.reduce((a,r)=>a+fatigue(r),0)/5;
     // turnover
@@ -4704,7 +4712,7 @@ function* liveGen(SD,opt,ctl){
       if(ud&&ctl&&ctl.hero!=null&&String(dp.pid)===String(ctl.hero)&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&(defOn==="on"||(defOn==="clutch"&&clutch))){
         const opts=defOptions(s,d,ctx),clk=`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
         const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}`,timing:typeof C!=="undefined"&&C?C.timing!==false:true,skl:Math.max(d.PER,d.STL,d.BLK)}};
-        if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}ctx.open=true;ctx.contest=false;df.stint+=.6}
+        if(da&&da.k!=="hands")enSpend(df,4);if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}ctx.open=true;ctx.contest=false;df.stint+=.6}
         else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(da.nat1||R()<.35)forceFoul=true;else{ctx.open=true;ctx.contest=false}}
         else if(da&&da.k==="charge"){if(da.made){sh.b.tov=(sh.b.tov||0)+1;df.b.chg=(df.b.chg||0)+1;push("to",`${p.name} lowers the shoulder. ${dp.name} is set. Charge.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}df.pf++;tfoul[1-o]++;push("foul",`Blocking foul on ${dp.name}.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
         else if(da&&da.k==="hands"&&da.made){ctx.contest=true;ctx.open=false}}
