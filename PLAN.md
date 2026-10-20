@@ -33,6 +33,34 @@ When this plan and old code disagree, this plan wins. When this plan is silent, 
 - Items are edges on specific moves. Loot boxes only at advancements and as boss/encounter drops. The shop spends NIL money; stock rotates per season; nothing is shop-only.
 - Cut and never to return: traits, daily EXP events (replaced by a flat ×1.6 game EXP), loadouts, archetype names on the HUD, the hallway map, the hoop prop, recruiting UI, franchise/GM screens in the pro stage, the Architect, Codex, star tiers 2–4.
 
+
+### 1a. The MMO loop (decided 2026-10-20, supersedes anything career-shaped below)
+
+- **No career length.** No aging decline, no retirement, no epilogue, no Hall of Fame finish line (the HOF becomes a ladder rank). Contracts and free agency stay, as a way to change teams.
+- **College is the tutorial:** one season (a 1★ junior college start may need two, with a transfer). It teaches the chain, practice, energy and the class pick at Lv 10. It ends with a **grade** (S/A/B/C/D) from efficiency, wins, awards and challenges.
+- **The grade decides the draft and the starter box:** S offers a choice of three teams including a contender, plus a legendary starter box; A three teams, epic; B two teams, rare; C one team (second round), uncommon; D undrafted → G League team, common. (Choice of team, not the real-NBA inversion where the best prospects go to the worst teams.)
+- **Seasons are content patches.** Each pro season: level cap rises (Season 1 cap 75, then +10 a season), the **league average (PV.ref) rises by 3**, the stat ceiling rises by 3 (99, 102, 105, …), a new loot tier unlocks, and the ladder partly resets (you keep a rank floor). Every league player's ratings track the league average; new draft classes come in stronger; bosses keep up.
+- **The league is the ruler, not 99.** All dice are relative to PV.ref, so percentages stay realistic while every number rises.
+- **The season is the raid.** Regular season = the dungeon crawl (EXP, NIL money, common–rare drops, boss matchups with drop tables); record sets the seed. **Playoffs = four raid wings**: each round won drops a box one rarity higher (rare, epic, epic, legendary). **The Finals = the raid boss**: a guaranteed legendary from the new tier, the season's biggest NIL payout, and a **championship ring** (unique per season, equippable, its own edge; the ring shelf is the long-term trophy case). Losing a round ends the run; you keep what you earned.
+- **Your team is your party.** The offseason is party-building: free agency, trade requests, choosing where you sign. NIL money and reputation decide which teams want you. Money has two uses: the shop and the party.
+
+### 1b. Creation and growth (decided 2026-10-20)
+
+- **Everyone starts with 300 SP.**
+- **Stars 1–5 set the starting floor of every skill and the growth rate** (option A+D):
+  | Stars | Floor | Growth | College offers |
+  |---|---|---|---|
+  | 5★ | 55 | normal | blue bloods |
+  | 4★ | 50 | +0.5 SP/level | high-majors |
+  | 3★ | 45 | +1 SP/level, +5% EXP | mid-majors |
+  | 2★ | 40 | +1.5 SP/level, +10% EXP | low-majors |
+  | 1★ | 35 | +2 SP/level, +20% EXP | junior college |
+  (The per-level bonus scales with the per-level grant below: treat it as a % of the level's SP, i.e. 4★ +10%, 3★ +20%, 2★ +30%, 1★ +40%.)
+- **Cost per skill point, by distance above the league average (PV.ref):** below average 2; average to +10: 4; +10 to +20: 7; +20 to +30: 11; the top band (last 4 points to the ceiling): 16.
+- **SP per level is set so that reaching the season's level cap gives exactly enough to max every skill to that season's ceiling** from a 3★ floor, with the grant growing by level (about 30 at Lv 10, about 130 at Lv 70). Compute the table in code from the cost curve; do not hand-type it.
+- **Origins** = a starting shape (which skills get +floor) plus one perk at Lv 5 from a two-option pool. No biographies. Every promise on the origin card must do something visible on the dice or the card; remove any that do not.
+- **EXP outside games:** two **practice slots per game week** (a drill = a 3–4 roll chain with the same dice; EXP plus progress toward that skill); the hub gym's scoreboard starts a drill; **challenges** (one-time feats, EXP + loot, replace goals); **offseason camps** (3–4 bigger drills, skippable); **boss bonus EXP**; rested EXP stays. No timers, no streaks.
+
 ## 2. The chain: state machine spec
 
 Replaces the current one-shot card in `play` for the user's team possessions. The CPU plays the same grammar with a tendency profile (section 2.6), so simmed and played stats come from one engine.
@@ -148,15 +176,15 @@ Save migration: on load, if `C.job.path` exists (old 5-path), map scorer→score
 
 ## 6. Milestones and acceptance
 
-**M1 — cleanup (shipped v45).** **M2 — the chain (shipped v46)**, plus the story cut. Acceptance results at ship: a three-move chain inside one possession on desktop and phone; 0 of 70 cards overflowing at 390×700; five-star played FG% 50.1 vs simmed 52.1, one-star 48.5 vs 48.1; league calibration as in §1.
+**M1 — cleanup (shipped v45).** **M2 — the chain (shipped v46)**, plus the story cut.
 
-**M3 — classes and perks (v47):** section 3; advancement cards in the System's voice; save migration; Job panel on the sheet lists perks with their text. Tests: `jobs.py` reaches the Lv 30 pick via sim; a unit script walks the machine with each perk on and asserts its effect.
+**M2.5 — creation and growth (v47):** §1b. 300 SP for all, star floors and growth, the new cost curve relative to PV.ref, SP-per-level table computed from the cap, origins rewritten (Legacy: Name on the Back = start at 20 Attention, opponent's best defender guards you from game one, printed −1; Lv 5 pool Heat check / Captain; others likewise). Practice slots and the gym drill. Tests: a 3★ who spends every point reaches max-all at Lv 75 within 2%; creation screen shows floors; drills run as chains.
 
-**M4 — items, loot, shop (v48):** section 4, with the Locker rewritten to edges on moves and the shop in the gym's shop room. Tests: an advancement grants exactly one class-matching item of the right rarity floor; buying debits NIL money; no item is ever in both bag and equipped.
+**M3 — classes and perks (v48):** §3. **M4 — items, loot, shop (v49):** §4, plus playoff wing boxes and the ring.
 
-**M5 — ladder, encounters, difficulty (v49):** section 5. Tests: a full simulated career climbs at least to All-NBA on a five-star build; each difficulty setting moves a greedy bot's FG% by roughly 4–5 points per step; loot drops only on wins, rarity rises with opponent strength.
+**M5 — the season loop (v50):** §1a. Tutorial grade and draft choice; no aging/retirement; season rollover (cap +10, PV.ref +3, ceiling +3, league ratings track, stronger draft classes, new loot tier, partial ladder reset); playoffs as raid wings; Finals loot and ring; offseason party-building (free agency, trade request). Tests: three simulated seasons run back to back with league FG% within realistic bands each season; a champion receives exactly one ring and one guaranteed legendary; a first-round exit receives one rare box.
 
-**M6 — aesthetics (v50+):** job visual tells on the sprite, item visuals, nat-20 and dunk animations, the shop interior, music. Only after M3–M5 are locked.
+**M6 — ladder, encounters, difficulty (v51):** §5. **M7 — aesthetics (v52+).**
 
 ## 7. Working rules for the executor
 
