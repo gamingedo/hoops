@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="e0067e34f1";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="f43506d7da";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -645,6 +645,7 @@ body{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
   .bar .btn{font-size:14px;padding:13px 6px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.cs-ev.hot{border-color:#ffd166;color:#ffd166}.drill-steps{display:grid;gap:6px;margin:8px 0}.drill-step{border:1px solid #2a3550;border-radius:8px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 8px}.drill-step em{grid-column:1/-1;font-style:normal;opacity:.85}.drill-step.cur{border-color:#ffd166}.drill-step.ok{border-color:#6cb8ff;background:rgba(108,184,255,.08)}.drill-step.no{border-color:#ffa24c;background:rgba(255,162,76,.08)}
 </style>
 </head>
 <body>
@@ -1483,7 +1484,7 @@ function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v46";
+const BUILD="v47";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -1549,7 +1550,7 @@ function mcOffers(){
   if(!C.offers)C.offers=recruitOffers();
   return mcHead(`${"★".repeat(C.stars)} recruit · ${C.pos} · ${ftin(C.ht)} · potential ${C.pot}`)+`
   <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="create">← Back to creation</button></div><div class="kicker">Step 3 of 3 · ${sl(y)} recruiting</div><h2>Choose your school</h2>
-    <p>${C.stars<=1?`One letter. Junior colleges only.`:C.stars===2?"Three low-majors called. Coach drove you to all of them.":`You're a ${C.stars}-star recruit. These programs offered you a scholarship${C.bonds?.rival?`; ${esc(C.bonds.rival.name)} is already committed somewhere else`:""}.`}</p>
+    <p>${C.stars<=1?`Two low-major programs called.`:C.stars===2?"Three low-majors called. Coach drove you to all of them.":`You're a ${C.stars}-star recruit. These programs offered you a scholarship${C.bonds?.rival?`; ${esc(C.bonds.rival.name)} is already committed somewhere else`:""}.`}</p>
     <div class="mc-offers">${C.offers.map(s=>{const ros=collegeRoster(s,y);const me=calcOvr(C.a,C.pos),role=(cl.teams[s]?.roster||[]).filter(id=>cl.players[id]&&cl.players[id].ovr>me).length,rk=apRk(cl,s);
       return`<div class="mc-offer"><div><b>${esc(s)}</b><small>${esc(cl.teams[s]?.conf||"")} · Program ${pr(s)}${rk?` · Preseason AP #${rk}`:""} · ${role<=1?"Projected starter":role<=4?"Rotation role":"Bench to start"}</small></div>
       <p>${cl.teams[s]?.juco?"Junior college. Two years at most, then the portal. Nobody films these games.":ros.length?"Future pros: "+ros.slice(0,4).map(x=>`${esc(x.name)} ('${String(x.d).slice(2)} #${x.pick})`).join(", "):`Best player: ${esc(cl.players[(cl.teams[s]?.roster||[]).slice().sort((a,b)=>(cl.players[b]?.ovr||0)-(cl.players[a]?.ovr||0))[0]]?.name||"--")}. ${(C.stars||5)>=4?"You would start on day one.":"Minutes are earned here."}`}</p>
@@ -2369,7 +2370,7 @@ function watchNext(){
 function nbaLive(h,a,playoff,label){
   const SD=nbaSD(h,a),side=h===G.userTid?0:1,mine=G.career&&!G.career.retired?G.career.pid:null,hero=(SD[side].ps.find(p=>p.pid===mine)||best(SD[side].ps,p=>p.ovr))?.pid;
   const ctl=mkCtl(side,hero);ctl.mode=mine?(playMode()==="sim"?"watch":playMode()):"watch";const gen=liveGen(SD,nbaOpt(),ctl);gen.next();
-  render();openLive({gen,ctl,teams:[h,a],mine,label,year:G.year,no3:no3(),onDone:L=>{G.preRes={h,a,L};if(G.phase==="season")simDay(false);else if(G.phase==="playoffs")playoffDay(false);G.preRes=null;save()}});
+  render();openLive({gen,ctl,teams:[h,a],mine,label,year:G.year,no3:no3(),onDone:L=>{if(mine&&typeof C!=="undefined"&&C)C._played=ctl.mode!=="watch";G.preRes={h,a,L};if(G.phase==="season")simDay(false);else if(G.phase==="playoffs")playoffDay(false);G.preRes=null;save()}});
 }
 function myPair(cl){
   if(cl.phase==="reg"){const p=(cl.sched[cl.day]||[]).find(x=>x.includes(C.school));return p?{h:p[0],a:p[1],neutral:false}:null}
@@ -2382,7 +2383,7 @@ function clWatch(){
   const SD=[clSide(cl,pr.h),clSide(cl,pr.a)],side=pr.h===C.school?0:1,ctl=mkCtl(side,"me");ctl.mode=playMode()==="sim"?"watch":playMode();const gen=liveGen(SD,clOpt(cl,{neutral:pr.neutral,watch:true}),ctl);gen.next();
   XW={players:cl.players,teams:cl.teams};mcRender();
   openLive({gen,ctl,teams:[pr.h,pr.a],mine:"me",college:true,halves:true,no3:cl.y<1986,court:{r3:col3(cl.y),lane:12,corner:col3(cl.y)},year:cl.y,label:cl.phase==="reg"?"Regular season":cl.phase==="ct"?"Conference tournament":"NCAA Tournament",
-    onDone:L=>{cl.pre={h:pr.h,a:pr.a,L};clDay(false);cl.pre=null;saveC()}});
+    onDone:L=>{C._played=ctl.mode!=="watch";cl.pre={h:pr.h,a:pr.a,L};clDay(false);cl.pre=null;saveC()}});
 }
 /* ---------- viewer ---------- */
 function eraClass(y){return y<1980?"era70":y<1990?"era80":y<2000?"era90":y<2010?"era00":""}
@@ -2873,7 +2874,7 @@ function mcDraftLegacy(){
     <p>${pk?`With the ${pk} pick, the ${esc(t.city)} ${esc(t.name)} select ${esc(C.name)} out of ${esc(C.school)}. You'll run the ${esc(t.name)} from here.`:"No team called his name. He'll sign with a team that needs him, and that's your new team."}</p>
     <div class="go"><button class="start" data-act="mcenterlegacy">Start his NBA career</button></div></div></section>`;
 }
-function mcEnterFuture(D){const dr=G.draft;C.draftY=D;
+function mcEnterFuture(D){const dr=G.draft;C.draftY=D;try{const R=C.rpg;if(R&&(R.lv||1)<20){for(let L=R.lv+1;L<=20;L++){const g=grantAt(L,R);R.spLv=(R.spLv||0)+g}R.lv=20;R.exp=0}}catch(e){console.error(e)}
   const p=mkPlayer({name:C.name,pos:C.pos,age:C.age,a:{...C.a},pot:C.pot,tid:-3,no:C.no??String(ri(0,55)),ht:C.ht,wt:C.wt});
   p.peakA={...C.peakA};p.focus=C.focus;p.everUser=true;p.look={...(C.look||lookFor(C.name))};if(C.rpg){p.rpg=C.rpg;p.sk=C.sk}dr.prospects.push(p.pid);
   revealLottery(true);dr.started=true;const slot=C.final?Math.min(C.final,nPicks())-1:null;
@@ -3245,19 +3246,21 @@ function drawPortrait(c,look,jersey,trim,num){const x=c.getContext("2d");x.image
 /*RPG_BEGIN*/
 /* ---------- CAREER SKELETON: 2026 start, star tiers, backstory-gated recruiting, JUCO, five-year eligibility, the Prologue ---------- */
 const START_Y=2026,LAST_DATA_Y=2025,ELIG=5;
-const STARS={5:{sp:500,n:"Five-star",tag:"Everybody knows your name",d:"Two thousand people at your last high school game. Eleven letters. Five hundred points."},
- 1:{sp:1,n:"One-star",tag:"One letter",d:"A junior college two states over. One point. The game starts from the bottom."},
- 4:{sp:400,n:"Four-star",tag:"",d:""},3:{sp:300,n:"Three-star",tag:"",d:""},2:{sp:150,n:"Two-star",tag:"",d:""}};
+const STARS={5:{sp:300,n:"Five-star",tag:"No growth bonus.",d:"Every skill starts at 70."},
+ 4:{sp:300,n:"Four-star",tag:"+10% points per college level.",d:"Every skill starts at 65."},
+ 3:{sp:300,n:"Three-star",tag:"+20% points per college level. +5% EXP.",d:"Every skill starts at 60."},
+ 2:{sp:300,n:"Two-star",tag:"+30% points per college level. +10% EXP.",d:"Every skill starts at 55."},
+ 1:{sp:300,n:"One-star",tag:"+40% points per college level. +20% EXP.",d:"Every skill starts at 50. A low-major program."}};
 const JUCOS=["Northeast Oklahoma A&M","Indian Hills CC","Salt Lake CC","Chipola College","Odessa College","South Plains College","Trinity Valley CC","Vincennes University"];
 const isJuco=s=>JUCOS.includes(s);
 function spBase(R){return STARS[R?.stars||5].sp}
 /* ---- schools a backstory opens: each Origin adds one school that fits, if it exists in the world ---- */
 const ORIG_SCHOOLS={legacy:["Duke","Kentucky","North Carolina","Kansas","UCLA"],scholar:["Stanford","Duke","Vanderbilt","Northwestern","Virginia","Notre Dame"],blacktop:["Memphis","Syracuse","Georgetown","St. John's","UNLV","Cincinnati"],
   import:["Gonzaga","Saint Mary's","Utah","Iowa State","Oregon"],bloom:["Butler","Dayton","Creighton","Wichita State","Loyola Chicago"],comeback:["Marquette","Providence","Xavier","Houston"],custom:[]};
-function recruitOffers(){const cl=clEnsure(),stars=C.stars||5;if(stars<=1)return shuffle([...JUCOS]).slice(0,1);
+function recruitOffers(){const cl=clEnsure(),stars=C.rpg?.stars||C.stars||3;
   const sch=Object.keys(cl.teams).filter(s=>!cl.teams[s].juco),pr=s=>cl.teams[s].pres,ranked=[...sch].sort((a,b)=>pr(b)-pr(a));
-  const band=stars>=5?[0,12]:stars===4?[8,40]:stars===3?[30,110]:[90,Math.max(96,ranked.length)];
-  let offers=shuffle(ranked.slice(...band)).slice(0,stars===2?3:4);
+  const n=ranked.length,band=stars>=5?[0,12]:stars===4?[8,40]:stars===3?[30,110]:stars===2?[90,Math.max(96,Math.min(n,200))]:[Math.max(0,n-40),n];
+  let offers=shuffle(ranked.slice(...band)).slice(0,stars===1?2:stars===2?3:4);
   const fit=(ORIG_SCHOOLS[C.rpg?.origin]||[]).filter(s=>sch.includes(s)&&!offers.includes(s));
   if(fit.length&&stars>=3){const want=fit.find(s=>stars>=5||pr(s)<=pr(ranked[band[1]-1])+10);if(want)offers[offers.length-1]=want}
   return offers.sort((a,b)=>pr(b)-pr(a))}
@@ -3357,14 +3360,16 @@ const SKL=[
 const SKG=["Shooting","Finishing","Playmaking","Defense","Rebounding","Athletic","Intangibles"],SKK=SKL.map(s=>s[0]),SKN_=Object.fromEntries(SKL.map(s=>[s[0],s[1]]));
 const PHYS=new Set(["SPD","ACC","VRT","STR","STA"]),MIND=new Set(["SIQ","VIS","CLU"]);
 const SP0=300;
+const XP_COL=.85,XP_NBA=13.3,XP_PLAYED=2;
+const lvCap=()=>{const R=rpgS();return(R&&R.cap)||LVCAP};
 const ORIGINS=[
- {k:"legacy",n:"The Legacy Kid",tag:"Legacy",bio:"Son of Ray \"Tick\" Coleman, a 1990s All-Star who flamed out and never talks about why. Everyone knows your last name.",trait:"Name on the Back: scouts notice you early (+1 recruiting star), but crowds expect more.",sk:{MID:6,SIQ:4},sig:"Fadeaway"},
- {k:"bloom",n:"The Late Bloomer",tag:"Underdog",bio:"Cut from JV as a 5'9\" freshman. Grew six inches in one summer. Nobody has a file on you.",trait:"Growth Spurt: +1 skill point every level, and bonus EXP for beating better players.",sk:{},spLv:1,sig:"Second Jump"},
- {k:"blacktop",n:"The Blacktop Prodigy",tag:"Streetball",bio:"Raised on city park courts. A legend there at 14, with flair to spare and holes in your fundamentals.",trait:"And-One: +6 handle and +4 dunk to start. Crowds love you.",sk:{HND:6,DNK:4,FT:-3},sig:"Crossover Chain"},
- {k:"import",n:"The Import",tag:"International",bio:"Moved to the States at 15 from Lagos, Belgrade or Melbourne. New language, old-school fundamentals.",trait:"Fundamentalist: +6 passing and +6 court vision. Overseas teams know your name.",sk:{PAS:6,VIS:6},sig:"No-Look Pass"},
- {k:"scholar",n:"The Scholar",tag:"Scholar",bio:"Straight-A student who wants law school. Basketball is your second love, for now.",trait:"Film Study: +8 shot IQ and +6 court vision. Academics never block eligibility.",sk:{SIQ:8,VIS:6},sig:"Read & React"},
- {k:"comeback",n:"The Comeback",tag:"Redemption",bio:"Number-one prospect in your class at 14. Tore an ACL at 15. Everyone moved on.",trait:"Scar Tissue: +10 clutch and 20 extra starting points, but the knee costs you 6 speed.",sk:{CLU:10,SPD:-6},sp:20,sig:"Ice Veins"},
- {k:"custom",n:"Custom",tag:"",bio:"Anyone you want. No personal storyline, more freedom.",trait:"Blank slate: 10 extra starting points.",sk:{},sp:10,sig:""}];
+ {k:"legacy",n:"The Legacy Kid",tag:"Name on the back",bio:"Everybody already knows the name.",trait:"Starts with 20 Attention: sponsors find you in your first season. Their best defender guards you: −1 on every move you make to create. Shape: mid-range, shot IQ, clutch. Lv 5: Heat Check or Name Recognition.",sk:{MID:6,SIQ:4,CLU:4},attn:20},
+ {k:"bloom",n:"The Late Bloomer",tag:"Growth",bio:"Nobody has a file on you yet.",trait:"+10% skill points every level. Shape: vertical and dunk. Lv 5: Second Jump or Late Burst.",sk:{VRT:6,DNK:4},spg:.10},
+ {k:"blacktop",n:"The Blacktop Prodigy",tag:"Flair",bio:"Park legend, holes in the fundamentals.",trait:"Your dunks swing momentum one more. Shape: handle and dunk, worse free throws. Lv 5: Ankle Breaker or Downhill.",sk:{HND:6,DNK:4,FT:-3}},
+ {k:"import",n:"The Import",tag:"Fundamentals",bio:"Old-school footwork from overseas.",trait:"Shape: passing and court vision. Lv 5: Vision or Fadeaway.",sk:{PAS:6,VIS:6}},
+ {k:"scholar",n:"The Scholar",tag:"Film study",bio:"Reads the game before it happens.",trait:"Shape: shot IQ and court vision. Lv 5: Screen Reader or Discipline.",sk:{SIQ:8,VIS:6}},
+ {k:"comeback",n:"The Comeback",tag:"Scar tissue",bio:"Was the best in the country once.",trait:"+20 starting points. Shape: clutch, a step slower. Lv 5: Ice Veins or Contact.",sk:{CLU:10,SPD:-6},sp:20},
+ {k:"custom",n:"Custom",tag:"",bio:"No shape. Your call.",trait:"+10 starting points. Lv 5: Downhill or Vision.",sk:{},sp:10}];
 const TRAITS=[
  {k:"gym",n:"Gym Rat",up:"+1 skill point every level",down:"Family and friends see you less (Bonds grow slower)",spLv:1},
  {k:"scorer",n:"Pure Scorer",up:"+6 to every shooting and finishing skill",down:"-6 to every defense skill",sk:{CLS:6,MID:6,THR:6,FT:6,LAY:6,DNK:6,PST:6},skx:{PER:-6,INT:-6,STL:-6,BLK:-6}},
@@ -3383,20 +3388,19 @@ const DAYEV=[
  {k:"fri",n:"Friday Night Lights",d:"4x EXP from every game.",xp:4,ic:"4×"},
  {k:"sat",n:"Lucky Saturday",d:"1.5x EXP and 1.5x crate keys.",xp:1.5,drop:1.5,ic:"★"}];
 const today=()=>({k:"none",n:"",d:"",xp:1,q:1,rest:1,drop:1,winx:1,bond:1,spB:0,ic:""});
-const needXP=L=>L<=20?Math.round(150+85*Math.pow(L,1.6)):9600+(L-20)*500;
-const skCost=v=>v<70?1:v<82?2:v<90?3:v<97?4:5+Math.floor((v-97)/10);
+const needXP=L=>xpNeed(L);
+const skCost=v=>{const R=rpgS();return costAt(v,grRef(R),grCeil(R))};
 /* ---- body-driven bases: height raises the floor on size skills and lowers it on quickness ---- */
 function skBase(k,b,age){
-  const h=(b.ht-78)/3,w=((b.ws??b.ht+3)-b.ht-3)/2,m=(b.wt-(b.ht*2.85-22))/15,ag=age<=24?(age-18)*1.4:age<=30?8.4:8.4-(age-30)*2.4;
+  const h=(b.ht-78)/3,w=((b.ws??b.ht+3)-b.ht-3)/2,m=(b.wt-(b.ht*2.85-22))/15;
   const T={CLS:[h*1.5,0,0],THR:[-h*1.2,0,0],LAY:[-h*.5,0,0],DNK:[h*4.5,w*1.5,-m],PST:[h*3,0,m*2],DRW:[0,0,m],HND:[-h*3,0,0],PAS:[-h*.8,0,0],PER:[-h*2,w,0],INT:[h*3,w*1.5,m*1.5],STL:[-h*.8,w*1.5,0],
     BLK:[h*4.5,w*2,0],ORB:[h*3,w,m],DRB:[h*3.5,w,m],SPD:[-h*3,0,-m*2],ACC:[-h*3,0,-m*1.5],VRT:[-h,0,-m*1.5],STR:[h*1.5,0,m*4],STA:[0,0,-m]}[k]||[0,0,0];
-  let v=50+T[0]+T[1]+T[2];if(PHYS.has(k))v+=ag;else if(MIND.has(k))v+=Math.max(0,age-18)*1.2;
-  return Math.round(clamp(v,18,72));
+  const R=rpgS();return Math.round(clamp(grFloor(R)+clamp((T[0]+T[1]+T[2])*.6,-12,12),30,grCeil(R)-1));
 }
 function rpgFlat(R){const o={};const add=s=>{for(const k in s||{})o[k]=(o[k]||0)+s[k]};const og=ORIGINS.find(x=>x.k===R.origin);if(og)add(og.sk);(R.traits||[]).forEach(t=>{const tt=TRAITS.find(x=>x.k===t);if(tt){add(tt.sk);add(tt.skx)}});return o}
-function skUp(base,pts){let v=base,left=pts;while(left>=skCost(v)){left-=skCost(v);v++}return{v,left}}
+function skUp(base,pts){let v=base,left=pts,g=0;while(g++<400&&left>=skCost(v)){left-=skCost(v);v++}return{v,left}}
 function rpgSkills(R,age){const fl=rpgFlat(R),o={};for(const k of SKK){const b=skBase(k,R.body,age)+(fl[k]||0);o[k]=skUp(b,R.alloc[k]||0).v}return o}
-function rpgTotal(R){const og=ORIGINS.find(x=>x.k===R.origin);return spBase(R)+(og?.sp||0)+(R.traits||[]).reduce((a,t)=>a+(TRAITS.find(x=>x.k===t)?.sp||0),0)+(R.spLv||0)+(R.spBonus||0)}
+function rpgTotal(R){const og=ORIGINS.find(x=>x.k===R.origin);return(R.spBase??SP0)+(og?.sp||0)+(R.spLv||0)+(R.spBonus||0)}
 function rpgSpent(R){return SKK.reduce((a,k)=>a+(R.alloc[k]||0),0)}
 function rpgFree(R){return rpgTotal(R)-rpgSpent(R)}
 function skToA(s){const r=x=>clamp(Math.round(x),25,115);
@@ -3417,27 +3421,28 @@ function rpgApply(){const R=rpgS();if(!R)return;const age=rpgAge(),s=rpgSkills(R
   else{C.sk=s;C.a=a;C.peakA={...a};C.ht=R.body.ht;C.wt=R.body.wt;C.pot=rpgPot(R,age);if(C.cl?.players?.me){syncMe()}}}
 function rpgPot(R,age){const s=rpgSkills(R,age),o=calcOvr(skToA(s),C?.pos||"SF");return clamp(Math.round(o+30+(R.body.ht-78)*1.2-Math.max(0,age-19)*3),50,99)}
 /* ---- EXP ---- */
-function spPerLv(R){const og=ORIGINS.find(x=>x.k===R.origin);return Math.max(2,5+(og?.spLv||0)+(R.traits||[]).reduce((a,t)=>a+(TRAITS.find(x=>x.k===t)?.spLv||0),0))}
+function spPerLv(R){return grantAt(R.lv,R)}
 function rpgRest(R){const now=Date.now();if(R.last){const h=(now-R.last)/36e5,cap=needXP(R.lv)*1.5;if(h>.25)R.rest=Math.min(cap,(R.rest||0)+h*needXP(R.lv)*.12*(today().rest||1)*(1+(typeof gearMods==="function"&&C?.gear?(gearMods().rest||0)+(C.spon?.active?.some(d=>d.pay&&d.pay.rest)?1:0):0)))}R.last=now}
 function rpgXP(R,amt,why){if(!R||amt<=0)return 0;amt=Math.round(amt);R.exp+=amt;R.xpLog=[{t:why,x:amt},...(R.xpLog||[])].slice(0,12);let ups=0;
-  while(R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const g=spPerLv(R)+(today().spB||0);R.spLv=(R.spLv||0)+g;ups++;(R.pend??=[]).push({lv:R.lv,sp:g})}
+  R.xpTot=(R.xpTot||0)+amt;{const src=R.xpSrc??={};const k=/^Practice/.test(why||'')?'prac':/pts/.test(why||'')?'game':'other';src[k]=(src[k]||0)+amt}while(R.lv<lvCap()&&R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const g=spPerLv(R);R.spLv=(R.spLv||0)+g;ups++;(R.pend??=[]).push({lv:R.lv,sp:g})}
   if(ups){rpgGoalsCheck(R)}return amt}
 /* one game for your player: line = {min,pts,reb,ast,stl,blk,fgm,fga,tpm}, w = won */
 function rpgGame(ln,w,kind,mg){const R=rpgS();if(!R||!ln)return;const ev=today();
-  if(!ln.min){rpgXP(R,15*ev.xp,"Practice reps");return}
-  let x=35+2.6*ln.pts+2.2*ln.reb+2.6*ln.ast+4*((ln.stl||0)+(ln.blk||0))+(w?26*(ev.winx||1):0)+(kind&&kind!=="reg"?40:0);if((C?.stars||5)<=2)x*=1.35;if(typeof isJuco==="function"&&C&&isJuco(C.school))x*=.8;
-  if((R.traits||[]).includes("showman")&&ln.pts>=25)x*=1.15;if(typeof C!=="undefined"&&C&&C.stage!=="college")x*=4;x*=1.6;
+  const played=!!(C&&C._played)||!!window.__forcePlayed;if(C)C._played=false;
+  if(!ln.min){rpgXP(R,15,"Practice reps");return}
+  let x=35+2.6*ln.pts+2.2*ln.reb+2.6*ln.ast+4*((ln.stl||0)+(ln.blk||0))+(w?26:0)+(kind&&kind!=="reg"?40:0);x*=1+(STARX[R.stars||3]||0);
+  x*=(typeof C!=="undefined"&&C&&C.stage!=="college")?XP_NBA:XP_COL;if(played)x*=XP_PLAYED;
   let bonus=0;if(R.rest>0){bonus=Math.min(R.rest,x);R.rest-=bonus}
   const r=R.rec??={g:0,maxPts:0,maxAst:0,maxReb:0,maxSB:0,dd:0,st:0,bestSt:0,pts:0,w:0};r.g++;r.pts+=ln.pts;r.maxPts=Math.max(r.maxPts,ln.pts);r.maxAst=Math.max(r.maxAst,ln.ast);r.maxReb=Math.max(r.maxReb,ln.reb);r.maxSB=Math.max(r.maxSB,(ln.stl||0)+(ln.blk||0));
   if([ln.pts,ln.reb,ln.ast,ln.stl||0,ln.blk||0].filter(v=>v>=10).length>=2)r.dd++;if(w){r.w++;r.st++;r.bestSt=Math.max(r.bestSt,r.st)}else r.st=0;
   R.keyFrac=(R.keyFrac||0)+(w?.34:.15)*(ev.drop||1);while(R.keyFrac>=1){R.keyFrac--;R.keys=(R.keys||0)+1}
-  rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${bonus?" · rested":""}${ev.xp>1?` · ${ev.n}`:""}`);rpgGoalsCheck(R);
+  rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${played?" · played":""}${bonus?" · rested":""}`);rpgGoalsCheck(R);try{originCheck()}catch(e){}if(window.__autoPrac)try{pracAuto()}catch(e){console.error(e)}
   try{if(typeof C!=="undefined"&&C&&C.stage==="college"){attnGame(ln,w,kind,mg);for(const s of SLOTS){const it=C.gear?.eq?.[s];if(it)it.games=(it.games||0)+1}}}catch(e){console.error(e)}
   R.lastGame={x:Math.round(x+bonus),b:Math.round(bonus)};if(typeof jobCheck==="function")setTimeout(jobCheck,0)}
 /* ---- goals: always three within reach ---- */
 const GOALS=[
  ["pts","Score {n} in a game",[12,18,24,30,36,42,50,60],r=>r.rec?.maxPts||0],
- ["lv","Reach level {n}",[3,5,8,12,16,20,25,30,40,50,60,75,90,110,130,150],(r)=>r.lv],
+ ["lv","Reach level {n}",[3,5,8,12,16,20,25,30,40,50,60,70],(r)=>r.lv],
  ["ast","Dish {n} assists in a game",[4,6,8,10,13,16],r=>r.rec?.maxAst||0],
  ["reb","Grab {n} rebounds in a game",[6,9,12,15,18,22],r=>r.rec?.maxReb||0],
  ["sb","Get {n} steals plus blocks in a game",[3,4,5,7,9],r=>r.rec?.maxSB||0],
@@ -3447,8 +3452,8 @@ const GOALS=[
  ["sp","Spend your skill points (have fewer than {n} left)",[5],r=>rpgFree(r)<5?1:0,1]];
 function rpgGoals(R){R.goals??={};const out=[];for(const[k,txt,ns,f,flag]of GOALS){const i=R.goals[k]||0;if(i>=ns.length)continue;const n=ns[i],v=f(R);out.push({k,t:txt.replace("{n}",n.toLocaleString()),n:flag?1:n,v:flag?(v?1:0):Math.min(v,n),i,pct:flag?(v?1:0):Math.min(1,v/n)})}
   return out.sort((a,b)=>b.pct-a.pct)}
-function rpgGoalsCheck(R){if(!R)return;let any=true,guard=0;while(any&&guard++<20){any=false;for(const g of rpgGoals(R))if(g.pct>=1){R.goals[g.k]=g.i+1;const xp=Math.round(needXP(R.lv)*(.35+g.i*.05)*(today().q||1));(R.done??=[]).unshift({t:g.t,x:xp});R.done=R.done.slice(0,30);
-      if(g.i>=1)R.keys=(R.keys||0)+Math.max(1,Math.round((today().drop||1)));R.exp+=xp;while(R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R)+(today().spB||0);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
+function rpgGoalsCheck(R){if(!R)return;let any=true,guard=0;while(any&&guard++<20){any=false;for(const g of rpgGoals(R))if(g.pct>=1){R.goals[g.k]=g.i+1;const xp=Math.round(needXP(R.lv)*.25);(R.done??=[]).unshift({t:g.t,x:xp});R.done=R.done.slice(0,30);
+      if(g.i>=1)R.keys=(R.keys||0)+Math.max(1,Math.round((today().drop||1)));R.exp+=xp;R.xpTot=(R.xpTot||0)+xp;(R.xpSrc??={}).goal=(R.xpSrc.goal||0)+xp;while(R.lv<lvCap()&&R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
       (R.toast??=[]).push(`Goal complete: ${g.t} (+${xp.toLocaleString()} EXP${g.i>=1?", +1 crate key":""})`);any=true}}}
 /* ---- new careers start here ---- */
 function rpgNew(){return{v:1,origin:"custom",stars:3,tags:[],traits:[],body:{ht:78,wt:205,ws:82},pos:"SF",alloc:{},lv:1,exp:0,spLv:0,spBonus:0,rest:0,last:Date.now(),keys:0,goals:{},loads:[null,null,null],rec:null}}
@@ -3456,10 +3461,99 @@ function autoBuild(R,age,style){R.alloc={};const pri={shooter:["THR","MID","SIQ"
     playmaker:["HND","PAS","VIS","ACC","MID","SPD","SIQ","STL","PER","THR"],twoway:["PER","STL","THR","MID","ACC","SPD","INT","VRT","SIQ","DRB"],big:["INT","BLK","DRB","ORB","CLS","DNK","PST","STR","VRT","STA"]}[style];
   let guard=0;while(rpgFree(R)>0&&guard++<4000){const s=rpgSkills(R,age);let best=null,bv=-1e9;pri.forEach((k,i)=>{const w=(10-i)*1.4-(s[k]-50)*.35;if(w>bv&&skCost(s[k])<=rpgFree(R)){bv=w;best=k}});if(!best)break;R.alloc[best]=(R.alloc[best]||0)+skCost(s[best])}}
 
+/* ---------- growth.js: creation and growth (PLAN.md §1b). Star floors, the cost curve, the level curve,
+   body and origin edges on the dice, origin perks at Lv 5, and practice drills. ---------- */
+const STARF={5:70,4:65,3:60,2:55,1:50};
+const STARG={5:0,4:.10,3:.20,2:.30,1:.40};
+const STARX={5:0,4:0,3:.05,2:.10,1:.20};
+const SKREF_COL=62,SKREF_NBA=65,SKCEIL=99,LVCAP=70,NBA_FLOOR=65,NBA_SP=500;
+const grRef=R=>(R&&R.ref)||SKREF_COL;
+const grCeil=R=>(R&&R.ceil)||SKCEIL;
+const grFloor=R=>(R&&R.floor)||STARF[R?.stars||3]||60;
+/* cost of the next point, by distance above the league average used for costs */
+function costAt(v,ref,ceil){if(v>=ceil)return Infinity;if(v>=ceil-4)return 16;const d=v-ref;return d<0?2:d<10?4:d<20?7:11}
+function costRange(from,to,ref,ceil){let c=0;for(let v=from;v<to;v++)c+=costAt(v,ref,ceil);return c}
+/* SP granted when you reach level L (L>=2). Shape grows with level; the scale is solved so that, from the NBA floor,
+   500 + every grant to the cap pays for every skill to the ceiling exactly (PLAN.md §1b). */
+const GR_SHAPE=L=>10+2*L;
+/* star growth applies to college levels (2–20) only; pro levels grant the same to everyone. Calibrated so a 3-star reaches max-all at the cap. */
+const GR_STARL=20;
+const GR_K=(()=>{const need=SKK.length*costRange(NBA_FLOOR,SKCEIL,SKREF_NBA,SKCEIL)-NBA_SP;let s=0;for(let L=2;L<=LVCAP;L++)s+=GR_SHAPE(L)*(L<=GR_STARL?1+STARG[3]:1);return need/s})();
+function grantAt(L,R){const og=ORIGINS.find(x=>x.k===R?.origin);return Math.round(GR_K*GR_SHAPE(L)*(1+(L<=GR_STARL?(STARG[R?.stars||3]||0):0)+(og?.spg||0)))}
+function grantsTo(L,R){let s=0;for(let l=2;l<=L;l++)s+=grantAt(l,R);return s}
+/* EXP per level: college levels are quick, pro levels flat and long (one NBA season ≈ Lv 20 → 70 if you play) */
+const XPC=L=>Math.round(120+60*L);
+const XPN=L=>Math.round(3000+(L-20)*28);
+function xpNeed(L){return L<20?XPC(L):XPN(L)}
+/* ---------- body edges: wingspan and height on specific rolls ---------- */
+const LEN_KEYS=new Set(["hands","steal","block","rotate","lane","crash","charge"]);
+const QR_KEYS=new Set(["three","mid","cs3","stepback","stepback3","pull3","pullmid","forced"]);
+function bodyEdges(kind,R){R=R||C?.rpg;if(!R?.body)return[];const out=[],ht=R.body.ht||78,wd=(R.body.ws??ht+3)-ht;
+  if(wd>=4&&LEN_KEYS.has(kind))out.push(["Length",Math.min(2,Math.round((wd-2)/2*2)/2)]);
+  if(wd<=1&&(QR_KEYS.has(kind)||kind==="cross"||kind==="hesi"))out.push(["Quick release",Math.min(1.5,(2-wd)*.5)*(QR_KEYS.has(kind)?1:.5)]);
+  if(ht<=75&&(kind==="drive"||kind==="cross"))out.push(["Small and quick",.5]);
+  if(ht>=82&&(kind==="post"||kind==="dropstep"||kind==="rim"||kind==="layhelp"||kind==="dunk"))out.push(["Size",.5]);
+  return out}
+/* ---------- origins: a starting shape and one perk at Lv 5 ---------- */
+const OPERKS={
+  heatcheck:{n:"Heat Check",d:"+1 on jumpers and threes right after you make one.",f:(k,c)=>(QR_KEYS.has(k)&&c?.lastMade)?1:0},
+  namerec:{n:"Name Recognition",d:"+1 drawing fouls and finishing at the rim. The refs know who you are.",f:k=>(k==="drawfoul"||k==="rim"||k==="layup"||k==="layhelp")?1:0},
+  secondjump:{n:"Second Jump",d:"+1.5 crashing the glass, +1 on layups.",f:k=>k==="crash"?1.5:(k==="rim"||k==="layup")?1:0},
+  lateburst:{n:"Late Burst",d:"+1 on every roll in the second half.",f:(k,c)=>c?.half2?1:0},
+  anklebreaker:{n:"Ankle Breaker",d:"+1 on crossovers and hesitations.",f:k=>(k==="cross"||k==="hesi")?1:0},
+  downhill:{n:"Downhill",d:"+1 on every drive.",f:k=>k==="drive"?1:0},
+  vision:{n:"Vision",d:"+1 on every pass and on calling for the ball.",f:k=>(k==="pass"||k==="callfor")?1:0},
+  fadeaway:{n:"Fadeaway",d:"+1.5 on forced jumpers, +1 on hooks.",f:k=>k==="forced"?1.5:(k==="hook"||k==="post")?1:0},
+  screenreader:{n:"Screen Reader",d:"+1.5 on calling and setting screens.",f:k=>k==="screen"?1.5:0},
+  discipline:{n:"Discipline",d:"+1 on hands up and help rotations.",f:k=>(k==="hands"||k==="rotate")?1:0},
+  iceveins:{n:"Ice Veins",d:"+1 on every roll in the last two minutes of a close game.",f:(k,c)=>c?.clutch?1:0},
+  contact:{n:"Contact",d:"+1 drawing fouls and on layups through the help.",f:k=>(k==="drawfoul"||k==="layhelp")?1:0}};
+const OPOOL={legacy:["heatcheck","namerec"],bloom:["secondjump","lateburst"],blacktop:["anklebreaker","downhill"],import:["vision","fadeaway"],
+  scholar:["screenreader","discipline"],comeback:["iceveins","contact"],custom:["downhill","vision"]};
+function originEdges(kind,ctx,R){R=R||C?.rpg;if(!R)return[];const out=[];const p=R.oPerk&&OPERKS[R.oPerk];if(p){const v=p.f(kind,ctx||{});if(v)out.push([p.n,v])}
+  if(R.origin==="legacy"&&["cross","hesi","jab","pump","drive","post","screen","handoff"].includes(kind))out.push(["Their best defender",-1]);
+  return out}
+/* every edge on one of your rolls: body, origin. kind = option key or shot type */
+function myEdges(kind,ctx,type){const R=C?.rpg;if(!R)return[];const a=[...bodyEdges(kind,R),...originEdges(kind,ctx,R)];
+  if(type&&type!==kind){for(const e of [...bodyEdges(type,R),...originEdges(type,ctx,R)])if(!a.some(x=>x[0]===e[0]))a.push(e)}return a}
+function originCheck(){try{const R=C?.rpg;if(!R||R.oPerk||R.oOffered||(R.lv||1)<5)return;R.oOffered=true;const pool=OPOOL[R.origin]||OPOOL.custom;
+  lifeRoll({title:"Level five",quiet:true,txt:[`~Level five. One edge, your choice. It stays with you.`],mods:[],dc:0,opts:pool.map(k=>({t:OPERKS[k].n,d:OPERKS[k].d,go:()=>{R.oPerk=k;saveC();return[`~${OPERKS[k].n}. It is on your card now.`]}}))})}catch(e){console.error(e)}}
+/* ---------- practice: two drills per game week, each a short chain of rolls ---------- */
+const DRILLS={shooting:{n:"Shooting",sk:["THR","MID"],steps:["Spot-up threes","Off the dribble","Contested, end of drill"]},
+  finishing:{n:"Finishing",sk:["LAY","DNK"],steps:["Mikan drill","Through the pad","Finish over the big"]},
+  handles:{n:"Handles",sk:["HND","ACC"],steps:["Two-ball","Cone weave","Live one-on-one"]},
+  defense:{n:"Defense",sk:["PER","STL"],steps:["Slide drill","Closeouts","Shell, live"]},
+  conditioning:{n:"Conditioning",sk:["STA","SPD"],steps:["Suicides","Full-court layups","Seventeens"]}};
+const DRILL_DC=[10,12,14];
+function pracWeek(){if(C?.stage==="college"&&C.cl){const cl=C.cl;return cl.phase==="reg"?"c"+Math.floor(cl.day/2):cl.phase==="ct"||cl.phase==="ncaa"?"p"+cl.phase:null}
+  if(typeof G!=="undefined"&&G?.career&&!G.career.retired&&(G.phase==="season"||G.phase==="playoffs"))return"n"+G.year+"-"+(G.phase==="season"?Math.floor(G.day/7):"po"+(G.po?.round??0));return null}
+function pracLeft(){const w=pracWeek();if(!w)return 0;const P=(C.prac??={w:null,used:0});if(P.w!==w){P.w=w;P.used=0}return Math.max(0,2-P.used)}
+function drillMod(k){const R=rpgS(),s=rpgSkills(R,rpgAge()),d=DRILLS[k],ref=grRef(R);return Math.round(d.sk.reduce((a,x)=>a+(s[x]-ref),0)/d.sk.length/10*2)/2}
+function openDrill(){const R=rpgS();if(!R)return;const left=pracLeft();
+  if(!left){openModal(`<div class="arch-card quiet"><small>Practice</small><p>${pracWeek()?"Both practice slots are used this week. The next game week brings two more.":"Practice opens when the season is on."}</p><div class="actions"><button class="btn" data-act="close">Close</button></div></div>`);return}
+  C.drill=null;openModal(`<div class="arch-card quiet"><small>Practice · ${left} of 2 left this week</small><p>Pick a drill. Three rolls, each harder than the last. Every success pays EXP; a perfect drill pays a skill point.</p>
+    <div class="lr-opts">${Object.entries(DRILLS).map(([k,d])=>{const m=drillMod(k);return`<button class="lr-opt" data-act="drillgo" data-v="${k}"><b>${d.n}</b><small>${d.sk.map(x=>SKN_[x]).join(" and ")} · your edge ${m>=0?"+":""}${m} · DC ${DRILL_DC.join(", ")}</small></button>`}).join("")}</div>
+    <div class="actions"><button class="btn ghost" data-act="close">Not now</button></div></div>`)}
+function drillHtml(){const D=C.drill,d=DRILLS[D.k];return`<div class="arch-card quiet"><small>Practice · ${d.n}</small>
+  <div class="drill-steps">${d.steps.map((s,i)=>{const r=D.res[i];return`<div class="drill-step ${r?r.ok?"ok":"no":i===D.res.length?"cur":""}"><b>${i+1}. ${esc(s)}</b><span>DC ${DRILL_DC[i]}</span>${r?`<em>${r.d} ${D.mod>=0?"+":"−"} ${Math.abs(D.mod)} = ${r.d+D.mod} · ${r.d===20?"natural 20":r.d===1?"natural 1":r.ok?"good":"missed"}</em>`:""}</div>`}).join("")}</div>
+  ${D.res.length<3?`<div class="actions"><button class="btn" data-act="drillroll">Roll the d20 (${D.mod>=0?"+":""}${D.mod})</button></div>`:`<p>${esc(D.out)}</p><div class="actions"><button class="btn" data-act="close">Done</button></div>`}</div>`}
+function drillGo(k){if(!DRILLS[k]||!pracLeft())return;C.drill={k,mod:drillMod(k),res:[]};$("sheet").innerHTML=drillHtml()}
+function drillRoll(){const D=C.drill;if(!D||D.res.length>=3)return;try{SFX.dice()}catch(e){}const i=D.res.length,d=1+Math.floor(Math.random()*20),ok=d===20||(d!==1&&d+D.mod>=DRILL_DC[i]);D.res.push({d,ok});
+  if(D.res.length===3){const R=rpgS(),n=D.res.filter(x=>x.ok).length,x=Math.round(xpNeed(R.lv)*.04*n*(1+(STARX[R.stars||3]||0)));C.prac.used++;
+    if(x)rpgXP(R,x,`Practice: ${DRILLS[D.k].n}, ${n} of 3`);let sp="";if(n===3){R.spBonus=(R.spBonus||0)+1;sp=" Perfect drill: +1 skill point."}
+    D.out=n?`EXP +${x}.${sp}`:"Nothing landed today. No EXP. It happens.";saveC();try{if(C.stage==="college")setTimeout(()=>{const keep=$("sheet").innerHTML,open=!$("modal").hidden;mcRender();if(open){$("sheet").innerHTML=keep;$("modal").hidden=false}},0)}catch(e){}try{rpgFlush()}catch(e){}}
+  $("sheet").innerHTML=drillHtml()}
+/* ---------- tests ---------- */
+function pracAuto(){let g=0;while(pracLeft()&&g++<4){const k=Object.keys(DRILLS)[Math.floor(Math.random()*5)];C.drill={k,mod:drillMod(k),res:[]};for(let i=0;i<3;i++){const D=C.drill,d=1+Math.floor(Math.random()*20);D.res.push({d,ok:d===20||(d!==1&&d+D.mod>=DRILL_DC[i])})}
+  const R=rpgS(),D=C.drill,n=D.res.filter(x=>x.ok).length,x=Math.round(xpNeed(R.lv)*.04*n*(1+(STARX[R.stars||3]||0)));C.prac.used++;if(x)rpgXP(R,x,'Practice (auto)');if(n===3)R.spBonus=(R.spBonus||0)+1;C.drill=null}}
+window.__growth={costRange,grantAt,grantsTo,xpNeed,GR_K,check(){const R0={stars:3,origin:"custom"};const tot=NBA_SP+grantsTo(LVCAP,R0),need=SKK.length*costRange(NBA_FLOOR,SKCEIL,SKREF_NBA,SKCEIL);
+  let xc=0;for(let L=1;L<20;L++)xc+=xpNeed(L);let xn=0;for(let L=20;L<LVCAP;L++)xn+=xpNeed(L);
+  return{spAtCap:tot,costMaxAll:need,ratio:+(tot/need).toFixed(4),xpCollegeTo20:xc,xpNbaTo70:xn,grantLv10:grantAt(10,R0),grantLv70:grantAt(70,R0),costOneSkill:costRange(NBA_FLOOR,SKCEIL,SKREF_NBA,SKCEIL)}}};
+
 /* ---------- ATTENTION, SPONSORS, THE LOCKER ---------- */
 /* Attention 0-100 decides who can see you. Reputation 0-100 is what they think when they do. */
 function attnBase(){const t=C?.cl?.teams?.[C.school];if(!t)return 2;if(t.juco)return 2;return t.pres>=80?40:t.pres>=60?25:t.pres>=40?12:6}
-function attnInit(){if(C.attn==null){C.attn=attnBase();C.rep=50;C.cash=0;C.spon={active:[],offers:[],seen:[],log:[]};C.gear={eq:{},bag:[],pity:{r:0,e:0},mem:{}};C.attnLog=[]}}
+function attnInit(){if(C.attn==null){C.attn=Math.max(attnBase(),(typeof ORIGINS!=="undefined"&&ORIGINS.find(o=>o.k===C.rpg?.origin)?.attn)||0);C.rep=50;C.cash=0;C.spon={active:[],offers:[],seen:[],log:[]};C.gear={eq:{},bag:[],pity:{r:0,e:0},mem:{}};C.attnLog=[]}}
 function attnAdd(n,why){attnInit();const was=C.attn;C.attn=clamp(Math.round(C.attn+n),0,100);if(Math.round(n))C.attnLog=[{t:why,x:Math.round(n)},...(C.attnLog||[])].slice(0,14);
   if(was<15&&C.attn>=15)archSay("Somebody posted the clip. People know your name now. Not many. Some.","The first spike");
   if(was<40&&C.attn>=40)archSay("Forty. You have a second slot in your life. Spend it on a person; the brands will find you anyway.","Attention 40");
@@ -3794,6 +3888,7 @@ function defOptions(s,d,ctx){const sk=v=>Math.round((v-PV.ref)/PV.skl*2)/2,out=[
   out.push({k:"block",lab:"Go for the block",mods:bm,mod:modSum(bm),dc:bdc,pct:pMake(modSum(bm)+1,bdc),pts:0,def:true,note:"Miss and it is a foul a third of the time."});
   const cm=[["Interior D",sk(d.INT)],["Judgment",clamp(typeof judgment==="function"?judgment():0,-2,2)]];
   out.push({k:"charge",lab:"Take the charge",mods:cm,mod:modSum(cm),dc:16,pct:pMake(modSum(cm)+1,16),pts:0,def:true,note:"Miss and it is a blocking foul."});
+  if(typeof myEdges==="function")out.forEach(o=>{const e=myEdges(o.k,ctx);if(e.length){o.mods=[...o.mods,...e];o.mod=modSum(o.mods);o.pct=pMake(o.mod+1,o.dc)}});
   if(typeof jobMods==="function")out.forEach(o=>{const jm=jobMods(o.k);if(jm.length){o.mods=[...o.mods,...jm];o.mod=modSum(o.mods);o.pct=pMake(o.mod+1,o.dc)}});
   if(typeof jobActives==="function")for(const a of jobActives("def")){if(jobUsed(a.k))continue;const base=out.find(o=>o.k===a.on);if(!base)continue;const m2=[...base.mods,[a.lab,a.mod]],md=modSum(m2);out.push({...base,lab:a.lab,mods:m2,mod:md,pct:pMake(md+1,base.dc),job:a.k,note:a.note})}
   return out}
@@ -3807,7 +3902,7 @@ function openPoss(){const w=LV.wait;if(!w)return;const el=$("lv-clutch");LV.pm={
 function possHtml(w){const o=LV.pm;const hdr=w.chain?`<div class="pm-h"><div><b>${esc(w.sitName)}</b><small>${esc(w.title)} · ${esc(w.sub)}</small></div><div class="pm-vs"><small>Guarded by</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>
     <div class="pm-meta"><span>Energy <b>${w.meta.en}</b>/${w.meta.em}</span><span>Momentum <b class="${w.meta.mom>=3?"up":w.meta.mom<=-3?"dn":""}">${w.meta.mom>0?"+":""}${w.meta.mom}</b></span>${w.offball?"":`<span>Move ${Math.min(5,w.meta.moves+1)} of 5</span>`}</div>${w.chips&&w.chips.length?`<div class="pm-chips">${w.chips.map(c=>`<span class="${c.info?"i":c.ok?"ok":"no"}">${esc(c.t)}${c.info?"":c.ok?" ✓":" ✗"}</span>`).join("")}</div>`:""}`
     :`<div class="pm-h"><div><b>${esc(w.title)}</b><small>${esc(w.sub)}</small></div><div class="pm-vs"><small>${w.def?"Guarding":"Guarded by"}</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>`;
-  if(o.step==="pick")return hdr+`<div class="pm-opts">${w.opts.map((x,i)=>`<button class="pm-o ${x.perk?"perk":""} ${x.kind==="setup"?"setup":""}" data-act="posspick" data-v="${i}"><i>${i+1}</i><span><b>${esc(x.lab)}</b><small>${x.mods.map(m=>`${m[0]} ${m[1]>0?"+":""}${m[1]}`).join(" · ")||"No modifiers"}${x.note?` · ${esc(x.note)}`:""}</small></span><em><b>${Math.round(x.pct*100)}%</b><small>DC ${x.dc} · ${x.mod>=0?"+":""}${x.mod}</small></em></button>`).join("")}</div><div class="pm-foot"><button class="pm-auto" data-act="possauto">Let the coach pick (Esc)</button><span>Press 1–${w.opts.length}</span></div>`;
+  if(o.step==="pick")return hdr+`<div class="pm-opts">${w.opts.map((x,i)=>`<button class="pm-o ${x.perk?"perk":""} ${x.kind==="setup"?"setup":""}" data-act="posspick" data-v="${i}"><i>${i+1}</i><span><b>${esc(x.lab)}</b><small>${x.mods.map(m=>`${m[0]} ${m[1]>0?"+":""}${m[1]}`).join(" · ")||"No modifiers"}${x.note?` · ${esc(x.note)}`:""}</small></span><em>${x.noroll?`<b>—</b><small>No roll</small>`:`<b>${Math.round(x.pct*100)}%</b><small>DC ${x.dc} · ${x.mod>=0?"+":""}${x.mod}</small>`}</em></button>`).join("")}</div><div class="pm-foot"><button class="pm-auto" data-act="possauto">Let the coach pick (Esc)</button><span>Press 1–${w.opts.length}</span></div>`;
   const x=o.pick;const die=`<div class="pm-die ${o.step==="roll"?"spin":""}" id="pm-die"><b>${o.step==="roll"?"?":o.roll}</b></div>`;
   if(o.step==="roll"||o.step==="tap")return hdr+`<div class="pm-res">${die}<div class="pm-sum"><b>${esc(x.lab)}</b><div>d20 <span id="pm-r">${o.roll??"…"}</span> ${x.mod>=0?"+":""}${x.mod} ${o.step==="tap"?`+ timing <span id="pm-t">?</span>`:""} vs DC ${x.dc}</div></div></div>${o.step==="tap"?`<div class="cl-bar2 pm-bar"><i class="zone" style="left:${50-o.zone*50}%;width:${o.zone*100}%"></i><i class="ndl" id="cl-ndl"></i></div><div class="cl-tap">TAP (Space) ON THE GOLD</div>`:""}`;
   return hdr+`<div class="pm-res">${die}<div class="pm-sum"><b class="${o.made?"ok":"no"}">${esc(o.verdict)}</b><div>${o.roll}${x.mod>=0?" + ":" − "}${Math.abs(x.mod)}${o.tap!=null?` ${o.tap>=0?"+":"−"} ${Math.abs(o.tap)}`:""} = <b>${o.total}</b> vs DC ${x.dc}${o.why?` · ${esc(o.why)}`:""}</div></div></div>`}
@@ -3832,13 +3927,14 @@ const PLAYMODES=[["touches","My touches","You decide every possession that comes
 function playMode(){return C?.playMode||"touches"}
 function settingsHtml(){const pm=playMode();return`<div class="mp-note">How you play your games. Space uses this mode.</div>
   <div class="st-col">${PLAYMODES.map(([k,n,d])=>`<button class="st-opt ${pm===k?"on":""}" data-act="pmset" data-v="mode:${k}"><b>${n}</b><small>${d}</small></button>`).join("")}</div>
+  <div class="st-row"><span>Off-ball cards (NBA)</span><button class="mp-btn sm ${C.offAll!==true?"on":""}" data-act="pmset" data-v="offall:0">When it matters</button><button class="mp-btn sm ${C.offAll===true?"on":""}" data-act="pmset" data-v="offall:1">Every trip</button><small class="mp-lab">When it matters = late and close, a run, or momentum. College always shows them.</small></div>
   <div class="st-row"><span>Timing tap</span><button class="mp-btn sm ${C.timing===true?"on":""}" data-act="pmset" data-v="timing:1">On</button><button class="mp-btn sm ${C.timing!==true?"on":""}" data-act="pmset" data-v="timing:0">Off</button><small class="mp-lab">Off = flat +1, never a penalty</small></div>
   <div class="st-row"><span>Karmic dice</span><button class="mp-btn sm ${C.karmic!==false?"on":""}" data-act="pmset" data-v="karmic:1">On</button><button class="mp-btn sm ${C.karmic===false?"on":""}" data-act="pmset" data-v="karmic:0">Off</button><small class="mp-lab">Softens long streaks, both teams</small></div>
   <div class="st-row"><span>On the bench</span><button class="mp-btn sm ${C.benchFF!==false?"on":""}" data-act="pmset" data-v="bench:1">Skip ahead</button><button class="mp-btn sm ${C.benchFF===false?"on":""}" data-act="pmset" data-v="bench:0">Watch</button><small class="mp-lab">Fast-forwards until you check back in</small></div>
   <div class="st-row"><span>Defensive calls</span><button class="mp-btn sm ${(C.defCalls||"on")==="on"?"on":""}" data-act="pmset" data-v="def:on">My matchup</button><button class="mp-btn sm ${C.defCalls==="clutch"?"on":""}" data-act="pmset" data-v="def:clutch">Clutch only</button><button class="mp-btn sm ${C.defCalls==="off"?"on":""}" data-act="pmset" data-v="def:off">Off</button><small class="mp-lab">Steal, block, charge, or hands up when your man has it</small></div>
   <div class="st-row"><span>Sound</span><button class="mp-btn sm ${C.sfx!==false?"on":""}" data-act="pmset" data-v="sfx:1">On</button><button class="mp-btn sm ${C.sfx===false?"on":""}" data-act="pmset" data-v="sfx:0">Off</button><small class="mp-lab">Dice, net, rim, whistle</small></div>
   <div class="st-row"><span>Game speed</span>${[2,4,8].map(s=>`<button class="mp-btn sm ${(C.lvSpeed||4)===s?"on":""}" data-act="pmset" data-v="speed:${s}">${s}×</button>`).join("")}</div>`}
-function pmSet(v){const[k,val]=v.split(":");if(k==="mode")C.playMode=val;else if(k==="timing")C.timing=val==="1";else if(k==="karmic")C.karmic=val==="1";else if(k==="speed")C.lvSpeed=+val;else if(k==="bench")C.benchFF=val==="1";else if(k==="sfx")C.sfx=val==="1";else if(k==="def")C.defCalls=val;saveC();csWins();if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const b=document.querySelector('.cs-next');if(b)mcRender()},0)}
+function pmSet(v){const[k,val]=v.split(":");if(k==="mode")C.playMode=val;else if(k==="timing")C.timing=val==="1";else if(k==="offall")C.offAll=val==="1";else if(k==="karmic")C.karmic=val==="1";else if(k==="speed")C.lvSpeed=+val;else if(k==="bench")C.benchFF=val==="1";else if(k==="sfx")C.sfx=val==="1";else if(k==="def")C.defCalls=val;saveC();csWins();if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const b=document.querySelector('.cs-next');if(b)mcRender()},0)}
 
 /* calibration harness (tests only) */
 window.__cal=function(n=40,yr){const cl=C.cl;if(yr){cl.y=yr}const ids=Object.keys(cl.teams),A={fga:0,fgm:0,tpa:0,tpm:0,fta:0,ftm:0,tov:0,stl:0,blk:0,ast:0,reb:0,pts:0,poss:0,g:0,ot:0},P=[];
@@ -3950,15 +4046,15 @@ function chPerks(){const out=new Set();try{if(typeof jobS!=="function"||typeof C
 const chHas=(E,m)=>{for(const x of E.perks)if(x.split("|")[0]===m)return x.split("|")[1];return null};
 
 /* the options for the current situation */
-function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;const finOnly=P.n>=5||P.clk<=4;
+function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;const finOnly=P.n>=(E.cap||5)||P.clk<=4;
   const tail=(mods,k,setup)=>{if(E.ctx.fat>0)mods.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)mods.push(["Momentum",E.mom]);if(setup){const sp=chSeenPen(E,k);if(sp)mods.push(["They have seen it",sp])}return mods};
   const ddc=(base,stat,div)=>Math.round(base+((stat??65)-PV.ref)/(div||PV.skl));
-  const S=(k,lab,note,mods,dc,sec,en,x)=>{if(finOnly)return;out.push(chFin({k,kind:"setup",lab,note,mods:tail(mods,k,true),dc,sec,en,...(x||{})}))};
+  const S=(k,lab,note,mods,dc,sec,en,x)=>{if(finOnly)return;out.push(chFin({k,kind:"setup",lab,note,mods:tail([...mods,...myEdges(k,E.ctx)],k,true),dc,sec,en,...(x||{})}))};
   const F=(k,lab,type,cx,extra,dcAdd,note,vs,x)=>{if(type==="three"&&E.no3x)return;const ctx={...E.ctx,...cx,me:true};const mods=shotMods(type,s,ctx).filter(m=>m[0]!=="Tired");
-    for(const m of extra||[])mods.push(m);if(E.mom)mods.push(["Momentum",E.mom]);const dp=vs==="help"?h:vs==="mm"?(E.mm||d):d;
+    for(const m of [...(extra||[]),...myEdges(k,ctx,type)])mods.push(m);if(E.mom)mods.push(["Momentum",E.mom]);const dp=vs==="help"?h:vs==="mm"?(E.mm||d):d;
     out.push(chFin({k,kind:"finish",type,lab,note,mods,dc:shotDC(type,dp,{...ctx,dh:vs==="help"?E.dhH:E.dh})+(dcAdd||0),pts:type==="three"?3:2,open:!!cx.open,contest:!!cx.contest,vs:vs||"man",...(x||{})}))};
   const K=(k,lab,openShot,dcAdd,bonus,pick,x)=>{const mates=(E.mates||[]).filter(m=>!pick||pick(m));if(!mates.length)return;
-    const swing=k==="kick"&&!openShot;const pm=[["Passing",chHalf(chSk(s.PAS)*(swing?.5:1))],["Court vision",chHalf((s.VIS-PV.ref)/25)]];if(E.ctx.fat>0)pm.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)pm.push(["Momentum",E.mom]);
+    const swing=k==="kick"&&!openShot;const pm=[["Passing",chHalf(chSk(s.PAS)*(swing?.5:1))],["Court vision",chHalf((s.VIS-PV.ref)/25)]];for(const e of myEdges("pass",E.ctx))pm.push(e);if(E.ctx.fat>0)pm.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)pm.push(["Momentum",E.mom]);
     const pdc=Math.round((swing?5:7)+(E.dSTL-PV.ref)/14+(dcAdd||0));const pp=pMake(chSum(pm)+1,pdc);
     let best=null;for(const m of mates){const type=x&&x.type?x.type:m.type;if(type==="three"&&E.no3x)continue;const c={open:openShot,contest:!openShot,home:E.ctx.home,fat:m.fat};const sm=shotMods(type,m.s,c).filter(z=>z[0]!=="Tired");
       for(const b of bonus||[])sm.push(b);if(E.mom)sm.push(["Momentum",E.mom]);const sdc=shotDC(type,m.ds,{...c,dh:m.dh}),sp=pMake(chSum(sm)+1,sdc),ev=sp*(type==="three"?3:2);
@@ -3997,22 +4093,23 @@ function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;
     K("kick","Bail out to {n}",false,0);if(!finOnly)out.push(chFin({k:"reset",kind:"setup",lab:"Reset the offense",note:"No roll. Six seconds and some energy. Back to the top.",mods:[],dc:0,noroll:true,sec:6,en:1}))}
   else if(sit==="corner"||sit==="wing"){F("cs3","Catch and shoot","three",{},[["Catch and shoot",1]],0,"Feet set. He is closing out.");dealt("pump");drv();K("kick","Swing it to {n}",false,0)}
   else if(sit==="runout"){F("rodunk","Dunk on the run-out","dunk",{open:true},[["Run-out",1]],1,"Nobody back. Worth more than two.");F("rolay","Layup on the run-out","rim",{open:true},[["Run-out",1]],0,null);K("kick","Hit the trailer, {n}",true,0)}
+  if(P.late&&P.lead>0&&P.n===0&&!fl.milk&&sit==="top")out.push(chFin({k:"milk",kind:"setup",lab:"Milk the clock",note:"No roll. Burns twenty seconds. Fewer moves after it.",mods:[],dc:0,sec:20,noroll:true}));
   return out}
 
 /* off the ball: your team has it, the ball is elsewhere */
-function chainOffball(E){const s=E.s,d=E.d,out=[];const t=(mods)=>{if(E.ctx.fat>0)mods.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)mods.push(["Momentum",E.mom]);return mods};
-  const deny=Math.floor((E.touches||0)/2.5);out.push(chFin({k:"callfor",kind:"offball",lab:"Call for the ball",note:`Get open for ${E.pgName}. Success puts the ball in your hands at the top.${deny?" They are denying you.":""}`,mods:t([["Getting open",chHalf((s.SPD-PV.ref)/20+(s.SIQ-PV.ref)/20)],[`${E.pgName}'s vision`,chHalf((E.pgVIS-PV.ref)/20)],...(deny?[["They are denying you",-deny]]:[])]),dc:12}));
-  out.push(chFin({k:"cut",kind:"offball",lab:"Cut to the rim",note:"Lose your man. If it works, the pass comes and the lane is yours.",mods:t([["Acceleration",chSk(s.ACC)]]),dc:Math.round(12+(d.PER-PV.ref)/PV.skl),en:1}));
-  out.push(chFin({k:"spot",kind:"offball",lab:"Spot up",note:`No roll. If ${E.handlerName} looks your way (${Math.round(E.spotP*100)}%), you catch it in the corner.`,mods:[],dc:0,noroll:true}));
-  out.push(chFin({k:"screen",kind:"offball",lab:`Screen for ${E.handlerName}`,note:"His shot gets your screen if it works.",mods:t([["Strength",chSk(s.STR)]]),dc:11,en:1}));
-  out.push(chFin({k:"crash",kind:"offball",lab:"Crash the glass",note:"If the shot misses, you are first to it.",mods:t([["Offensive rebounding",chSk(s.ORB)],["Strength",chHalf((s.STR-PV.ref)/20)]]),dc:12,en:1}));
+function chainOffball(E){const cfE=o=>chFin(o.noroll?o:{...o,mods:[...o.mods,...myEdges(o.k,E.ctx)]});const s=E.s,d=E.d,out=[];const t=(mods)=>{if(E.ctx.fat>0)mods.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)mods.push(["Momentum",E.mom]);return mods};
+  const deny=Math.floor((E.touches||0)/2.5);out.push(cfE({k:"callfor",kind:"offball",lab:"Call for the ball",note:`Get open for ${E.pgName}. Success puts the ball in your hands at the top.${deny?" They are denying you.":""}`,mods:t([["Getting open",chHalf((s.SPD-PV.ref)/20+(s.SIQ-PV.ref)/20)],[`${E.pgName}'s vision`,chHalf((E.pgVIS-PV.ref)/20)],...(deny?[["They are denying you",-deny]]:[])]),dc:12}));
+  out.push(cfE({k:"cut",kind:"offball",lab:"Cut to the rim",note:"Lose your man. If it works, the pass comes and the lane is yours.",mods:t([["Acceleration",chSk(s.ACC)]]),dc:Math.round(12+(d.PER-PV.ref)/PV.skl),en:1}));
+  out.push(cfE({k:"spot",kind:"offball",lab:"Spot up",note:`No roll. If ${E.handlerName} looks your way (${Math.round(E.spotP*100)}%), you catch it in the corner.`,mods:[],dc:0,noroll:true}));
+  out.push(cfE({k:"screen",kind:"offball",lab:`Screen for ${E.handlerName}`,note:"His shot gets your screen if it works.",mods:t([["Strength",chSk(s.STR)]]),dc:11,en:1}));
+  out.push(cfE({k:"crash",kind:"offball",lab:"Crash the glass",note:"If the shot misses, you are first to it.",mods:t([["Offensive rebounding",chSk(s.ORB)],["Strength",chHalf((s.STR-PV.ref)/20)]]),dc:12,en:1}));
   return out}
 
 /* help defense: late and close, or during their run, when your man does not have it */
-function chainHelp(E){const s=E.me,out=[];
-  out.push(chFin({k:"rotate",kind:"help",def:true,lab:"Rotate and contest",note:"Get a hand up on their shooter.",mods:[["Perimeter D",chSk(s.PER)],["Distance",-1]],dc:11}));
-  out.push(chFin({k:"lane",kind:"help",def:true,lab:"Jump the passing lane",note:"A steal is a run-out. Miss and your man is open.",mods:[["Steal",chSk(s.STL)],["Anticipation",chHalf((s.SIQ-PV.ref)/20)]],dc:16}));
-  out.push(chFin({k:"home",kind:"help",def:true,lab:"Stay home",note:"No roll. Do not leave your man.",mods:[],dc:0,noroll:true}));
+function chainHelp(E){const cfE=o=>chFin(o.noroll?o:{...o,mods:[...o.mods,...myEdges(o.k,E.ctx)]});const s=E.me,out=[];
+  out.push(cfE({k:"rotate",kind:"help",def:true,lab:"Rotate and contest",note:"Get a hand up on their shooter.",mods:[["Perimeter D",chSk(s.PER)],["Distance",-1]],dc:11}));
+  out.push(cfE({k:"lane",kind:"help",def:true,lab:"Jump the passing lane",note:"A steal is a run-out. Miss and your man is open.",mods:[["Steal",chSk(s.STL)],["Anticipation",chHalf((s.SIQ-PV.ref)/20)]],dc:16}));
+  out.push(cfE({k:"home",kind:"help",def:true,lab:"Stay home",note:"No roll. Do not leave your man.",mods:[],dc:0,noroll:true}));
   return out}
 
 /* the auto policy: used by the CPU walking your player's chain, by "let the coach pick", and by the test bot.
@@ -4020,7 +4117,7 @@ function chainHelp(E){const s=E.me,out=[];
 function chainAuto(opts,greed,n){greed=greed??.5;let bestF=null,bestS=null;
   for(const x of opts){const ev=x.kind==="finish"?x.pct*(x.pts||2)+(x.type==="dunk"?.3:0):x.kind==="pass"?x.pct*(x.pts||2)*.75+(x.lob?.3:0):0;
     if(x.kind==="finish"||x.kind==="pass"){if(!bestF||ev>bestF.ev)bestF={x,ev}}
-    else if(x.kind==="setup"&&x.k!=="reset"){const v=x.pct*(x.k==="drive"?1.25:x.k==="drawfoul"?1.3:1);if(!bestS||v>bestS.v)bestS={x,v}}}
+    else if(x.kind==="setup"&&x.k!=="reset"&&x.k!=="milk"){const v=x.pct*(x.k==="drive"?1.25:x.k==="drawfoul"?1.3:1);if(!bestS||v>bestS.v)bestS={x,v}}}
   const bar=.9+greed*.35-(n||0)*.12;
   if(bestF&&(bestF.ev>=bar||!bestS||bestS.x.pct<.5))return bestF.x;
   if(bestS)return bestS.x;
@@ -4063,23 +4160,23 @@ function mcCreate(){
   C.rpg??=rpgNew();const R=C.rpg,st=C.cs||"origin",i=CSTEPS.findIndex(x=>x[0]===st),age=18;
   C.look??=lookFor(C.name);C.no??=String(ri(0,55));C.pos??="SF";R.body.ht??=78;
   const steps=`<nav class="mp-tabs">${CSTEPS.map(([k,l],j)=>`<button data-act="rstep" data-v="${k}" aria-current="${k===st}" ${j>i+1?"disabled":""}>${j+1}. ${l}</button>`).join("")}</nav>`;
-  const nav=`<div class="mp-nav">${i>0?`<button class="mp-btn" data-act="rstep" data-v="${CSTEPS[i-1][0]}">← Back</button>`:""}<span></span>${i<CSTEPS.length-1?`<button class="mp-btn main" data-act="rstep" data-v="${CSTEPS[i+1][0]}">Next: ${CSTEPS[i+1][1]} →</button>`:`<button class="mp-btn main" data-act="mcoffers" ${rpgFree(R)>0?`title="You still have ${rpgFree(R)} points to spend"`:""}>Begin the Prologue →</button>`}</div>`;
+  const nav=`<div class="mp-nav">${i>0?`<button class="mp-btn" data-act="rstep" data-v="${CSTEPS[i-1][0]}">← Back</button>`:""}<span></span>${i<CSTEPS.length-1?`<button class="mp-btn main" data-act="rstep" data-v="${CSTEPS[i+1][0]}">Next: ${CSTEPS[i+1][1]} →</button>`:`<button class="mp-btn main" data-act="mcoffers" ${rpgFree(R)>0?`title="You still have ${rpgFree(R)} points to spend"`:""}>Start college →</button>`}</div>`;
   let body="";
   if(st==="origin")body=mpWin("Who is he?",`<div class="mp-form"><label>Name <input id="mc-name" class="mp-in" maxlength="24" value="${esc(C.name)}"></label>
       ${C.legacy?`<div class="mp-note">Generation ${C.legacy.gen}. Son of ${esc(C.legacy.parent)}. He'll wear No. ${esc(C.legacy.no??"--")} and get a recruiting boost.</div>`:`<div class="mp-note">Freshman season: <b>${sl(START_Y)}</b>. This is your 2K27. One to five years of college, then the league.</div>`}</div>`)
     +mpWin("Choose an origin",`<div class="mp-orig">${ORIGINS.map(o=>`<button class="mp-card ${R.origin===o.k?"picked":""}" data-act="rorig" data-v="${o.k}"><b>${o.n}</b>${o.tag?`<span class="chip">[${o.tag}]</span>`:""}<p>${o.bio}</p><small>${o.trait}</small>${o.sig?`<em>Signature: ${o.sig}</em>`:""}</button>`).join("")}</div>`);
-  else if(st==="stars")body=mpWin("How good are you right now?",`<div class="mp-note">Your star rating sets your starting skill points and which doors open at the recruiting table. Your backstory decides which of those doors have your name on them. The game never caps you later: a one-star can become anything, slowly.</div>
-      <div class="mp-orig">${[5,1].map(k=>{const s=STARS[k];return`<button class="mp-card ${(R.stars||5)===k?"picked":""}" data-act="rstars" data-v="${k}"><b>${"★".repeat(k)}${"☆".repeat(5-k)} ${s.n}</b><span class="chip">${s.sp} SP</span><small>${s.tag}</small><p>${s.d}</p>${k===1?`<em>Junior college only. Transfer up when you are good enough. +35% EXP.</em>`:`<em>Blue bloods recruit you. Expectations from day one.</em>`}</button>`}).join("")}</div>`);
+  else if(st==="stars")body=mpWin("How good are you right now?",`<div class="mp-note">Everyone starts with 300 skill points. Stars set the floor every skill starts from and how fast you grow. A five-star starts higher. A one-star earns more points every college level. At the level cap anyone can max every skill.</div>
+      <div class="mp-orig">${[5,4,3,2,1].map(k=>{const s=STARS[k];return`<button class="mp-card ${(R.stars||3)===k?"picked":""}" data-act="rstars" data-v="${k}"><b>${"★".repeat(k)}${"☆".repeat(5-k)} ${s.n}</b><span class="chip">Floor ${STARF[k]}</span><small>${s.tag}</small><p>${s.d}</p></button>`}).join("")}</div>`);
   else if(st==="body"){const hts=[];for(let h=66;h<=91;h++)hts.push(h);const wts=[];for(let w=150;w<=330;w+=5)wts.push(w);const wss=[];for(let w=R.body.ht-2;w<=R.body.ht+12;w++)wss.push(w);
     body=`<div class="mp-two"><div class="mp-col">${mpWin("Body",`<div class="mp-form">
       <div class="mp-lab">Position</div><div class="fid">${POS.map(p=>`<button data-act="mcpos" data-v="${p}" aria-pressed="${C.pos===p}">${p}</button>`).join("")}</div>
       <label>Height <select class="mp-in" data-act="rbody" data-k="ht">${hts.map(h=>`<option value="${h}" ${h===R.body.ht?"selected":""}>${ftin(h)}</option>`).join("")}</select></label>
       <label>Wingspan <select class="mp-in" data-act="rbody" data-k="ws">${wss.map(h=>`<option value="${h}" ${h===R.body.ws?"selected":""}>${ftin(h)}${h-R.body.ht>=6?" (long)":h-R.body.ht<=0?" (short)":""}</option>`).join("")}</select></label>
       <label>Weight <select class="mp-in" data-act="rbody" data-k="wt">${wts.map(w=>`<option value="${w}" ${w===R.body.wt?"selected":""}>${w} lb</option>`).join("")}</select></label>
-      <div class="mp-note">Any height at any position. Height raises your floor for blocks, boards, interior defense and dunking, lowers it for speed and handle, and raises your ceiling: the taller you are, the higher you can climb. Wingspan helps steals, blocks and contests. Weight trades speed for strength.</div></div>`)}
+      <div class="mp-note">Any height at any position. Height raises your floor for blocks, boards, interior defense and dunking, and lowers it for speed and handle. A wingspan four inches past your height gives Length (steals, blocks, contests). A wingspan within an inch of your height gives Quick release (jumpers, handle). Weight trades speed for strength.</div></div>`)}
       ${mpWin("Look",avOpts(C.look,"mclook")+noSelect("mc-no",C.no)+`<div class="actions" style="margin-top:8px"><button class="mp-btn" data-act="mclookrand">Randomize</button></div>`)}</div>
       <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas><canvas data-show='${showData("back")}' width="${SHW}" height="${SHH}"></canvas></div><div class="mp-show-s"><canvas class="av-sm" data-av='${esc(JSON.stringify({l:C.look,j:rpgJersey()[0],t:"#f4f1ea",h:R.body.ht}))}' width="40" height="56"></canvas><small>How he looks on the court</small></div>`)}</div></div>`}
-  else if(st==="skills")body=`<div class="mp-two"><div class="mp-col">${mpWin("Skills",`<div class="mp-pts"><span>${rpgTotal(R)} to start (${"★".repeat(R.stars||5)}). The next point costs 1 under 70, 2 under 82, 3 under 90, 4 under 97, then more. No cap.</span><b>${rpgFree(R)}</b></div>
+  else if(st==="skills")body=`<div class="mp-two"><div class="mp-col">${mpWin("Skills",`<div class="mp-pts"><span>${rpgTotal(R)} to start (${"★".repeat(R.stars||3)}, floor ${grFloor(R)}). A point costs 2 below the league average (${grRef(R)}), then 4, 7 and 11 as you climb, and 16 for the last four before ${grCeil(R)}.</span><b>${rpgFree(R)}</b></div>
       <div class="actions"><button class="mp-btn" data-act="rauto" data-v="shooter">Auto: Shooter</button><button class="mp-btn" data-act="rauto" data-v="slasher">Slasher</button><button class="mp-btn" data-act="rauto" data-v="playmaker">Playmaker</button><button class="mp-btn" data-act="rauto" data-v="twoway">Two-way</button><button class="mp-btn" data-act="rauto" data-v="big">Big</button><button class="mp-btn" data-act="rreset">Reset</button></div>${skGroups(R,age,true)}`)}</div>
       <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>`+rpgSummary(R,age))}</div></div>`;
   else body=mpWin("Traits (pick up to 2)",`<div class="mp-orig">${TRAITS.map(t=>{const on=R.traits.includes(t.k);return`<button class="mp-card ${on?"picked":""}" data-act="rtrait" data-v="${t.k}" ${!on&&R.traits.length>=2?"disabled":""}><b>${t.n}</b><p class="up">▲ ${t.up}</p><p class="dn">▼ ${t.down}</p></button>`}).join("")}</div>`)
@@ -4105,7 +4202,7 @@ function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetT
 function rpgBar(){const R=rpgS();if(!R)return"";const pct=Math.min(100,R.exp/needXP(R.lv)*100),ev=today(),g=rpgGoals(R)[0],free=rpgFree(R);
   return`<div class="rpgbar" id="rpgbar"><button class="rpg-lv" data-act="rsheet" data-v="stat" title="Character (C)">Lv <b>${R.lv}</b></button><button class="rpg-xp" data-act="rsheet" data-v="stat" aria-label="EXP ${Math.round(pct)}%"><i style="width:${pct}%"></i><span>EXP ${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()} (${pct.toFixed(1)}%)</span></button>
   ${free>0?`<button class="rpg-sp hot" data-act="rsheet" data-v="skills" title="Skills (K)">+${free} SP</button>`:`<button class="rpg-sp" data-act="rsheet" data-v="skills" title="Skills (K)">Skills</button>`}
-  <button class="rpg-ev" data-act="rsheet" data-v="today" title="${esc(ev.d)}"><span>${ev.ic}</span>${ev.n}</button>${g?`<button class="rpg-goal" data-act="rsheet" data-v="goals" title="Goals (J)">◎ ${esc(g.t)} <small>${g.v.toLocaleString()}/${g.n.toLocaleString()}</small></button>`:""}</div>`}
+  ${typeof pracWeek==="function"&&pracWeek()?`<button class="rpg-sp${pracLeft()?" hot":""}" data-act="drill" title="Practice: two drills per game week">Practice (${pracLeft()})</button>`:""}${g?`<button class="rpg-goal" data-act="rsheet" data-v="goals" title="Goals (J)">◎ ${esc(g.t)} <small>${g.v.toLocaleString()}/${g.n.toLocaleString()}</small></button>`:""}</div>`}
 function rpgMount(){const R=rpgS();const old=$("rpgbar");if(!R){old?.remove();return}const html=rpgBar();if(old){old.outerHTML=html;return}
   const anchor=document.querySelector("#mc:not([hidden]) .cl-top .hdr")||(!$("app")?.hidden&&$("hdr"));if(anchor)anchor.insertAdjacentHTML("afterend",html)}
 function rpgFlush(){const R=rpgS();if(!R)return;(R.toast||[]).splice(0).forEach((m,i)=>setTimeout(()=>toast(m),i*1600));
@@ -4155,11 +4252,11 @@ function mcCollege(){
       <div class="cs-next">${act}</div>${hubPad()}</div>
     <div class="cs-hud"><div class="cs-lv"><b><small>LV.</small>${R?.lv||1}</b><span>${esc(C.name)} · ${esc((typeof jobName==="function"&&jobName())||archName(rpgSkills(R||rpgNew(),C.age||18),C.ht))}</span></div>
       <button class="cs-xp" data-act="cswin" data-v="stat" aria-label="EXP"><i style="width:${pct}%"></i><span>EXP ${R?R.exp.toLocaleString():0} [${pct.toFixed(2)}%]</span></button>
-      <button class="cs-ev" data-act="cswin" data-v="today" title="${esc(ev.d)}"><b>${ev.ic}</b>${ev.n}</button><button class="cs-ev" data-act="cswin" data-v="attn" title="Attention"><b>${(attnInit(),C.attn)}</b>ATTN · ${C.spon.active.length}/${slots()} slots${C.spon.offers.length?` · <span style="color:#ffd166">${C.spon.offers.length} offer${C.spon.offers.length>1?"s":""}</span>`:""}</button>
+      <button class="cs-ev${pracLeft()?" hot":""}" data-act="drill" title="Practice: two drills per game week (E)"><b>${pracLeft()}</b>Practice</button><button class="cs-ev" data-act="cswin" data-v="attn" title="Attention"><b>${(attnInit(),C.attn)}</b>ATTN · ${C.spon.active.length}/${slots()} slots${C.spon.offers.length?` · <span style="color:#ffd166">${C.spon.offers.length} offer${C.spon.offers.length>1?"s":""}</span>`:""}</button>
       <div class="cs-keys">${keys.map(([k,l,key])=>`<button class="cs-k ${k==="skills"&&free>0?"hot":""}" data-act="cswin" data-v="${k}" title="${CSWIN[k][0]} (${key})"><i>${key}</i>${k==="skills"&&free>0?`+${free}`:l}</button>`).join("")}</div></div></div>`;
 }
 function csKeys(e){if(!C||C.stage!=="college"||$("mc").hidden||!$("live").hidden)return false;if(hubKeyDown(e))return true;if(e.metaKey||e.ctrlKey||e.altKey)return false;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return false;
-  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn"};const k=map[e.key.toLowerCase()];if(!k)return false;
+  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn"};if(e.key.toLowerCase()==="e"){if(!$("modal").hidden)closeModal();else openDrill();e.preventDefault();return true}const k=map[e.key.toLowerCase()];if(!k)return false;
   if(!$("modal").hidden){closeModal();if(["stat","skills","quests","today"].includes(k))return true}csToggle(k);e.preventDefault();return true}
 
 /* ---------- HUB: walkable side-scroller maps (MapleStory-style) ---------- */
@@ -4289,7 +4386,7 @@ function drawBgMap(g,m,iw,ih,floorY,cam,t){const bg=hubImg(m.bg);g.fillStyle="#1
 /* interaction */
 function nearProp(p,m,ih,floorY){const b=propBox(p,m,ih,floorY);return Math.abs(HUB.px-(b.x+b.w/2))<Math.max(40,b.w/2+16)}
 function hubAct(p){if(!p)return;if(p.portal){hubGo(p.portal,p.spawn);return}
-  switch(p.act){case"goals":csToggle("case");break;case"sched":csToggle("sched");break;case"news":csToggle("news");break;
+  switch(p.act){case"drill":openDrill();break;case"goals":csToggle("case");break;case"sched":csToggle("sched");break;case"news":csToggle("news");break;
     case"shoot":{{const dir=HUB.px<=p.x?1:-1;HUB.dunk={t0:performance.now(),x0:HUB.px,x1:p.x-dir*30,dir}}break}
     case"soon":toast(p.label);break}}
 function hubTalk(n){if(!n)return;const i=(n._i=((n._i||0)+1)%n.lines.length);HUB.talk=n.id;HUB.bubble={id:n.id,txt:n.lines[i],until:(performance.now()-HUB.t0)/1000+4};HUB.face=HUB.px<n.x?1:-1}
@@ -4483,13 +4580,13 @@ function* liveGen(SD,opt,ctl){
     const shooters=mates.length&&mates.reduce((a,m)=>a+m.s.THR,0)/mates.length>=66,PD=D.map(x=>prof(x.p));
     return{P,s,d,h:prof(helpR.p),df,helpR,meR,mates,big,shooters,no3x,mom:chMom(),seen:ctl?ctl.seen:null,perks:chPerks(),dh:hgt(meR.p)-hgt(df.p),dhH:hgt(meR.p)-hgt(helpR.p),
       dSTL:PD.reduce((a,x)=>a+x.STL,0)/PD.length,dPERavg:PD.reduce((a,x)=>a+x.PER,0)/PD.length,mm:big?prof((D[O.indexOf(big.r)]||df).p):d,
-      ctx:{home:o===0&&HOME>0,clutch,fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
+      cap:CLK<=24?4:5,ctx:{home:o===0&&HOME>0,clutch,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
   const chCard=(E,P,lead,extra)=>({opts:null,chain:true,sit:P.sit,sitName:CH_SIT[P.sit]||"",chips:P.log.slice(-6),title:lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`,
-    sub:`${chClk()} · shot clock ${Math.max(0,Math.round(P.clk))}`,meta:{en:Math.round(E.meR.en),em:enMax(E.meR),mom:ctl?ctl.mom||0:0,moves:P.n},dname:E.df.p.name,dnote:`PER ${E.d.PER} · INT ${E.d.INT} · STL ${E.d.STL}`,
+    sub:`${chClk()} · shot clock ${Math.max(0,Math.round(P.clk))}${P.flags.hurry?" · Hurry":""}${P.late&&lead===-3&&t<=30?" · Down three: a two does not tie":""}`,meta:{en:Math.round(E.meR.en),em:enMax(E.meR),mom:ctl?ctl.mom||0:0,moves:P.n},dname:E.df.p.name,dnote:`PER ${E.d.PER} · INT ${E.d.INT} · STL ${E.d.STL}`,
     timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(E.s.THR,E.s.MID,E.s.LAY),...(extra||{})});
   const chNote=(P,meR)=>{const l=P.log.filter(x=>!x.info).map(x=>x.t);if(l.length>1)push("chain",l.join(" → ")+".",{sh:meR.p.pid,me:1})};
   const chainRun=function*(meR,inter,start,clutch,lead){if(ctl)ctl.touches=(ctl.touches||0)+1;
-    const P={sit:start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"?4:0),n:0,flags:{},log:[],deal:chDeal(prof(meR.p))};
+    const P={sit:start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"?4:0),n:0,flags:{},log:[],deal:chDeal(prof(meR.p)),lead,late:q>=np&&t<=120};if(P.late&&lead<0){P.clk=Math.min(P.clk,12);P.flags.hurry=1}
     for(let guard=0;guard<14;guard++){
       const E=chEnv(meR,P,clutch);let opts=chainOpts(E);if(!opts.length){P.n=9;opts=chainOpts(E)}
       let ans=null;
@@ -4507,6 +4604,7 @@ function* liveGen(SD,opt,ctl){
           case"cross":if(ok)P.sit="space";else if(nat1)return TO("stripped");else P.sit="picked";break;
           case"hesi":case"pump":if(ok)P.sit="offbal";break;
           case"jab":if(ok){P.sit="space";P.flags.small=true}break;
+          case"milk":P.flags.milk=1;P.n=Math.max(P.n,(E.cap||5)-2);{const burn=Math.min(12,Math.max(0,t-1));t-=burn;elapsed+=burn}P.log.push({t:"Milked the clock",ok:true,info:true});P.log.splice(-2,1);break;
           case"handoff":if(ok)P.sit="space";break;
           case"drive":if(ok){const rr=1+Math.floor(R()*20),hm=Math.round((E.h.INT-PV.ref)/PV.skl),hdc=E.shooters?13:9,col=rr!==1&&(rr===20||rr+hm>=hdc);
               P.log.push({t:`Help: ${rr}${hm>=0?"+":""}${hm} vs ${hdc}, ${col?"they collapse":"they stay home"}`,ok:!col,info:true});P.sit=col?"collapse":"lane";P.flags.under=false}
@@ -4557,7 +4655,8 @@ function* liveGen(SD,opt,ctl){
         const inter=!opt.quiet&&mode!=="watch"&&mode!=="sim"&&(mode==="touches"||mode==="every"||(mode==="clutch"&&clutch));
         if(ctl.runout){ctl.runout=false;return yield* chainRun(meR,inter,"runout",clutch,lead)}
         if(sh===meR)return yield* chainRun(meR,inter,"top",clutch,lead);
-        if(inter){const Pq={sit:"off",clk:CLK,n:0,flags:{},log:[]},E=chEnv(meR,Pq,clutch);const mates=O.filter(r=>r!==meR),pg=mates.reduce((b,r)=>prof(r.p).VIS>prof(b.p).VIS?r:b,mates[0]);
+        const offOK=CLK>24||clutch||(ctl.runOpp||0)>=8||Math.abs(ctl.mom||0)>=3||(typeof C!=="undefined"&&C&&C.offAll===true);
+        if(inter&&offOK){const Pq={sit:"off",clk:CLK,n:0,flags:{},log:[]},E=chEnv(meR,Pq,clutch);const mates=O.filter(r=>r!==meR),pg=mates.reduce((b,r)=>prof(r.p).VIS>prof(b.p).VIS?r:b,mates[0]);
           E.pgName=lname(pg.p);E.pgVIS=prof(pg.p).VIS;E.touches=ctl.touches||0;E.handlerName=lname(sh.p);E.spotP=clamp(.3+(E.s.THR-PV.ref)/80,.15,.6);
           const opts=chainOffball(E),card=chCard(E,Pq,lead,{offball:true,sitName:`${lname(sh.p)} has it. You are off the ball`});card.opts=opts;
           let ans=yield{poss:card};if(!ans||!ans.opt)ans=chainRoll(ctl,opts[0]);
@@ -4576,7 +4675,9 @@ function* liveGen(SD,opt,ctl){
       const defOn=typeof C!=="undefined"&&C?(C.defCalls||"on"):"off";
       if(ud&&ctl&&ctl.hero!=null&&String(dp.pid)===String(ctl.hero)&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&(defOn==="on"||(defOn==="clutch"&&clutch))){
         const opts=defOptions(s,d,ctx),clk=`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
-        const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}`,timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(d.PER,d.STL,d.BLK)}};
+        if(q>=np&&t<=120&&lead>0)opts.push({k:"foul",lab:"Foul to stop the clock",mods:[],mod:0,dc:0,pct:1,pts:0,def:true,noroll:true,note:"He shoots two. The clock stops."});
+        const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Down ${lead}`:`Up ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}`,timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(d.PER,d.STL,d.BLK)}};
+        if(da&&da.k==="foul"){df.pf++;tfoul[1-o]++;push("foul",`${dp.name} fouls ${p.name} on purpose. The clock stops.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
         if(da&&da.k!=="hands")enSpend(df,2);if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});ctl.runout=true;o=1-o;return}ctx.open=true;ctx.contest=false;df.stint+=.6}
         else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(da.nat1||R()<.35)forceFoul=true;else{ctx.open=true;ctx.contest=false}}
         else if(da&&da.k==="charge"){if(da.made){sh.b.tov=(sh.b.tov||0)+1;df.b.chg=(df.b.chg||0)+1;push("to",`${p.name} lowers the shoulder. ${dp.name} is set. Charge.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}df.pf++;tfoul[1-o]++;push("foul",`Blocking foul on ${dp.name}.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
@@ -4608,7 +4709,7 @@ function* liveGen(SD,opt,ctl){
       const verb=type==="three"?pick(["drills a three","buries it from deep","splashes a triple"]):type==="dunk"?pick(["throws it down","hammers it home","rises and dunks"]):type==="rim"?pick(["finishes at the rim","lays it in","scoops it in"]):type==="post"?pick(["scores on the block","drops in the hook","spins baseline and scores"]):pick(["hits the jumper","knocks down the pull-up","nails the elbow J"]);
       const heat=sh.hot.length>=4&&sh.hot.slice(-4).every(v=>v)?" He's heating up!":"";
       const homeT=o===0&&HOME>0,big=!!(x.dunk||x.lob)&&type==="dunk";
-      if(ctl&&US>=0){const k=o===US?1:-1;ctl.mom=clamp((ctl.mom||0)+k*(big?(homeT?3:2):1),-5,5);if(o===US){ctl.runOpp=0;if(big&&x.me)ctl.dunkTax=true}else ctl.runOpp=(ctl.runOpp||0)+pts}
+      if(ctl&&US>=0){const k=o===US?1:-1;ctl.mom=clamp((ctl.mom||0)+k*(big?(homeT?3:2)+(o===US&&x.me&&C?.rpg?.origin==="blacktop"?1:0):1),-5,5);if(o===US){ctl.runOpp=0;if(big&&x.me)ctl.dunkTax=true}else ctl.runOpp=(ctl.runOpp||0)+pts}
       const call=x.me&&big?(x.lob?` ${lname(x.assistTo.p)} lobs it and ${p.name} finishes it at the rim. ${homeT?"The building is on its feet.":"In their building."}`:` ${p.name} THROWS IT DOWN. ${homeT?"The crowd goes wild.":"You can hear their gym go quiet."}`):"";
       push("make",call?`${cx.clutch?"CLUTCH! ":""}${call.trim()}`:`${cx.clutch?"CLUTCH! ":""}${p.name} ${verb}${ast?` (assist ${lname(ast.p)})`:""}.${heat}`,{sh:p.pid,as:ast?.p.pid,d:dp.pid,shot:stype,dist,ang,pts,...cx,...(big&&x.me?{dunk:1}:{})});
       if(fouled){df.pf++;tfoul[1-o]++;push("foul",`And one! ${dp.name} fouls ${lname(p)}.`,{sh:p.pid,d:dp.pid});shootFT(sh,1,df)}
@@ -5294,7 +5395,7 @@ document.addEventListener("click",e=>{
     case"rsave":{const R=rpgS(),age=rpgAge();(R.loads??=[null,null,null])[+d.v]={n:archName(rpgSkills(R,age),R.body.ht),pts:rpgSpent(R),alloc:{...R.alloc}};if(rpgP())save();else saveC();openSheet("loads");return}
     case"rload":{const R=rpgS(),L=R.loads?.[+d.v];if(!L)return;R.alloc={...L.alloc};let guard=0;while(rpgFree(R)<0&&guard++<500){const k=Object.keys(R.alloc).sort((a,b)=>R.alloc[b]-R.alloc[a])[0];R.alloc[k]--}rpgApply();if(rpgP())save();else saveC();openSheet("skills");toast(`Loaded: ${L.n}`);return}
     case"mcschool":C.school=d.v;C.stage="college";seasonSetup();bondsSeed();mcRender();return;
-    case"plgnav":plgNav(+d.v);return;case"plgpick":plgPick(d.v);return;case"rstars":{C.rpg.stars=+d.v;C.stars=+d.v;saveC();mcRender();return}
+    case"plgnav":plgNav(+d.v);return;case"plgpick":plgPick(d.v);return;case"drill":openDrill();return;case"drillgo":drillGo(d.v);return;case"drillroll":drillRoll();rpgMount();return;case"rstars":{C.rpg.stars=+d.v;C.stars=+d.v;C.rpg.alloc={};saveC();mcRender();return}
     case"mcgame":{const n=+d.n,s=C.season;for(let i=0;i<n&&s.games.length<31;i++)collegeGame(s.opps[s.games.length],false);mcRender();return}
     case"mctourney":{const s=C.season;while(s.games.length<31)collegeGame(s.opps[s.games.length],false);runTourney();closeSeason();
       if(C.legacy){mcRender();legacyCatchUp(C.y+1).then(()=>{mcRender();toast(`Meanwhile in the NBA: the ${G.recaps?.[0]?.champ||"season"} wrapped up.`)});return}mcRender();return}
