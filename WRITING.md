@@ -1,4 +1,7 @@
-# Writing rules for DocMan2021 HOOPS (from review, 2026-10-19)
+# Writing rules for DocMan2021 HOOPS
+
+**Scope (2026-10-20): there is no story. The only prose in the game is the System's voice on level-ups, advancements, loot and sponsor offers, plus item descriptions. One or two sentences, dry, DCC register. No characters, no scenes, no dialogue.** The rules below still apply to every line that remains.
+
 
 The user is a law student and patent agent. Words matter. Every line is read closely.
 

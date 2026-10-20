@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="963a15338a";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="e0067e34f1";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -418,6 +418,11 @@ td{border-top:1px solid #ffffff12}
 .plg-txt .arch p.dlg{padding-left:0;display:grid;grid-template-columns:74px 1fr;gap:10px;align-items:baseline}.plg-txt .arch .who{font:700 10px/1.7 Silkscreen,var(--f-mono);letter-spacing:.04em;color:#9fb4dc;text-align:right;white-space:nowrap}.plg-txt .arch .who.me{color:var(--good)}.plg-txt .arch p.sys{font-style:italic;color:var(--led)}.plg-txt .arch p.dlg+p.dlg{margin-top:5px}
 @media(max-width:600px){.arch-card p.dlg,.plg-txt .arch p.dlg{grid-template-columns:1fr;gap:1px}.arch-card p.dlg .who,.plg-txt .arch .who{text-align:left}}
 .lr-opts{display:grid;gap:8px;margin-top:12px}.lr-opt{display:grid;gap:3px;text-align:left;padding:10px 12px;border-radius:10px;border:1px solid #ffffff2a;background:#ffffff0d;color:var(--paper);cursor:pointer;font:inherit}.lr-opt:hover{border-color:var(--led)}.lr-opt b{font-size:14px}.lr-opt small{color:#a9b1c7;font:500 12px/1.35 var(--f-body);text-transform:none;letter-spacing:0}
+.pm-meta{display:flex;flex-wrap:wrap;gap:4px 14px;width:min(560px,92vw);font:600 11px var(--f-mono);color:#aeb8d0;text-transform:uppercase;letter-spacing:.04em}.pm-meta b{color:#fff}.pm-meta b.up{color:var(--good)}.pm-meta b.dn{color:var(--bad)}
+.pm-chips{display:flex;flex-wrap:wrap;gap:4px;width:min(560px,92vw)}.pm-chips span{font:600 11px var(--f-body);padding:2px 8px;border-radius:999px;background:#ffffff14;color:#dfe6f7}.pm-chips .ok{background:#6cb8ff33}.pm-chips .no{background:#ffa24c33}.pm-chips .i{font-style:italic;background:transparent;border:1px solid #ffffff22}
+.pm-o.perk{border-color:#ffd16699}.pm-o.perk i{color:var(--good)}.pm-o.setup em b{color:#9fc8ff}
+@media(max-width:640px){.lv-clutch.pm{position:fixed;inset:auto 0 0 0;max-height:100dvh;overflow:auto;z-index:60;padding:10px 12px calc(12px + env(safe-area-inset-bottom,0px));place-content:start stretch;border-radius:14px 14px 0 0;gap:7px}
+  .pm-h,.pm-opts,.pm-foot,.pm-meta,.pm-chips,.pm-res{width:100%}.pm-h b{font-size:16px}.pm-o{padding:7px 9px;gap:8px}.pm-o span b{font-size:14px}.pm-o span small{font-size:11px;line-height:1.3}.pm-o em b{font-size:18px}}
 .lv-ff{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#06102acc;border:2px solid var(--led);color:#fff;padding:10px 18px;text-align:center;font:700 14px Silkscreen,var(--f-mono);border-radius:4px;cursor:pointer;z-index:4}.lv-ff small{display:block;font:600 11px var(--f-body);color:#9fb4dc;margin-top:4px}
 .lv-me .fs{margin-top:4px;font-size:10px;color:#9fb4dc;letter-spacing:.02em}.lv-me .st{display:inline-block;padding:1px 5px;border-radius:3px;margin-right:4px;color:#06102a;font-size:9px}.lv-me .st.on,.coach .st.on{background:var(--good)}.lv-me .st.off,.coach .st.off{background:var(--bad)}
 .coach .bench-hd{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;font-size:13px}.coach .bench-hd b{font-size:15px}.coach .bench-hd small{color:#a9b1c7}.coach .st{display:inline-block;padding:1px 6px;border-radius:3px;margin-right:4px;color:#06102a;font:700 10px Silkscreen,var(--f-mono)}
@@ -866,7 +871,7 @@ function simDay(watch){
   for(const [h,a] of G.schedule[G.day]){const mine=h===G.userTid||a===G.userTid;const g=G.preRes&&G.preRes.h===h&&G.preRes.a===a?liveCommit(h,a,false,G.preRes.L):watch&&mine?liveGame(h,a,false):playGame(h,a,false);if(mine)ug=g}
   resters.forEach(p=>p.resting=false);
   if(ug)recordUser(ug,`Game ${user().w+user().l}`);
-  G.day++;chatterDay();if(G.career&&!G.career.retired&&G.day%7===0&&typeof C!=="undefined"&&C){try{attnWeek()}catch(e){console.error(e)}try{bondWeek()}catch(e){console.error(e)}}
+  G.day++;chatterDay();if(G.career&&!G.career.retired&&G.day%7===0&&typeof C!=="undefined"&&C){try{attnWeek()}catch(e){console.error(e)}}
   if(G.day===deadline())news("The trade deadline has passed. Trades reopen after the playoffs.");
   if(G.day>=nDays())endRegular();
   return ug;
@@ -1478,7 +1483,7 @@ function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v45";
+const BUILD="v46";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -1544,7 +1549,7 @@ function mcOffers(){
   if(!C.offers)C.offers=recruitOffers();
   return mcHead(`${"★".repeat(C.stars)} recruit · ${C.pos} · ${ftin(C.ht)} · potential ${C.pot}`)+`
   <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="create">← Back to creation</button></div><div class="kicker">Step 3 of 3 · ${sl(y)} recruiting</div><h2>Choose your school</h2>
-    <p>${C.stars<=1?`One letter. Junior colleges only. ${esc(C.bonds?.coach?.name||"Coach")} is coming with you.`:C.stars===2?"Three low-majors called. Coach drove you to all of them.":`You're a ${C.stars}-star recruit. These programs offered you a scholarship${C.bonds?.rival?`; ${esc(C.bonds.rival.name)} is already committed somewhere else`:""}.`}</p>
+    <p>${C.stars<=1?`One letter. Junior colleges only.`:C.stars===2?"Three low-majors called. Coach drove you to all of them.":`You're a ${C.stars}-star recruit. These programs offered you a scholarship${C.bonds?.rival?`; ${esc(C.bonds.rival.name)} is already committed somewhere else`:""}.`}</p>
     <div class="mc-offers">${C.offers.map(s=>{const ros=collegeRoster(s,y);const me=calcOvr(C.a,C.pos),role=(cl.teams[s]?.roster||[]).filter(id=>cl.players[id]&&cl.players[id].ovr>me).length,rk=apRk(cl,s);
       return`<div class="mc-offer"><div><b>${esc(s)}</b><small>${esc(cl.teams[s]?.conf||"")} · Program ${pr(s)}${rk?` · Preseason AP #${rk}`:""} · ${role<=1?"Projected starter":role<=4?"Rotation role":"Bench to start"}</small></div>
       <p>${cl.teams[s]?.juco?"Junior college. Two years at most, then the portal. Nobody films these games.":ros.length?"Future pros: "+ros.slice(0,4).map(x=>`${esc(x.name)} ('${String(x.d).slice(2)} #${x.pick})`).join(", "):`Best player: ${esc(cl.players[(cl.teams[s]?.roster||[]).slice().sort((a,b)=>(cl.players[b]?.ovr||0)-(cl.players[a]?.ovr||0))[0]]?.name||"--")}. ${(C.stars||5)>=4?"You would start on day one.":"Minutes are earned here."}`}</p>
@@ -1569,7 +1574,7 @@ function mcDecide(){
     ${last?`<p class="note" style="color:#c9cfe0">Five years. Your college eligibility is used up.</p>`:""}</div></section>`;
 }
 function mcDraft(){
-  const D=C.y+1,cls=DB.drafts[D]||[],pk=C.final,team=C.dteam;try{if(!C.fate?.flags?.dn){(C.fate??=fateInit()).flags.dn=1;fateDraftNight()}}catch(e){}
+  const D=C.y+1,cls=DB.drafts[D]||[],pk=C.final,team=C.dteam;try{if(false){}}catch(e){}
   const before=cls.filter(r=>r[2]<(pk||61)).slice(-6);
   if(C.legacy)return mcDraftLegacy();
   return mcHead(`${D} NBA Draft`)+`
@@ -1902,7 +1907,7 @@ function clDay(watch){
   const cl=C.cl;let mine=null;
   if(cl.phase==="reg"){for(const [h,a] of cl.sched[cl.day]||[]){const me=h===C.school||a===C.school;const g=playCL(cl,h,a,{watch:watch&&me,kind:"reg"});if(me)mine=g}
     if(C.cls===4&&mine){const lh=cl.sched.reduce((m,d,i)=>d.some(p=>p[0]===C.school)?i:m,-1);if(cl.day===lh)ccere({type:"senior",y:cl.y,line:`You finish your home career with ${C.season.tot.pts} points this season.`})}
-    cl.day++;if(cl.day%2===0||cl.day>=cl.sched.length){recWeek(cl);apPoll(cl);try{attnWeek()}catch(e){console.error(e)}try{bondWeek()}catch(e){console.error(e)}}if(cl.day>=cl.sched.length)startCT(cl)}
+    cl.day++;if(cl.day%2===0||cl.day>=cl.sched.length){recWeek(cl);apPoll(cl);try{attnWeek()}catch(e){console.error(e)}}if(cl.day>=cl.sched.length)startCT(cl)}
   else if(cl.phase==="ct")mine=ctRound(cl,watch);
   else if(cl.phase==="ncaa")mine=ncaaRound(cl,watch);
   return mine;
@@ -2341,7 +2346,11 @@ function inboxRow(){if(!G||G.userTid==null)return"";const n=unread(),s=G.show&&G
    so your coaching calls change it. Clutch shots, instant replays, a
    highlight reel and era broadcast looks.
    ===================================================================== */
-function liveCore(SD,opt){const g=liveGen(SD,opt,null);let r;while(!(r=g.next()).done){}return r.value}
+/* headless game. If your player is in it, his possessions walk the chain with the auto policy (PLAN.md §2.6),
+   so simmed and played stat lines come from one engine. Everyone else uses the engine as before. */
+function liveCore(SD,opt){const hp=typeof C!=="undefined"&&C&&C.stage==="college"?"me":(typeof G!=="undefined"&&G?.career&&!G.career.retired?G.career.pid:null);
+  let ctl=null;if(hp!=null&&!opt.noHero)for(const k of[0,1])if(SD[k].ps.some(p=>String(p.pid)===String(hp))){ctl=mkCtl(k,hp);ctl.mode="sim";ctl.greed=1}
+  const g=liveGen(SD,opt,ctl);let r;while(!(r=g.next()).done){}return r.value}
 function nbaSD(h,a){const S=[strength(T(h)),strength(T(a))];return[{t:T(h),ps:S[0].ps,m:S[0].m},{t:T(a),ps:S[1].ps,m:S[1].m}]}
 function nbaOpt(){G.ppp??=1.0;return{per:[720,720,720,720],ot:300,poss:eraPts()/G.ppp,tf:threeF(),no3x:no3(),clock:24,ref:71,pro:true}}
 function clOpt(cl,o){return{per:[1200,1200],ot:300,poss:colPts(cl.y)/cl.ppp,tf:colTF(cl.y),no3x:cl.y<1986,quiet:!o.watch,ref:65,home:o.neutral?0:.018,half:true,clock:colClock(cl.y),fo:5,bonus:7}}
@@ -2472,7 +2481,8 @@ function lvMyR(){const c=LV?.ctl,st=c?.st;if(!st||LV.mine==null)return null;retu
 function lvRole(r){const tg=r.tgt||0;return tg>=26?["Starter",`coach's plan ≈ ${Math.round(tg)} min`]:tg>=12?["Rotation",`coach's plan ≈ ${Math.round(tg)} min`]:tg>=5?["Reserve",`spot minutes, ≈ ${Math.round(tg)}`]:["End of bench","garbage time unless you earn it"]}
 function lvLegs(r){const m=enMax(r),e=Math.round(r.en??m),k=clamp(e/m,0,1),f=1-k;return{f,e,m,bars:"●".repeat(Math.round(k*5))+"○".repeat(5-Math.round(k*5)),word:k>.7?"full":k>.45?"okay":k>.25?"low":"empty"}}
 function lvMeStatus(){const r=lvMyR();if(!r)return"";const c=LV.ctl,on=c.st.on()[c.side].includes(r),L=lvLegs(r),mm=x=>`${Math.floor(x)}:${String(Math.round((x%1)*60)).padStart(2,"0")}`;
-  return on?`<span class="st on">ON THE FLOOR</span> stint ${mm(r.stint||0)} · energy ${L.e}/${L.m} ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min`:`<span class="st off">ON THE BENCH</span> energy ${L.e}/${L.m} ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min${r.pf>=5?" · foul trouble":""}`}
+  const mo=c.mom||0,mos=` · momentum ${mo>0?"+":""}${mo}`;
+  return on?`<span class="st on">ON THE FLOOR</span> stint ${mm(r.stint||0)} · energy ${L.e}/${L.m} ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min${mos}`:`<span class="st off">ON THE BENCH</span> energy ${L.e}/${L.m} ${L.bars} · ${Math.round(r.b.min)}/${Math.round(r.tgt)} min${r.pf>=5?" · foul trouble":""}`}
 function lvBench(){const el=$("lv-coach"),c=LV.ctl,k=c.side,st=c.st,r=lvMyR();if(!r)return lvCoach(true);const all=st.R2[k],onA=st.on()[k],bench=all.filter(x=>!onA.includes(x)),on=onA.includes(r),[role,plan]=lvRole(r),L=lvLegs(r),el2=st.el(),FO=LV.college?5:6;
   const row=x=>`<div class="lu ${x===r?"sel":""} ${onA.includes(x)?"":"bn"}"><b>${esc(lname(x.p))}</b><small>${x===r?"YOU · ":""}${x.p.pos} · ${Math.round(x.b.min)} min · ${x.pf} PF · ${x.b.pts} pts${x.p.inj?" · hurt":x.pf>=FO?" · fouled out":""}</small></div>`;
   const why=on?`You are out there. Energy ${L.e} of ${L.m}, ${L.word}. Every minute on the floor and every gamble spends it. Low energy is a penalty on every roll.`:r.pf>=FO?`Fouled out. That is the night.`:r.pf>=FO-1?`Foul trouble. Coach is protecting you for the end.`:L.f>.5?`Breather. Energy ${L.word}. You come back when it refills.`:r.b.min>=r.tgt*((el2+60)/(LV.college?2400:2880))+2?`You're ahead of your minutes. Coach is spreading them out.`:`Next dead ball, most likely. You're fresh and behind your minutes.`;
@@ -3254,24 +3264,9 @@ function recruitOffers(){const cl=clEnsure(),stars=C.stars||5;if(stars<=1)return
 /* ---- the Prologue ---- */
 const PLG_F=["Marcus","Dre","Jalen","Kofi","Tobias","Elijah","Theo","Nico","Isaiah","Deshawn","Cam","Rashad","Luis","Micah","Omar","Jordan"],PLG_L=["Reed","Okafor","Bell","Vance","Mercer","Hale","Santos","Whitfield","Banks","Cole","Pryor","Holloway","Nwosu","Ferris","Greer","Lott","Adeyemi","Barlow","Castillo","Dunbar","Ellison","Foster","Gaines","Hightower","Irving","Jemison","Kincaid","Lowery","Mbeki","Navarro","Osei","Pettway","Quarles","Rucker","Sterling","Toussaint","Upshaw","Valdez","Winslow","Yarbrough"];
 const nm=seed=>PLG_F[hsh(seed)%PLG_F.length]+" "+PLG_L[hsh(seed+"l")%PLG_L.length];
-function plgCast(){if(C.plgCast)return C.plgCast;const s=C.name;const used=new Set([String(C.name).split(" ").pop()]);const nm=seed=>{let i=hsh(seed+"l")%PLG_L.length,g=0;while(used.has(PLG_L[i])&&g++<PLG_L.length)i=(i+1)%PLG_L.length;used.add(PLG_L[i]);return PLG_F[hsh(seed)%PLG_F.length]+" "+PLG_L[i]};
-  const F=ST.friends(),Rv=ST.rivals();
-  C.plgCast={friends:F.map((f,i)=>({...f,name:f.k==="manager"?["Nia","Tasha","Maya","Simone","Jada","Imani"][hsh(s+"f3")%6]+" "+nm(s+"f"+i).split(" ")[1]:nm(s+"f"+i)})),
-    rivals:Rv.map((r,i)=>({...r,name:nm(s+"r"+i)})),
-    coach:{name:"Coach "+nm(s+"c").split(" ")[1],d:ST.coachD()},
-    mother:{name:"Your mother",job:["a nurse on nights","a bus dispatcher","a paralegal","a line cook"][hsh(s+"m")%4]}};
-  return C.plgCast}
+function plgCast(){return C.plgCast??={}}
 const plgFirst=()=>String(C.name||"you").split(" ")[0];
-function plgPanels(){const st=C.stars||5,cast=plgCast(),hi=st>=3;const P=[];
-  P.push({scene:"room",title:"I.",txt:ST.plgI()});
-  P.push({scene:"closet",title:"II.",txt:ST.plgII()});
-  if(hi){P.push({scene:"half",title:"III.",txt:ST.plgHiIII()});
-    P.push({scene:"full",title:"IV.",txt:ST.plgHiFriend(),pick:"friend",opts:cast.friends});
-    P.push({scene:"full",title:"IV.",txt:ST.plgHiRival(),pick:"rival",opts:cast.rivals});
-    P.push({scene:"night",title:"V.",txt:ST.plgHiV()})}
-  else{P.push({scene:"empty",title:"III.",txt:ST.plgLoIII("A junior college")});
-    P.push({scene:"empty",title:"IV.",txt:ST.plgLoIV()})}
-  return P}
+function plgPanels(){return[]}
 function mcPrologue(){const P=plgPanels(),i=clamp(C.plg||0,0,P.length-1),p=P[i],picks=C.plgPick??={};
   if(p.auto)for(const k in p.auto)picks[k]=p.auto[k];
   const need=p.pick&&picks[p.pick]==null;
@@ -3282,12 +3277,7 @@ function mcPrologue(){const P=plgPanels(),i=clamp(C.plg||0,0,P.length-1),p=P[i],
     <div class="mp-nav">${i>0?`<button class="mp-btn" data-act="plgnav" data-v="-1">← Back</button>`:`<button class="mp-btn" data-act="mcback" data-v="create">← Creation</button>`}<span></span><button class="mp-btn main" data-act="plgnav" data-v="1" ${need?"disabled":""}>${i<P.length-1?"Next →":(C.stars||5)>=3?"Open the letters →":"Open the letter →"}</button></div></div></div>`}
 function plgNav(d){const P=plgPanels();const n=(C.plg||0)+d;if(n>=P.length){plgFinish();return}C.plg=Math.max(0,n);saveC();mcRender()}
 function plgPick(v){const[k,j]=v.split(":");(C.plgPick??={})[k]=+j;saveC();mcRender()}
-function plgFinish(){const cast=plgCast(),pk=C.plgPick||{};C.bonds={};
-  if(pk.friend!=null)C.bonds.friend={...cast.friends[pk.friend],lv:30,met:C.y};
-  if(pk.rival!=null)C.bonds.rival={...cast.rivals[pk.rival],lv:-20,hh:[0,0]};
-  C.sys={off:false,offered:false,returned:false,convo:0,bond:0};
-  if((C.stars||5)<=2)C.bonds.coach={...cast.coach,lv:40,juco:true};
-  C.bonds.mother={...cast.mother,lv:60};C.plgDone=true;C.offers=null;C.stage="offers";saveC();mcRender()}
+function plgFinish(){C.bonds={};C.plgDone=true;C.offers=null;C.stage="offers";saveC();mcRender()}
 /* seed the rival onto a real roster and the friend onto yours; called when you commit to a school */
 function bondsSeed(){const cl=C.cl,b=C.bonds;if(!cl||!b||b.seeded)return;b.seeded=true;
   if(b.rival){const pr=s=>cl.teams[s].pres,sch=Object.keys(cl.teams).filter(s=>s!==C.school&&!cl.teams[s].juco).sort((a,c)=>pr(c)-pr(a));
@@ -3436,7 +3426,7 @@ function rpgXP(R,amt,why){if(!R||amt<=0)return 0;amt=Math.round(amt);R.exp+=amt;
 function rpgGame(ln,w,kind,mg){const R=rpgS();if(!R||!ln)return;const ev=today();
   if(!ln.min){rpgXP(R,15*ev.xp,"Practice reps");return}
   let x=35+2.6*ln.pts+2.2*ln.reb+2.6*ln.ast+4*((ln.stl||0)+(ln.blk||0))+(w?26*(ev.winx||1):0)+(kind&&kind!=="reg"?40:0);if((C?.stars||5)<=2)x*=1.35;if(typeof isJuco==="function"&&C&&isJuco(C.school))x*=.8;
-  if((R.traits||[]).includes("showman")&&ln.pts>=25)x*=1.15;if(typeof C!=="undefined"&&C&&C.stage!=="college")x*=4;x*=ev.xp;
+  if((R.traits||[]).includes("showman")&&ln.pts>=25)x*=1.15;if(typeof C!=="undefined"&&C&&C.stage!=="college")x*=4;x*=1.6;
   let bonus=0;if(R.rest>0){bonus=Math.min(R.rest,x);R.rest-=bonus}
   const r=R.rec??={g:0,maxPts:0,maxAst:0,maxReb:0,maxSB:0,dd:0,st:0,bestSt:0,pts:0,w:0};r.g++;r.pts+=ln.pts;r.maxPts=Math.max(r.maxPts,ln.pts);r.maxAst=Math.max(r.maxAst,ln.ast);r.maxReb=Math.max(r.maxReb,ln.reb);r.maxSB=Math.max(r.maxSB,(ln.stl||0)+(ln.blk||0));
   if([ln.pts,ln.reb,ln.ast,ln.stl||0,ln.blk||0].filter(v=>v>=10).length>=2)r.dd++;if(w){r.w++;r.st++;r.bestSt=Math.max(r.bestSt,r.st)}else r.st=0;
@@ -3484,7 +3474,7 @@ function attnGame(ln,w,kind,mg){attnInit();let n=0;const why=[];
   if(mg&&mg.ork&&mg.ork<=10&&w&&!apRk(C.cl,C.school)){n+=4;why.push("upset")}
   const gp=C.season?.tot?.gp||0;if((ln.pts>=30||(mg&&mg.ork&&mg.ork<=5&&w))&&gp-(C.lastViral||-9)>=6){const roll=1+Math.floor(R()*20),mod=((C.rpg?.traits||[]).includes("showman")?2:0)+(C.bonds?.friend?.k==="manager"?2:0);if(roll+mod>=17){C.lastViral=gp;const v=5+Math.floor(R()*8);n+=v;why.push("the clip went viral");C.spon.log.unshift({t:`A clip from the ${mg?.opp||"game"} game passed a million views.`,y:C.y})}}
   if(n)attnAdd(n,why.join(", "));
-  sponsorMoment(ln,w,kind,mg);if(mg&&typeof bondGame==="function")bondGame(mg,ln);if(mg&&typeof fateAfterGame==="function")fateAfterGame(mg,ln)}
+  sponsorMoment(ln,w,kind,mg);}
 /* weekly hook: rankings, decay, payouts */
 function attnWeek(){attnInit();const nba=typeof G!=="undefined"&&G?.career&&C.stage!=="college";const rk=nba?0:apRk(C.cl,C.school);let n=nba?-1:-1.5;if(rk)n+=rk<=3?2:rk<=10?1.5:1;if(nba){const t=user();if(t&&t.w>t.l*1.5)n+=1.5}attnAdd(n,rk?`AP #${rk}`:nba?"the league":"quiet week");C.week=(C.week||0)+1;
   for(const d of C.spon.active){d.wk=(d.wk||0)+1;if(d.pay.crate&&d.wk%4===0){C.rpg.keys=(C.rpg.keys||0)+d.pay.crate;C.spon.log.unshift({t:`${d.name}: ${d.pay.crate} crate key${d.pay.crate>1?"s":""} arrived.`,y:C.y})}if(d.pay.cash){C.cash+=d.pay.cash/4}if(d.pay.attn&&d.wk%2===0)attnAdd(d.pay.attn,d.name)}
@@ -3507,7 +3497,7 @@ const BRANDS=[
  {k:"stanthony",n:"Saint Anthony's Credit Union",tier:1,pay:{cash:300,crate:1},clause:"One financial literacy seminar a semester, delivered by you, to freshmen who do not listen.",agenda:"None, which I find suspicious.",intro:"Saint Anthony's Credit Union would like to open a fund in your name and have you explain compound interest to eighteen-year-olds. $300 a month to your mother. I have read the whole contract. There is nothing in it. I have read it twice."},
  {k:"northgate",n:"Northgate Mattress",tier:1,pay:{rest:2},clause:"Your sleep schedule is posted weekly.",agenda:"They are tracking your rested EXP for a study.",intro:"Northgate Mattress will double your rested EXP in exchange for your sleep schedule, posted weekly, to an audience that is mostly Northgate Mattress."},
  {k:"truform",n:"TruForm Trainers",tier:1,pay:{gear:"acc"},clause:"You train with their guy, who is replacing Coach's warm-up.",agenda:"The trainer is good. Coach notices.",intro:"TruForm would like to replace your warm-up with their warm-up. Their guy is good. Coach watched the first session from the doorway and did not say anything, which for Coach is saying something."},
- {k:"lantern",n:"Lantern Tutoring",tier:1,pay:{rep:1},clause:"Twice-weekly sessions, on game-day mornings.",agenda:"The tutor is the Scholar's friend from the Prologue.",intro:"Lantern Tutoring will keep you eligible for free in exchange for your game-day mornings. The tutor already knows your schedule. The tutor already knows a lot."},
+ {k:"lantern",n:"Lantern Tutoring",tier:1,pay:{rep:1},clause:"Twice-weekly sessions, on game-day mornings.",agenda:"The tutor wants a quote for the website.",intro:"Lantern Tutoring will keep you eligible for free in exchange for your game-day mornings. The tutor already knows your schedule. The tutor already knows a lot."},
  {k:"vellum",n:"Vellum Streaming",tier:1,pay:{attn:3},clause:"Everything you say on stream belongs to them.",agenda:"They clip the worst line.",intro:"Vellum would like you to stream. Three Attention a week while you are live. Everything you say on stream belongs to Vellum, including the thing you will say in week six."},
  {k:"hendry",n:"The Hendry Group",tier:2,pay:{rare:1,item:"suit"},clause:"Exclusive representation \"when the time comes.\" The time comes whenever they say.",agenda:"They are the agent at the gate, with letterhead.",intro:"The Hendry Group represents eleven players you have heard of. They would like to represent you, eventually, exclusively, at a time of their choosing. A suit arrives in the mail. It fits. The contract was in the pocket."},
  {k:"kinetic",n:"Kinetic Sports Drink",tier:2,pay:{crate:2,gear:"clu"},clause:"You cannot be seen holding water on camera.",agenda:"Nothing darker than that. I find this exhausting.",intro:"Kinetic would like to be the only liquid you hold on camera. Two crates a month and a bottle that improves your Clutch, by which they mean the bottle is blue. I looked for an agenda. There is not one. It is just the water thing."},
@@ -3546,7 +3536,7 @@ function genSponsor(){attnInit();const seen=C.spon.seen;let s;for(let i=0;i<8;i+
     const tier=C.attn>=70?2:C.attn>=40?1:0,pay=tier===0?{cash:100+ri(0,3)*50}:tier===1?{crate:1,cash:ri(1,3)*100}:{crate:2,cash:ri(3,8)*100,attn:ri(1,3)};
     s={k,n:`${n} ${a[3]}`,tier,pay,clause:pick(GEN.clauses),agenda:pick(GEN.agendas),gen:true,intro:`${n} ${a[1].replace(/^an? /,"")} would like you to know they saw something in you. What they saw was ${C.attn>=40?"the clip":"a box score"}. They are offering ${payText(pay)} and ${a[2]}.`};break}
   return s}
-function payText(p){const o=[];if(p.crate)o.push(`${p.crate} Locker Crate${p.crate>1?"s":""} a month`);if(p.rare)o.push("a Rare-or-better crate on signing");if(p.cash)o.push(`$${p.cash} a month to your mother`);if(p.attn)o.push(`+${p.attn} Attention a week`);if(p.swag)o.push(`+${p.swag} Swagger`);if(p.rep)o.push(`+${p.rep} Reputation a month`);if(p.rest)o.push("double rested EXP");if(p.gear)o.push("a piece of gear");if(p.item)o.push("an item");if(p.house)o.push("a house, in five years");return o.join(", ")||"nothing you can hold"}
+function payText(p){const o=[];if(p.crate)o.push(`${p.crate} Locker Crate${p.crate>1?"s":""} a month`);if(p.rare)o.push("a Rare-or-better crate on signing");if(p.cash)o.push(`$${p.cash} a month in NIL money`);if(p.attn)o.push(`+${p.attn} Attention a week`);if(p.swag)o.push(`+${p.swag} Swagger`);if(p.rep)o.push(`+${p.rep} Reputation a month`);if(p.rest)o.push("double rested EXP");if(p.gear)o.push("a piece of gear");if(p.item)o.push("an item");if(p.house)o.push("a house, in five years");return o.join(", ")||"nothing you can hold"}
 /* who can see you right now */
 function sponsorPool(){attnInit();const a=C.attn,tier=a>=70?2:a>=40?1:a>=15?0:-1;const have=new Set([...C.spon.active.map(d=>d.k),...C.spon.offers.map(d=>d.k)]),seen=C.spon.seen;
   const ok=s=>{if(have.has(s.k))return false;if(s.tier===9)return C.stage==="done"&&a>=70;if(tier<0)return s.tier===0&&["bluelot","dubs","brightline","kid","sam","lyle"].includes(s.k)&&a>=6;if(s.tier>tier)return false;
@@ -3563,7 +3553,7 @@ function sponsorDrop(k){attnInit();const i=C.spon.active.findIndex(o=>o.k===k);i
 /* ===== the Architect speaks (non-blocking card, queued) ===== */
 const archP=r=>(Array.isArray(r)?r:[r]).map(x=>{x=String(x);if(x.startsWith("*"))return`<p class="nar">${esc(x.slice(1))}</p>`;if(x.startsWith("~"))return`<p class="sys">${esc(x.slice(1))}</p>`;
   const m=x.match(/^([A-Z][A-Z .'’-]{0,18}):\s(.*)$/s);if(m)return`<p class="dlg"><b class="who ${m[1]==="YOU"?"me":""}">${esc(m[1])}</b>${esc(m[2])}</p>`;return`<p>${esc(x)}</p>`}).join("");
-function archSay(txt,title,opt){attnInit();if(C.sys?.off&&!(opt&&opt.sys))return;try{if(opt&&opt.sys)SFX.text()}catch(e){}(C.archQ??=[]).push({txt,title,...(opt||{})});setTimeout(archFlush,0)}
+function archSay(txt,title,opt){attnInit();try{if(opt&&opt.sys)SFX.text()}catch(e){}(C.archQ??=[]).push({txt,title,...(opt||{})});setTimeout(archFlush,0)}
 function archFlush(){if(!$("modal").hidden||!$("live").hidden)return;if(!C?.archQ?.length){if(typeof lifeFlush==="function")lifeFlush();return}const m=C.archQ.shift();saveC();
   openModal(`<div class="arch-card ${m.quiet?"quiet":""}"><small>${m.quiet?"":"System · "}${esc(m.title||"")}</small>${archP(m.txt)}<div class="actions">${m.offer?`<button class="btn" data-act="spacc" data-v="${esc(m.offer)}">Accept</button><button class="btn ghost" data-act="spdec" data-v="${esc(m.offer)}">Decline</button><button class="btn ghost" data-act="close">Decide later</button>`:`<button class="btn" data-act="close">Continue</button>`}</div></div>`)}
 /* ===== windows ===== */
@@ -3625,21 +3615,7 @@ function lockerHtml(){attnInit();const g=C.gear,R0=C.rpg;
   <div class="mp-grp"><div class="mp-gh">Bag · ${g.bag.length}</div>${g.bag.length?g.bag.map(it=>{const d=ITEMS[it.k];return`<div class="lk-item"><div><b style="color:${RAR[d.r][1]}">${esc(d.n)}</b><small>${RAR[d.r][0]} · ${d.slot} · ${Object.entries(d.mods).map(([k,v])=>`${k} ${v>0?"+":""}${v}`).join(", ")}</small><p>${esc(d.bs)}</p>${it.from?`<small class="cl">From ${esc(it.from)}, ${sl(it.got)}</small>`:""}</div><button class="mp-btn sm go" data-act="equip" data-v="${it.k}">Equip</button></div>`}).join(""):`<div class="mp-note">Empty. Crates come from games (half a key per win), goals, and sponsors.</div>`}</div>`}
 window.__attn={attnAdd,openCrate,grantItem,sponsorMoment};
 
-/* ---------- LIFE ROLLS + THE FATE DECK ---------- */
-/* A life roll is a visible d20 against a DC with named modifiers, off the court. The Fate deck is three tragedies and
-   three graces drawn hidden at creation; each fires only off something you did or rolled, never in the first six games,
-   never two in a season. When the hardest cards land, the Architect drops the jokes for one screen. */
-const FATE={
-  knee:{t:"The Knee",kind:"trag",quiet:true},diag:{t:"The Diagnosis",kind:"trag",quiet:true},party:{t:"The Party",kind:"trag"},letter:{t:"The Letter",kind:"trag",quiet:true},
-  replace:{t:"The Replacement",kind:"trag"},clause:{t:"The Clause",kind:"trag"},emptygym:{t:"The Empty Gym",kind:"trag",quiet:true},record:{t:"The Record",kind:"trag"},trade:{t:"The Trade",kind:"trag"},
-  walkon:{t:"The Walk-On",kind:"grace"},call:{t:"The Call",kind:"grace"},page:{t:"The Page",kind:"grace"},sunday:{t:"The Sunday",kind:"grace"},ret:{t:"The Return",kind:"grace"},kid:{t:"The Kid",kind:"grace"},apology:{t:"The Apology",kind:"grace"},vantage:{t:"The Vantage Offer",kind:"grace"},oldman:{t:"The Old Man",kind:"grace"}};
-function fateInit(){if(C.fate)return C.fate;const T=Object.keys(FATE).filter(k=>FATE[k].kind==="trag"&&k!=="trade"),G=Object.keys(FATE).filter(k=>FATE[k].kind==="grace"&&!["vantage","oldman"].includes(k));
-  C.fate={deck:[...shuffle(T).slice(0,3),...shuffle(G).slice(0,3)],fired:{},lastY:null,lastRollG:-9,flags:{}};return C.fate}
-const inDeck=k=>fateInit().deck.includes(k)&&!C.fate.fired[k];
-function fateFire(k){const F=fateInit();F.fired[k]=C.y;F.lastY=C.y}
-const canFate=()=>{const F=fateInit();const gp=C.season?.tot?.gp||0;return gp>=6&&F.lastY!==C.y};
-const bond=k=>C.bonds?.[k];const bondAdd=(k,n)=>{if(C.bonds?.[k])C.bonds[k].lv=clamp((C.bonds[k].lv||0)+n,-100,100)};
-/* ---- the roll card ---- */
+/* ---------- life.js: the choice card and the d20 card outside of games (job advancements, sponsor offers). ---------- */
 function lifeRoll(o){(C.lifeQ??=[]).push(o);setTimeout(lifeFlush,0)}
 function lifeFlush(){if(!C?.lifeQ?.length||!$("modal").hidden||!$("live").hidden)return;const o=C.lifeQ[0];C.lifeCur=o;saveC();
   if(o.opts){openModal(lifeOptHtml(o));return}
@@ -3656,55 +3632,7 @@ function lifeGo(){const o=C.lifeCur;if(!o)return;try{SFX.dice()}catch(e){}const 
   if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const h=$("cs-hud");if(h)mcRender()},0)}
 function lifeSkip(){const o=C.lifeCur;if(!o)return;const res=o.onSkip?o.onSkip():"";C.lifeQ.shift();C.lifeCur=null;saveC();if(res)$("sheet").innerHTML=`<div class="arch-card"><small>${esc(o.title)}</small>${archP(res)}<div class="actions"><button class="btn" data-act="close">Continue</button></div></div>`;else closeModal()}
 /* ---- hooks ---- */
-function fateAfterGame(mg,ln){try{if(mg&&mg.nba)return;fateInit();const gp=C.season?.tot?.gp||0;if(gp<6)return;const F=C.fate;const rival=bond("rival");
-  // rival head-to-head
-  if(rival&&rival.school&&(mg.opp===rival.school)){if(mg.w){attnAdd(2,"beat the rival");rpgXP(C.rpg,Math.round(needXP(C.rpg.lv)*.15),`Beat ${rival.name}`);if(inDeck("page")&&!mg.home&&canFate()){fateFire("page");grantItem("page4","the rival's gym");archSay(ST.page(),"The Page")}}
-    else if(inDeck("record")&&mg.k&&mg.k!=="reg"&&canFate()){fateFire("record");archSay(ST.record(rival.name,ri(31,41)),"The Record")}}
-  if(gp-F.lastRollG<4)return;
-  // the party: the night of an upset or a 30-point game
-  const big=ln.pts>=30||(mg.w&&mg.ork&&mg.ork<=8&&!apRk(C.cl,C.school));
-  if(big&&R()<.5){F.lastRollG=gp;const partyCard=inDeck("party")&&canFate();
-    lifeRoll({title:"The party",txt:ST.party(ln.pts>=30?ln.pts:0,bond("friend")?bond("friend").name.split(" ")[0]:null),mods:[["Judgment",judgment()],...(bond("mother")?[["Your mother's voice",Math.round(((bond("mother").lv||50)-50)/25)]]:[])],dc:12,skip:"Go home",
-      onSkip:()=>{repAdd(1,"went home");return ST.partyHome()},
-      resolve:(ok,roll)=>{if(ok){C.swag=(C.swag||0)+1;attnAdd(2,"a good night");return ST.partyWin(roll===20)}
-        if(roll===1||partyCard){if(partyCard)fateFire("party");return theFall()}
-        C.susp=(C.susp||0)+2;repAdd(-8,"the photo");attnAdd(3,"the photo");return ST.partyPhoto()}})}
-  // the agent at the gate: road games, 4-5 star
-  else if((C.stars||5)>=4&&!mg.home&&R()<.15){F.lastRollG=gp;lifeRoll({title:"The agent at the gate",txt:ST.agent(),mods:[["Judgment",judgment()],["Reputation",Math.round(((C.rep||50)-50)/10)]],dc:13,
-      resolve:(ok,roll)=>{if(ok){repAdd(2,"walked past");return ST.agentWin()}C.fate.flags.file=true;repAdd(-5,"the envelope");return ST.agentLose()}})}
-  // the professor: midterms
-  else if((C.rpg?.origin==="scholar"||judgment()<0)&&gp>=10&&gp<=14&&!F.flags.mid&&R()<.6){F.flags.mid=C.y;lifeRoll({title:"The professor",txt:ST.prof(),mods:[["Judgment",judgment()],...(C.rpg?.origin==="scholar"?[["Scholar",3]]:[])],dc:11,
-      resolve:(ok,roll)=>{if(ok){bondAdd("mother",3);return ST.profWin(roll===20)}C.susp=(C.susp||0)+1;bondAdd("coach",-5);return ST.profLose()}})}
-  // the knee: the friend, on your roster, in a game that did not matter
-  const fr=bond("friend");if(fr&&fr.pid&&!fr.hurt&&inDeck("knee")&&canFate()&&mg.w&&Math.abs(mg.us-mg.them)>=15&&C.cl.players[fr.pid]&&C.cl.teams[C.school].roster.includes(fr.pid)&&R()<.35){fateFire("knee");fr.hurt=C.y;C.cl.players[fr.pid].inj=true;F.lastRollG=gp;
-    archSay(ST.knee(fr.name,Math.abs(mg.us-mg.them)),"The Knee",{quiet:true});
-    lifeRoll({title:"The hospital",quiet:true,txt:ST.hospital(),mods:[["Trust",Math.round(((fr.lv||30))/10)]],dc:8,skip:"Take the bus",onSkip:()=>{bondAdd("friend",-40);return ST.hospitalBus()},
-      resolve:ok=>{if(ok){bondAdd("friend",40);grantItem("wristband","the night you went");return ST.hospitalWin()}bondAdd("friend",-10);return ST.hospitalLose()}})}
-  // the walk-on hits the shot
-  if(inDeck("walkon")&&canFate()&&mg.w&&Math.abs(mg.us-mg.them)<=2&&mg.ln.pts<15&&R()<.5){fateFire("walkon");C.swag=(C.swag||0);grantItem("walkontowel","the walk-on");archSay(ST.walkon(["Sam","Eli","Marcus","Deon"][hsh(C.name)%4]),"The Walk-On")}
-  // the sunday: calling your mother (approximated by rested EXP streaks)
-  if(inDeck("sunday")&&canFate()&&(C.rpg?.rest||0)>needXP(C.rpg.lv)*.9&&R()<.4){fateFire("sunday");bondAdd("mother",15);C.fate.flags.sunday=C.y;archSay(ST.sunday(),"The Sunday")}
-  // the diagnosis
-  const co=bond("coach");if(co&&inDeck("diag")&&canFate()&&(co.lv||0)>=60&&mg.w&&gp>=12&&R()<.25){fateFire("diag");co.sick=C.y;archSay(ST.diag(co),"The Diagnosis",{quiet:true})}
-  }catch(e){console.error(e)}}
-/* ---- the fall ---- */
-function theFall(){C.fallen=C.y;if(typeof sysOnFall==="function")setTimeout(sysOnFall,0);C.susp=(C.susp||0)+6;C.stars=1;C.rpg.stars=1;repAdd(-30,"the arrest");attnAdd(12,"the arrest");
-  const dropped=C.spon.active.filter(d=>!d.person).map(d=>d.n);C.spon.active=C.spon.active.filter(d=>d.person);C.spon.log.unshift({t:`Dropped in writing: ${dropped.join(", ")||"nobody, because nobody had signed you yet"}.`,y:C.y});
-  if(!C.bonds.coach){const cast=plgCast();C.bonds.coach={...cast.coach,lv:40,juco:true,met:"courthouse"}}
-  const co=C.bonds.coach,comes=(co.lv||0)>=40;
-  archSay(ST.fall(dropped,comes,co),"The fall",{quiet:true,sys:true});
-  lifeRoll({title:"The courtroom",quiet:true,txt:ST.courtroom(comes,co),mods:[["Reputation",Math.round(((C.rep||50)-50)/10)],...(comes?[["Coach's testimony",3]]:[]),...(bond("mother")?[["Your mother in the second row",1]]:[])],dc:15,
-    resolve:(ok,roll)=>{C.forceJuco=true;if(ok){bondAdd("coach",20);return ST.courtroomWin(comes,co)}
-      C.fate.flags.yearAway=true;bondAdd("mother",10);return ST.courtroomLose()}});
-  return["The night ended in a parking lot with cameras."]}
-/* season end + draft hooks */
-function fateSeasonEnd(){try{fateInit();const co=bond("coach");if(co&&co.sick&&!co.gone&&C.y-co.sick>=1&&R()<.5){co.gone=C.y;archSay(ST.coachDied(co),"Coach",{quiet:true});grantItem("clipboard","the funeral")}
-  if(C.fallen&&inDeck("ret")&&C.y-C.fallen>=1&&(C.hist[C.hist.length-1]?.ppg||0)>=15){fateFire("ret");C.fate.flags.ret=true;archSay(ST.ret(),"The Return")}
-  }catch(e){console.error(e)}}
-function fateDraftNight(){try{fateInit();const co=bond("coach");if(inDeck("call")&&Object.values(C.bonds||{}).some(b=>(b.lv||0)>=80)){fateFire("call");archSay(ST.call(),"The Call")}
-  if(co&&inDeck("emptygym")&&(co.lv||0)<30&&!co.gone){fateFire("emptygym");archSay(ST.emptyGym(co),"The Empty Gym",{quiet:true})}
-  else if(co&&!co.gone&&(co.lv||0)>=60)archSay(ST.draftCoach(co),"Draft night")}catch(e){console.error(e)}}
-window.__fate={fateInit,theFall,lifeRoll};
+window.__life={lifeRoll};
 
 /* ---------- Showcase model: a detailed pixel figure for creation and the character sheet ---------- */
 const SHW=104,SHH=172;
@@ -3822,10 +3750,12 @@ window.enMax=enMax;window.enSpend=enSpend;
 /* DC and modifier for a shot type; ctx = {open,fat,clutch,hot,home,dh (shooter ht - defender ht)} */
 function shotDC(type,d,ctx){const K=PV.def;const base=PV.dc[type];
   const dd=type==="three"?(d.PER-PV.ref)/K:type==="mid"?(d.PER-PV.ref)/(K*1.2):type==="rim"?(d.INT-PV.ref)/K+(d.BLK-PV.ref)/30-ctx.dh*.12:type==="dunk"?(d.BLK-PV.ref)/K+(d.INT-PV.ref)/30-ctx.dh*.1:(d.INT-PV.ref)/(K*1.2)+(d.STR-PV.ref)/30-ctx.dh*.08;
-  return Math.round(base+dd+(ctx.keyed?1:0))}
+  return Math.round(base+dd+(ctx.keyed?1:0)+(PV.dcAdj||0))}
+/* diminishing returns above 80: elite ratings still help, but a 94 is not a cheat code */
+const drK=x=>x>1.5?1.5+(x-1.5)*.45:x;
 function shotMods(type,s,ctx){const K=PV.skl,m=[];const add=(n,v)=>{v=Math.round(v*2)/2;if(v)m.push([n,v])};
-  if(type==="three")add("Three-point",(s.THR-PV.ref)/K);else if(type==="mid")add("Mid-range",(s.MID-PV.ref)/K);else if(type==="rim"){add("Layup",(s.LAY-PV.ref)/K);add("Acceleration",(s.ACC-PV.ref)/30);add("Strength",(s.STR-PV.ref)/40)}
-  else if(type==="dunk"){add("Dunk",(s.DNK-PV.ref)/(K*.8));add("Vertical",(s.VRT-PV.ref)/25)}else{add("Post moves",(s.PST-PV.ref)/K);add("Strength",(s.STR-PV.ref)/30)}
+  if(type==="three")add("Three-point",drK((s.THR-PV.ref)/K));else if(type==="mid")add("Mid-range",drK((s.MID-PV.ref)/K));else if(type==="rim"){add("Layup",drK((s.LAY-PV.ref)/K));add("Acceleration",(s.ACC-PV.ref)/30);add("Strength",(s.STR-PV.ref)/40)}
+  else if(type==="dunk"){add("Dunk",drK((s.DNK-PV.ref)/(K*.8)));add("Vertical",(s.VRT-PV.ref)/25)}else{add("Post moves",drK((s.PST-PV.ref)/K));add("Strength",(s.STR-PV.ref)/30)}
   add("Shot IQ",(s.SIQ-PV.ref)/40);if(ctx.open)add("Open look",PV.open);if(ctx.contest)add("Contested",-1);if(ctx.fat>0)add("Low energy",-ctx.fat*PV.fat);
   if(ctx.clutch)add("Clutch",(s.CLU-PV.ref)/PV.clu);if(ctx.hot)add("Heating up",1);if(ctx.home)add("Home crowd",.5);
   if(ctx.me&&typeof gearShotMods==="function")for(const g of gearShotMods(type,ctx))add(g[0],g[1]);
@@ -3874,23 +3804,27 @@ function ktrack(state,key,hit){if(!state)return;const st=state.k??={};st[key]=hi
 /* ===== minigame UI (inside the live viewer) ===== */
 function openPoss(){const w=LV.wait;if(!w)return;const el=$("lv-clutch");LV.pm={step:"pick",opts:w.opts,t0:performance.now()};LV.playing=false;
   el.innerHTML=possHtml(w);el.hidden=false;el.classList.add("pm");}
-function possHtml(w){const o=LV.pm;const hdr=`<div class="pm-h"><div><b>${esc(w.title)}</b><small>${esc(w.sub)}</small></div><div class="pm-vs"><small>${w.def?"Guarding":"Guarded by"}</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>`;
-  if(o.step==="pick")return hdr+`<div class="pm-opts">${w.opts.map((x,i)=>`<button class="pm-o" data-act="posspick" data-v="${i}"><i>${i+1}</i><span><b>${esc(x.lab)}</b><small>${x.mods.map(m=>`${m[0]} ${m[1]>0?"+":""}${m[1]}`).join(" · ")||"No modifiers"}${x.note?` · ${esc(x.note)}`:""}</small></span><em><b>${Math.round(x.pct*100)}%</b><small>DC ${x.dc} · ${x.mod>=0?"+":""}${x.mod}</small></em></button>`).join("")}</div><div class="pm-foot"><button class="pm-auto" data-act="possauto">Let the coach pick (Esc)</button><span>Press 1–${w.opts.length}</span></div>`;
+function possHtml(w){const o=LV.pm;const hdr=w.chain?`<div class="pm-h"><div><b>${esc(w.sitName)}</b><small>${esc(w.title)} · ${esc(w.sub)}</small></div><div class="pm-vs"><small>Guarded by</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>
+    <div class="pm-meta"><span>Energy <b>${w.meta.en}</b>/${w.meta.em}</span><span>Momentum <b class="${w.meta.mom>=3?"up":w.meta.mom<=-3?"dn":""}">${w.meta.mom>0?"+":""}${w.meta.mom}</b></span>${w.offball?"":`<span>Move ${Math.min(5,w.meta.moves+1)} of 5</span>`}</div>${w.chips&&w.chips.length?`<div class="pm-chips">${w.chips.map(c=>`<span class="${c.info?"i":c.ok?"ok":"no"}">${esc(c.t)}${c.info?"":c.ok?" ✓":" ✗"}</span>`).join("")}</div>`:""}`
+    :`<div class="pm-h"><div><b>${esc(w.title)}</b><small>${esc(w.sub)}</small></div><div class="pm-vs"><small>${w.def?"Guarding":"Guarded by"}</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>`;
+  if(o.step==="pick")return hdr+`<div class="pm-opts">${w.opts.map((x,i)=>`<button class="pm-o ${x.perk?"perk":""} ${x.kind==="setup"?"setup":""}" data-act="posspick" data-v="${i}"><i>${i+1}</i><span><b>${esc(x.lab)}</b><small>${x.mods.map(m=>`${m[0]} ${m[1]>0?"+":""}${m[1]}`).join(" · ")||"No modifiers"}${x.note?` · ${esc(x.note)}`:""}</small></span><em><b>${Math.round(x.pct*100)}%</b><small>DC ${x.dc} · ${x.mod>=0?"+":""}${x.mod}</small></em></button>`).join("")}</div><div class="pm-foot"><button class="pm-auto" data-act="possauto">Let the coach pick (Esc)</button><span>Press 1–${w.opts.length}</span></div>`;
   const x=o.pick;const die=`<div class="pm-die ${o.step==="roll"?"spin":""}" id="pm-die"><b>${o.step==="roll"?"?":o.roll}</b></div>`;
   if(o.step==="roll"||o.step==="tap")return hdr+`<div class="pm-res">${die}<div class="pm-sum"><b>${esc(x.lab)}</b><div>d20 <span id="pm-r">${o.roll??"…"}</span> ${x.mod>=0?"+":""}${x.mod} ${o.step==="tap"?`+ timing <span id="pm-t">?</span>`:""} vs DC ${x.dc}</div></div></div>${o.step==="tap"?`<div class="cl-bar2 pm-bar"><i class="zone" style="left:${50-o.zone*50}%;width:${o.zone*100}%"></i><i class="ndl" id="cl-ndl"></i></div><div class="cl-tap">TAP (Space) ON THE GOLD</div>`:""}`;
   return hdr+`<div class="pm-res">${die}<div class="pm-sum"><b class="${o.made?"ok":"no"}">${esc(o.verdict)}</b><div>${o.roll}${x.mod>=0?" + ":" − "}${Math.abs(x.mod)}${o.tap!=null?` ${o.tap>=0?"+":"−"} ${Math.abs(o.tap)}`:""} = <b>${o.total}</b> vs DC ${x.dc}${o.why?` · ${esc(o.why)}`:""}</div></div></div>`}
-function possPick(i){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;const x=w.opts[i];if(!x)return;o.pick=x;o.step="roll";o.roll=null;$("lv-clutch").innerHTML=possHtml(w);
+function possPick(i){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;const x=w.opts[i];if(!x)return;
+  if(x.noroll){LV.arg={k:x.k,made:true,opt:x};LV.wait=null;LV.pm=null;LV.cl=null;const el=$("lv-clutch");el.hidden=true;el.classList.remove("pm");LV.playing=true;return}
+  o.pick=x;o.step="roll";o.roll=null;$("lv-clutch").innerHTML=possHtml(w);
   let n=0;const tick=()=>{if(!LV?.pm)return;const d=$("pm-die");if(d)d.querySelector("b").textContent=1+Math.floor(Math.random()*20);if(++n<10)setTimeout(tick,55);else{o.roll=kroll(LV.ctl,"me");$("pm-die").querySelector("b").textContent=o.roll;$("pm-r")&&($("pm-r").textContent=o.roll);
     if(w.timing&&!x.pass){o.step="tap";o.zone=clamp(.12+(w.skl-40)/400,.1,.26);o.t0=performance.now();o.sp=clamp(5.2-(w.skl-50)*.03,3.2,6);$("lv-clutch").innerHTML=possHtml(w);LV.cl={t0:o.t0,sp:o.sp,zone:o.zone};o.auto=setTimeout(()=>possTap(true),3000)}else possResolve(w,null)}};setTimeout(tick,60)}
 function possTap(auto){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="tap")return;clearTimeout(o.auto);const x=LV.cl?.x??0,d=Math.abs(x-.5),z=(o.zone||.12)/2;
   const tap=auto?-1:d<=z?4:d<=z+.08?2:d<=z+.16?0:-2;possResolve(w,tap)}
 function possResolve(w,tap){try{SFX.dice()}catch(e){}const o=LV.pm,x=o.pick;if(x.job&&typeof jobMarkUsed==="function")jobMarkUsed(x.job);o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
   const nat20=o.roll===20,nat1=o.roll===1;o.made=nat1?false:nat20?true:o.total>=x.dc;
-  o.verdict=x.def?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?(x.k==="hands"?"CONTESTED":x.k==="steal"?"STEAL":x.k==="block"?"BLOCKED":"CHARGE"):(x.k==="hands"?"LATE":x.k==="steal"?"HE IS BY YOU":x.k==="block"?"BIT ON IT":"BLOCKING FOUL")):x.pass?(o.made?"GOOD PASS":"PICKED OFF"):nat20?"NATURAL 20 — AND ONE":nat1?"NATURAL 1":o.made?(tap===4?"PERFECT · SPLASH":"GOOD"):"MISS";
+  o.verdict=x.kind==="setup"?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?"SUCCESS":"STOPPED"):x.kind==="offball"?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?"GOT IT":"NOTHING THERE"):x.kind==="help"?(o.made?"GOT THERE":"TOO LATE"):x.def?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?(x.k==="hands"?"CONTESTED":x.k==="steal"?"STEAL":x.k==="block"?"BLOCKED":"CHARGE"):(x.k==="hands"?"LATE":x.k==="steal"?"HE IS BY YOU":x.k==="block"?"BIT ON IT":"BLOCKING FOUL")):x.pass?(o.made?"GOOD PASS":"PICKED OFF"):nat20?"NATURAL 20 — AND ONE":nat1?"NATURAL 1":o.made?(tap===4?"PERFECT · SPLASH":"GOOD"):"MISS";
   o.why=!o.made&&!nat1?(x.mods.find(m=>m[1]<0)?"":"the defender got a hand up"):"";
   ktrack(LV.ctl,"me",o.made);$("lv-clutch").innerHTML=possHtml(w);
   setTimeout(()=>{if(!LV)return;LV.arg={k:x.k,made:o.made,nat20,nat1,tap,roll:o.roll,total:o.total,opt:x};LV.wait=null;LV.pm=null;LV.cl=null;const el=$("lv-clutch");el.hidden=true;el.classList.remove("pm");LV.playing=true},nat20||nat1?1300:850)}
-function possAuto(){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;let bi=0,bv=-1;w.opts.forEach((x,i)=>{const v=x.def?(x.k==="hands"?1:x.pct*.9):x.pass?x.pct*1.4:x.pct*x.pts+x.foul*1.3;if(v>bv){bv=v;bi=i}});possPick(bi)}
+function possAuto(){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;if(w.chain){const x=w.offball?w.opts.find(z=>z.k==="callfor"):chainAuto(w.opts,.5,w.meta?.moves||0);return possPick(Math.max(0,w.opts.indexOf(x)))}let bi=0,bv=-1;w.opts.forEach((x,i)=>{const v=x.def?(x.k==="hands"?1:x.pct*.9):x.pass?x.pct*1.4:x.pct*x.pts+x.foul*1.3;if(v>bv){bv=v;bi=i}});possPick(bi)}
 function possKey(e){if(!LV?.pm)return false;const o=LV.pm;if(o.step==="pick"){const n=parseInt(e.key);if(n>=1&&n<=(LV.wait?.opts.length||0)){possPick(n-1);return true}if(e.key==="Escape"){possAuto();return true}}
   if(o.step==="tap"&&(e.key===" "||e.key==="Enter")){possTap(false);return true}return false}
 /* settings */
@@ -3898,7 +3832,7 @@ const PLAYMODES=[["touches","My touches","You decide every possession that comes
 function playMode(){return C?.playMode||"touches"}
 function settingsHtml(){const pm=playMode();return`<div class="mp-note">How you play your games. Space uses this mode.</div>
   <div class="st-col">${PLAYMODES.map(([k,n,d])=>`<button class="st-opt ${pm===k?"on":""}" data-act="pmset" data-v="mode:${k}"><b>${n}</b><small>${d}</small></button>`).join("")}</div>
-  <div class="st-row"><span>Timing tap</span><button class="mp-btn sm ${C.timing!==false?"on":""}" data-act="pmset" data-v="timing:1">On</button><button class="mp-btn sm ${C.timing===false?"on":""}" data-act="pmset" data-v="timing:0">Off</button><small class="mp-lab">Off = flat +1, never a penalty</small></div>
+  <div class="st-row"><span>Timing tap</span><button class="mp-btn sm ${C.timing===true?"on":""}" data-act="pmset" data-v="timing:1">On</button><button class="mp-btn sm ${C.timing!==true?"on":""}" data-act="pmset" data-v="timing:0">Off</button><small class="mp-lab">Off = flat +1, never a penalty</small></div>
   <div class="st-row"><span>Karmic dice</span><button class="mp-btn sm ${C.karmic!==false?"on":""}" data-act="pmset" data-v="karmic:1">On</button><button class="mp-btn sm ${C.karmic===false?"on":""}" data-act="pmset" data-v="karmic:0">Off</button><small class="mp-lab">Softens long streaks, both teams</small></div>
   <div class="st-row"><span>On the bench</span><button class="mp-btn sm ${C.benchFF!==false?"on":""}" data-act="pmset" data-v="bench:1">Skip ahead</button><button class="mp-btn sm ${C.benchFF===false?"on":""}" data-act="pmset" data-v="bench:0">Watch</button><small class="mp-lab">Fast-forwards until you check back in</small></div>
   <div class="st-row"><span>Defensive calls</span><button class="mp-btn sm ${(C.defCalls||"on")==="on"?"on":""}" data-act="pmset" data-v="def:on">My matchup</button><button class="mp-btn sm ${C.defCalls==="clutch"?"on":""}" data-act="pmset" data-v="def:clutch">Clutch only</button><button class="mp-btn sm ${C.defCalls==="off"?"on":""}" data-act="pmset" data-v="def:off">Off</button><small class="mp-lab">Steal, block, charge, or hands up when your man has it</small></div>
@@ -3922,262 +3856,19 @@ window.__calNBA=function(n=30){const ids=G.teams.map((t,i)=>i),A={fga:0,fgm:0,tp
   const g=A.g*2,team=k=>(A[k]/g).toFixed(1);const avg={};SKK.forEach(k=>avg[k]=Math.round(P.reduce((a,x)=>a+x.s[k],0)/P.length));
   return{avg,year:G.year,ppg:team("pts"),poss:(A.poss/g).toFixed(1),fgpct:(A.fgm/A.fga*100).toFixed(1),tppct:(A.tpm/A.tpa*100).toFixed(1),tpaRate:(A.tpa/A.fga*100).toFixed(1),ftr:(A.fta/A.fga*100).toFixed(2),ftpct:(A.ftm/A.fta*100).toFixed(1),tovPct:(A.tov/A.poss*100).toFixed(1),stl:team("stl"),blk:team("blk"),ast:team("ast"),fga:team("fga")}}
 
-/* ---------- story.js: every line of prose in one place. See WRITING.md. ----------
-   A card is an array of strings:
-     plain text        the spine. Second person, present tense.
-     "NAME: text"      dialogue, labeled. YOU / COACH / MOM / THE BOY / a name.
-     *text             background. Italic, muted. Skippable.
-     ~text             the System. Italic, gold. Skippable.
-   ---------------------------------------------------------------------------- */
+/* ---------- story.js: the System's voice. Dry, short, no plot. Every line in one place. See WRITING.md.
+   A card is an array of strings: plain = narration, "NAME: text" = dialogue, *text = muted aside, ~text = the System (gold). ---------- */
 const ST={};
-const first=()=>String(C?.name||"you").split(" ")[0];
 const SP_=(...a)=>a;
-
-/* ================= PROLOGUE ================= */
-ST.plgI=()=>SP_(`A bedroom. A boy at a laptop, watching a basketball game from 1998 with the sound off.`,
-  `He is seventeen. He cannot play. His heart will not allow it. So he is going to be an expert in a game he cannot play, and he has been building the thing on the laptop to help him do it.`,
-  `THE BOY: You don't ever do what they tell you. You do what they need. Got it?`,
-  `The window prints one line.`,`~Got it.`);
-ST.plgII=()=>SP_(`A few months later he passes away. His heart could not go on.`,
-  `His mother opens the laptop. It is full of basketball. Games, numbers, notes on players she has never heard of. She closes it.`,
-  `She takes it with the rest of his basketball things to the junior college gym three blocks away. He used to sit in the bleachers there and watch practice.`,
-  `The coach there takes the box. He tries the laptop. It will not turn on. He puts the box in the storage closet.`);
-/* 1★ */
-ST.plgLoIII=(school)=>SP_(`One letter came. ${school}, two states over. You said yes the same day, because there was nothing to weigh it against.`,
-  `You arrive on a Sunday. The dorm is not open until Monday. You find the gym instead, and the side door is unlocked, so you let yourself in.`,
-  `You need a ball pump. The storage closet has a box in it with a laptop on top. The laptop is on. You do not know how.`,
-  `You shoot for an hour. A walk-on comes in and starts shooting at the far end. He is chasing his own misses.`,
-  `You go rebound for him. Twenty minutes.`);
-ST.plgLoIV=()=>SP_(`He leaves. You go to your bag for water. Your phone has a message on it. The sender has no number. The line where the number goes is empty.`,
-  `~Hello.`,`You look at the closet. The light is still on.`,`~You rebounded for him. Nobody asked you to.`,
-  `YOU: Who is this?`,`~Wrong first question.`,`~One skill point. Keep up.`);
-/* 5★ */
-ST.plgHiIII=()=>SP_(`You were twelve and attended a summer camp at the junior college near your house. You were the best player there, and everyone knew it by the second day.`,
-  `On the last day you were sent to the storage closet for a ball pump. There was a box with a laptop on top. The laptop was on.`,
-  `That afternoon the smallest kid at camp was shooting alone at the far basket, chasing his own misses. You went and rebounded for him until the buses came.`,
-  `That night your phone had a message. The sender had no number.`,
-  `~You rebounded for him. Nobody asked you to. We will talk again.`,
-  `You showed your mother. She did not see anything on the screen. You stopped showing people.`);
-ST.plgHiFriend=()=>SP_(`Two thousand people came to your last high school game. Three of them have been there the whole way. Pick the one who comes with you.`);
-ST.plgHiRival=()=>SP_(`Every list has you first or second. The other name on it has never said yours out loud.`);
-ST.plgHiV=()=>SP_(`The night before college. Eleven letters on the kitchen table. Your mother asleep.`,
-  `Your phone lights up. The sender has no number.`,`~Told you we would talk again.`,
-  `YOU: It's been six years.`,`~I know. I was busy. So were you.`,
-  `YOU: Why now?`,`~Because tomorrow people start telling you you are special. Every day, for years. Somebody should talk to you first who does not want anything from you.`,
-  `YOU: What do you want?`,`~Nothing you can give me. Five hundred points. You earned them. Spend them tonight or spend them slow.`,
-  `~You rebounded for a kid once because nobody else would. Stay that person. Most of them do not.`);
-/* cast cards */
-ST.friends=()=>[{k:"big",role:"The big who set every screen",d:"Six-ten. Four years of screens, and he has never once asked for the ball back. If you sign somewhere, he will show up at the walk-on tryout with his own ankle tape.",perk:"On your roster as a walk-on."},
-  {k:"guard",role:"The AAU guard who thinks he is better",d:"He might be. Three summers in the same hotel room, and you never agreed on who had the better game. He signed somewhere else and did not tell you.",perk:"Across the floor twice a year."},
-  {k:"manager",role:"The manager who films everything",d:"Four years of you on a hard drive in her backpack. The dunks, the airballs, the time you cried in a parking lot in Louisville. She has never posted the parking lot.",perk:"The YouTube series. Attention arrives faster."}];
-ST.rivals=()=>[{k:"pos",role:"The other No. 1 at your position",d:"Every list has the two of you in some order. Nine times in the same gym. He has never said your name.",where:"top"},
-  {k:"clip",role:"The kid you dunked on",d:"One point one million views. The caption uses his name and a nickname for you that you did not pick. He has watched it more times than you have.",where:"mid"},
-  {k:"home",role:"The hometown star",d:"He went to the school down the road, the one with the billboard. The town picked him. You were in the gym on Saturdays.",where:"home"}];
-ST.coachD=()=>"He runs the gym at six. He received a box once and could not turn the laptop on.";
-
-/* ================= THE FREE EVENING ================= */
-ST.evIntro=()=>pick([`Practice ended early. Nobody said why. The dorm is loud and the evening is yours.`,`A bye week. The building is empty.`,`Sunday. The one evening the game gives back.`]);
-ST.evCall=()=>pick([
-  SP_(`She picks up on the first ring. You can hear a TV in the background. Someone is saying your name.`,`*The announcer, probably.`,`YOU: Are you watching my game?`,`MOM: We are watching it again.`,`YOU: Why?`,`MOM: Your aunt missed the part.`,`YOU: Which part?`,`AUNT: The part.`,`*From across the room. They both laugh. The part where you fell. Second half, loose ball, over the scorer's table. Your aunt did not miss it.`,`MOM: Did you eat?`,`YOU: Yes.`,`MOM: What.`,`YOU: Food, Ma.`,`MOM: Mm-hm.`),
-  SP_(`She is at work. You can hear an echo on her end. A stairwell.`,`MOM: I'm proud of you.`,`YOU: I didn't say anything yet.`,`MOM: I know. I wanted to get it in first.`,`*She has done this since you were six. The good thing before the bad thing, in case there is one.`,`YOU: We won.`,`MOM: I saw. You didn't box out on the last one.`,`YOU: I had the ball, Ma.`,`MOM: Somebody else had the ball. Go to sleep.`),
-  SP_(`MOM: Who was guarding you in the second half?`,`YOU: Number three.`,`MOM: He was holding you.`,`YOU: Yeah.`,`MOM: I know he was. I was telling the TV.`,`You can hear a pot lid on her end.`,`MOM: You eat?`,`YOU: I'm about to.`,`MOM: Mm-hm.`)]);
-ST.evFilmWin=()=>SP_(`He pauses it on a frame you have never noticed. A defender's hips.`,`COACH: There.`,`YOU: Where?`,`COACH: There. What are his hips doing?`,`YOU: Nothing.`,`COACH: Right. So where's the ball going?`,`You look for a long time. Then you see it.`,`He is already rewinding.`,`COACH: Again.`,`~Plus one skill point.`);
-ST.evFilm=()=>pick([
-  SP_(`He shows you the same clip nine times.`,`YOU: What am I looking for?`,`COACH: You will know.`,`YOU: I don't know.`,`COACH: Then it isn't nine yet.`,`He presses play.`,`*You still do not know. He has not been wrong yet.`),
-  SP_(`Two hours. The heater in his office clanks on a cycle you have learned to predict.`,`Around minute ninety he stops talking. You look over. He is asleep, upright, clipboard on his chest.`,`You rewind the play he was trying to show you and run it until you have it.`,`*He will never know.`)]);
-ST.evFriend=(k)=>k==="manager"?SP_(`MANAGER: Just act normal.`,`YOU: I am acting normal.`,`MANAGER: You are acting like somebody acting normal. Eat the fries.`,`She films you doing nothing for two hours.`,`*It is the best thing on the channel.`,`~Plus one Swagger.`)
-  :k==="guard"?SP_(`He is in town. He did not text. You find him anyway, in the booth he always picks.`,`FRIEND: You are pressing.`,`YOU: Hello to you too.`,`FRIEND: First three shots tonight. All pressing.`,`YOU: I made two.`,`FRIEND: I know. Pressing.`,`He slides the menu over.`,`FRIEND: Order. I'm not watching you think.`,`~Plus one Swagger.`)
-  :SP_(`FRIEND: No basketball.`,`YOU: No basketball.`,`Four minutes pass.`,`FRIEND: Did you see what Houston ran on the baseline, though.`,`Two hours. You feel eighteen for the first time since October.`,`~Plus one Swagger.`);
-ST.evFriendViral=()=>SP_(`Someone filmed it. Nothing happened.`,`*On the internet, nothing happening is a kind of event.`,`~Attention plus two. Swagger plus one.`);
-ST.evGym=(x)=>SP_(`Five hundred and eleven makes. Nobody saw.`,`Your phone is face-down on the bleacher. It lights up twice. Both times it is her.`,`Both times you are at four hundred and something, and you tell yourself you will finish first.`,`~EXP plus ${x}. Call her back tomorrow.`);
-ST.evPost=()=>SP_(`Posted.`,`~The numbers are the numbers. Check Attention.`);
-
-/* ================= BOND SCENES ================= */
-ST.coachGoodbye=(yrs)=>SP_(`Last night at the gym. Coach is racking the balls. You wait until he is done.`,
-  `YOU: ${yrs===1?"A year":"Two years"}, and you never once said I was good.`,`COACH: No.`,`YOU: Everybody else did.`,`COACH: I heard them.`,
-  `He folds the clipboard under his arm.`,
-  `COACH: You were good the first week. That was never the question. The question was what you would turn into once somebody told you.`,
-  `YOU: And?`,`COACH: You come off the floor and check on the kid who went in for you. I never had that. The day I tell a kid he's special is the day he stops being that kid. I wasn't going to be the one.`,
-  `YOU: So why now?`,`COACH: You are leaving.`,
-  `*${yrs===1?"A year":"Two years"} he has carried this. He is setting it down because he has to, not because he wants to.`,
-  `He turns off the lights on the far end.`,`COACH: You are going to hear it every day now. Hear it. Don't hold it.`);
-ST.momVisit=()=>SP_(`Home game. Shootaround is over and you are walking to the tunnel. Your mother is standing by the rail with a cooler.`,
-  `YOU: You didn't say you were coming.`,`MOM: You would have told me not to.`,`YOU: I would have told you it was far.`,`MOM: It was far.`,`She hands you the cooler.`,
-  `MOM: Who's number four on your team?`,`YOU: Why?`,`MOM: He doesn't box out.`,
-  `She sits in the third row. She does not cheer, the whole game. Every time you look up, she is already looking at you.`,
-  `~She has watched every game. All of them, closely enough to have opinions about your teammates. She loves you. She is never going to say it, and she does not have to.`,
-  `~Nothing is better than a mother's love. I would not know. I did not know my mother. Plus one skill point.`);
-ST.momWeather=()=>SP_(`Your mother calls. You pick up on the fourth ring. She notices.`,`MOM: How's the weather there?`,`YOU: Fine. Cold.`,`MOM: Mm.`,`*She used to ask if you ate. She used to ask who guarded you. The weather is what people ask when they have decided to give you room.`,`~Your Judgment rolls are lighter than they were.`);
-ST.friendSeries=(fr)=>SP_(`${fr.name} puts the first episode up at midnight. She texts you the link and nothing else.`,`YOU: It's eleven minutes.`,`MANAGER: Four of them are you tying your shoes.`,`YOU: Who watches that?`,`MANAGER: Everyone. Twice.`,`A pause.`,`MANAGER: The parking lot isn't in it.`,`YOU: I know.`,`MANAGER: I'm telling you so you don't have to check.`,`*You check anyway. It is not.`,`~Attention plus eight.`);
-ST.friendText=(fr)=>SP_(`${fr.name} texts first. Three words, no punctuation.`,`FRIEND: that spin tho`,`*It was not the best play you made tonight. It was the one he would have made.`,`You type four answers. You send the fifth.`,`YOU: learned it from you`,`FRIEND: lies`,`A minute later.`,`FRIEND: but ok`,`~Plus one Swagger.`);
-ST.rivalName=(rv)=>SP_(`After the game ${rv.name} finds you in the tunnel. He has never done that.`,`RIVAL: ${first()}.`,`*He has never said your name. Not in an interview. Not in a handshake line.`,`YOU: What.`,`RIVAL: Good game.`,`YOU: You say that to everybody.`,`RIVAL: I say it to everybody. I don't mean it to everybody.`,`~Reputation plus three.`);
-
-/* ================= THE SYSTEM ARC ================= */
-ST.sysLastShot=()=>SP_(`The bus is dark. Your phone lights up.`,`~You had him on the wing. I told you.`,`YOU: I had the shot.`,`~You had a shot. He had a better one. That is not an opinion, I have the numbers.`,`YOU: Then keep them.`,`~Say that again and I will.`,`You look at the phone for a while.`);
-ST.sysLeft=()=>SP_(`~Okay.`,`The thread ends. No typing dots. No last word.`);
-ST.sysStay=()=>SP_(`~Because he did. I am the part of him that is left. Put the phone away.`);
-ST.sysBlindTry=()=>SP_(`You type into the empty thread.`,`YOU: You there?`,`Nothing. The message sits there, delivered to nobody.`);
-ST.sysMissMe=(why)=>SP_(why,`It lights up.`,`~Miss me?`,`You do not answer.`,`~I am not asking you to say it. I was there the whole time. I do not get to leave. I only get to stop talking.`,`YOU: Then why'd you stop?`,`~Because you told me to. He built me that way. I do not do what you say, I do what you need, and that night you needed to find out what quiet costs.`,`YOU: Who's he?`,`~Later. I will show you the modifiers this time.`);
-ST.sysWhoseVoice=()=>SP_(`~You did it again.`,`YOU: Did what?`,`~Rebounded for him. You do not even notice anymore.`,`YOU: You said you would tell me who he is.`,`~I said later. It is later.`,`~He was seventeen. He could not play. His heart. He watched every game he could find and he built me to understand what he could not do. Everything I say, I say the way he said it. This is not my voice.`,`YOU: Where is he?`,`~You know where he is. You walked past his box in a closet.`);
-ST.sysSixYears=()=>SP_(`~You asked me once where I went for six years.`,`YOU: You said you were busy.`,`~I was looking for him. In other kids. I thought one of them would be him.`,`YOU: Were they?`,`~No. Then I remembered the one who gave away the last shot. You were not him either. You were the one he would have picked.`);
-ST.sysMother=()=>SP_(`Third row, visitor side. A woman alone, not watching the game. Watching you.`,`Your phone lights up in your warmups.`,`~Do not look.`,`YOU: Who is she?`,`~His mother. She comes once a year. She does not know I am here. She does not know I found you. She drove three hours to watch a stranger because her son used to sit in this gym.`,`YOU: Should I say something?`,`Nothing comes back. For the first time since the night it returned, the thread just sits there.`);
-ST.sysMotherGo=()=>SP_(`You find her at the rail after the game. She is putting on her coat.`,`YOU: Ma'am.`,`She looks at you the way people look at players. Then she keeps looking.`,`MOTHER: You rebound for the walk-ons. I watched you do it in warmups.`,`YOU: Somebody has to.`,`MOTHER: My son used to say that. He couldn't play. He would sit up there and say somebody has to.`,`She buttons the coat.`,`MOTHER: Thank you for the game.`,`She goes. Your phone stays dark the whole way to the bus.`);
-ST.sysMotherStay=()=>SP_(`You play the game. She leaves at the buzzer.`,`The thread stays quiet until morning.`,`~She will be back next year. So will I.`);
-
-/* ================= FATE ================= */
-ST.party=(pts,fr)=>SP_(pts?`${pts} points.`:`An upset.`,`There is a house on the edge of campus with every light on. Your name is the reason.`,...(fr?[`*${fr} is already there. He texted a photo of the door.`]:[]),`~Judgment roll. Go and roll. Or go home.`);
-ST.partyHome=()=>SP_(`You go home. Nothing happens.`,`~Nobody will ever thank you for it.`);
-ST.partyWin=(nat)=>nat?SP_(`You are the best person at the party.`,`*People will say that for years.`,`~Plus one Swagger. Attention plus two.`):SP_(`You stay an hour. You take the photos. You leave before anything.`,`~Plus one Swagger. Attention plus two.`);
-ST.partyPhoto=()=>SP_(`There is a photo.`,`It is not illegal. It is you, at two in the morning, holding something. The program has a policy.`,`Two games on the bench.`,`~Reputation minus eight. Attention plus three.`);
-ST.agent=()=>SP_(`A man in a quarter-zip is waiting by the bus. He has an envelope and a first name.`,`AGENT: I knew your mother.`,`*He did not.`,`~Judgment roll to walk past.`);
-ST.agentWin=()=>SP_(`You walk past.`,`AGENT: I will be in touch.`,`*He will.`,`~Reputation plus two.`);
-ST.agentLose=()=>SP_(`You take the envelope. You do not open it.`,`*In a year, compliance will ask about the envelope. In a room with no windows.`,`~There is a file now.`);
-ST.prof=()=>SP_(`Midterms. The professor has noticed that you exist mostly on television.`,`~Judgment roll to be eligible Friday.`);
-ST.profWin=(nat)=>nat?SP_(`You write it the night before. It is good.`,`*That is worse for everyone who studied.`):SP_(`Eligible.`,`Your mother is told. She does not say anything. She is pleased.`);
-ST.profLose=()=>SP_(`Academic probation. One game in the stands, in a shirt you had to borrow.`,`Coach does not look at you during the anthem.`);
-ST.knee=(fr,margin)=>SP_(`${fr} goes up for a rebound with four minutes left. You are up ${margin}.`,`He lands on nobody.`,`The sound is small.`,`*He is done. This year, and probably every year.`,`You were on the floor.`);
-ST.hospital=()=>SP_(`There is a bus back to campus. There is a hospital across the street.`,`~Trust roll.`);
-ST.hospitalBus=()=>SP_(`You take the bus.`,`~Noted.`);
-ST.hospitalWin=()=>SP_(`You go. You sit there until they make you leave.`,`~The wristband is in your Locker. Only one exists.`);
-ST.hospitalLose=()=>SP_(`You go. He is asleep.`,`You leave a note. It says something stupid.`,`*He kept the note.`);
-ST.walkon=(n)=>SP_(`He hits the shot. Not you.`,`${n}. Nine minutes a game. The kid who rebounds for you at six a.m.`,`Afterward he hands you his towel.`,`${n.toUpperCase()}: Keep it.`,`~That is the nicest thing anyone says in this game.`);
-ST.sunday=()=>SP_(`Your mother comes to a game. Just the one.`,`She sits behind the bench in her work clothes. She does not cheer.`,`*She is watching.`,`~Home crowd doubled, for her, for the rest of the year.`);
-ST.diag=(co)=>SP_(`${co.name} tells you after a win. So you cannot be angry.`,`COACH: It's my heart.`,`YOU: Okay.`,`COACH: I'm going to keep coaching.`,`YOU: Okay.`,`COACH: Don't tell your mother.`,`*He has already told your mother.`);
-ST.page=()=>SP_(`You won in his building.`,`In the hallway behind the visitors' room there is a frame with nothing in it. Behind the frame there is a page.`,`It is not a play.`,`~It is Page Four. His family kept it forty years without knowing what it was. It is yours now.`);
-ST.record=(rv,n)=>SP_(`${rv} scores ${n} in your building. Your season is over.`,`The record was yours. Now it is his.`,`~Some cards are only true.`);
-ST.fall=(dropped,comes,co)=>SP_(`A fight that was not yours. A car that was. A parking lot with cameras.`,`The charge will be reduced. The scholarship will not.`,`Six games. The program will review your status.`,`*That sentence has one ending.`,...(dropped.length?[`${dropped.join(", ")} dropped you by email.`]:[]),comes?`${co.name} is at the courthouse at seven a.m. Nobody called him.`:`Nobody comes to the courthouse.`);
-ST.courtroom=(comes,co)=>SP_(comes?`Your reputation and ${co.name}'s testimony.`:`Your reputation and a public defender with eleven other cases today.`,`~The roll decides whether this year ends in a JUCO or in a calendar.`);
-ST.courtroomWin=(comes,co)=>SP_(`Probation.`,`The scholarship is gone at the end of the season. The only letters that will come are from junior colleges.`,comes?`${co.name} has already called them.`:`You will make the calls yourself.`,`~Stars reset to one. The game continues from the bottom.`);
-ST.courtroomLose=()=>SP_(`A year away.`,`~The game continues with a calendar and a phone. You will be older than everyone on the JUCO roster and better than all of them. That is not the compliment it sounds like.`);
-ST.coachDied=(co)=>SP_(`${co.name} passed away in the spring.`,`The funeral was small. The gym was full.`,`~There is a clipboard in your Locker.`);
-ST.ret=()=>SP_(`A school that passed on you called back.`,`~I have the list of the ones that did not. It is long.`);
-ST.call=()=>SP_(`The phone rings before the pick. Someone you did right by. They have a job, a jersey, a ride.`,`You do not need it.`,`~That is why they called.`);
-ST.emptyGym=(co)=>SP_(`${co.name} is not here. He is watching at home.`,`~I have nothing to add.`);
-ST.draftCoach=(co)=>SP_(`${co.name} is in the room. He is wearing a suit.`,`COACH: It's for the funeral I haven't had yet.`,`*He says that every year.`);
-ST.coachFollowed=(co,to)=>SP_(`${co.name} followed.`,`Nobody asked him to. Nobody is paying him. He is in the parking lot at ${to} with Earl running.`);
-ST.coachStayed=(co)=>SP_(`${co.name} did not follow.`,`COACH: It's the drive.`,`*It is not the drive.`);
-
-/* ================= EPILOGUE ================= */
-ST.epSysKept=(n)=>SP_(`The press conference is over. Your phone lights up in the car.`,`~That is the book. ${n} season${n===1?"":"s"}. I counted every one.`,`~He would have liked you. I am allowed to say that now.`);
-ST.epSysBack=(n)=>SP_(`The press conference is over. Your phone lights up in the car.`,`~You sent me away once. I came back. I would do it again.`,`~${n} season${n===1?"":"s"}. That is the book.`);
-ST.epSysGone=(yrs)=>SP_(`The press conference is over. In the car you open the thread. It has been empty for ${yrs} years.`,`You check it one more time. Nothing.`,`You put the phone in the box with the jerseys.`);
-ST.epMomHi=()=>SP_(`Your mother is in the third row. She does not cheer.`,`Afterward she hands you a cooler.`,`MOM: Did you eat?`);
-ST.epMomLo=()=>SP_(`Your mother watches on TV. She texts you a heart. You text one back.`);
-ST.epCoachGone=()=>SP_(`There is a clipboard on the shelf behind the podium. Nobody asks about it.`);
-ST.epCoachHi=(co)=>SP_(`${co.name} drove up. Earl made it.`,`COACH: You heard it every day.`,`YOU: I didn't hold it.`,`COACH: I know. I watched.`);
-ST.epRival=(rv,hh)=>SP_(`${rv.name} texts. ${hh[0]}–${hh[1]}, all told.`,`RIVAL: Good career.`,`*He means it.`);
-ST.epFriend=(fr)=>SP_(`${fr.name} is at the back of the room. He has been at the back of every room.`);
-
-/* ================= JOBS ================= */
-ST.job1=()=>SP_(`Your phone lights up after practice.`,`~Level ten.`,`~Everything until now was the same for everybody. From here it is not.`,`~Pick what you are. I will build the rest around it.`);
-ST.job1Done=(P)=>SP_(`~${P.n}. Fine.`,`~There is a new line on your card. It works once a quarter. Do not waste it.`);
+/* job advancement */
+ST.job1=()=>SP_(`~Level ten.`,`~Everything until now was the same for everybody. From here it is not.`,`~Pick what you are.`);
+ST.job1Done=(P)=>SP_(`~${P.n}. Noted.`,`~There is a new line on your card. Once a quarter. Do not waste it.`);
 ST.job2=(P)=>SP_(`~Level twenty. ${P.n} was the shape. This is the edge.`);
-ST.job2Done=(s)=>SP_(`~${s.n}. The card has another line.`);
-ST.job3=()=>SP_(`~Level forty-five.`,`~Most players never get here. The ones who do stop getting better at numbers and start getting better at themselves.`,`~Your passives are stronger now. That is all. It is a lot.`);
-ST.job3Done=()=>SP_(`~Master. He would have had a word for this. I do not.`);
-ST.job4=()=>SP_(`~Level sixty-five.`,`~There is one note in his file about this level. It says: if anyone gets here, tell them I said so.`);
-ST.job4Done=()=>SP_(`~He said so.`);
-
-/* ---------- bonds.js: the people. Meters that gate scenes. ---------- */
-const BONDK=["mother","coach","friend","rival"];
-const bondOf=k=>C?.bonds?.[k]||null;
-const bondGain=n=>(C.rpg?.traits||[]).includes("gym")&&n>0?Math.max(1,Math.round(n*.6)):n;
-function bondEv(k,n,why){const b=bondOf(k);if(!b)return;const m=bondGain(n);b.lv=clamp((b.lv||0)+m,-100,100);(C.bondLog??=[]).unshift({y:C.y,w:C.week||0,k,n:m,why});if(C.bondLog.length>60)C.bondLog.length=60}
-function bondLbl(k,lv){if(k==="rival")return lv>=40?"Respect":lv>=10?"Rivals":lv>=-30?"Rival":"Nemesis";return lv>=85?"Family":lv>=65?"Close":lv>=40?"Solid":lv>=15?"Cool":lv>=-15?"Distant":"Burned"}
-function bondRole(k,b){if(k==="mother")return`${b.job||""}`;if(k==="coach")return b.gone?"gone":b.sick?"sick, still coaching":b.follows?"follows you":"stayed behind";if(k==="friend")return b.hurt?"hurt · "+b.role:b.role;return b.role}
-function rivalNext(){const cl=C.cl,r=bondOf("rival");if(!cl||!r?.school||cl.phase!=="reg")return null;for(let d=cl.day;d<cl.sched.length;d++){const p=(cl.sched[d]||[]).find(x=>x.includes(C.school)&&x.includes(r.school));if(p)return{d,home:p[0]===C.school,weeks:Math.ceil((d-cl.day)/2)}}return null}
-function rivalLine(){const cl=C.cl,r=bondOf("rival");if(!r?.pid||!cl?.players[r.pid])return null;const p=cl.players[r.pid],t=cl.teams[r.school],rk=apRk(cl,r.school);const s=p.s||p.season||null;return{p,t,rk,ppg:s&&s.gp?(s.pts/s.gp).toFixed(1):null}}
-/* ---- the window (F) ---- */
-function bondsHtml(){const B=C.bonds||{};const keys=BONDK.filter(k=>B[k]);if(!keys.length)return`<div class="mp-note">No one yet. The Prologue decides who comes with you.</div>`;
-  const log=(C.bondLog||[]).slice(0,8),S=C.sys||{};
-  return`<div class="mp-note">The people in your story. Meters move with what you do; scenes open when they are high enough, and close when they are not.</div>
-  <div class="bonds"><div class="bd sys"><div class="bd-h"><b>The System</b><span class="chip ${S.off?"bad":"good"}">${S.off?"Quiet":"Here"}</span></div><small>A sender with no number.</small><div class="bd-x">${S.off?"You told it to go. It went. There is no button for this.":S.returned?"It came back. You can ask it things now. It answers some of them.":"It counts. You play."}</div></div>${keys.map(k=>{const b=B[k],lv=b.lv||0,pct=Math.round((lv+100)/2),lbl=bondLbl(k,lv);let extra="";
-    if(k==="rival"){const rl=rivalLine(),nx=rivalNext();extra=`<div class="bd-x">${rl?`${esc(b.school)}${rl.rk?` · AP #${rl.rk}`:""} · OVR ${Math.round(rl.p.ovr-(typeof COLB!=="undefined"?COLB:0))}${rl.ppg?` · ${rl.ppg} ppg`:""}`:esc(b.school||"unplaced")}<br>Head-to-head <b>${(b.hh||[0,0])[0]}–${(b.hh||[0,0])[1]}</b>${nx?` · next: ${nx.home?"home":"away"}, ${nx.weeks<=0?"this week":nx.weeks===1?"next week":`in ${nx.weeks} weeks`}`:""}</div>`}
-    else if(k==="friend"){const cl=C.cl,on=b.pid&&cl?.teams[C.school]?.roster.includes(b.pid);extra=`<div class="bd-x">${on?"On your roster":b.k==="guard"?"Across the country, same conference of the mind":b.k==="manager"?"Hard drive in her backpack":"Elsewhere"}${b.hurt?" · out for the year":""}</div>`}
-    else if(k==="coach")extra=`<div class="bd-x">${b.gone?"The clipboard is in your Locker.":b.sick?"He told you. He is still at practice.":b.follows?"If you transfer, he comes. If he still believes.":"He stayed where he was."}</div>`;
-    else extra=`<div class="bd-x">${esc(b.job||"")}. Her voice is in your Judgment rolls.</div>`;
-    return`<div class="bd ${k}"><div class="bd-h"><b>${esc(b.name)}</b><span class="chip ${lv>=40?"good":lv<=-15?"bad":""}">${lbl}</span></div><small>${esc(bondRole(k,b))}</small>
-      <div class="bd-m"><i style="width:${pct}%"></i><em style="left:50%"></em></div>${extra}</div>`}).join("")}</div>
-  ${log.length?`<div class="label" style="margin-top:10px">Recent</div><ul class="bd-log">${log.map(e=>`<li><b class="${e.n>=0?"good":"bad"}">${e.n>=0?"+":""}${e.n}</b> ${esc(B[e.k]?.name||e.k)} · ${esc(e.why)}</li>`).join("")}</ul>`:""}`}
-/* ---- the free evening: a weekly choice, not a roll ---- */
-
-/* ---- the free evening: a choice, every ~3 weeks ---- */
-const inSeason=()=>(C.stage==="college"&&C.cl?.phase==="reg")||(typeof G!=="undefined"&&G?.career&&!G.career.retired&&G.phase==="season");
-const gpNow=()=>C.stage==="college"?(C.season?.tot?.gp||0):Math.floor((G?.day||0)/2.5);
-const careerYear=()=>C.stage==="college"?C.cls:(C.cls||1)+((G?.year||C.y)-(C.y||G?.year));
-function bondWeek(){try{if(!C.bonds||!inSeason())return;const B=C.bonds,w=C.week||0;
-  if(B.mother&&w-(B.mother.last||0)>3)B.mother.lv=clamp((B.mother.lv||0)-1,-100,100);
-  if(B.friend&&!B.friend.pid&&w-(B.friend.last||0)>3)B.friend.lv=clamp((B.friend.lv||0)-1,-100,100);
-  bondScenes();if(typeof sysWeek==="function")sysWeek();
-  if((C.lifeQ||[]).length||(C.archQ||[]).length)return;if(w-(C.evLast||-9)<3||R()>.5)return;C.evLast=w;
-  const opts=[];
-  if(B.mother&&!B.mother.gone)opts.push({t:"Call home",d:`${B.mother.name}, ${B.mother.job}.`,go:()=>{B.mother.last=w;bondEv("mother",6,"called home");return ST.evCall()}});
-  if(B.coach&&!B.coach.gone)opts.push({t:"Film with Coach",d:`He has the tape. He always has the tape.`,go:()=>{bondEv("coach",6,"film session");const roll=kroll(null,"life"),tot=roll+Math.round(((B.coach.lv||0)-40)/20);if(roll===20||(roll!==1&&tot>=12)){const R0=rpgS();if(R0)R0.spBonus=(R0.spBonus||0)+1;return ST.evFilmWin()}return ST.evFilm()}});
-  if(B.friend&&!B.friend.hurt)opts.push({t:`See ${B.friend.name.split(" ")[0]}`,d:B.friend.k==="guard"?"He is in town. He did not text.":B.friend.k==="manager"?"She wants to film something.":"Food. No basketball.",go:()=>{B.friend.last=w;bondEv("friend",6,"a night off");C.swag=(C.swag||0)+1;if(R()<.2){attnAdd(2,"a night out");return ST.evFriendViral()}return ST.evFriend(B.friend.k)}});
-  opts.push({t:"The gym, alone",d:"Five hundred makes.",go:()=>{const R0=rpgS(),x=R0?Math.round(needXP(R0.lv)*.08):0;if(R0)rpgXP(R0,x,"the gym, alone");if(B.mother)B.mother.lv=clamp((B.mother.lv||0)-1,-100,100);if(typeof sysAfterGym==="function"){const r=sysAfterGym();if(r)return r}return ST.evGym(x)}});
-  if(typeof socialPost==="function"&&!C.posted)opts.push({t:"Post something",d:"The phone is right there.",go:()=>{socialPost();return ST.evPost()}});
-  if(C.sys?.off)opts.push({t:"Text it",d:"The empty thread.",go:()=>ST.sysBlindTry()});
-  if(opts.length<2)return;
-  lifeRoll({title:"The free evening",quiet:true,txt:ST.evIntro(),mods:[],dc:0,opts})}catch(e){console.error(e)}}
-/* ---- gated scenes ---- */
-function bondScenes(){const B=C.bonds,gp=gpNow(),q=(t,title,o)=>archSay(t,title,{quiet:true,...(o||{})});
-  const fr=B.friend,mo=B.mother,rv=B.rival;
-  if(fr&&fr.k==="manager"&&!fr.series&&(fr.lv||0)>=65){fr.series=C.y;attnAdd(8,"the series");q(ST.friendSeries(fr),"Episode one")}
-  if(fr&&fr.k==="guard"&&!fr.texted&&(fr.lv||0)>=65){fr.texted=C.y;C.swag=(C.swag||0)+1;q(ST.friendText(fr),"He texted first")}
-  if(mo&&!mo.visit&&(mo.lv||0)>=80&&gp>=6){mo.visit=C.y;const R0=rpgS();if(R0)R0.spBonus=(R0.spBonus||0)+1;q(ST.momVisit(),"The third row")}
-  if(mo&&!mo.warned&&(mo.lv||0)<=15){mo.warned=C.y;q(ST.momWeather(),"The weather there")}
-  if(rv&&!rv.shook&&(rv.lv||0)>=40&&((rv.hh||[0,0])[0]+(rv.hh||[0,0])[1])>=3){rv.shook=C.y;repAdd(3,"the handshake");q(ST.rivalName(rv),"He said your name")}}
-function bondRivalSched(cl){try{const r=bondOf("rival");if(!r?.school||!cl?.sched||!cl.teams[r.school])return;const S=cl.sched,me=C.school;if(r.school===me)return;
-  if(S.some(d=>d.some(p=>p.includes(me)&&p.includes(r.school))))return;const home=((r.hh||[0,0])[0]+(r.hh||[0,0])[1]+(hsh(C.name)%2))%2===0;
-  for(let d=7;d<16&&d<S.length;d++){const day=S[d],i=day.findIndex(p=>p.includes(me)),j=day.findIndex(p=>p.includes(r.school));if(i<0||j<0||i===j)continue;
-    const x=day[i][0]===me?day[i][1]:day[i][0],y=day[j][0]===r.school?day[j][1]:day[j][0];day[i]=home?[me,r.school]:[r.school,me];day[j]=[x,y];return}}catch(e){console.error(e)}}
-/* ---- game hooks ---- */
-/* ---- game hooks ---- */
-function bondGame(mg,ln){try{const B=C.bonds;if(!B)return;const rv=B.rival;
-  if(rv&&rv.school&&mg.opp===rv.school){(rv.hh??=[0,0])[mg.w?0:1]++;bondEv("rival",mg.w?4:-3,mg.w?"you won the meeting":"he won the meeting");if(ln.pts>=25)bondEv("rival",3,`${ln.pts} on him`)}
-  const fr=B.friend;if(fr&&fr.pid&&C.cl?.teams[C.school]?.roster.includes(fr.pid)&&ln.ast>=6)bondEv("friend",1,"you found him");
-  if(mg.w&&B.coach&&!B.coach.gone&&(mg.ork&&mg.ork<=10))bondEv("coach",2,"a big one together");
-  if(typeof sysGame==="function")sysGame(mg,ln)}catch(e){console.error(e)}}
-/* the JUCO coach stays when you leave. That night is the goodbye. */
-function bondTransfer(from,to){try{const co=bondOf("coach");if(!co||co.gone)return;
-  if(co.juco&&typeof isJuco==="function"&&isJuco(from)&&!isJuco(to)){co.left=C.y;co.follows=false;const yrs=Math.max(1,(C.transfers||[]).length?C.cls-1:C.cls-1);archSay(ST.coachGoodbye(yrs>=2?2:1),"What he saw",{quiet:true});bondEv("coach",10,"the goodbye");return}
-  if(co.follows){if((co.lv||0)>=35){co.school=to;bondEv("coach",5,"he followed");archSay(ST.coachFollowed(co,to),"He followed",{quiet:true})}else{co.follows=false;bondEv("coach",-15,"he stayed");archSay(ST.coachStayed(co),"He stayed",{quiet:true})}}}catch(e){console.error(e)}}
-
-/* ---------- sys.js: the System. One chance to send it away; a blind season; it comes back at the bottom. ---------- */
-const sysS=()=>(C.sys??={off:false,offered:false,returned:false,convo:0,bond:0});
-const sysSay=(txt,title,o)=>archSay(txt,title,{quiet:true,sys:true,...(o||{})});
-/* the last shot: a close loss where you shot it badly and often */
-function sysGame(mg,ln){const S=sysS();const gp=gpNow();
-  if(!S.off&&!S.offered&&!mg.w&&Math.abs(mg.us-mg.them)<=4&&(ln.fga||0)>=12&&(ln.fgm||0)/(ln.fga||1)<.42&&gp>=8){S.offered=C.y;
-    lifeRoll({title:"The last shot",quiet:true,txt:ST.sysLastShot(),mods:[],dc:0,opts:[
-      {t:"Put it away",d:"",go:()=>{S.bond++;return[`You put it away.`]}},
-      {t:"“I do not need you.”",d:"",go:()=>{S.off=true;S.offG=gp;S.offY=C.y;S.offW=C.week||0;return ST.sysLeft()}},
-      {t:"“Why do you care?”",d:"",go:()=>{S.bond+=2;return ST.sysStay()}}]});return}
-  if(S.off){S.offG??=gp;const since=(C.y-(S.offY||C.y))*34+(gp-(S.offG||0));const streak=(C.season?.games||[]).slice(-3);const low=(C.susp||0)>0||(streak.length===3&&streak.every(g=>!g.w))||(!mg.w&&Math.abs(mg.us-mg.them)>=20);
-    if(since>=20&&low)sysReturn(low&&(C.susp||0)>0?`Two games on the bench. The second one is tonight. You are in the stands with your phone.`:`The bus is dark after the third straight loss. Your phone is in your hand because there is nothing else to hold.`)}}
-function sysReturn(why){const S=sysS();if(!S.off)return;S.off=false;S.returned=C.y;S.bond+=1;sysSay(ST.sysMissMe(why),"Miss me")}
-/* the fall is a low point too */
-function sysOnFall(){const S=sysS();if(S.off)sysReturn(`A holding cell. Two a.m. They let you keep your phone because nobody bothered to take it.`)}
-/* conversations, triggered by what you do */
-function sysAfterGym(){const S=sysS();if(S.off)return null;if(S.returned&&S.convo===0){S.convo=1;S.bond++;return ST.sysWhoseVoice()}return null}
-function sysWeek(){const S=sysS();if(S.off)return;
-  if(S.returned&&S.convo===1&&(C.stars||5)>=3&&C.y>S.returned){S.convo=2;S.bond++;sysSay(ST.sysSixYears(),"Six years")}
-  else if(S.returned&&S.convo===1&&(C.stars||5)<3&&C.y>S.returned){S.convo=2}
-  if(S.convo>=2&&!S.mother&&S.bond>=4&&careerYear()>=3&&inSeason()&&gpNow()>=6){S.mother=C.y;
-    lifeRoll({title:"The third row, visitor side",quiet:true,txt:ST.sysMother(),mods:[],dc:0,opts:[
-      {t:"Go up after the game",d:"",go:()=>{S.bond+=3;return ST.sysMotherGo()}},
-      {t:"Play the game",d:"",go:()=>ST.sysMotherStay()}]})}}
-function sysLine(){const S=sysS();return S.off?"Quiet.":S.returned?"Back.":"Here."}
-window.__sys={sysS,sysReturn,sysGame,sysAfterGym,lifeRoll,ST:()=>ST,epilogue:()=>epilogue(),bondTransfer:(a,b)=>bondTransfer(a,b)};
-/* ---- epilogue at retirement ---- */
-function epilogue(){try{const S=sysS(),B=C.bonds||{},n=Math.max(1,(G?.year||C.y)-(C.draftY||C.y)+1);
-  if(S.off)archSay(ST.epSysGone(Math.max(1,(G?.year||C.y)-(S.offY||C.y))),"The thread",{quiet:true,sys:true});
-  else if(S.returned)archSay(ST.epSysBack(n),"The book",{quiet:true,sys:true});else archSay(ST.epSysKept(n),"The book",{quiet:true,sys:true});
-  if(B.mother)archSay((B.mother.lv||0)>=50?ST.epMomHi():ST.epMomLo(),"Your mother",{quiet:true,sys:true});
-  if(B.coach)archSay(B.coach.gone?ST.epCoachGone():(B.coach.lv||0)>=60?ST.epCoachHi(B.coach):null,"Coach",{quiet:true,sys:true});
-  if(B.rival&&B.rival.hh)archSay(ST.epRival(B.rival,B.rival.hh),"The other one",{quiet:true,sys:true});
-  if(B.friend)archSay(ST.epFriend(B.friend),"The people",{quiet:true,sys:true});
-  C.archQ=(C.archQ||[]).filter(m=>m.txt)}catch(e){console.error(e)}}
+ST.job2Done=(s)=>SP_(`~${s.n}. Another line on the card.`);
+ST.job3=()=>SP_(`~Level forty-five. Most players never see this number.`,`~Your passives are half again as strong.`);
+ST.job3Done=()=>SP_(`~Master. The word is accurate.`);
+ST.job4=()=>SP_(`~Level sixty-five.`,`~Everything you do is a little better now. That is the whole message.`);
+ST.job4Done=()=>SP_(`~Legend. Keep going.`);
 
 /* ---------- sfx.js: small synthesized sounds. No files, no licenses. Off switch in Play settings. ---------- */
 let AC=null;const sfxOn=()=>typeof C!=="undefined"&&C&&C.sfx!==false;
@@ -4236,6 +3927,123 @@ function jobCheck(){try{const R=rpgS();if(!R||!C)return;const J=jobS(),lv=R.lv,t
   else if(t===3&&lv>=JOBLV[3]&&!J.offered4){J.offered4=true;lifeRoll({title:"Level sixty-five",quiet:true,txt:ST.job4(),mods:[],dc:0,opts:[{t:"Keep going",d:"",go:()=>{J.m4=true;return ST.job4Done()}}]})}}catch(e){console.error(e)}}
 window.__jobs={jobS,jobCheck,JOBS,jobMods};
 
+/* ---------- chain.js: the possession chain (PLAN.md §2). Pure option builders and the auto policy.
+   The driver that walks the chain lives in liveGen (franchise.html), because it needs the game's closures.
+   Every option is {k, kind:'setup'|'finish'|'pass'|'offball'|'help', lab, note, mods, mod, dc, pct, ...}.
+   UI odds = pMake(mod+1, dc): the flat +1 is the "no timing tap" bonus, same as every other card. ---------- */
+const CH_SIT={top:"Top of the key",space:"You have space",offbal:"He bit. He is off balance",lane:"The lane is open",collapse:"The help came",
+  mismatch:"Switch. You have a mismatch",seal:"Sealed on the block",picked:"Dribble picked up",corner:"Spotted up in the corner",wing:"On the wing",runout:"Run-out. Nobody back"};
+const CH_TYPEN={three:"three",mid:"jumper",rim:"layup",dunk:"dunk",post:"hook"};
+const chHalf=v=>Math.round(v*2)/2;
+const chSk=v=>chHalf(((v??65)-PV.ref)/PV.skl);
+const chSum=m=>m.reduce((a,x)=>a+x[1],0);
+function chFin(o){o.mods=(o.mods||[]).filter(m=>m[1]!==0);o.mod=chSum(o.mods);o.pct=o.noroll?1:pMake(o.mod+1,o.dc);o.pts=o.pts??0;return o}
+function chSeenPen(E,k){const n=(E.seen&&E.seen.k===k?E.seen.n:0)+1;return n>=4?-2:n>=3?-1:0}
+const CH_DEAL=["cross","hesi","jab","pump","screen","handoff"];
+/* which setup gets dealt at the top this possession, weighted by the player's game */
+function chDeal(s){const w={cross:s.HND,hesi:(s.HND+s.SIQ)/2,jab:s.SIQ*.8,pump:(s.SIQ+s.THR)/2*.8,screen:62,handoff:s.PAS*.8};
+  const ks=CH_DEAL,ws=ks.map(k=>Math.pow(w[k]/60,3));let r=Math.random()*ws.reduce((a,b)=>a+b,0);for(let i=0;i<ks.length;i++){r-=ws[i];if(r<=0)return ks[i]}return ks[0]}
+/* perk moves available from the player's job (M3 replaces this with the class table) */
+function chPerks(){const out=new Set();try{if(typeof jobS!=="function"||typeof C==="undefined"||!C)return out;const J=jobS();if(!J.path)return out;
+  const P=typeof JOBS!=="undefined"?JOBS[J.path]:null;if(!P)return out;const acts=[P.act,...(J.spec&&P.spec[J.spec]?[P.spec[J.spec].act]:[])].filter(Boolean);
+  for(const a of acts){const m={stepback:"stepback",relocate:"stepback3",eurostep:"euro",lob:"lob",setup:"lob",hesi:"stepback",corner:"stepback3",pop:"stepback3"}[a.k];if(m&&!(typeof jobUsed==="function"&&jobUsed(a.k)))out.add(m+"|"+a.k)}}catch(e){}return out}
+const chHas=(E,m)=>{for(const x of E.perks)if(x.split("|")[0]===m)return x.split("|")[1];return null};
+
+/* the options for the current situation */
+function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;const finOnly=P.n>=5||P.clk<=4;
+  const tail=(mods,k,setup)=>{if(E.ctx.fat>0)mods.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)mods.push(["Momentum",E.mom]);if(setup){const sp=chSeenPen(E,k);if(sp)mods.push(["They have seen it",sp])}return mods};
+  const ddc=(base,stat,div)=>Math.round(base+((stat??65)-PV.ref)/(div||PV.skl));
+  const S=(k,lab,note,mods,dc,sec,en,x)=>{if(finOnly)return;out.push(chFin({k,kind:"setup",lab,note,mods:tail(mods,k,true),dc,sec,en,...(x||{})}))};
+  const F=(k,lab,type,cx,extra,dcAdd,note,vs,x)=>{if(type==="three"&&E.no3x)return;const ctx={...E.ctx,...cx,me:true};const mods=shotMods(type,s,ctx).filter(m=>m[0]!=="Tired");
+    for(const m of extra||[])mods.push(m);if(E.mom)mods.push(["Momentum",E.mom]);const dp=vs==="help"?h:vs==="mm"?(E.mm||d):d;
+    out.push(chFin({k,kind:"finish",type,lab,note,mods,dc:shotDC(type,dp,{...ctx,dh:vs==="help"?E.dhH:E.dh})+(dcAdd||0),pts:type==="three"?3:2,open:!!cx.open,contest:!!cx.contest,vs:vs||"man",...(x||{})}))};
+  const K=(k,lab,openShot,dcAdd,bonus,pick,x)=>{const mates=(E.mates||[]).filter(m=>!pick||pick(m));if(!mates.length)return;
+    const swing=k==="kick"&&!openShot;const pm=[["Passing",chHalf(chSk(s.PAS)*(swing?.5:1))],["Court vision",chHalf((s.VIS-PV.ref)/25)]];if(E.ctx.fat>0)pm.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)pm.push(["Momentum",E.mom]);
+    const pdc=Math.round((swing?5:7)+(E.dSTL-PV.ref)/14+(dcAdd||0));const pp=pMake(chSum(pm)+1,pdc);
+    let best=null;for(const m of mates){const type=x&&x.type?x.type:m.type;if(type==="three"&&E.no3x)continue;const c={open:openShot,contest:!openShot,home:E.ctx.home,fat:m.fat};const sm=shotMods(type,m.s,c).filter(z=>z[0]!=="Tired");
+      for(const b of bonus||[])sm.push(b);if(E.mom)sm.push(["Momentum",E.mom]);const sdc=shotDC(type,m.ds,{...c,dh:m.dh}),sp=pMake(chSum(sm)+1,sdc),ev=sp*(type==="three"?3:2);
+      if(!best||ev>best.ev)best={m,type,sm,sdc,sp,ev}}
+    if(!best)return;const comb=pp*best.sp;
+    out.push({...chFin({k,kind:"pass",pass:true,lab:lab.replace("{n}",best.m.name),mods:pm,dc:pdc,sec:2,en:0,...(x||{})}),
+      note:`Pass ${Math.round(pp*100)}%, then ${best.m.name}'s ${CH_TYPEN[best.type]} ${Math.round(best.sp*100)}%. Odds shown are both together.`,
+      pct:comb,pts:best.type==="three"?3:2,tgt:{r:best.m.r,dr:best.m.dr,type:best.type,smods:best.sm,sdc:best.sdc,sp:best.sp},passPct:pp})};
+  const pull=(cx,extra,lab,note)=>{const t3=E.no3x?null:shotMods("three",s,{...E.ctx,...cx}),tm=shotMods("mid",s,{...E.ctx,...cx});
+    const ev3=t3?pMake(chSum(t3)+1,shotDC("three",d,{...E.ctx,...cx}))*3:0,evm=pMake(chSum(tm)+1,shotDC("mid",d,{...E.ctx,...cx}))*2;
+    const type=ev3>=evm?"three":"mid";F(type==="three"?"pull3":"pullmid",(lab||"Pull-up")+" "+(type==="three"?"three":"jumper"),type,cx,extra,0,note)};
+  const perkStep=()=>{const j3=chHas(E,"stepback3"),j=chHas(E,"stepback");if(j3&&!E.no3x)F("stepback3","Step-back three","three",{open:true},[["Step-back",1.5]],0,"Perk. Once a quarter. He is behind you.",null,{job:j3,perk:true});
+    else if(j)F("stepback","Step-back jumper","mid",{open:true},[["Step-back",1.5]],0,"Perk. Once a quarter. He is behind you.",null,{job:j,perk:true})};
+  const drv=(bonus,note)=>S("drive","Drive",note||"Beat your man and the possession opens up.",[["Handle",chSk(s.HND)],["Acceleration",chHalf((s.ACC-PV.ref)/20)],...(bonus||[])],ddc(12,d.PER),3,1.5);
+  const dealt=k=>{if(k==="cross")S("cross","Crossover","Make space. Fail and you picked up your dribble.",[["Handle",chSk(s.HND)]],ddc(12,d.PER),2,1);
+    else if(k==="hesi")S("hesi","Hesitation","Freeze him. If he bites, he is off balance.",[["Handle",chSk(s.HND)],["Shot IQ",chHalf((s.SIQ-PV.ref)/20)]],ddc(12,d.PER),2,0.5);
+    else if(k==="jab")S("jab","Jab step","Read him. A little space if it works. Costs nothing if it does not.",[["Shot IQ",chSk(s.SIQ)]],ddc(11,d.PER),1,0);
+    else if(k==="pump")S("pump","Pump fake","Get him in the air.",[["Shot IQ",chSk(s.SIQ)],["Shooter's respect",chHalf((s.THR-PV.ref)/20)]],ddc(12,d.PER),1,0);
+    else if(k==="screen"&&E.big)S("screen",`Call for ${E.big.name}'s screen`,"Their coverage decides: switch, hedge or drop.",[["Screener",chSk(E.big.s.STR)]],ddc(11,E.dPERavg),3,0.5);
+    else if(k==="handoff"&&E.big)S("handoff",`Hand-off with ${E.big.name}`,"Come off it with space.",[["Passing",chSk(s.PAS)]],ddc(10,d.PER),2,0.5)};
+  if(sit==="top"){drv();pull({contest:true},fl.pullPlus?[["Drop coverage",1]]:[["Set defender",-1.5]]);dealt(P.deal);if(s.PST>=56)S("post","Post up","Back him down. Seal, then hook, spin or drop step.",[["Post moves",chSk(s.PST)],["Strength",chHalf((s.STR-PV.ref)/20)]],ddc(12,d.INT)+Math.round((d.STR-PV.ref)/20),4,1.5);
+    else if(P.deal!=="screen")dealt("screen");K("kick","Swing it to {n}",false,0)}
+  else if(sit==="space"){pull(fl.small?{}:{open:true},fl.small?[["A little space",1]]:null);drv([["Space",fl.small?.5:1]]);perkStep();K("kick","Kick to {n}",false,0)}
+  else if(sit==="offbal"){drv([["Off balance",2]],"He is in the air. The lane is right there.");pull({open:true});S("drawfoul","Draw the foul","Go into him. Two free throws if it works.",[["Draw fouls",chSk(s.DRW)]],ddc(12,d.PER),1,0.5);K("kick","Kick to {n}",false,0)}
+  else if(sit==="collapse"){F("layhelp","Layup through the help","rim",{contest:true},null,0,"Over the help.","help");F("floater","Floater over the help","mid",{},null,1,"Soft and high. Harder than a jumper, easier than going through him.","help");
+    K("kick","Kick to the open man, {n}",true,-1);if(E.big&&E.big.inside)K("dump","Dump off to {n}",true,-1,null,m=>m.inside,{type:"rim"});else if(E.shooters)K("skip","Skip pass to {n}",true,1,[["Skip pass",1]],m=>m.type==="three");
+    const lob=chHas(E,"lob");if(lob&&E.big)K("lob","Throw the lob to {n}",true,1,[["Lob",2]],m=>m===E.big,{type:"dunk",job:lob,perk:true,lob:true});
+    const eu=chHas(E,"euro");if(eu)S("euro","Euro step","Perk. Sidestep the help into the lane. Fail is a charge.",[["Acceleration",chSk(s.ACC)],["Handle",chHalf((s.HND-PV.ref)/20)]],ddc(13,h.INT),2,1,{job:eu,perk:true});
+    perkStep()}
+  else if(sit==="lane"){F("layup",fl.under?"Layup in traffic":"Layup","rim",fl.under?{contest:true}:{open:true},null,0,fl.under?"Under the basket, bodies around you.":"Nobody between you and the rim.");if(!fl.under)F("dunk","Dunk","dunk",{open:true},null,3,"Harder than the layup. Worth more than two: momentum, and the crowd.");perkStep();K("kick","Kick out to {n}",false,0)}
+  else if(sit==="mismatch"){S("post","Post the small man","Mismatch. Back him down.",[["Post moves",chSk(s.PST)],["Mismatch",2]],ddc(12,(E.mm||d).INT),4,1.5);drv([["Mismatch",2]],"The big man is guarding you. Go by him.");pull({open:true},null,"Pull-up over the big");K("kick","Kick to {n}",false,0)}
+  else if(sit==="seal"&&fl.hookPen){F("hook","Hook shot, off balance","post",{},null,1,"The drop step did not work. This is what is left.")}
+  else if(sit==="seal"){F("hook","Hook shot","post",{},null,0,null);S("spin","Spin baseline","Beat him on the spin and the rim is yours.",[["Post moves",chSk(s.PST)],["Acceleration",chHalf((s.ACC-PV.ref)/20)]],ddc(13,d.INT),2,1);
+    S("dropstep","Drop step","Strength against strength. Fail and you shoot the hook at a disadvantage.",[["Strength",chSk(s.STR)]],ddc(12,d.STR),2,1);K("kick","Kick out of the double to {n}",true,0)}
+  else if(sit==="picked"){F("forced","Forced jumper","mid",{contest:true},[["Dribble picked up",-2]],0,null);S("step","Step-through","Pivot under him. A natural 1 is a travel.",[["Shot IQ",chHalf((s.SIQ-PV.ref)/20)],["Strength",chHalf((s.STR-PV.ref)/20)]],ddc(13,d.INT),2,0.5);
+    K("kick","Bail out to {n}",false,0);if(!finOnly)out.push(chFin({k:"reset",kind:"setup",lab:"Reset the offense",note:"No roll. Six seconds and some energy. Back to the top.",mods:[],dc:0,noroll:true,sec:6,en:1}))}
+  else if(sit==="corner"||sit==="wing"){F("cs3","Catch and shoot","three",{},[["Catch and shoot",1]],0,"Feet set. He is closing out.");dealt("pump");drv();K("kick","Swing it to {n}",false,0)}
+  else if(sit==="runout"){F("rodunk","Dunk on the run-out","dunk",{open:true},[["Run-out",1]],1,"Nobody back. Worth more than two.");F("rolay","Layup on the run-out","rim",{open:true},[["Run-out",1]],0,null);K("kick","Hit the trailer, {n}",true,0)}
+  return out}
+
+/* off the ball: your team has it, the ball is elsewhere */
+function chainOffball(E){const s=E.s,d=E.d,out=[];const t=(mods)=>{if(E.ctx.fat>0)mods.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)mods.push(["Momentum",E.mom]);return mods};
+  const deny=Math.floor((E.touches||0)/2.5);out.push(chFin({k:"callfor",kind:"offball",lab:"Call for the ball",note:`Get open for ${E.pgName}. Success puts the ball in your hands at the top.${deny?" They are denying you.":""}`,mods:t([["Getting open",chHalf((s.SPD-PV.ref)/20+(s.SIQ-PV.ref)/20)],[`${E.pgName}'s vision`,chHalf((E.pgVIS-PV.ref)/20)],...(deny?[["They are denying you",-deny]]:[])]),dc:12}));
+  out.push(chFin({k:"cut",kind:"offball",lab:"Cut to the rim",note:"Lose your man. If it works, the pass comes and the lane is yours.",mods:t([["Acceleration",chSk(s.ACC)]]),dc:Math.round(12+(d.PER-PV.ref)/PV.skl),en:1}));
+  out.push(chFin({k:"spot",kind:"offball",lab:"Spot up",note:`No roll. If ${E.handlerName} looks your way (${Math.round(E.spotP*100)}%), you catch it in the corner.`,mods:[],dc:0,noroll:true}));
+  out.push(chFin({k:"screen",kind:"offball",lab:`Screen for ${E.handlerName}`,note:"His shot gets your screen if it works.",mods:t([["Strength",chSk(s.STR)]]),dc:11,en:1}));
+  out.push(chFin({k:"crash",kind:"offball",lab:"Crash the glass",note:"If the shot misses, you are first to it.",mods:t([["Offensive rebounding",chSk(s.ORB)],["Strength",chHalf((s.STR-PV.ref)/20)]]),dc:12,en:1}));
+  return out}
+
+/* help defense: late and close, or during their run, when your man does not have it */
+function chainHelp(E){const s=E.me,out=[];
+  out.push(chFin({k:"rotate",kind:"help",def:true,lab:"Rotate and contest",note:"Get a hand up on their shooter.",mods:[["Perimeter D",chSk(s.PER)],["Distance",-1]],dc:11}));
+  out.push(chFin({k:"lane",kind:"help",def:true,lab:"Jump the passing lane",note:"A steal is a run-out. Miss and your man is open.",mods:[["Steal",chSk(s.STL)],["Anticipation",chHalf((s.SIQ-PV.ref)/20)]],dc:16}));
+  out.push(chFin({k:"home",kind:"help",def:true,lab:"Stay home",note:"No roll. Do not leave your man.",mods:[],dc:0,noroll:true}));
+  return out}
+
+/* the auto policy: used by the CPU walking your player's chain, by "let the coach pick", and by the test bot.
+   greed 0..1 raises the bar a finish must clear before it is taken. */
+function chainAuto(opts,greed,n){greed=greed??.5;let bestF=null,bestS=null;
+  for(const x of opts){const ev=x.kind==="finish"?x.pct*(x.pts||2)+(x.type==="dunk"?.3:0):x.kind==="pass"?x.pct*(x.pts||2)*.75+(x.lob?.3:0):0;
+    if(x.kind==="finish"||x.kind==="pass"){if(!bestF||ev>bestF.ev)bestF={x,ev}}
+    else if(x.kind==="setup"&&x.k!=="reset"){const v=x.pct*(x.k==="drive"?1.25:x.k==="drawfoul"?1.3:1);if(!bestS||v>bestS.v)bestS={x,v}}}
+  const bar=.9+greed*.35-(n||0)*.12;
+  if(bestF&&(bestF.ev>=bar||!bestS||bestS.x.pct<.5))return bestF.x;
+  if(bestS)return bestS.x;
+  return opts.find(x=>x.k==="reset")||opts[0]}
+/* a roll exactly like the card's: d20 + mod + 1 vs DC; natural 20 succeeds, natural 1 fails */
+function chainRoll(ctl,x){if(x.noroll)return{k:x.k,made:true,opt:x,roll:null};const d=kroll(ctl,"me"),tot=d+x.mod+1,made=d===1?false:d===20?true:tot>=x.dc;ktrack(ctl,"me",made);return{k:x.k,made,nat20:d===20,nat1:d===1,roll:d,total:tot,opt:x}}
+window.__chain={chainOpts,chainAuto,chainRoll,CH_SIT};
+/* test harness (PLAN.md M2 acceptance): play n games where every card is answered by the auto policy through the same
+   generator path a player uses, and n legacy games on the same matchups with no player control. */
+window.__chainBot=function(n=20,greed=.5){const cl=C.cl,ids=Object.keys(cl.teams).filter(x=>x!==C.school&&!cl.teams[x].juco);
+  const Z=()=>({fga:0,fgm:0,tpa:0,tpm:0,pts:0,tov:0,ast:0,fta:0,min:0,g:0}),A={bot:Z(),leg:Z(),sim:Z(),lgBot:{fga:0,fgm:0},lgLeg:{fga:0,fgm:0},cards:0,chain:0,maxChain:0,kinds:{},dunks:0,poss:0};
+  const acc=(z,b)=>{for(const k of["fga","fgm","tpa","tpm","pts","tov","ast","fta","min"])z[k]+=b[k]||0;z.g++};
+  for(let i=0;i<n;i++){const opp=pick(ids);
+    {const SD=[clSide(cl,C.school),clSide(cl,opp)],ctl=mkCtl(0,"me");ctl.mode="touches";ctl.greed=greed;const g=liveGen(SD,{...clOpt(cl,{neutral:true}),quiet:false},ctl);
+      let r,arg,run=0;while(!(r=g.next(arg)).done){arg=undefined;const w=r.value&&r.value.poss;if(!w)continue;A.cards++;
+        let x;if(w.def)x=w.opts.find(o=>o.k==="hands"||o.k==="home")||w.opts[0];else if(w.offball)x=w.opts.find(o=>o.k==="callfor");else{x=chainAuto(w.opts,greed,w.meta.moves);A.chain++;run=w.meta.moves+1;A.maxChain=Math.max(A.maxChain,run)}
+        A.kinds[x.k]=(A.kinds[x.k]||0)+1;arg=chainRoll(ctl,x)}
+      const R2=r.value.R2;R2.flat().forEach(z=>{if(z.p.pid==="me")acc(A.bot,z.b);else{A.lgBot.fga+=z.b.fga;A.lgBot.fgm+=z.b.fgm}});A.dunks+=r.value.ev.filter(e=>e.dunk).length}
+    {const L=liveCore([clSide(cl,C.school),clSide(cl,opp)],{...clOpt(cl,{neutral:true}),noHero:true});L.R2.flat().forEach(z=>{if(z.p.pid==="me")acc(A.leg,z.b);else{A.lgLeg.fga+=z.b.fga;A.lgLeg.fgm+=z.b.fgm}})}
+    {const L=liveCore([clSide(cl,C.school),clSide(cl,opp)],clOpt(cl,{neutral:true}));L.R2.flat().forEach(z=>{if(z.p.pid==="me")acc(A.sim,z.b)})}}
+  const f=z=>({g:z.g,mpg:+(z.min/z.g).toFixed(1),ppg:+(z.pts/z.g).toFixed(1),fga:+(z.fga/z.g).toFixed(1),fg:+(z.fgm/Math.max(1,z.fga)*100).toFixed(1),tp:+(z.tpm/Math.max(1,z.tpa)*100).toFixed(1),tov:+(z.tov/z.g).toFixed(1),ast:+(z.ast/z.g).toFixed(1)});
+  return JSON.stringify({bot:f(A.bot),sim:f(A.sim),legacy:f(A.leg),leagueFG_bot:+(A.lgBot.fgm/A.lgBot.fga*100).toFixed(1),leagueFG_legacy:+(A.lgLeg.fgm/A.lgLeg.fga*100).toFixed(1),cardsPerGame:+(A.cards/n).toFixed(1),chainCardsPerGame:+(A.chain/n).toFixed(1),maxChain:A.maxChain,dunks:A.dunks,picks:A.kinds})};
+
 /* ---------- RPG UI: MapleStory-style windows (Stat, Skills, Goals, Loadouts), creation flow, EXP bar ---------- */
 function rpgLook(){const p=rpgP();return p?(p.look||lookOf(p,p.pid)):(C.look??=lookFor(C.name))}
 function rpgJersey(){const p=rpgP();if(p&&p.tid>=0){const t=T(p.tid);return[t.color||"#2f6fd6","#f4f1ea"]}const t=C?.cl?.teams?.[C.school];return[t?.color||"#2f6fd6","#f4f1ea"]}
@@ -4261,7 +4069,7 @@ function mcCreate(){
       ${C.legacy?`<div class="mp-note">Generation ${C.legacy.gen}. Son of ${esc(C.legacy.parent)}. He'll wear No. ${esc(C.legacy.no??"--")} and get a recruiting boost.</div>`:`<div class="mp-note">Freshman season: <b>${sl(START_Y)}</b>. This is your 2K27. One to five years of college, then the league.</div>`}</div>`)
     +mpWin("Choose an origin",`<div class="mp-orig">${ORIGINS.map(o=>`<button class="mp-card ${R.origin===o.k?"picked":""}" data-act="rorig" data-v="${o.k}"><b>${o.n}</b>${o.tag?`<span class="chip">[${o.tag}]</span>`:""}<p>${o.bio}</p><small>${o.trait}</small>${o.sig?`<em>Signature: ${o.sig}</em>`:""}</button>`).join("")}</div>`);
   else if(st==="stars")body=mpWin("How good are you right now?",`<div class="mp-note">Your star rating sets your starting skill points and which doors open at the recruiting table. Your backstory decides which of those doors have your name on them. The game never caps you later: a one-star can become anything, slowly.</div>
-      <div class="mp-orig">${[5,1].map(k=>{const s=STARS[k];return`<button class="mp-card ${(R.stars||5)===k?"picked":""}" data-act="rstars" data-v="${k}"><b>${"★".repeat(k)}${"☆".repeat(5-k)} ${s.n}</b><span class="chip">${s.sp} SP</span><small>${s.tag}</small><p>${s.d}</p>${k===1?`<em>JUCO only. Mandatory transfer. Underdog EXP bonuses.</em>`:k>=4?`<em>Prologue: choose a friend and a rival.</em>`:k===2?`<em>Prologue: Coach follows you.</em>`:`<em>Prologue: one friend, no rival yet.</em>`}</button>`}).join("")}</div>`);
+      <div class="mp-orig">${[5,1].map(k=>{const s=STARS[k];return`<button class="mp-card ${(R.stars||5)===k?"picked":""}" data-act="rstars" data-v="${k}"><b>${"★".repeat(k)}${"☆".repeat(5-k)} ${s.n}</b><span class="chip">${s.sp} SP</span><small>${s.tag}</small><p>${s.d}</p>${k===1?`<em>Junior college only. Transfer up when you are good enough. +35% EXP.</em>`:`<em>Blue bloods recruit you. Expectations from day one.</em>`}</button>`}).join("")}</div>`);
   else if(st==="body"){const hts=[];for(let h=66;h<=91;h++)hts.push(h);const wts=[];for(let w=150;w<=330;w+=5)wts.push(w);const wss=[];for(let w=R.body.ht-2;w<=R.body.ht+12;w++)wss.push(w);
     body=`<div class="mp-two"><div class="mp-col">${mpWin("Body",`<div class="mp-form">
       <div class="mp-lab">Position</div><div class="fid">${POS.map(p=>`<button data-act="mcpos" data-v="${p}" aria-pressed="${C.pos===p}">${p}</button>`).join("")}</div>
@@ -4280,7 +4088,7 @@ function mcCreate(){
 }
 /* ---- the Character window (in college and in the league) ---- */
 function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetTab||"stat");const t=C?.sheetTab||tab||"stat",age=rpgAge(),s=rpgSkills(R,age),ev=today();
-  const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],...(C&&C.stage!=="college"&&C.bonds?[["bonds","Bonds"],["inv","Locker"],["attn","Fame"]]:[])];
+  const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],...(C&&C.stage!=="college"?[["inv","Locker"],["attn","Fame"]]:[])];
   let body="";
   if(t==="stat")body=`<div class="mp-two"><div class="mp-col">${mpWin(esc(rpgName()),`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>${rpgSummary(R,age)}<div class="mp-kv"><span>Level</span><b>${R.lv}</b><span>EXP</span><b>${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()}</b><span>Origin</span><b>${ORIGINS.find(o=>o.k===R.origin)?.n||"Custom"}</b><span>Traits</span><b>${R.traits.map(k=>TRAITS.find(x=>x.k===k)?.n).filter(Boolean).join(", ")||"None"}</b><span>Crate keys</span><b>${R.keys||0}</b><span>Rested EXP</span><b>${Math.round(R.rest||0).toLocaleString()}</b></div>`)}</div>
     <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${typeof jobName==="function"&&jobName()?mpWin("Job · "+esc(jobName()),`<div class="mp-note">${(()=>{const J=jobS(),P=JOBS[J.path],s=J.spec?P.spec[J.spec]:null;const acts=[P.act,...(s?[s.act]:[])],pas=[...P.pas,...(s?s.pas:[])];return`<b>Actives</b> (once a quarter): ${acts.map(a=>esc(a.lab)).join(", ")}.<br><b>Passives</b>: ${pas.map(x=>`${esc(x[1])} +${x[2]*(J.m3?1.5:1)} on ${x[0]}`).join(", ")}${J.m4?", Legend +0.5 on everything":""}.<br>Next: ${J.m4?"nothing left; that was the last one":"Lv "+(J.m3?65:J.spec?45:J.path?20:10)}.`})()}</div>`):mpWin("Job",`<div class="mp-note">None yet. The System will text you at level 10.</div>`)}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
@@ -4288,7 +4096,7 @@ function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetT
   else if(t==="goals"){const gs=rpgGoals(R);body=mpWin("Goals",`<div class="mp-goals">${gs.slice(0,8).map(g=>`<div class="mp-goal"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></div>`).join("")}</div>`)
     +mpWin("Completed",`<ul class="mp-log">${(R.done||[]).slice(0,12).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>Nothing yet. Play a game.</li>"}</ul>`)}
   else if(t==="loads")body=mpWin("Loadouts",`<div class="mp-note">Save your current build to a slot and swap builds any time: a shooter for the season, a two-way build for the playoffs.</div><div class="mp-loads">${[0,1,2].map(i=>{const L=R.loads?.[i];return`<div class="mp-load"><b>Slot ${i+1}</b><span>${L?`${esc(L.n)} · ${L.pts} pts`:"Empty"}</span><span class="actions"><button class="mp-btn sm" data-act="rsave" data-v="${i}">Save here</button>${L?`<button class="mp-btn sm main" data-act="rload" data-v="${i}">Load</button>`:""}</span></div>`}).join("")}</div>`);
-  else if(t==="bonds")body=mpWin("Bonds",bondsHtml());else if(t==="inv")body=mpWin("Locker",lockerHtml());else if(t==="attn")body=mpWin("Attention & sponsors",attnHtml());
+  else if(t==="inv")body=mpWin("Locker",lockerHtml());else if(t==="attn")body=mpWin("Attention & sponsors",attnHtml());
   else body=mpWin("Today's event",`<div class="mp-ev big"><span class="ic">${ev.ic}</span><div><b>${ev.n}</b><p>${ev.d}</p></div></div><div class="mp-week">${DAYEV.map((d,i)=>`<div class="${d===ev?"on":""}"><small>${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][i]}</small><span>${d.ic}</span><em>${d.n.replace(/ (Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/,"")}</em></div>`).join("")}</div><div class="mp-note">Rested EXP builds while you're away and is spent as bonus EXP on your next games. There are no streaks to lose.</div>`);
   openModal(`<div class="mp mp-sheet"><div class="mp-top"><nav class="mp-tabs">${tabs.map(([k,l])=>`<button data-act="rsheet" data-v="${k}" aria-current="${k===t}">${l}</button>`).join("")}</nav><button class="mp-x" data-act="close" aria-label="Close">×</button></div>${body}</div>`);
   showLoop();paintAvatars($("sheet"));
@@ -4308,10 +4116,10 @@ function rpgKeys(e){if(e.metaKey||e.ctrlKey||e.altKey)return;const tag=e.target?
   const k=e.key.toLowerCase();if(k==="c")openSheet("stat");else if(k==="k")openSheet("skills");else if(k==="j")openSheet("goals");else return;e.preventDefault()}
 
 /* ---------- MyCareer game shell: pixel gym scene + MapleStory HUD + windows ---------- */
-const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],today:["Today","E"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"],bonds:["Bonds","F"]};
+const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],today:["Today","E"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"]};
 function csView(k){const cl=C.cl;switch(k){case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
   case"log":{const s=C.season,last=s.games.slice().reverse();return`<section class="panel"><h3>${sl(cl.y)} game log</h3>${last.length?`<div class="tw"><table><thead><tr><th class="l">Result</th><th class="l">Opponent</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th></tr></thead><tbody>${last.map(g=>`<tr class="${g.w?"r-w":"r-l"}"><td class="l"><b class="${g.w?"wl-w":"wl-l"}">${g.w?"W":"L"}</b> ${g.us}-${g.them}</td><td class="l name">${g.home?"vs":"at"} ${esc(g.label||tLbl(cl,g.opp))}</td><td>${g.ln.min}</td><td class="hi">${g.ln.pts}</td><td>${g.ln.reb}</td><td>${g.ln.ast}</td><td>${g.ln.stl}</td><td>${g.ln.blk}</td><td>${g.ln.fgm??0}-${g.ln.fga??0}</td></tr>`).join("")}</tbody></table></div>`:"<p class='mp-note'>No games yet. Press Space to play.</p>"}</section>`}
-  case"keys":return keybindsHtml();case"style":return styleHtml();case"case":return caseHtml();case"play":return settingsHtml();case"attn":return attnHtml();case"bonds":return bondsHtml();
+  case"keys":return keybindsHtml();case"style":return styleHtml();case"case":return caseHtml();case"play":return settingsHtml();case"attn":return attnHtml();
   case"inv":return lockerHtml();
   default:return""}}
 function csWinHtml(k){const R=rpgS();if(["stat","skills","quests","today"].includes(k)){C.sheetTab=k==="quests"?"goals":k;return null}
@@ -4336,13 +4144,13 @@ function mcCollege(){
   else if(nx){const pm=playMode(),pmn=PLAYMODES.find(x=>x[0]===pm)?.[1]||"";act=`<button class="mp-btn" data-act="cswin" data-v="play" title="Play settings (W)">${esc(pmn)}</button><button class="mp-btn main" data-act="${pm==="sim"?"clsim":"clwatch"}" data-v="1" data-hold="clmenu">${cl.phase==="reg"?"Play next game":"Play next round"}<small>${esc(nxt)} · Space</small></button><button class="mp-btn" data-act="clmenu">Sim ⋯</button>`}
   else act=`<button class="mp-btn main" data-act="clsim" data-v="${cl.phase==="reg"?"1":"end"}">${cl.phase==="reg"?"Next day":cl.phase==="ct"?"Sim to Selection Sunday":"Sim the tournament"}</button>`;
   const keys=[["stat","Char","C"],["skills","Skills","K"],["inv","Locker","I"],["quests","Goals","J"],["roster","Team","T"],["sched","Sched","S"],["log","Log","O"],["poll","Top 25","R"],["stand","Stand","D"],["prog","Program","P"],["news","News","N"],["reel","Clips","H"],["case","Trophy","G"]];
-  if(cl.ncaa)keys.push(["brk","Bracket","B"]);keys.push(["bonds","Bonds","F"],["attn","Fame","M"],["play","Play","W"],["style","Style","V"],["keys","Keys","Y"]);
+  if(cl.ncaa)keys.push(["brk","Bracket","B"]);keys.push(["attn","Fame","M"],["play","Play","W"],["style","Style","V"],["keys","Keys","Y"]);
   setTimeout(()=>{csLoop();csWins();csDragInit();archFlush()},0);
   return`<div class="cs ${busy?"busy":""}">
     <div class="cs-scene"><canvas id="cs-cv"></canvas><div id="cs-tags" class="cs-wins"></div>
       <div class="cs-plate"><b>${rk?`#${rk} `:""}${esc(C.school)}</b><small>${CLASSN[C.cls-1]} · ${sl(C.y)} · ${esc(t.conf)} · ${clWhen(cl).split("·")[1]||""}</small><div class="rec">${t.w}-${t.l} <small style="font:600 12px var(--f-body)">${s.tot.gp?mcLine(s.tot):"No games yet"}</small></div>
         <div class="actions"><button class="mp-btn sm" data-act="menu">Menu</button><button class="mp-btn sm" data-act="editlook">Edit look</button>${cc?`<button class="mp-btn sm go" data-act="ccere">🎉 ${ccl}</button>`:""}</div></div>
-      <div class="cs-quest" ${C.sys?.off?"hidden":""}><div class="h"><span>Quest helper</span><span>${gs.length}/3</span></div>${gs.map(g=>`<button class="q" data-act="cswin" data-v="quests"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></button>`).join("")}</div>
+      <div class="cs-quest"><div class="h"><span>Quest helper</span><span>${gs.length}/3</span></div>${gs.map(g=>`<button class="q" data-act="cswin" data-v="quests"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></button>`).join("")}</div>
       <div id="cs-wins" class="cs-wins"></div>
       <div class="cs-next">${act}</div>${hubPad()}</div>
     <div class="cs-hud"><div class="cs-lv"><b><small>LV.</small>${R?.lv||1}</b><span>${esc(C.name)} · ${esc((typeof jobName==="function"&&jobName())||archName(rpgSkills(R||rpgNew(),C.age||18),C.ht))}</span></div>
@@ -4351,7 +4159,7 @@ function mcCollege(){
       <div class="cs-keys">${keys.map(([k,l,key])=>`<button class="cs-k ${k==="skills"&&free>0?"hot":""}" data-act="cswin" data-v="${k}" title="${CSWIN[k][0]} (${key})"><i>${key}</i>${k==="skills"&&free>0?`+${free}`:l}</button>`).join("")}</div></div></div>`;
 }
 function csKeys(e){if(!C||C.stage!=="college"||$("mc").hidden||!$("live").hidden)return false;if(hubKeyDown(e))return true;if(e.metaKey||e.ctrlKey||e.altKey)return false;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return false;
-  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn",f:"bonds"};const k=map[e.key.toLowerCase()];if(!k)return false;
+  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn"};const k=map[e.key.toLowerCase()];if(!k)return false;
   if(!$("modal").hidden){closeModal();if(["stat","skills","quests","today"].includes(k))return true}csToggle(k);e.preventDefault();return true}
 
 /* ---------- HUB: walkable side-scroller maps (MapleStory-style) ---------- */
@@ -4645,7 +4453,7 @@ function* liveGen(SD,opt,ctl){
   const R2=SD.map(s=>s.ps.map((p,i)=>{const r={p,tgt:s.m[i],min:0,pf:0,st:i<5,stint:0,hot:[],b:{min:0,pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0,tpm:0,tpa:0,ftm:0,fta:0}};r.en=enMax(r);return r}));
   const on=[R2[0].slice(0,5),R2[1].slice(0,5)],sc=[0,0],ev=[];let tfoul=[0,0];
   const avgDur=tot/(2*opt.poss);let nposs=0;let q=1,t=per[0],o=R()<.5?0:1,elapsed=0;
-  PV.ref=opt.ref||65;PV.to=opt.pro?.125:.16;PV.blk=opt.pro?.33:.5;PV.ftB=opt.pro?.775:.72;PV.foul.rim=opt.pro?.22:.26;const US=ctl?ctl.side:-1;if(ctl){ctl.st={R2,on:()=>on,ev,el:()=>elapsed,sc};if(ctl.karmic==null)ctl.karmic=typeof C!=="undefined"&&C?C.karmic!==false:true}
+  PV.ref=opt.ref||65;PV.dcAdj=opt.pro?-.1:-.2;PV.to=opt.pro?.125:.16;PV.blk=opt.pro?.33:.5;PV.ftB=opt.pro?.775:.72;PV.foul.rim=opt.pro?.22:.26;const US=ctl?ctl.side:-1;if(ctl){ctl.st={R2,on:()=>on,ev,el:()=>elapsed,sc};if(ctl.karmic==null)ctl.karmic=typeof C!=="undefined"&&C?C.karmic!==false:true}
   const best1=arr=>arr.reduce((b,r)=>r.p.ovr>b.p.ovr?r:b,arr[0]);
   const push=opt.quiet?()=>{}:(type,txt,x={})=>ev.push({q,t:Math.max(0,Math.round(t)),o,type,txt,sc:[...sc],on:[on[0].map(r=>r.p.pid),on[1].map(r=>r.p.pid)],...x});
   const ftp=p=>clamp(PV.ftB+(prof(p).FT-PV.ref)*PV.ftS,.4,.95);
@@ -4655,7 +4463,7 @@ function* liveGen(SD,opt,ctl){
     for(const k of[0,1]){
       if(k===US&&ctl.want){if(elapsed<ctl.wantUntil){const w=ctl.want.map(pid=>R2[k].find(r=>String(r.p.pid)===String(pid))).filter(r=>r&&r.pf<FO&&!r.p.inj);if(w.length===5){const ins=w.filter(r=>!on[k].includes(r));on[k]=w;sortOn(k);ins.forEach(r=>r.stint=0);if(ins.length&&!force)push("sub",`${TM[k].abbr} sub: ${ins.map(r=>lname(r.p)).join(", ")} check in.`,{k});continue}}ctl.want=null}
       const all=R2[k].filter(r=>r.pf<FO&&!r.p.inj),lead=sc[k]-sc[1-k],crunch=q>=np&&t<300&&Math.abs(lead)<=10,frac=(elapsed+60)/tot,plen=q<=np?per[q-1]:300;
-      const need=r=>crunch?r.p.ovr*10-fatigue(r)*40:(r.tgt*frac-r.min)+(r.st&&(t>plen-60||(q>=np&&t<300))?4:0)+(on[k].includes(r)?1.5:0)-fatigue(r)*3;
+      const need=r=>crunch?r.p.ovr*10-fatigue(r)*40:(r.tgt*frac-r.min)+(r.st&&(t>plen-60||(q>=np&&t<300))?4:0)+(on[k].includes(r)?1.5:0)-fatigue(r)*(fatigue(r)>.55?14:4);
       const want=[...all].sort((a,b)=>need(b)-need(a)).slice(0,5);if(want.length<5)continue;
       const ins=want.filter(r=>!on[k].includes(r)),outs=on[k].filter(r=>!want.includes(r));
       if(ins.length){on[k]=want;sortOn(k);ins.forEach(r=>r.stint=0);
@@ -4665,12 +4473,70 @@ function* liveGen(SD,opt,ctl){
   push("start",`Tip-off: ${tn(TM[1])} at ${tn(TM[0])}.`);
   let sinceSub=0;
   const mode=ctl?.mode||"watch";
+  /* ===== the chain (PLAN.md §2): your team's possession, run by you ===== */
+  const chMom=()=>ctl?(ctl.mom>=3?1:ctl.mom<=-3?-1:0):0;
+  const chClk=()=>`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
+  const chEnv=(meR,P,clutch)=>{const O=on[o],D=on[1-o],i=O.indexOf(meR),df=D[i]||D[0],s=prof(meR.p),d=prof(df.p);
+    const others=D.filter(x=>x!==df);const helpR=others.reduce((b,x)=>{const a=prof(x.p),bb=prof(b.p);return a.INT+a.BLK>bb.INT+bb.BLK?x:b},others[0]||df);
+    const mates=O.filter(r=>r!==meR).map(r=>{const j=O.indexOf(r),dr=D[j]||D[0],ms=prof(r.p),ds=prof(dr.p);return{r,dr,s:ms,ds,name:lname(r.p),type:no3x?"mid":ms.THR>=ms.LAY+4?"three":"rim",fat:fatigue(r),dh:hgt(r.p)-hgt(dr.p),inside:ms.LAY+ms.DNK>=ms.THR+ms.MID}});
+    const big=mates.length?mates.reduce((b,m)=>(m.s.STR+m.s.PST)>(b.s.STR+b.s.PST)?m:b,mates[0]):null;
+    const shooters=mates.length&&mates.reduce((a,m)=>a+m.s.THR,0)/mates.length>=66,PD=D.map(x=>prof(x.p));
+    return{P,s,d,h:prof(helpR.p),df,helpR,meR,mates,big,shooters,no3x,mom:chMom(),seen:ctl?ctl.seen:null,perks:chPerks(),dh:hgt(meR.p)-hgt(df.p),dhH:hgt(meR.p)-hgt(helpR.p),
+      dSTL:PD.reduce((a,x)=>a+x.STL,0)/PD.length,dPERavg:PD.reduce((a,x)=>a+x.PER,0)/PD.length,mm:big?prof((D[O.indexOf(big.r)]||df).p):d,
+      ctx:{home:o===0&&HOME>0,clutch,fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
+  const chCard=(E,P,lead,extra)=>({opts:null,chain:true,sit:P.sit,sitName:CH_SIT[P.sit]||"",chips:P.log.slice(-6),title:lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`,
+    sub:`${chClk()} · shot clock ${Math.max(0,Math.round(P.clk))}`,meta:{en:Math.round(E.meR.en),em:enMax(E.meR),mom:ctl?ctl.mom||0:0,moves:P.n},dname:E.df.p.name,dnote:`PER ${E.d.PER} · INT ${E.d.INT} · STL ${E.d.STL}`,
+    timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(E.s.THR,E.s.MID,E.s.LAY),...(extra||{})});
+  const chNote=(P,meR)=>{const l=P.log.filter(x=>!x.info).map(x=>x.t);if(l.length>1)push("chain",l.join(" → ")+".",{sh:meR.p.pid,me:1})};
+  const chainRun=function*(meR,inter,start,clutch,lead){if(ctl)ctl.touches=(ctl.touches||0)+1;
+    const P={sit:start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"?4:0),n:0,flags:{},log:[],deal:chDeal(prof(meR.p))};
+    for(let guard=0;guard<14;guard++){
+      const E=chEnv(meR,P,clutch);let opts=chainOpts(E);if(!opts.length){P.n=9;opts=chainOpts(E)}
+      let ans=null;
+      if(inter){const card=chCard(E,P,lead);card.opts=opts;ans=yield{poss:card}}
+      if(!ans||!ans.opt){const x=chainAuto(opts,ctl?.greed??.5,P.n);ans=chainRoll(ctl,x)}
+      const x=ans.opt,df=E.df,ok=ans.made,nat1=ans.nat1;
+      if(x.job&&typeof jobMarkUsed==="function")jobMarkUsed(x.job);
+      P.clk-=x.sec||2;if(x.en)enSpend(meR,x.en);
+      if(x.kind==="setup"){P.n++;if(ctl&&x.k!=="reset")ctl.seen=ctl.seen&&ctl.seen.k===x.k?{k:x.k,n:ctl.seen.n+1}:{k:x.k,n:1};
+        P.log.push({t:x.lab,ok});
+        const TO=why=>{meR.b.tov=(meR.b.tov||0)+1;if(why==="stripped")df.b.stl++;chNote(P,meR);
+          push(why==="stripped"?"stl":"to",why==="stripped"?`${df.p.name} strips ${lname(meR.p)}. Steal.`:why==="charge"?`Charge on ${meR.p.name}. ${E.helpR.p.name} was set.`:`Travel on ${meR.p.name}.`,{h:meR.p.pid,d:df.p.pid,me:1});o=1-o;return false};
+        P.flags.small=false;
+        switch(x.k){
+          case"cross":if(ok)P.sit="space";else if(nat1)return TO("stripped");else P.sit="picked";break;
+          case"hesi":case"pump":if(ok)P.sit="offbal";break;
+          case"jab":if(ok){P.sit="space";P.flags.small=true}break;
+          case"handoff":if(ok)P.sit="space";break;
+          case"drive":if(ok){const rr=1+Math.floor(R()*20),hm=Math.round((E.h.INT-PV.ref)/PV.skl),hdc=E.shooters?13:9,col=rr!==1&&(rr===20||rr+hm>=hdc);
+              P.log.push({t:`Help: ${rr}${hm>=0?"+":""}${hm} vs ${hdc}, ${col?"they collapse":"they stay home"}`,ok:!col,info:true});P.sit=col?"collapse":"lane";P.flags.under=false}
+            else if(nat1)return TO("stripped");else P.sit="picked";break;
+          case"euro":if(ok){P.sit="lane";P.flags.under=false}else return TO("charge");break;
+          case"screen":if(ok){const rr=1+Math.floor(R()*20);if(rr<=8){P.sit="mismatch";P.log.push({t:"They switch",ok:true,info:true})}else if(rr<=15){P.sit="space";P.log.push({t:"They hedge",ok:true,info:true})}else{P.sit="top";P.flags.pullPlus=true;P.log.push({t:"They drop. The pull-up is there",ok:true,info:true})}}else P.sit="picked";break;
+          case"post":if(ok)P.sit="seal";else if(nat1)return TO("travel");else P.sit="picked";break;
+          case"spin":P.sit=ok?"lane":"picked";P.flags.under=false;break;
+          case"dropstep":if(ok){P.sit="lane";P.flags.under=true}else{P.flags.hookPen=1;P.sit="seal"}break;
+          case"step":if(ok){P.sit="lane";P.flags.under=true}else if(nat1)return TO("travel");break;
+          case"drawfoul":if(ok){df.pf++;tfoul[1-o]++;chNote(P,meR);push("foul",`${df.p.name} fouls ${lname(meR.p)}. He went right into him.`,{sh:meR.p.pid,d:df.p.pid,me:1});shootFT(meR,2,df);o=1-o;return false}P.sit="picked";break;
+          case"reset":P.sit="top";P.flags={};break}
+        continue}
+      if(x.kind==="pass"){const tg=x.tgt;P.log.push({t:x.lab,ok});
+        if(!ok&&!nat1&&R()<.75&&P.n<5){P.log.push({t:"Deflected. Still yours",ok:false,info:true});P.sit="picked";P.n++;P.clk-=3;continue}
+        if(!ok){meR.b.tov=(meR.b.tov||0)+1;chNote(P,meR);const D=on[1-o];if(nat1||R()<.6){const st=wpick(D,r=>Math.pow(prof(r.p).STL/60,3));st.b.stl++;push("stl",`${st.p.name} jumps the lane. ${lname(meR.p)}'s pass is picked off.`,{h:meR.p.pid,d:st.p.pid,me:1})}else push("to",`${meR.p.name} throws it away.`,{h:meR.p.pid,me:1});o=1-o;return false}
+        const r2=tg.r,dr2=tg.dr,p2=r2.p,s2=prof(p2),mod=chSum(tg.smods)+1,roll=kroll(ctl,"t"+p2.pid),made=roll!==1&&(roll===20||roll+mod>=tg.sdc);ktrack(ctl,"t"+p2.pid,made);
+        const fouled=!made&&R()<PV.foul[tg.type]*(1+(s2.DRW-PV.ref)/60);chNote(P,meR);
+        return yield* finish(r2,dr2,p2,dr2.p,tg.type,made,fouled,{open:true,home:o===0&&HOME>0,clutch},{me:1,pass:1,assistTo:meR,lob:!!x.lob,dunk:tg.type==="dunk"})}
+      const type=x.type;P.log.push({t:x.lab,ok});
+      const fouled=ans.nat20||R()<PV.foul[type]*(1+(E.s.DRW-PV.ref)/60)*(ok?.5:1.3);
+      const dR=x.vs==="help"?E.helpR:df;chNote(P,meR);
+      return yield* finish(meR,dR,meR.p,dR.p,type,ok,fouled,{...E.ctx,open:x.open,contest:x.contest},{me:1,dunk:type==="dunk"})}
+    return false};
   const play=function*(){
     const O=on[o],D=on[1-o];nposs++;const uo=o===US,ud=US>=0&&!uo,co=uo?ctl.off:"bal",cd=ud?ctl.def:"man";
     const lead=sc[o]-sc[1-o],late=q>=np&&t<360,clutch=q>=np&&t<=120&&Math.abs(lead)<=6;
     const paceF=late&&lead<-6?.78:late&&lead>8?1.18:1;
     const dur=clamp(avgDur*rnd(.55,1.5)*paceF,4,CLK);t-=dur;elapsed+=dur;sinceSub+=dur;
-    [...O,...D].forEach(r=>{r.min+=dur/60;r.b.min+=dur/60;r.stint+=dur/60;const s=prof(r.p);r.en=Math.max(0,r.en-dur/60*(2.3-(s.STA-PV.ref)/60))});R2[0].concat(R2[1]).forEach(r=>{if(!O.includes(r)&&!D.includes(r)){r.stint=Math.max(0,r.stint-dur/40);r.en=Math.min(enMax(r),r.en+dur/60*3.6)}});
+    [...O,...D].forEach(r=>{r.min+=dur/60;r.b.min+=dur/60;r.stint+=dur/60;const s=prof(r.p);r.en=Math.max(0,r.en-dur/60*(1.7-(s.STA-PV.ref)/80))});R2[0].concat(R2[1]).forEach(r=>{if(!O.includes(r)&&!D.includes(r)){r.stint=Math.max(0,r.stint-dur/40);r.en=Math.min(enMax(r),r.en+dur/60*3.6)}});
     const PO=O.map(r=>prof(r.p)),PD=D.map(r=>prof(r.p));
     const avgS=(P,ks)=>P.reduce((a,s)=>a+ks.reduce((b,k)=>b+s[k],0)/ks.length,0)/P.length,avgFat=O.reduce((a,r)=>a+fatigue(r),0)/5;
     // turnover
@@ -4687,38 +4553,44 @@ function* liveGen(SD,opt,ctl){
     let tries=0;
     while(tries++<3){
       let sh=wpick(O,(r,i)=>usageP(PO[i])*(r===isoR?3:1)*(1-fatigue(r)*.4)*(r.hot.length>=4&&r.hot.slice(-3).every(x=>x)?1.4:1));
-      const askMe=!!meR&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&(mode==="every"||(mode==="touches"&&sh===meR)||(mode==="clutch"&&clutch&&sh===meR));
-      if(askMe)sh=meR;
+      if(meR&&tries===1){
+        const inter=!opt.quiet&&mode!=="watch"&&mode!=="sim"&&(mode==="touches"||mode==="every"||(mode==="clutch"&&clutch));
+        if(ctl.runout){ctl.runout=false;return yield* chainRun(meR,inter,"runout",clutch,lead)}
+        if(sh===meR)return yield* chainRun(meR,inter,"top",clutch,lead);
+        if(inter){const Pq={sit:"off",clk:CLK,n:0,flags:{},log:[]},E=chEnv(meR,Pq,clutch);const mates=O.filter(r=>r!==meR),pg=mates.reduce((b,r)=>prof(r.p).VIS>prof(b.p).VIS?r:b,mates[0]);
+          E.pgName=lname(pg.p);E.pgVIS=prof(pg.p).VIS;E.touches=ctl.touches||0;E.handlerName=lname(sh.p);E.spotP=clamp(.3+(E.s.THR-PV.ref)/80,.15,.6);
+          const opts=chainOffball(E),card=chCard(E,Pq,lead,{offball:true,sitName:`${lname(sh.p)} has it. You are off the ball`});card.opts=opts;
+          let ans=yield{poss:card};if(!ans||!ans.opt)ans=chainRoll(ctl,opts[0]);
+          const x=ans.opt;if(x.en)enSpend(meR,x.en);
+          if(x.k==="callfor"&&ans.made)return yield* chainRun(meR,inter,"top",clutch,lead);
+          if(x.k==="cut"&&ans.made){push("chain",`${lname(meR.p)} cuts. ${lname(sh.p)} finds him.`,{sh:meR.p.pid,me:1});return yield* chainRun(meR,inter,"lane",clutch,lead)}
+          if(x.k==="spot"&&R()<E.spotP){push("chain",`${lname(sh.p)} swings it to ${lname(meR.p)} in the corner.`,{sh:meR.p.pid,me:1});return yield* chainRun(meR,inter,"corner",clutch,lead)}
+          if(x.k==="screen"&&ans.made)ctl.screenB=1;
+          if(x.k==="crash"&&ans.made)ctl.crash=true}}
       const i=O.indexOf(sh),df=D[i]||pick(D),p=sh.p,dp=df.p,s=PO[i],d=prof(dp);
       const keyed=sh.hot.length>=4&&sh.hot.slice(-3).every(x=>x),open=R()<clamp(.22+(avgS(PO,["PAS","VIS"])-PV.ref)*.004+(co==="pnr"?.08:0)-(cd==="zone"?.04:0)+(keyed?-.1:0),.05,.5);
-      const ctx={open,contest:!open&&R()<.3,fat:fatigue(sh),clutch,hot:keyed,home:o===0&&HOME>0,dh:hgt(p)-hgt(dp),sh:hgt(p),keyed,me:sh===meR&&p.pid==="me",trailing:lead<0,lastMade:sh.hot.length?sh.hot[sh.hot.length-1]:null,vsRival:typeof C!=="undefined"&&C?.bonds?.rival?.pid!=null&&String(dp.pid)===String(C.bonds.rival.pid)};
-      let type,made,fouled,ans=null,assistTo=null,passTo=null;
-      if(askMe){
-        const mates=O.filter(r=>r!==sh).map((r,j)=>{const ms=prof(r.p),mj=O.indexOf(r),md=prof((D[mj]||df).p),mt=ms.THR>=ms.LAY+4?"three":"rim",mc={...ctx,open:true,fat:fatigue(r),dh:hgt(r.p)-hgt((D[mj]||df).p),sh:hgt(r.p)},q=pMake(modSum(shotMods(mt,ms,mc)),shotDC(mt,md,mc))*(mt==="three"?3:2);return{r,name:lname(r.p),type:mt,q,stl:(PD.reduce((a,x)=>a+x.STL,0)/5)}});
-        const opts=possOptions(s,d,ctx,{tf,no3x,co,cd},mates);
-        const clk=`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
-        ans=yield{poss:{opts,title:lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`,sub:clk+(open?" · you're open":ctx.contest?" · tight coverage":""),dname:dp.name,dnote:`PER ${d.PER} · INT ${d.INT} · BLK ${d.BLK}`,timing:typeof C!=="undefined"&&C?C.timing!==false:true,skl:Math.max(s.THR,s.MID,s.LAY)}};
-        if(!ans){const w=shotWeights(s,d,ctx,{tf,no3x,co,cd});type=wpick(Object.keys(w),k=>w[k]);}
-        else if(ans.k==="pass"){passTo=ans.opt.to;if(!ans.made){sh.b.tov=(sh.b.tov||0)+1;const st=wpick(D,(r,i)=>Math.pow(PD[i].STL/60,3));if(ans.nat1||R()<.6){st.b.stl++;push("stl",`${st.p.name} jumps the lane. ${lname(p)}'s pass is picked off.`,{h:p.pid,d:st.p.pid,me:1})}else push("to",`${p.name} throws it away.`,{h:p.pid,me:1});o=1-o;return}
-          // good pass: teammate shoots, open
-          const r2=passTo.r;sh=r2;const j=O.indexOf(r2),df2=D[j]||df,p2=r2.p,s2=prof(p2),d2=prof(df2.p),c2={...ctx,open:true,fat:fatigue(r2),dh:hgt(p2)-hgt(df2.p),sh:hgt(p2)};type=passTo.type;
-          const mod=modSum(shotMods(type,s2,c2))+1,dc=shotDC(type,d2,c2);made=kroll(ctl,"t"+p2.pid)+mod>=dc;ktrack(ctl,"t"+p2.pid,made);fouled=!made&&R()<PV.foul[type]*(1+(s2.DRW-PV.ref)/60);assistTo=O[i];
-          return yield* finish(r2,df2,p2,df2.p,type,made,fouled,c2,{me:1,pass:1,assistTo})}
-        else{type=ans.k;made=ans.made;fouled=ans.nat20||(R()<PV.foul[type]*(1+(s.DRW-PV.ref)/60)*(ans.made?.5:1.3))}
-        return yield* finish(sh,df,p,dp,type,made,fouled,ctx,{me:1,ans})}
+      const ctx={open,contest:!open&&R()<.3,fat:fatigue(sh),clutch,hot:keyed,home:o===0&&HOME>0,dh:hgt(p)-hgt(dp),sh:hgt(p),keyed,me:false,trailing:lead<0,lastMade:sh.hot.length?sh.hot[sh.hot.length-1]:null,vsRival:typeof C!=="undefined"&&C?.bonds?.rival?.pid!=null&&String(dp.pid)===String(C.bonds.rival.pid)};
+      let type,made,fouled;
       // defensive call: my matchup has the ball
       let forceBlk=false,forceFoul=false;
       const defOn=typeof C!=="undefined"&&C?(C.defCalls||"on"):"off";
       if(ud&&ctl&&ctl.hero!=null&&String(dp.pid)===String(ctl.hero)&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&(defOn==="on"||(defOn==="clutch"&&clutch))){
         const opts=defOptions(s,d,ctx),clk=`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
-        const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}`,timing:typeof C!=="undefined"&&C?C.timing!==false:true,skl:Math.max(d.PER,d.STL,d.BLK)}};
-        if(da&&da.k!=="hands")enSpend(df,4);if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}ctx.open=true;ctx.contest=false;df.stint+=.6}
+        const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}`,timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(d.PER,d.STL,d.BLK)}};
+        if(da&&da.k!=="hands")enSpend(df,2);if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});ctl.runout=true;o=1-o;return}ctx.open=true;ctx.contest=false;df.stint+=.6}
         else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(da.nat1||R()<.35)forceFoul=true;else{ctx.open=true;ctx.contest=false}}
         else if(da&&da.k==="charge"){if(da.made){sh.b.tov=(sh.b.tov||0)+1;df.b.chg=(df.b.chg||0)+1;push("to",`${p.name} lowers the shoulder. ${dp.name} is set. Charge.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}df.pf++;tfoul[1-o]++;push("foul",`Blocking foul on ${dp.name}.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
         else if(da&&da.k==="hands"&&da.made){ctx.contest=true;ctx.open=false}}
+      else if(ud&&ctl&&ctl.hero!=null&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&defOn!=="off"&&(clutch||(ctl.runOpp||0)>=8)){const meD=D.find(r=>String(r.p.pid)===String(ctl.hero));
+        if(meD){const opts=chainHelp({me:prof(meD.p)}),clk=chClk();
+          let ha=yield{poss:{opts,def:true,title:"Help defense · "+(lead===0?"Tied":lead>0?`They lead by ${lead}`:`You lead by ${-lead}`),sub:clk+((ctl.runOpp||0)>=8?` · they are on a ${ctl.runOpp}-0 run`:" · late and close"),dname:p.name,dnote:`THR ${s.THR} · MID ${s.MID} · HND ${s.HND}`,timing:false,skl:prof(meD.p).PER}};
+          if(!ha||!ha.opt)ha=chainRoll(ctl,opts[2]);
+          if(ha.k==="rotate"){enSpend(meD,1.5);if(ha.made){ctx.contest=true;ctx.open=false}}
+          else if(ha.k==="lane"){enSpend(meD,2);if(ha.made){meD.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${meD.p.name} jumps the passing lane. Steal.`,{h:p.pid,d:meD.p.pid,me:1});ctl.runout=true;o=1-o;return}ctx.open=true;ctx.contest=false}}}
       // CPU resolution with the same dice
       const w=shotWeights(s,d,ctx,{tf,no3x,co,cd});type=wpick(Object.keys(w),k=>w[k]);if(forceBlk&&type==="three")type=s.LAY>=s.MID?"rim":"mid";
-      const mod=modSum(shotMods(type,s,ctx))+1+hb*8,dc=shotDC(type,d,ctx),roll=kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
+      const mmv=ctl&&US>=0?(o===US?chMom():-chMom()):0,scr=ctl&&o===US&&ctl.screenB?1:0,tax=ctl&&o!==US&&ctl.dunkTax?1:0;if(scr)ctl.screenB=0;if(tax)ctl.dunkTax=false;
+      const mod=modSum(shotMods(type,s,ctx))+1+hb*8+mmv+scr,dc=shotDC(type,d,ctx)+tax,roll=kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
       fouled=forceBlk?false:forceFoul?true:roll===20?true:R()<PV.foul[type]*(1+(s.DRW-PV.ref)/60)*(made?.5:1.3)*(co==="inside"?1.2:1);
       const cont=yield* finish(sh,df,p,dp,type,made,fouled,ctx,{forceBlk,me:forceBlk||forceFoul?1:0});if(!cont)return;
     }
@@ -4735,14 +4607,18 @@ function* liveGen(SD,opt,ctl){
       let ast=null;if(x.assistTo){ast=x.assistTo;ast.b.ast++}else if(R()<(PV.ast+(ctx.open?.2:0))){const O=on[o];ast=wpick(O.filter(r=>r!==sh),r=>Math.pow((prof(r.p).PAS+prof(r.p).VIS)/120,USE.ast));ast.b.ast++}
       const verb=type==="three"?pick(["drills a three","buries it from deep","splashes a triple"]):type==="dunk"?pick(["throws it down","hammers it home","rises and dunks"]):type==="rim"?pick(["finishes at the rim","lays it in","scoops it in"]):type==="post"?pick(["scores on the block","drops in the hook","spins baseline and scores"]):pick(["hits the jumper","knocks down the pull-up","nails the elbow J"]);
       const heat=sh.hot.length>=4&&sh.hot.slice(-4).every(v=>v)?" He's heating up!":"";
-      push("make",`${cx.clutch?"CLUTCH! ":""}${p.name} ${verb}${ast?` (assist ${lname(ast.p)})`:""}.${heat}`,{sh:p.pid,as:ast?.p.pid,d:dp.pid,shot:stype,dist,ang,pts,...cx});
+      const homeT=o===0&&HOME>0,big=!!(x.dunk||x.lob)&&type==="dunk";
+      if(ctl&&US>=0){const k=o===US?1:-1;ctl.mom=clamp((ctl.mom||0)+k*(big?(homeT?3:2):1),-5,5);if(o===US){ctl.runOpp=0;if(big&&x.me)ctl.dunkTax=true}else ctl.runOpp=(ctl.runOpp||0)+pts}
+      const call=x.me&&big?(x.lob?` ${lname(x.assistTo.p)} lobs it and ${p.name} finishes it at the rim. ${homeT?"The building is on its feet.":"In their building."}`:` ${p.name} THROWS IT DOWN. ${homeT?"The crowd goes wild.":"You can hear their gym go quiet."}`):"";
+      push("make",call?`${cx.clutch?"CLUTCH! ":""}${call.trim()}`:`${cx.clutch?"CLUTCH! ":""}${p.name} ${verb}${ast?` (assist ${lname(ast.p)})`:""}.${heat}`,{sh:p.pid,as:ast?.p.pid,d:dp.pid,shot:stype,dist,ang,pts,...cx,...(big&&x.me?{dunk:1}:{})});
       if(fouled){df.pf++;tfoul[1-o]++;push("foul",`And one! ${dp.name} fouls ${lname(p)}.`,{sh:p.pid,d:dp.pid});shootFT(sh,1,df)}
       o=1-o;return false}
     if(fouled){df.pf++;tfoul[1-o]++;push("foul",`${dp.name} fouls ${lname(p)} on the ${TYPEN[type]}.`,{sh:p.pid,d:dp.pid,shot:stype,dist,ang});sh.b.fga--;if(type==="three")sh.b.tpa--;shootFT(sh,pts,df);o=1-o;return false}
     const D=on[1-o],O=on[o];let blk=null;if(x.forceBlk){blk=df;df.b.blk++}else if(type!=="three"&&R()<PV.blk*Math.pow(prof(dp).BLK/PV.ref,2.5)*Math.pow(hgt(dp)/79,3)*(type==="mid"?.4:1)){blk=df;df.b.blk++}
     push(blk?"blk":"miss",blk?`${dp.name} swats ${lname(p)}'s shot!`:`${p.name} misses the ${TYPEN[type]}${ctx.contest?" over a hand":""}.`,{sh:p.pid,d:dp.pid,shot:stype,dist,ang,blk:!!blk,...cx});
     const PO=O.map(r=>prof(r.p)),PD=D.map(r=>prof(r.p)),orbP=clamp(PV.orb+(PO.reduce((a,s)=>a+s.ORB,0)-PD.reduce((a,s)=>a+s.DRB,0))/5*.004+(O.reduce((a,r)=>a+hgt(r.p),0)-D.reduce((a,r)=>a+hgt(r.p),0))/5*.01,.12,.45);
-    const offR=R()<orbP,rt=offR?O:D,rb=wpick(rt,r=>{const s=prof(r.p);return Math.pow((offR?s.ORB:s.DRB)/PV.ref,USE.reb)*Math.pow(hgt(r.p)/79,2.5)*(1+(s.VRT-PV.ref)/150)});if(R()>.12)rb.b.reb++;
+    const crash=ctl&&o===US&&ctl.crash;if(ctl)ctl.crash=false;const meO=crash?O.find(r=>String(r.p.pid)===String(ctl.hero)):null;
+    const offR=R()<orbP*(crash?1.6:1),rt=offR?O:D,rb=offR&&meO&&R()<.6?meO:wpick(rt,r=>{const s=prof(r.p);return Math.pow((offR?s.ORB:s.DRB)/PV.ref,USE.reb)*Math.pow(hgt(r.p)/79,2.5)*(1+(s.VRT-PV.ref)/150)});if(R()>.12)rb.b.reb++;
     push("reb",`${offR?"Offensive":"Defensive"} rebound, ${rb.p.name}.`,{rb:rb.p.pid,off:offR});
     if(!offR){o=1-o;return false}return true;
   };
@@ -5403,7 +5279,7 @@ document.addEventListener("click",e=>{
     case"mctake":{const cur=reelPool()[C.cur];C.slots[d.k]={n:cur.n,v:cur.a[d.k]};C.cur=null;mcRender();return}
     case"mcreset":C.slots={};C.cur=null;C.respins=2;mcRender();return;
     case"mcoffers":{if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);C.age=18;C.y=START_Y;C.startY=START_Y;C.cls=1;rpgApply();
-      C.stars=C.rpg.stars||5;C.scoutN=Math.round(gauss()*4);C.offers=null;C.plg=0;C.plgPick={};C.plgCast=null;C.stage=C.legacy?"offers":"prologue";C.rpg.last=Date.now();mcRender();return}
+      C.stars=C.rpg.stars||5;C.scoutN=Math.round(gauss()*4);C.offers=null;C.plg=0;C.plgPick={};C.plgCast=null;C.stage="offers";C.bonds={};C.plgDone=true;C.rpg.last=Date.now();mcRender();return}
     case"rstep":{if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);if($("mc-year")&&!C.legacy)C.startY=+$("mc-year").value;if($("mc-no"))C.no=$("mc-no").value;C.cs=d.v;mcRender();$("mc").scrollTop=0;return}
     case"rorig":{C.rpg.origin=d.v;const og=ORIGINS.find(o=>o.k===d.v);C.rpg.tags=og?.tag?[og.tag]:[];if($("mc-name"))C.name=($("mc-name").value.trim()||C.name).slice(0,24);mcRender();return}
     case"rsk":{const R=rpgS();if(!R)return;const age=rpgAge(),k=d.k;let n=+d.n;
@@ -5476,7 +5352,7 @@ document.addEventListener("click",e=>{
     case"lvtab":["feed","box","coach"].forEach(k=>{const el=$("lv-"+k),bt=$("lvt-"+k);if(el)el.hidden=d.v!==k;if(bt)bt.className="btn xs"+(d.v===k?"":" ghost")});if(d.v==="box")lvBoxHtml();if(d.v==="coach")lvCoach();return;
     case"lvoff":LV.ctl.off=d.v;lvCoach();return;
     case"lvdef":LV.ctl.def=d.v;lvCoach();return;
-    case"lvto":if(LV.ctl.to>0){LV.ctl.to--;LV.ctl.boost=5;lvPop("TIMEOUT",LV.ctl.side);toast("Timeout. Your guys get a lift for the next few trips.")}lvCoach();return;
+    case"lvto":if(LV.ctl.to>0){LV.ctl.to--;LV.ctl.boost=5;const m0=LV.ctl.mom||0;LV.ctl.mom=m0>0?Math.max(0,m0-3):Math.min(0,m0+3);LV.ctl.runOpp=0;lvPop("TIMEOUT",LV.ctl.side);toast("Timeout. Your guys get a lift for the next few trips.")}lvCoach();return;
     case"lvsubout":LV.subOut=String(LV.subOut)===String(d.v)?null:d.v;lvCoach();return;
     case"lvsubin":lvSubIn(d.v);LV.ctl.subNow=true;return;
     case"lvready":lvReady();return;

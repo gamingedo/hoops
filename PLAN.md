@@ -20,15 +20,18 @@ When this plan and old code disagree, this plan wins. When this plan is silent, 
 
 ## 1. Locked design decisions (do not reopen)
 
-- Two roads: five-star (500 SP) and one-star (1 SP). No other tiers.
+- **This is a pure basketball RPG. No story.** The prologue, bonds, the Fate deck, life events, the System arc and the epilogue were cut on 2026-10-20 (originals kept in the scratchpad `cut/` folder, not in the build). The only prose left is the System's voice: one or two dry lines on level-ups, job advancements, loot drops and sponsor offers, in the register of item descriptions. Never add narrative scenes, characters or dialogue.
+- The loop is the MMO loop: get stronger, dominate, chase rare loot, climb a visible ladder. Every system serves that loop or goes.
+- Two roads: five-star (500 SP, blue-blood offers) and one-star (1 SP, one junior college, +35% EXP).
 - Classes: **Scorer, Playmaker, Defense** at Lv 10. Specialization at Lv 20. Perk picks at 30/40/50/60 from the specialization's pool. Master at 45 (+50% edges), Legend at 65 (+0.5 on everything, one extra active use per game).
 - Position never limits the build. Height and ratings decide blocks and boards on every roll.
-- Energy replaces legs: pool from Stamina (`enMax = 40 + STA*0.8`), drains on the floor, refills on the bench, spent by gambles and actives, shown on the card and the Bench tab.
-- Every possession of your team is yours to run (always-on off-ball). Defense is lighter: your matchup, the last two minutes, runs.
-- Dice: d20 + named modifiers vs DC, all printed. Natural 20 succeeds, natural 1 fails and is a turnover on setup moves. Timing tap stays optional, off by default, never a penalty.
-- Items are edges on specific moves. Loot boxes only at advancements (Lv 5 origin perk, 10, 20, 30, 40, 50, 60). The shop spends NIL money; stock rotates per season; nothing is shop-only.
-- Cuts: traits, daily events, loadouts, archetype names, the hallway map, the hoop prop, recruiting UI, franchise/GM screens in the pro stage, any text saying Architect/Codex/star tiers 2–4.
-- Bond scenes fire on specific triggers, not on a timer. Free evenings are rare and plain. The mother's rewatch is a high school game.
+- Energy replaces legs: pool from Stamina (`enMax = 40 + STA*0.8`), drains on the floor (`1.7 − (STA−65)/80` per minute), refills on the bench, spent by moves and gambles, shown on the card and the Bench tab. Coach pulls anyone whose fatigue is above 0.55 outside crunch time.
+- Every possession of your team is yours to run (always-on off-ball). Defense is lighter: your matchup, the last two minutes, opponent runs of 8-0 or more.
+- Dice: d20 + named modifiers vs DC, all printed. Natural 20 succeeds, natural 1 fails. Timing tap optional, off by default.
+- Shooting skills have diminishing returns above 80 (`drK` in poss.js). League calibration after that change: college FG 44.0 / 3P 35.4, NBA FG 46.6 / 3P 36.5 (`PV.dcAdj` −0.2 college, −0.1 pro).
+- Your player's simmed possessions walk the same chain with the auto policy (`liveCore` creates a ctl with `mode:"sim"`, `greed:1`), so played and simmed lines come from one engine.
+- Items are edges on specific moves. Loot boxes only at advancements and as boss/encounter drops. The shop spends NIL money; stock rotates per season; nothing is shop-only.
+- Cut and never to return: traits, daily EXP events (replaced by a flat ×1.6 game EXP), loadouts, archetype names on the HUD, the hallway map, the hoop prop, recruiting UI, franchise/GM screens in the pro stage, the Architect, Codex, star tiers 2–4.
 
 ## 2. The chain: state machine spec
 
@@ -133,30 +136,31 @@ Save migration: on load, if `C.job.path` exists (old 5-path), map scorer→score
 - Shop: `C.nil` is the balance (sponsor cash payouts and NIL value per season add to it; remove "Sent home" as a sink or make it a choice). `shopHtml()`: 6 items per season drawn by class, priced by rarity (uncommon 15k, rare 40k, epic 120k, legendary 400k), restocks at season start. Hub: the `shop` map's counter prop opens the shop window (`act:"shop"`). No timers.
 - Locker bugs: `.mp-win>.mp-body{min-height:0}` (scroll), and verify `equip`/`unequip` never leave an item in both `bag` and `eq`.
 
-## 5. Story consistency pass
+## 5. The ladder, encounters and difficulty (replaces the story pass)
 
-- Free evening: fire at most every 5th week, 35%; results are one line each (`ST.ev*` trimmed to ≤2 lines). Keep "The gym, alone" as the trigger for Whose Voice.
-- Scenes on triggers (bonds.js `bondScenes` → make it event-driven from `bondGame`): rival win → "He said your name" at the third meeting with lv≥40; a 10-point-or-worse game → the mother calls (new short card, plain); first game back from the blind season → one gold line; the rewatch call happens once, on a bye week, and the game she is rewatching is a high school game (rewrite `ST.evCall[0]`: she is watching a game from three years ago; the fall is from that game).
-- Attention on the court: Attention ≥ 70 → the opponent's best defender takes you (their Stopper edge +1 on your rolls), "They have seen it" starts one move earlier, road crowd −0.5. Print all three.
-- Sponsors: each `pay` becomes `{rule|edge, cost}`; the clause is the cost. Rewrite the 24 brands and 16 people payouts (text stays).
-- Remove every string with "Architect", "Codex", "four-star", "three-star", "two-star", "Hoops Lab". Hide franchise screens in the pro stage: owner meter, trade, press conference, chemistry.
-- Goals (`GOALS` in rpg.js): replace stat-line goals with chain goals: "Finish a four-move possession", "Score on a run-out", "Hit a step-back in the fourth", "Draw a foul from Off balance", "Dunk at home", "Three assists off kick-outs", etc. EXP only, no keys.
+- **Ladder:** a visible rank on the HUD with the next requirement shown: Walk-on → Rotation → Starter → Star → All-Conference → All-American → Lottery Pick → Starter (pro) → All-Star → All-NBA → MVP → Legend → Hall of Fame. Each rank has one requirement (a stat line over N games, an award, a win count) and a reward (a loot box of a set rarity, a title, a cosmetic). Window: `ladder` (key L).
+- **Titles:** earned from feats ("Forty Burger", "Triple-Double Machine", "Lockdown", "Giant Killer"). One equipped title shows on the HUD and grants a tiny named edge.
+- **Encounters with loot tables:** the opponent's best player is the matchup boss of a game (named on the pregame card with his rating). Beating a top-25 team, a rival school, a conference tournament, March Madness rounds and NBA playoff rounds each roll on a loot table whose rarity scales with the opponent's strength and the round. Losses drop nothing. Show the table on the pregame card.
+- **Records against the greats:** the existing records and GOAT data become chase goals with rewards.
+- **Difficulty:** a setting (Rookie / Pro / All-Star / Hall of Fame) that adds +0/+1/+2/+3 to the DCs of your rolls and to the opponent's modifiers, printed on every card as "Difficulty". Default Pro. Opponent quality also scales with your level via schedule (tougher non-conference games as Attention rises).
+- **Goals** become chain goals and ladder steps (EXP and loot, no timers).
+- **Sponsors** stay as loot sources with a clause as the cost; rewrite payouts in the four perk kinds; cash goes to NIL money. No characters.
 
 ## 6. Milestones and acceptance
 
-**M1 — cleanup (ship as v45):** energy in (done in poss.js/franchise.html; verify `enMax` is exported and `stay.py` passes both roads), traits/daily events/loadouts/hoop/hallway cut, news legible, locker scroll, shop placeholder map. Tests: `col.py`, `stay.py 5`, `stay.py 1`, `bench.py`, `poss.py` all `errors []`.
+**M1 — cleanup (shipped v45).** **M2 — the chain (shipped v46)**, plus the story cut. Acceptance results at ship: a three-move chain inside one possession on desktop and phone; 0 of 70 cards overflowing at 390×700; five-star played FG% 50.1 vs simmed 52.1, one-star 48.5 vs 48.1; league calibration as in §1.
 
-**M2 — the chain (v46):** sections 2.1–2.8 for the user's team possessions (offense) with the CPU on the same grammar; defense as 2.7; card UI; announcer lines for dunks and lobs; momentum in the HUD. Tests: a greedy bot in `touches` mode over 20 games lands within +5 FG% of `__cal`; `poss.py` sees a chain of ≥3 cards in one possession; mobile card fits 390×700 without scroll.
+**M3 — classes and perks (v47):** section 3; advancement cards in the System's voice; save migration; Job panel on the sheet lists perks with their text. Tests: `jobs.py` reaches the Lv 30 pick via sim; a unit script walks the machine with each perk on and asserts its effect.
 
-**M3 — classes and perks (v47):** section 3; advancement scenes; save migration; Job panel on the sheet lists perks with their text. Tests: `jobs.py` reaches Lv 30 pick via `__autoSpend` sim; every perk's `apply` is exercised by a unit script that walks the machine with the perk on and asserts the change.
+**M4 — items, loot, shop (v48):** section 4, with the Locker rewritten to edges on moves and the shop in the gym's shop room. Tests: an advancement grants exactly one class-matching item of the right rarity floor; buying debits NIL money; no item is ever in both bag and equipped.
 
-**M4 — items, loot, shop (v48):** section 4. Tests: advancement grants exactly one class-matching item of the right floor; shop buys debit `C.nil`; no item ever in both bag and eq.
+**M5 — ladder, encounters, difficulty (v49):** section 5. Tests: a full simulated career climbs at least to All-NBA on a five-star build; each difficulty setting moves a greedy bot's FG% by roughly 4–5 points per step; loot drops only on wins, rarity rises with opponent strength.
 
-**M5 — story pass (v49):** section 5, bible updated, `WRITING.md` rules applied to every new string. Review the spine scenes with the user before shipping; furniture ships without review.
+**M6 — aesthetics (v50+):** job visual tells on the sprite, item visuals, nat-20 and dunk animations, the shop interior, music. Only after M3–M5 are locked.
 
 ## 7. Working rules for the executor
 
 - Edit module files, rebuild with ins.py + make_main.py, syntax-check, run the named tests, then build the PWA and push, then publish the artifact. Bump BUILD.
-- Never paraphrase approved text in `story.js`. New text follows WRITING.md; keep it short.
+- `story.js` holds the System's lines only. New lines follow WRITING.md, stay one or two sentences, and never introduce a person, a place or a plot.
 - When a decision is not covered here, choose the option that prints more information on the card and ask nothing.
 - Keep `WRITING.md`, `PLAN.md` and `story.js` copied into `hoops/` on each push.
