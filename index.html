@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="8b616ab051";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="8479fdbfe0";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -2413,7 +2413,7 @@ function lvFrame(now){
   if(LV.playing&&!LV.done&&!LV.wait&&lvBenchFF(now))return requestAnimationFrame(lvFrame);
   if(LV.playing&&!LV.done&&!LV.wait){
     if(!LV.steps){let e=LV.ev[LV.i];if(!e&&LV.gen&&!LV.genDone){lvPull(false);e=LV.ev[LV.i]}
-      if(!e){if(!LV.wait&&(LV.genDone||!LV.gen)){LV.done=true;lvScore();if(LV.reel)LV.playing=false;else lvPop("FINAL",0)}}
+      if(!e){if(!LV.wait&&(LV.genDone||!LV.gen)){LV.done=true;lvScore();if(LV.reel)LV.playing=false;else{lvPop("FINAL",0);try{SFX.buzzer()}catch(x){}}}}
       else{LV.flip=LV.halves?e.q===2:e.q>2&&e.q<=4;LV.hl=hlOf(e);if(LV.hl)LV.snap=snapPos();LV.steps=stepsFor(e);LV.sub=0;LV.st=0;LV.steps[0]?.go()}}
     if(LV.steps){LV.st+=dt;if(LV.st>=LV.steps[LV.sub].d){LV.sub++;LV.st=0;
       if(LV.sub>=LV.steps.length){const e=LV.ev[LV.i];
@@ -3462,7 +3462,7 @@ function attnInit(){if(C.attn==null){C.attn=attnBase();C.rep=50;C.cash=0;C.spon=
 function attnAdd(n,why){attnInit();const was=C.attn;C.attn=clamp(Math.round(C.attn+n),0,100);if(Math.round(n))C.attnLog=[{t:why,x:Math.round(n)},...(C.attnLog||[])].slice(0,14);
   if(was<15&&C.attn>=15)archSay("Somebody posted the clip. People know your name now. Not many. Some.","The first spike");
   if(was<40&&C.attn>=40)archSay("Forty. You have a second slot in your life. Spend it on a person; the brands will find you anyway.","Attention 40");
-  if(was<70&&C.attn>=70)archSay("Seventy. National. Your mother's coworkers ask about you. She says you're fine. You should call her.","Attention 70")}
+  if(was<70&&C.attn>=70)archSay("Seventy. National. Your mother's coworkers ask about you. She says you are fine. You should call her.","Attention 70")}
 function repAdd(n,why){attnInit();C.rep=clamp(Math.round(C.rep+n),0,100)}
 function slots(){attnInit();return C.stage==="done"?4:C.attn>=70?3:C.attn>=40?2:1}
 function judgment(){const s=C.sk||{};return Math.round(((s.SIQ||50)-50)/10+((s.VIS||50)-50)/20+(((C.bonds?.mother?.lv)||50)-50)/25)}
@@ -3482,7 +3482,7 @@ function attnWeek(){attnInit();const nba=typeof G!=="undefined"&&G?.career&&C.st
 function socialPost(){attnInit();if(C.posted){toast("You already posted this week.");return}C.posted=true;const roll=1+Math.floor(R()*20),mod=judgment()+((C.rpg?.origin==="scholar")?2:0),tot=roll+mod;
   if(roll===1){attnAdd(4,"the screenshot");repAdd(-8,"screenshot");archSay(`Natural 1. You posted it. You deleted it. Four thousand people had already saved it. Reputation −8. Attention +4, which is the problem with Attention.`,"The post")}
   else if(tot>=10){const v=(C.rpg?.origin==="blacktop")?4:2;attnAdd(v,"a post that landed");archSay(`${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot} vs DC 10. It landed. +${v} Attention. Nobody screenshotted anything. This time.`,"The post")}
-  else{repAdd(-3,"a post that didn't land");archSay(`${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot} vs DC 10. It did not land. Reputation −3. The replies are mostly about your shoes.`,"The post")}
+  else{repAdd(-3,"a post that did not land");archSay(`${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot} vs DC 10. It did not land. Reputation −3. The replies are mostly about your shoes.`,"The post")}
   saveC();csWins()}
 /* ===== the pool ===== */
 const BRANDS=[
@@ -3497,9 +3497,9 @@ const BRANDS=[
  {k:"northgate",n:"Northgate Mattress",tier:1,pay:{rest:2},clause:"Your sleep schedule is posted weekly.",agenda:"They are tracking your rested EXP for a study.",intro:"Northgate Mattress will double your rested EXP in exchange for your sleep schedule, posted weekly, to an audience that is mostly Northgate Mattress."},
  {k:"truform",n:"TruForm Trainers",tier:1,pay:{gear:"acc"},clause:"You train with their guy, who is replacing Coach's warm-up.",agenda:"The trainer is good. Coach notices.",intro:"TruForm would like to replace your warm-up with their warm-up. Their guy is good. Coach watched the first session from the doorway and did not say anything, which for Coach is saying something."},
  {k:"lantern",n:"Lantern Tutoring",tier:1,pay:{rep:1},clause:"Twice-weekly sessions, on game-day mornings.",agenda:"The tutor is the Scholar's friend from the Prologue.",intro:"Lantern Tutoring will keep you eligible for free in exchange for your game-day mornings. The tutor already knows your schedule. The tutor already knows a lot."},
- {k:"vellum",n:"Vellum Streaming",tier:1,pay:{attn:3},clause:"Everything you say on stream belongs to them.",agenda:"They clip the worst line.",intro:"Vellum would like you to stream. Three Attention a week while you're live. Everything you say on stream belongs to Vellum, including the thing you will say in week six."},
+ {k:"vellum",n:"Vellum Streaming",tier:1,pay:{attn:3},clause:"Everything you say on stream belongs to them.",agenda:"They clip the worst line.",intro:"Vellum would like you to stream. Three Attention a week while you are live. Everything you say on stream belongs to Vellum, including the thing you will say in week six."},
  {k:"hendry",n:"The Hendry Group",tier:2,pay:{rare:1,item:"suit"},clause:"Exclusive representation \"when the time comes.\" The time comes whenever they say.",agenda:"They are the agent at the gate, with letterhead.",intro:"The Hendry Group represents eleven players you have heard of. They would like to represent you, eventually, exclusively, at a time of their choosing. A suit arrives in the mail. It fits. The contract was in the pocket."},
- {k:"kinetic",n:"Kinetic Sports Drink",tier:2,pay:{crate:2,gear:"clu"},clause:"You cannot be seen holding water on camera.",agenda:"Nothing darker than that. I find this exhausting.",intro:"Kinetic would like to be the only liquid you hold on camera. Two crates a month and a bottle that improves your Clutch, by which they mean the bottle is blue. I looked for an agenda. There isn't one. It's just the water thing."},
+ {k:"kinetic",n:"Kinetic Sports Drink",tier:2,pay:{crate:2,gear:"clu"},clause:"You cannot be seen holding water on camera.",agenda:"Nothing darker than that. I find this exhausting.",intro:"Kinetic would like to be the only liquid you hold on camera. Two crates a month and a bottle that improves your Clutch, by which they mean the bottle is blue. I looked for an agenda. There is not one. It is just the water thing."},
  {k:"apex",n:"Apex Footwear",tier:2,pay:{crate:2,gear:"vert"},clause:"Shoes only. Resoled Sophomore Shoes are breach of contract.",agenda:"They drop you the day the rival signs.",intro:"Apex is offering a colorway. Your colorway. Two crates a month and shoes that add to your Vertical, which is what shoes do in advertisements. The contract names every other shoe you own, by brand, and forbids them."},
  {k:"meridian",n:"Meridian Wireless",tier:2,pay:{cash:600},clause:"Your phone is theirs, including the messages.",agenda:"They know about the party before you do.",intro:"Meridian Wireless will pay your mother $600 a month and give you a phone. The phone is theirs. The messages on it are theirs. They have not said what they do with them. I have a guess."},
  {k:"goldstd",n:"Gold Standard Insurance",tier:2,pay:{cash:350,rep:1},clause:"A clause about \"conduct\" that I will read twice.",agenda:"They pay the friend's hospital bill. Quietly.",intro:"Gold Standard would like to insure your career. There is a clause about conduct. I am going to read it to you twice. The second time, listen."},
@@ -3507,17 +3507,17 @@ const BRANDS=[
  {k:"halcyon",n:"Halcyon Watches",tier:2,pay:{rep:2,item:"watch"},clause:"You wear it at the draft and in court.",agenda:"It stops the night the Fate card fires. I will not say anything.",intro:"Halcyon makes watches for people who are about to be photographed. Two Reputation and a watch you will wear at the draft and, the contract specifies, in court, should it come to that. I thought that was a strange thing to specify."},
  {k:"parkside",n:"Parkside Realty",tier:1,pay:{cash:200,house:5},clause:"Five years with the same sponsor.",agenda:"They will sell it the week you leave the state.",intro:"Parkside Realty will buy your mother a house in five years if you stay with them for five years. I did the math on what happens if you leave in year four. So did they."},
  {k:"overtime",n:"Overtime Energy",tier:1,pay:{gear:"sta"},clause:"A can in every post.",agenda:"Owned by the rival's father.",intro:"Overtime Energy would like a can in every post. The can improves Stamina, allegedly. The company is owned by a man whose last name you will recognize from a roster."},
- {k:"summit",n:"Summit Outfitters",tier:2,pay:{rare:1,item:"jacket"},clause:"Only in March.",agenda:"They make the ladders you cut nets from.",intro:"Summit only sponsors March. A crate that can roll Legendary and a jacket you may wear for one month a year. They also make the ladders. Every net you've ever seen cut was cut from a Summit."},
+ {k:"summit",n:"Summit Outfitters",tier:2,pay:{rare:1,item:"jacket"},clause:"Only in March.",agenda:"They make the ladders you cut nets from.",intro:"Summit only sponsors March. A crate that can roll Legendary and a jacket you may wear for one month a year. They also make the ladders. Every net you have ever seen cut was cut from a Summit."},
  {k:"ledger",n:"The Ledger",tier:1,pay:{attn:2},clause:"One episode a month in which you say something.",agenda:"The host is the journalist from the people pool.",intro:"The Ledger is a podcast network. They would like an episode a month in which you say something. Not anything. Something. Two Attention a week. The host already has a file on you and it is flattering, so far."},
  {k:"vantage",n:"Vantage",tier:9,pay:{crate:4,cash:5000,attn:10},clause:"Everything.",agenda:"I know this one.",intro:"Vantage. Everything you want. I know this one."}];
 const PEOPLE=[
  {k:"dub_p",n:"Dub (the barber)",tier:0,person:true,wants:"Your chair every game day",later:"He hears every scout. He tells you which ones are lying.",pay:{swag:1},intro:"Dub, again, but as a person this time. He wants nothing from you except Thursdays. He hears everything in that chair, and he is willing to tell you which of it is true."},
  {k:"marisol",n:"Marisol (the trainer)",tier:1,person:true,wants:"Three mornings a week, 6 a.m.",later:"Your NBA trainer, who knows your knee was never the problem.",pay:{gear:"sta"},intro:"Marisol trains people who are about to be famous and people who used to be. She wants three mornings a week at six. She does not want money yet. That is how you know she is good."},
  {k:"lyle",n:"Pastor Lyle",tier:0,person:true,wants:"Sundays",later:"The courtroom. He speaks for you when Coach cannot.",pay:{rep:1},intro:"Pastor Lyle wants your Sundays. He does not say what for. He has sat in a courtroom for other boys from your block and he is telling you this in the gentlest possible way."},
- {k:"nia",n:"Nia (the journalist)",tier:1,person:true,wants:"One honest answer a month",later:"The profile that moves you up a draft board, or the piece that ends a career. Depends on the month.",pay:{attn:2},intro:"Nia writes long and publishes rarely. She wants one honest answer a month. She will know if it isn't. What she does with it depends on the month."},
+ {k:"nia",n:"Nia (the journalist)",tier:1,person:true,wants:"One honest answer a month",later:"The profile that moves you up a draft board, or the piece that ends a career. Depends on the month.",pay:{attn:2},intro:"Nia writes long and publishes rarely. She wants one honest answer a month. She will know if it is not. What she does with it depends on the month."},
  {k:"rico",n:"Rico (sneaker reseller)",tier:0,person:true,wants:"Game-worn shoes",later:"The Apex contact. He sets up the signature deal, or he sells your pair the night you lose.",pay:{cash:150},intro:"Rico resells shoes. He would like yours, worn. He pays in cash and in introductions. One of the introductions is Apex. One of them is a man named Lonnie, and I would skip that one."},
  {k:"tasha",n:"The manager who films",tier:1,person:true,wants:"Access",later:"A production company with your name on it.",pay:{attn:3},req:"manager",intro:"She has four years of your highlights on a hard drive and would like the next four. Three Attention a week, rising with views. She will also have the lowlights. She has always had the lowlights."},
- {k:"ray",n:"Uncle Ray",tier:0,person:true,wants:"To be seen with you",later:"He introduces you to your father's agent. That is not a gift.",pay:{cash:100},req:"legacy",intro:"Uncle Ray would like to be seen with you. He knows your father's agent. He says this like it's a gift. It isn't, but it is information."},
+ {k:"ray",n:"Uncle Ray",tier:0,person:true,wants:"To be seen with you",later:"He introduces you to your father's agent. That is not a gift.",pay:{cash:100},req:"legacy",intro:"Uncle Ray would like to be seen with you. He knows your father's agent. He says this like it's a gift. It is not, but it is information."},
  {k:"bell",n:"Coach Bell (the JUCO coach)",tier:0,person:true,wants:"A season of your best",later:"A recommendation that opens the Return card.",pay:{rep:2},req:"juco",intro:"Coach Bell has sent eleven players to Division I and does not mention it. He wants one season of your best. In exchange, a phone call to someone who passed on you, at the right moment, in your favor."},
  {k:"prof",n:"The Professor",tier:0,person:true,wants:"Office hours",later:"The letter that keeps you eligible, or the law-school reference you use at 35.",pay:{rep:1},req:"scholar",intro:"The Professor would like you at office hours. Not for help. For company, she says, which is a lie, and for a letter later, which is not."},
  {k:"lonnie",n:"Lonnie (the bookie)",tier:0,person:true,wants:"Information",later:"A debt you did not know you had.",pay:{cash:800},cursed:true,intro:"Lonnie would like to know how your ankle feels. He pays well for conversation. I am going to say this once, in plain language, because the dice are not involved yet: do not."},
@@ -3552,7 +3552,7 @@ function sponsorDrop(k){attnInit();const i=C.spon.active.findIndex(o=>o.k===k);i
 /* ===== the Architect speaks (non-blocking card, queued) ===== */
 const archP=r=>(Array.isArray(r)?r:[r]).map(x=>{x=String(x);if(x.startsWith("*"))return`<p class="nar">${esc(x.slice(1))}</p>`;if(x.startsWith("~"))return`<p class="sys">${esc(x.slice(1))}</p>`;
   const m=x.match(/^([A-Z][A-Z .'’-]{0,18}):\s(.*)$/s);if(m)return`<p class="dlg"><b class="who ${m[1]==="YOU"?"me":""}">${esc(m[1])}</b>${esc(m[2])}</p>`;return`<p>${esc(x)}</p>`}).join("");
-function archSay(txt,title,opt){attnInit();if(C.sys?.off&&!(opt&&opt.sys))return;(C.archQ??=[]).push({txt,title,...(opt||{})});setTimeout(archFlush,0)}
+function archSay(txt,title,opt){attnInit();if(C.sys?.off&&!(opt&&opt.sys))return;try{if(opt&&opt.sys)SFX.text()}catch(e){}(C.archQ??=[]).push({txt,title,...(opt||{})});setTimeout(archFlush,0)}
 function archFlush(){if(!$("modal").hidden||!$("live").hidden)return;if(!C?.archQ?.length){if(typeof lifeFlush==="function")lifeFlush();return}const m=C.archQ.shift();saveC();
   openModal(`<div class="arch-card ${m.quiet?"quiet":""}"><small>${m.quiet?"":"System · "}${esc(m.title||"")}</small>${archP(m.txt)}<div class="actions">${m.offer?`<button class="btn" data-act="spacc" data-v="${esc(m.offer)}">Accept</button><button class="btn ghost" data-act="spdec" data-v="${esc(m.offer)}">Decline</button><button class="btn ghost" data-act="close">Decide later</button>`:`<button class="btn" data-act="close">Continue</button>`}</div></div>`)}
 /* ===== windows ===== */
@@ -3585,7 +3585,7 @@ const ITEMS={
  walkontowel:{n:"Walk-On's Towel",r:"rare",slot:"hands",mods:{benchTrust:1},bs:"He hit the shot. Not you. The towel was on his shoulder. He gave it to you and said \"keep it,\" which is the nicest thing anyone says in this game."},
  rosary:{n:"Gas Station Rosary",r:"common",slot:"charm",mods:{oneRoll:1},bs:"Bought at 2 a.m. in a town that is mostly a gas station. Not religious. Works anyway."},
  lanyard27:{n:"Tournament Lanyard, 2027",r:"uncommon",slot:"charm",mods:{rep:1},bs:"All-access until the Sunday you lost. Then it was a lanyard."},
- watch:{n:"Halcyon Watch",r:"rare",slot:"arm",mods:{rep:2},bs:"For people who are about to be photographed. It keeps time until it doesn't."},
+ watch:{n:"Halcyon Watch",r:"rare",slot:"arm",mods:{rep:2},bs:"For people who are about to be photographed. It keeps time until it does not."},
  jacket:{n:"Summit Tournament Jacket",r:"rare",slot:"head",mods:{march:2},bs:"Worn one month a year. The zipper is a ladder rung. I am not being poetic; check the zipper."},
  gear_acc:{n:"TruForm Trainers",r:"uncommon",slot:"feet",mods:{acc:4},bs:"Their guy's shoes. Lighter than yours. Coach has opinions about the laces."},
  gear_clu:{n:"Kinetic Bottle (blue)",r:"uncommon",slot:"hands",mods:{clu:3},bs:"Improves Clutch, by which they mean it is blue."},
@@ -3639,15 +3639,15 @@ function lifeFlush(){if(!C?.lifeQ?.length||!$("modal").hidden||!$("live").hidden
 function lifeOptHtml(o){return`<div class="arch-card quiet"><small>${esc(o.title)}</small>${archP(o.txt)}<div class="lr-opts">${o.opts.map((x,i)=>`<button class="lr-opt" data-act="lifeopt" data-v="${i}"><b>${esc(x.t)}</b><small>${esc(x.d)}</small></button>`).join("")}</div></div>`}
 function lifeOpt(i){const o=C.lifeCur;if(!o||!o.opts)return;const x=o.opts[i];if(!x)return;let res="";try{res=x.go()||""}catch(e){console.error(e)}C.lifeQ.shift();C.lifeCur=null;saveC();
   $("sheet").innerHTML=`<div class="arch-card quiet"><small>${esc(o.title)} · ${esc(x.t)}</small>${archP(res)}<div class="actions"><button class="btn" data-act="close">Continue</button></div></div>`;if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{if($("cs-hud"))mcRender()},0)}
-function lifeGo(){const o=C.lifeCur;if(!o)return;const roll=kroll(null,"life"),mod=o.mods.reduce((a,m)=>a+m[1],0),tot=roll+mod,ok=roll===20||(roll!==1&&tot>=o.dc);
-  const res=o.resolve(ok,roll,tot);C.lifeQ.shift();C.lifeCur=null;saveC();
+function lifeGo(){const o=C.lifeCur;if(!o)return;try{SFX.dice()}catch(e){}const roll=kroll(null,"life"),mod=o.mods.reduce((a,m)=>a+m[1],0),tot=roll+mod,ok=roll===20||(roll!==1&&tot>=o.dc);
+  try{if(roll===20)setTimeout(SFX.nat20,350);else if(roll===1)setTimeout(SFX.nat1,350)}catch(e){}const res=o.resolve(ok,roll,tot);C.lifeQ.shift();C.lifeCur=null;saveC();
   $("sheet").innerHTML=`<div class="arch-card ${o.quiet?"quiet":""}"><small>${esc(o.title)} · ${roll===20?"NATURAL 20":roll===1?"NATURAL 1":ok?"PASSED":"FAILED"}</small><div class="lr-res"><div class="pm-die"><b>${roll}</b></div><div><b>${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot}</b> vs DC ${o.dc}</div></div>${archP(res)}<div class="actions"><button class="btn" data-act="close">Continue</button></div></div>`;
   if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const h=$("cs-hud");if(h)mcRender()},0)}
 function lifeSkip(){const o=C.lifeCur;if(!o)return;const res=o.onSkip?o.onSkip():"";C.lifeQ.shift();C.lifeCur=null;saveC();if(res)$("sheet").innerHTML=`<div class="arch-card"><small>${esc(o.title)}</small>${archP(res)}<div class="actions"><button class="btn" data-act="close">Continue</button></div></div>`;else closeModal()}
 /* ---- hooks ---- */
 function fateAfterGame(mg,ln){try{if(mg&&mg.nba)return;fateInit();const gp=C.season?.tot?.gp||0;if(gp<6)return;const F=C.fate;const rival=bond("rival");
   // rival head-to-head
-  if(rival&&rival.school&&(mg.opp===rival.school)){rival.hh[mg.w?0:1]++;if(mg.w){attnAdd(2,"beat the rival");rpgXP(C.rpg,Math.round(needXP(C.rpg.lv)*.15),`Beat ${rival.name}`);if(inDeck("page")&&!mg.home&&canFate()){fateFire("page");grantItem("page4","the rival's gym");archSay(ST.page(),"The Page")}}
+  if(rival&&rival.school&&(mg.opp===rival.school)){if(mg.w){attnAdd(2,"beat the rival");rpgXP(C.rpg,Math.round(needXP(C.rpg.lv)*.15),`Beat ${rival.name}`);if(inDeck("page")&&!mg.home&&canFate()){fateFire("page");grantItem("page4","the rival's gym");archSay(ST.page(),"The Page")}}
     else if(inDeck("record")&&mg.k&&mg.k!=="reg"&&canFate()){fateFire("record");archSay(ST.record(rival.name,ri(31,41)),"The Record")}}
   if(gp-F.lastRollG<4)return;
   // the party: the night of an upset or a 30-point game
@@ -3853,7 +3853,7 @@ function possPick(i){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return
     if(w.timing&&!x.pass){o.step="tap";o.zone=clamp(.12+(w.skl-40)/400,.1,.26);o.t0=performance.now();o.sp=clamp(5.2-(w.skl-50)*.03,3.2,6);$("lv-clutch").innerHTML=possHtml(w);LV.cl={t0:o.t0,sp:o.sp,zone:o.zone};o.auto=setTimeout(()=>possTap(true),3000)}else possResolve(w,null)}};setTimeout(tick,60)}
 function possTap(auto){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="tap")return;clearTimeout(o.auto);const x=LV.cl?.x??0,d=Math.abs(x-.5),z=(o.zone||.12)/2;
   const tap=auto?-1:d<=z?4:d<=z+.08?2:d<=z+.16?0:-2;possResolve(w,tap)}
-function possResolve(w,tap){const o=LV.pm,x=o.pick;o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
+function possResolve(w,tap){try{SFX.dice()}catch(e){}const o=LV.pm,x=o.pick;o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
   const nat20=o.roll===20,nat1=o.roll===1;o.made=nat1?false:nat20?true:o.total>=x.dc;
   o.verdict=x.pass?(o.made?"GOOD PASS":"PICKED OFF"):nat20?"NATURAL 20 — AND ONE":nat1?"NATURAL 1":o.made?(tap===4?"PERFECT · SPLASH":"GOOD"):"MISS";
   o.why=!o.made&&!nat1?(x.mods.find(m=>m[1]<0)?"":"the defender got a hand up"):"";
@@ -3870,8 +3870,9 @@ function settingsHtml(){const pm=playMode();return`<div class="mp-note">How you 
   <div class="st-row"><span>Timing tap</span><button class="mp-btn sm ${C.timing!==false?"on":""}" data-act="pmset" data-v="timing:1">On</button><button class="mp-btn sm ${C.timing===false?"on":""}" data-act="pmset" data-v="timing:0">Off</button><small class="mp-lab">Off = flat +1, never a penalty</small></div>
   <div class="st-row"><span>Karmic dice</span><button class="mp-btn sm ${C.karmic!==false?"on":""}" data-act="pmset" data-v="karmic:1">On</button><button class="mp-btn sm ${C.karmic===false?"on":""}" data-act="pmset" data-v="karmic:0">Off</button><small class="mp-lab">Softens long streaks, both teams</small></div>
   <div class="st-row"><span>On the bench</span><button class="mp-btn sm ${C.benchFF!==false?"on":""}" data-act="pmset" data-v="bench:1">Skip ahead</button><button class="mp-btn sm ${C.benchFF===false?"on":""}" data-act="pmset" data-v="bench:0">Watch</button><small class="mp-lab">Fast-forwards until you check back in</small></div>
+  <div class="st-row"><span>Sound</span><button class="mp-btn sm ${C.sfx!==false?"on":""}" data-act="pmset" data-v="sfx:1">On</button><button class="mp-btn sm ${C.sfx===false?"on":""}" data-act="pmset" data-v="sfx:0">Off</button><small class="mp-lab">Dice, net, rim, whistle</small></div>
   <div class="st-row"><span>Game speed</span>${[2,4,8].map(s=>`<button class="mp-btn sm ${(C.lvSpeed||4)===s?"on":""}" data-act="pmset" data-v="speed:${s}">${s}×</button>`).join("")}</div>`}
-function pmSet(v){const[k,val]=v.split(":");if(k==="mode")C.playMode=val;else if(k==="timing")C.timing=val==="1";else if(k==="karmic")C.karmic=val==="1";else if(k==="speed")C.lvSpeed=+val;else if(k==="bench")C.benchFF=val==="1";saveC();csWins();if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const b=document.querySelector('.cs-next');if(b)mcRender()},0)}
+function pmSet(v){const[k,val]=v.split(":");if(k==="mode")C.playMode=val;else if(k==="timing")C.timing=val==="1";else if(k==="karmic")C.karmic=val==="1";else if(k==="speed")C.lvSpeed=+val;else if(k==="bench")C.benchFF=val==="1";else if(k==="sfx")C.sfx=val==="1";saveC();csWins();if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const b=document.querySelector('.cs-next');if(b)mcRender()},0)}
 
 /* calibration harness (tests only) */
 window.__cal=function(n=40,yr){const cl=C.cl;if(yr){cl.y=yr}const ids=Object.keys(cl.teams),A={fga:0,fgm:0,tpa:0,tpm:0,fta:0,ftm:0,tov:0,stl:0,blk:0,ast:0,reb:0,pts:0,poss:0,g:0,ot:0},P=[];
@@ -4047,7 +4048,7 @@ function rivalLine(){const cl=C.cl,r=bondOf("rival");if(!r?.pid||!cl?.players[r.
 /* ---- the window (F) ---- */
 function bondsHtml(){const B=C.bonds||{};const keys=BONDK.filter(k=>B[k]);if(!keys.length)return`<div class="mp-note">No one yet. The Prologue decides who comes with you.</div>`;
   const log=(C.bondLog||[]).slice(0,8),S=C.sys||{};
-  return`<div class="mp-note">The people in your story. Meters move with what you do; scenes open when they're high enough, and close when they're not.</div>
+  return`<div class="mp-note">The people in your story. Meters move with what you do; scenes open when they are high enough, and close when they are not.</div>
   <div class="bonds"><div class="bd sys"><div class="bd-h"><b>The System</b><span class="chip ${S.off?"bad":"good"}">${S.off?"Quiet":"Here"}</span></div><small>A sender with no number.</small><div class="bd-x">${S.off?"You told it to go. It went. There is no button for this.":S.returned?"It came back. You can ask it things now. It answers some of them.":"It counts. You play."}</div></div>${keys.map(k=>{const b=B[k],lv=b.lv||0,pct=Math.round((lv+100)/2),lbl=bondLbl(k,lv);let extra="";
     if(k==="rival"){const rl=rivalLine(),nx=rivalNext();extra=`<div class="bd-x">${rl?`${esc(b.school)}${rl.rk?` · AP #${rl.rk}`:""} · OVR ${Math.round(rl.p.ovr-(typeof COLB!=="undefined"?COLB:0))}${rl.ppg?` · ${rl.ppg} ppg`:""}`:esc(b.school||"unplaced")}<br>Head-to-head <b>${(b.hh||[0,0])[0]}–${(b.hh||[0,0])[1]}</b>${nx?` · next: ${nx.home?"home":"away"}, ${nx.weeks<=0?"this week":nx.weeks===1?"next week":`in ${nx.weeks} weeks`}`:""}</div>`}
     else if(k==="friend"){const cl=C.cl,on=b.pid&&cl?.teams[C.school]?.roster.includes(b.pid);extra=`<div class="bd-x">${on?"On your roster":b.k==="guard"?"Across the country, same conference of the mind":b.k==="manager"?"Hard drive in her backpack":"Elsewhere"}${b.hurt?" · out for the year":""}</div>`}
@@ -4070,7 +4071,7 @@ function bondWeek(){try{if(!C.bonds||!inSeason())return;const B=C.bonds,w=C.week
   const opts=[];
   if(B.mother&&!B.mother.gone)opts.push({t:"Call home",d:`${B.mother.name}, ${B.mother.job}.`,go:()=>{B.mother.last=w;bondEv("mother",6,"called home");return ST.evCall()}});
   if(B.coach&&!B.coach.gone)opts.push({t:"Film with Coach",d:`He has the tape. He always has the tape.`,go:()=>{bondEv("coach",6,"film session");const roll=kroll(null,"life"),tot=roll+Math.round(((B.coach.lv||0)-40)/20);if(roll===20||(roll!==1&&tot>=12)){const R0=rpgS();if(R0)R0.spBonus=(R0.spBonus||0)+1;return ST.evFilmWin()}return ST.evFilm()}});
-  if(B.friend&&!B.friend.hurt)opts.push({t:`See ${B.friend.name.split(" ")[0]}`,d:B.friend.k==="guard"?"He's in town. He didn't text.":B.friend.k==="manager"?"She wants to film something.":"Food. No basketball.",go:()=>{B.friend.last=w;bondEv("friend",6,"a night off");C.swag=(C.swag||0)+1;if(R()<.2){attnAdd(2,"a night out");return ST.evFriendViral()}return ST.evFriend(B.friend.k)}});
+  if(B.friend&&!B.friend.hurt)opts.push({t:`See ${B.friend.name.split(" ")[0]}`,d:B.friend.k==="guard"?"He is in town. He did not text.":B.friend.k==="manager"?"She wants to film something.":"Food. No basketball.",go:()=>{B.friend.last=w;bondEv("friend",6,"a night off");C.swag=(C.swag||0)+1;if(R()<.2){attnAdd(2,"a night out");return ST.evFriendViral()}return ST.evFriend(B.friend.k)}});
   opts.push({t:"The gym, alone",d:"Five hundred makes.",go:()=>{const R0=rpgS(),x=R0?Math.round(needXP(R0.lv)*.08):0;if(R0)rpgXP(R0,x,"the gym, alone");if(B.mother)B.mother.lv=clamp((B.mother.lv||0)-1,-100,100);if(typeof sysAfterGym==="function"){const r=sysAfterGym();if(r)return r}return ST.evGym(x)}});
   if(typeof socialPost==="function"&&!C.posted)opts.push({t:"Post something",d:"The phone is right there.",go:()=>{socialPost();return ST.evPost()}});
   if(C.sys?.off)opts.push({t:"Text it",d:"The empty thread.",go:()=>ST.sysBlindTry()});
@@ -4086,12 +4087,12 @@ function bondScenes(){const B=C.bonds,gp=gpNow(),q=(t,title,o)=>archSay(t,title,
   if(rv&&!rv.shook&&(rv.lv||0)>=40&&((rv.hh||[0,0])[0]+(rv.hh||[0,0])[1])>=3){rv.shook=C.y;repAdd(3,"the handshake");q(ST.rivalName(rv),"He said your name")}}
 function bondRivalSched(cl){try{const r=bondOf("rival");if(!r?.school||!cl?.sched||!cl.teams[r.school])return;const S=cl.sched,me=C.school;if(r.school===me)return;
   if(S.some(d=>d.some(p=>p.includes(me)&&p.includes(r.school))))return;const home=((r.hh||[0,0])[0]+(r.hh||[0,0])[1]+(hsh(C.name)%2))%2===0;
-  for(let d=2;d<14&&d<S.length;d++){const day=S[d],i=day.findIndex(p=>p.includes(me)),j=day.findIndex(p=>p.includes(r.school));if(i<0||j<0||i===j)continue;
+  for(let d=7;d<16&&d<S.length;d++){const day=S[d],i=day.findIndex(p=>p.includes(me)),j=day.findIndex(p=>p.includes(r.school));if(i<0||j<0||i===j)continue;
     const x=day[i][0]===me?day[i][1]:day[i][0],y=day[j][0]===r.school?day[j][1]:day[j][0];day[i]=home?[me,r.school]:[r.school,me];day[j]=[x,y];return}}catch(e){console.error(e)}}
 /* ---- game hooks ---- */
 /* ---- game hooks ---- */
 function bondGame(mg,ln){try{const B=C.bonds;if(!B)return;const rv=B.rival;
-  if(rv&&rv.school&&mg.opp===rv.school){bondEv("rival",mg.w?4:-3,mg.w?"you won the meeting":"he won the meeting");if(ln.pts>=25)bondEv("rival",3,`${ln.pts} on him`)}
+  if(rv&&rv.school&&mg.opp===rv.school){(rv.hh??=[0,0])[mg.w?0:1]++;bondEv("rival",mg.w?4:-3,mg.w?"you won the meeting":"he won the meeting");if(ln.pts>=25)bondEv("rival",3,`${ln.pts} on him`)}
   const fr=B.friend;if(fr&&fr.pid&&C.cl?.teams[C.school]?.roster.includes(fr.pid)&&ln.ast>=6)bondEv("friend",1,"you found him");
   if(mg.w&&B.coach&&!B.coach.gone&&(mg.ork&&mg.ork<=10))bondEv("coach",2,"a big one together");
   if(typeof sysGame==="function")sysGame(mg,ln)}catch(e){console.error(e)}}
@@ -4108,7 +4109,7 @@ function sysGame(mg,ln){const S=sysS();const gp=gpNow();
   if(!S.off&&!S.offered&&!mg.w&&Math.abs(mg.us-mg.them)<=3&&(ln.fga||0)>=15&&(ln.fgm||0)/(ln.fga||1)<.38&&gp>=8){S.offered=C.y;
     lifeRoll({title:"The last shot",quiet:true,txt:ST.sysLastShot(),mods:[],dc:0,opts:[
       {t:"Put it away",d:"",go:()=>{S.bond++;return[`You put it away.`]}},
-      {t:"“I don't need you.”",d:"",go:()=>{S.off=true;S.offG=gp;S.offY=C.y;S.offW=C.week||0;return ST.sysLeft()}},
+      {t:"“I do not need you.”",d:"",go:()=>{S.off=true;S.offG=gp;S.offY=C.y;S.offW=C.week||0;return ST.sysLeft()}},
       {t:"“Why do you care?”",d:"",go:()=>{S.bond+=2;return ST.sysStay()}}]});return}
   if(S.off){S.offG??=gp;const since=(C.y-(S.offY||C.y))*34+(gp-(S.offG||0));const streak=(C.season?.games||[]).slice(-3);const low=(C.susp||0)>0||(streak.length===3&&streak.every(g=>!g.w))||(!mg.w&&Math.abs(mg.us-mg.them)>=20);
     if(since>=20&&low)sysReturn(low&&(C.susp||0)>0?`Two games on the bench. The second one is tonight. You are in the stands with your phone.`:`The bus is dark after the third straight loss. Your phone is in your hand because there is nothing else to hold.`)}}
@@ -4135,6 +4136,26 @@ function epilogue(){try{const S=sysS(),B=C.bonds||{},n=Math.max(1,(G?.year||C.y)
   if(B.rival&&B.rival.hh)archSay(ST.epRival(B.rival,B.rival.hh),"The other one",{quiet:true,sys:true});
   if(B.friend)archSay(ST.epFriend(B.friend),"The people",{quiet:true,sys:true});
   C.archQ=(C.archQ||[]).filter(m=>m.txt)}catch(e){console.error(e)}}
+
+/* ---------- sfx.js: small synthesized sounds. No files, no licenses. Off switch in Play settings. ---------- */
+let AC=null;const sfxOn=()=>typeof C!=="undefined"&&C&&C.sfx!==false;
+function ac(){if(!AC){try{AC=new(window.AudioContext||window.webkitAudioContext)()}catch(e){return null}}if(AC.state==="suspended")AC.resume().catch(()=>{});return AC}
+function tone(f,d,type="sine",g=.08,t0=0,slide=null){const a=ac();if(!a)return;const o=a.createOscillator(),v=a.createGain();o.type=type;o.frequency.setValueAtTime(f,a.currentTime+t0);if(slide)o.frequency.exponentialRampToValueAtTime(slide,a.currentTime+t0+d);
+  v.gain.setValueAtTime(0,a.currentTime+t0);v.gain.linearRampToValueAtTime(g,a.currentTime+t0+.01);v.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t0+d);o.connect(v).connect(a.destination);o.start(a.currentTime+t0);o.stop(a.currentTime+t0+d+.02)}
+function noise(d,g=.06,t0=0,hp=800){const a=ac();if(!a)return;const n=a.sampleRate*d,b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*(1-i/n);
+  const s=a.createBufferSource();s.buffer=b;const f=a.createBiquadFilter();f.type="highpass";f.frequency.value=hp;const v=a.createGain();v.gain.setValueAtTime(g,a.currentTime+t0);v.gain.exponentialRampToValueAtTime(.0001,a.currentTime+t0+d);s.connect(f).connect(v).connect(a.destination);s.start(a.currentTime+t0)}
+const SFX={
+  dice(){if(!sfxOn())return;for(let i=0;i<7;i++)tone(900+Math.random()*700,.03,"square",.03,i*.05)},
+  nat20(){if(!sfxOn())return;[523,659,784,1047].forEach((f,i)=>tone(f,.18,"triangle",.07,i*.07))},
+  nat1(){if(!sfxOn())return;tone(180,.35,"sawtooth",.06,0,90)},
+  swish(){if(!sfxOn())return;noise(.18,.07,0,1500);tone(1800,.08,"sine",.02,.02,1200)},
+  rim(){if(!sfxOn())return;tone(420,.12,"square",.05,0,380);noise(.06,.03,.0,2500)},
+  whistle(){if(!sfxOn())return;tone(2600,.22,"square",.035);tone(2630,.22,"square",.02)},
+  buzzer(){if(!sfxOn())return;tone(220,.6,"sawtooth",.07);tone(223,.6,"square",.03)},
+  level(){if(!sfxOn())return;[392,523,659,784,1047].forEach((f,i)=>tone(f,.2,"triangle",.07,i*.08))},
+  text(){if(!sfxOn())return;tone(1320,.06,"sine",.05);tone(1760,.09,"sine",.04,.07)},
+  tap(){if(!sfxOn())return;tone(1000,.03,"square",.03)}};
+window.SFX=SFX;
 
 /* ---------- RPG UI: MapleStory-style windows (Stat, Skills, Goals, Loadouts), creation flow, EXP bar ---------- */
 function rpgLook(){const p=rpgP();return p?(p.look||lookOf(p,p.pid)):(C.look??=lookFor(C.name))}
@@ -4202,7 +4223,7 @@ function rpgMount(){const R=rpgS();const old=$("rpgbar");if(!R){old?.remove();re
   const anchor=document.querySelector("#mc:not([hidden]) .cl-top .hdr")||(!$("app")?.hidden&&$("hdr"));if(anchor)anchor.insertAdjacentHTML("afterend",html)}
 function rpgFlush(){const R=rpgS();if(!R)return;(R.toast||[]).splice(0).forEach((m,i)=>setTimeout(()=>toast(m),i*1600));
   if(R.pend?.length){const ups=R.pend.splice(0),last=ups[ups.length-1],sp=ups.reduce((a,x)=>a+x.sp,0);let el=$("lvup-b");if(!el){el=document.createElement("div");el.id="lvup-b";document.body.appendChild(el)}
-    el.innerHTML=`<div class="lv-burst"></div><small>LEVEL UP</small><b>Lv ${last.lv}</b><p>+${sp} skill point${sp===1?"":"s"} · press K</p>`;el.className="show";clearTimeout(rpgFlush.t);rpgFlush.t=setTimeout(()=>{el.className=""},2400)}
+    el.innerHTML=`<div class="lv-burst"></div><small>LEVEL UP</small><b>Lv ${last.lv}</b><p>+${sp} skill point${sp===1?"":"s"} · press K</p>`;el.className="show";try{SFX.level()}catch(e){}clearTimeout(rpgFlush.t);rpgFlush.t=setTimeout(()=>{el.className=""},2400)}
   rpgMount()}
 function rpgKeys(e){if(e.metaKey||e.ctrlKey||e.altKey)return;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA"||!$("live").hidden)return;if(!rpgS())return;
   const k=e.key.toLowerCase();if(k==="c")openSheet("stat");else if(k==="k")openSheet("skills");else if(k==="j")openSheet("goals");else return;e.preventDefault()}
@@ -4482,11 +4503,11 @@ function lvCard(pid){const el=$("lv-card");if(!el||!LV)return;const x=LV.ps[pid]
   el.innerHTML=`<canvas width="24" height="24"></canvas><div><div class="n">${esc(shortNm(p))} <span>| ${esc(p.pos||"")}${p.no!=null?" #"+esc(String(p.no)):""}</span></div><div class="g" style="grid-template-columns:repeat(3,auto)"><b>PTS</b><b>${three?"3PT":"FG"}</b><b>${three?"3PT%":"FG%"}</b><i>${b.pts||0}</i><i>${sh[0]}/${sh[1]}</i><i>${sh[1]?Math.round(100*sh[0]/sh[1]):0}%</i></div></div>`;
   drawPortrait(el.querySelector("canvas"),lookOf(p,pid),jy,tr,p.no);el.hidden=false;clearTimeout(lvCard.t);lvCard.t=setTimeout(()=>{const e2=$("lv-card");if(e2)e2.hidden=true},2600)}
 function lvApply(e){LV.lastE=e;if(LV.ctl&&$("lv-coach")&&!$("lv-coach").hidden&&(e.type==="sub"||e.type==="q"))setTimeout(lvCoach,0);
-  if(e.type==="sub"&&LV.mine!=null&&LV.ctl&&e.k===LV.ctl.side&&!LV.skipping){const nowOn=onHas(e.on[e.k],LV.mine);if(LV._wasOn!=null&&nowOn!==LV._wasOn){lvPop(nowOn?"YOU'RE IN":"BREATHER",e.k);if(!nowOn&&LV.ctl.mode&&LV.ctl.mode!=="watch")toast("Coach pulled you. Legs or minutes — check the Bench tab.")}LV._wasOn=nowOn}
+  if(e.type==="sub"&&LV.mine!=null&&LV.ctl&&e.k===LV.ctl.side&&!LV.skipping){const nowOn=onHas(e.on[e.k],LV.mine);if(LV._wasOn!=null&&nowOn!==LV._wasOn){try{SFX.whistle()}catch(x){}lvPop(nowOn?"YOU'RE IN":"BREATHER",e.k);if(!nowOn&&LV.ctl.mode&&LV.ctl.mode!=="watch")toast("Coach pulled you. Legs or minutes — check the Bench tab.")}LV._wasOn=nowOn}
   else if(e.type==="start"&&LV.mine!=null&&LV.ctl)LV._wasOn=onHas(e.on[LV.ctl.side],LV.mine);
   const b=LV.box,add=(pid,k,v=1)=>{if(!pid)return;(b[pid]??={pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0,tpm:0,tpa:0});b[pid][k]+=v};
-  if(e.type==="make"){if(e.o===0)LV.cheer=.9;if(!LV.skipping){LV.celeb={pid:e.sh,t:1.1};(LV.net??={})[lvBasket(e.o,e.q)]=1}add(e.sh,"pts",e.pts);add(e.sh,"fgm");add(e.sh,"fga");if(e.shot==="3"){add(e.sh,"tpm");add(e.sh,"tpa")}add(e.as,"ast")}
-  else if(e.type==="miss"||e.type==="blk"){add(e.sh,"fga");if(e.shot==="3")add(e.sh,"tpa");if(e.type==="blk")add(e.d,"blk")}
+  if(e.type==="make"){if(e.o===0)LV.cheer=.9;if(!LV.skipping){try{if(LV.mine!=null&&String(e.sh)===String(LV.mine))SFX.swish()}catch(x){}LV.celeb={pid:e.sh,t:1.1};(LV.net??={})[lvBasket(e.o,e.q)]=1}add(e.sh,"pts",e.pts);add(e.sh,"fgm");add(e.sh,"fga");if(e.shot==="3"){add(e.sh,"tpm");add(e.sh,"tpa")}add(e.as,"ast")}
+  else if(e.type==="miss"||e.type==="blk"){try{if(!LV.skipping&&LV.mine!=null&&String(e.sh)===String(LV.mine))SFX.rim()}catch(x){}add(e.sh,"fga");if(e.shot==="3")add(e.sh,"tpa");if(e.type==="blk")add(e.d,"blk")}
   else if(e.type==="reb")add(e.rb,"reb");else if(e.type==="stl")add(e.d,"stl");else if(e.type==="ft")add(e.sh,"pts",e.ft[0]);
   if(e.type!=="sub"||true){const li=document.createElement("li");const mineIn=LV.mine&&[e.sh,e.as,e.rb,e.d,e.h].includes(LV.mine);
     li.className=mineIn?"mine":"";li.dataset.mine=mineIn?"1":"";li.innerHTML=`<small>${LV.halves?(e.q>2?"OT":"H"+e.q):(e.q>4?"OT":"Q"+e.q)} ${Math.floor(e.t/60)}:${String(e.t%60).padStart(2,"0")} · ${LV.teams[0].abbr} ${e.sc[0]}-${e.sc[1]} ${LV.teams[1].abbr}</small>${esc(e.txt)}`;
