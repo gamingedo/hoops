@@ -15,7 +15,7 @@ ST.plgI=()=>SP_(`A bedroom. A boy at a laptop, watching a basketball game from 1
   `THE BOY: You don't ever do what they tell you. You do what they need. Got it?`,
   `The window prints one line.`,`~Got it.`);
 ST.plgII=()=>SP_(`A few months later he passes away. His heart could not go on.`,
-  `His mother opens the laptop. It is full of basketball. Games, numbers, notes on players she is never heard of. She closes it.`,
+  `His mother opens the laptop. It is full of basketball. Games, numbers, notes on players she has never heard of. She closes it.`,
   `She takes it with the rest of his basketball things to the junior college gym three blocks away. He used to sit in the bleachers there and watch practice.`,
   `The coach there takes the box. He tries the laptop. It will not turn on. He puts the box in the storage closet.`);
 /* 1★ */
@@ -75,7 +75,7 @@ ST.coachGoodbye=(yrs)=>SP_(`Last night at the gym. Coach is racking the balls. Y
   `COACH: You were good the first week. That was never the question. The question was what you would turn into once somebody told you.`,
   `YOU: And?`,`COACH: You come off the floor and check on the kid who went in for you. I never had that. The day I tell a kid he's special is the day he stops being that kid. I wasn't going to be the one.`,
   `YOU: So why now?`,`COACH: You are leaving.`,
-  `*${yrs===1?"A year":"Two years"} he is carried this. He is setting it down because he has to, not because he wants to.`,
+  `*${yrs===1?"A year":"Two years"} he has carried this. He is setting it down because he has to, not because he wants to.`,
   `He turns off the lights on the far end.`,`COACH: You are going to hear it every day now. Hear it. Don't hold it.`);
 ST.momVisit=()=>SP_(`Home game. Shootaround is over and you are walking to the tunnel. Your mother is standing by the rail with a cooler.`,
   `YOU: You didn't say you were coming.`,`MOM: You would have told me not to.`,`YOU: I would have told you it was far.`,`MOM: It was far.`,`She hands you the cooler.`,
