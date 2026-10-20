@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="f929077c0e";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="4b79bb2349";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -645,7 +645,15 @@ body{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
   .bar .btn{font-size:14px;padding:13px 6px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-.jp{display:grid;gap:6px}.jp-row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:6px 8px;border:1px solid rgba(127,127,127,.35);border-radius:6px}.jp-row b{font-weight:700}.jp-row span{grid-column:1/-1;font-size:12px;opacity:.85}.jp-row button{grid-row:1;grid-column:2}.jp-row.off{opacity:.5}.cs-ev.hot{border-color:#ffd166;color:#ffd166}.drill-steps{display:grid;gap:6px;margin:8px 0}.drill-step{border:1px solid #2a3550;border-radius:8px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 8px}.drill-step em{grid-column:1/-1;font-style:normal;opacity:.85}.drill-step.cur{border-color:#ffd166}.drill-step.ok{border-color:#6cb8ff;background:rgba(108,184,255,.08)}.drill-step.no{border-color:#ffa24c;background:rgba(255,162,76,.08)}
+.jp{display:grid;gap:6px}.jp-row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:6px 8px;border:1px solid rgba(127,127,127,.35);border-radius:6px}.jp-row b{font-weight:700}.jp-row span{grid-column:1/-1;font-size:12px;opacity:.85}.jp-row button{grid-row:1;grid-column:2}.jp-row.off{opacity:.5}.g-top{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:stretch}.g-nil{background:linear-gradient(180deg,#2c3a24,#1c2617);color:#fff;border-radius:6px;padding:10px 14px;display:grid;align-content:center}.g-nil b{font:900 22px var(--f-display);color:#ffd166}.g-nil small{font-size:11px;opacity:.85}
+.g-pity{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:12px;border:1px solid #cfd3dc;border-radius:6px;padding:8px 10px;background:#fff}.g-pity small{font:700 10px Silkscreen,var(--f-mono);color:#4a4f5e}
+.g-sets .mp-lab{text-transform:none;font:400 12px var(--f-body);letter-spacing:0}.g-sets{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}.g-slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:8px}.g-slot{border:1px solid #cfd3dc;border-radius:6px;background:#fff;padding:6px;min-width:0}.g-slot>small{font:700 10px Silkscreen,var(--f-mono);color:#4a4f5e}.g-slot.empty i{display:block;font-size:12px;color:#7a8090;padding:6px 2px}
+.g-row{border-left:4px solid var(--rc);padding:6px 8px;display:grid;gap:4px;min-width:0;background:#fff;border-bottom:1px solid #e3e5ea}.g-slot .g-row{border-bottom:0;padding:4px 6px}.g-head{display:flex;flex-wrap:wrap;gap:4px 8px;align-items:baseline}.g-head b{font-size:14px}.g-head i{font-style:normal;color:#b07800;font-size:12px;letter-spacing:.05em}.g-head small{font:700 10px Silkscreen,var(--f-mono)}
+.g-main{font-weight:700;font-size:13px}.g-main small{font-weight:400;color:#5a6070;font-size:11px}.g-subs{display:flex;flex-wrap:wrap;gap:4px}.g-sub{font-size:12px;background:#eef0f4;border-radius:4px;padding:2px 6px;display:inline-flex;gap:4px;align-items:center}.g-rule{background:#fff3d6;color:#6b4a00}
+.g-re{border:0;background:none;cursor:pointer;font-size:12px;padding:0 2px;color:#4a4f5e}.g-act{display:flex;flex-wrap:wrap;gap:6px}.g-filt{display:flex;flex-wrap:wrap;gap:4px;margin:6px 0}.g-filt .mp-btn.on{background:linear-gradient(180deg,#ffd76a,#f5a623)}
+#sheet:has(.g-top){max-height:92vh;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+@media(max-width:600px){.g-top{grid-template-columns:1fr}.g-slots{grid-template-columns:1fr}}
+.cs-ev.hot{border-color:#ffd166;color:#ffd166}.drill-steps{display:grid;gap:6px;margin:8px 0}.drill-step{border:1px solid #2a3550;border-radius:8px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 8px}.drill-step em{grid-column:1/-1;font-style:normal;opacity:.85}.drill-step.cur{border-color:#ffd166}.drill-step.ok{border-color:#6cb8ff;background:rgba(108,184,255,.08)}.drill-step.no{border-color:#ffa24c;background:rgba(255,162,76,.08)}
 </style>
 </head>
 <body>
@@ -923,7 +931,7 @@ function playoffDay(watch){let watched=null;
     if(sDone(s))continue;const g=s.wh+s.wl,hiHome=[0,1,4,6].includes(g);
     const mine=s.hi===G.userTid||s.lo===G.userTid,fn0=watch&&mine?liveGame:playGame,fn=(x,y,po)=>G.preRes&&G.preRes.h===x&&G.preRes.a===y?liveCommit(x,y,true,G.preRes.L):fn0(x,y,po);const res=hiHome?fn(s.hi,s.lo,true):fn(s.lo,s.hi,true);if(watch&&mine)watched=res;
     const hiWon=hiHome?res.hs>res.as:res.as>res.hs;if(hiWon)s.wh++;else s.wl++;
-    if(s.hi===G.userTid||s.lo===G.userTid){recordUser(res,`${roundName(po.round)} · Game ${g+1}`);if(sDone(s))news(sWin(s)===G.userTid?`You won the ${roundName(po.round)} ${Math.max(s.wh,s.wl)}-${Math.min(s.wh,s.wl)}.`:`You were eliminated in the ${roundName(po.round)}.`)}
+    if(s.hi===G.userTid||s.lo===G.userTid){recordUser(res,`${roundName(po.round)} · Game ${g+1}`);if(sDone(s)){news(sWin(s)===G.userTid?`You won the ${roundName(po.round)} ${Math.max(s.wh,s.wl)}-${Math.min(s.wh,s.wl)}.`:`You were eliminated in the ${roundName(po.round)}.`);try{if(G.career&&!G.career.retired&&typeof C!=="undefined"&&C&&typeof gearS==="function"&&gearS()){const fin=po.round===po.nr-1,won=sWin(s)===G.userTid;if(won)nilAdd([15000,30000,60000,150000][Math.min(3,po.round+(4-po.nr))],`for winning the ${roundName(po.round)}`);if(fin){const it=won?gearFinals():gearRoll("boss");if(it)toast(`${won?"The Finals":"Finals"}: ${GRAR[it.rar][0]} ${gName(it)} ${gStars(it)}`)}saveC()}}catch(e){console.error(e)}}}
   }
   if(cur.every(sDone))advanceRound();
   return watched;
@@ -1462,7 +1470,7 @@ function scoutPot(){return Math.round(C.pot+(C.scoutN??0))}
 function stock(){const t=C.season?.tot,g=t?.gp||0;const prod=(g?prodScore():0)+(C.prep?6:0);
   const v=.5*scoutPot()+.5*calcOvr(C.a,C.pos)-8+prod*.25*(isJuco(C.school)?.3:1)+(C.awards.filter(a=>a.y===C.y).length*1.5)-Math.max(0,C.cls-1)*1.2-(isJuco(C.school)?10:0);
   let k=1;while(k<=60&&slotV(k)>v)k++;return k>60?null:k}
-function closeSeason(){try{if(typeof fateSeasonEnd==="function")fateSeasonEnd()}catch(e){}
+function closeSeason(){
   if(!frEligible(C.cl.y)&&C.cls===1){C.season.tot=freshLine();C.season.res=`Freshman team (varsity: ${C.season.res||"season over"})`}
   C.nil=nilValue();if(C.nil)C.nilTot=(C.nilTot||0)+C.nil;
   const s=C.season,t=s.tot,g=t.gp||1,tm=C.cl.teams[C.school];
@@ -1484,7 +1492,7 @@ function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v48";
+const BUILD="v49";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -1550,7 +1558,7 @@ function mcOffers(){
   if(!C.offers)C.offers=recruitOffers();
   return mcHead(`${"★".repeat(C.stars)} recruit · ${C.pos} · ${ftin(C.ht)} · potential ${C.pot}`)+`
   <section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="create">← Back to creation</button></div><div class="kicker">Step 3 of 3 · ${sl(y)} recruiting</div><h2>Choose your school</h2>
-    <p>${C.stars<=1?`Two low-major programs called.`:C.stars===2?"Three low-majors called. Coach drove you to all of them.":`You're a ${C.stars}-star recruit. These programs offered you a scholarship${C.bonds?.rival?`; ${esc(C.bonds.rival.name)} is already committed somewhere else`:""}.`}</p>
+    <p>${C.stars<=1?`Two low-major programs called.`:C.stars===2?"Three low-major programs called.":`You are a ${C.stars}-star recruit. These programs offered you a scholarship.`}</p>
     <div class="mc-offers">${C.offers.map(s=>{const ros=collegeRoster(s,y);const me=calcOvr(C.a,C.pos),role=(cl.teams[s]?.roster||[]).filter(id=>cl.players[id]&&cl.players[id].ovr>me).length,rk=apRk(cl,s);
       return`<div class="mc-offer"><div><b>${esc(s)}</b><small>${esc(cl.teams[s]?.conf||"")} · Program ${pr(s)}${rk?` · Preseason AP #${rk}`:""} · ${role<=1?"Projected starter":role<=4?"Rotation role":"Bench to start"}</small></div>
       <p>${cl.teams[s]?.juco?"Junior college. Two years at most, then the portal. Nobody films these games.":ros.length?"Future pros: "+ros.slice(0,4).map(x=>`${esc(x.name)} ('${String(x.d).slice(2)} #${x.pick})`).join(", "):`Best player: ${esc(cl.players[(cl.teams[s]?.roster||[]).slice().sort((a,b)=>(cl.players[b]?.ovr||0)-(cl.players[a]?.ovr||0))[0]]?.name||"--")}. ${(C.stars||5)>=4?"You would start on day one.":"Minutes are earned here."}`}</p>
@@ -1571,7 +1579,7 @@ function mcDecide(){
     <p>${st?(DB.drafts[C.y+1]?`In the real ${C.y+1} draft, pick #${st} was ${esc(DB.drafts[C.y+1]?.find(r=>r[2]===st)?.[1]||"someone")}.`:`Scouts have you going in the ${st<=14?"lottery":st<=30?"first round":"second round"}.`):"Another year could raise your stock."}</p>
     <div class="label" style="color:#c9cfe0">Summer training focus</div><div class="fid">${FOCI.map(([k,l])=>`<button data-act="mcfocus" data-v="${k}" aria-pressed="${C.focus===k}">${l}</button>`).join("")}</div>
     ${C.nil?`<p class="note" style="color:#c9cfe0">💰 ${nilDeals(C.nil)}. Coming back keeps the money flowing.</p>`:""}
-    <div class="go"><button class="start" data-act="mcdeclare">Declare for the ${C.y+1} draft</button>${last||jucoOut?"":`<button class="opt" data-act="mcreturn">Return as a ${CLASSN[C.cls]}</button>`}${!last&&(isJuco(C.school)||(portalOK(C.y+1)&&!(C.transfers||[]).length))?`<button class="opt" data-act="mcportalgo">${isJuco(C.school)?"Transfer up (portal)":"Enter the transfer portal"}</button>`:""}</div>${jucoOut?`<p class="note" style="color:#c9cfe0">Two years is the JUCO limit. The portal or the draft. ${esc(C.bonds?.coach?.name||"Coach")} already packed.</p>`:""}
+    <div class="go"><button class="start" data-act="mcdeclare">Declare for the ${C.y+1} draft</button>${last||jucoOut?"":`<button class="opt" data-act="mcreturn">Return as a ${CLASSN[C.cls]}</button>`}${!last&&(isJuco(C.school)||(portalOK(C.y+1)&&!(C.transfers||[]).length))?`<button class="opt" data-act="mcportalgo">${isJuco(C.school)?"Transfer up (portal)":"Enter the transfer portal"}</button>`:""}</div>${jucoOut?`<p class="note" style="color:#c9cfe0">Two years is the junior college limit. The portal or the draft.</p>`:""}
     ${last?`<p class="note" style="color:#c9cfe0">Five years. Your college eligibility is used up.</p>`:""}</div></section>`;
 }
 function mcDraft(){
@@ -2369,7 +2377,7 @@ function watchNext(){
 }
 function nbaLive(h,a,playoff,label){
   const SD=nbaSD(h,a),side=h===G.userTid?0:1,mine=G.career&&!G.career.retired?G.career.pid:null,hero=(SD[side].ps.find(p=>p.pid===mine)||best(SD[side].ps,p=>p.ovr))?.pid;
-  const ctl=mkCtl(side,hero);ctl.mode=mine?(playMode()==="sim"?"watch":playMode()):"watch";const gen=liveGen(SD,nbaOpt(),ctl);gen.next();
+  const ctl=mkCtl(side,hero);ctl.mode=mine?(playMode()==="sim"?"watch":playMode()):"watch";const gen=liveGen(SD,{...nbaOpt(),boss:!!playoff},ctl);gen.next();
   render();openLive({gen,ctl,teams:[h,a],mine,label,year:G.year,no3:no3(),onDone:L=>{if(mine&&typeof C!=="undefined"&&C)C._played=ctl.mode!=="watch";G.preRes={h,a,L};if(G.phase==="season")simDay(false);else if(G.phase==="playoffs")playoffDay(false);G.preRes=null;save()}});
 }
 function myPair(cl){
@@ -2380,7 +2388,7 @@ function myPair(cl){
 function clWatch(){
   const cl=C.cl;let guard=0;while(cl.phase==="reg"&&!myPair(cl)&&guard++<40)clDay(false);
   const pr=myPair(cl);if(!pr){mcRender();return toast("No game to watch right now.")}
-  const SD=[clSide(cl,pr.h),clSide(cl,pr.a)],side=pr.h===C.school?0:1,ctl=mkCtl(side,"me");ctl.mode=playMode()==="sim"?"watch":playMode();const gen=liveGen(SD,clOpt(cl,{neutral:pr.neutral,watch:true}),ctl);gen.next();
+  const SD=[clSide(cl,pr.h),clSide(cl,pr.a)],side=pr.h===C.school?0:1,ctl=mkCtl(side,"me");ctl.mode=playMode()==="sim"?"watch":playMode();const gen=liveGen(SD,{...clOpt(cl,{neutral:pr.neutral,watch:true}),boss:cl.phase!=="reg"},ctl);gen.next();
   XW={players:cl.players,teams:cl.teams};mcRender();
   openLive({gen,ctl,teams:[pr.h,pr.a],mine:"me",college:true,halves:true,no3:cl.y<1986,court:{r3:col3(cl.y),lane:12,corner:col3(cl.y)},year:cl.y,label:cl.phase==="reg"?"Regular season":cl.phase==="ct"?"Conference tournament":"NCAA Tournament",
     onDone:L=>{C._played=ctl.mode!=="watch";cl.pre={h:pr.h,a:pr.a,L};clDay(false);cl.pre=null;saveC()}});
@@ -2696,7 +2704,7 @@ function aiPortal(cl){if(cl.y<2018)return;const moves=[];
     ps.slice(7).forEach(p=>{if(R()<(portalOK(cl.y)?.18:.08)&&p.ovr>=44){const to=pick(Object.keys(cl.teams).filter(x=>x!==s&&cl.teams[x].roster.length<CRMAX&&Math.abs(cl.teams[x].pres-t.pres)<35));if(!to)return;
       t.roster=t.roster.filter(x=>x!==p.pid);cl.teams[to].roster.push(p.pid);p.sid=to;p.no=freeNo(cl,to);moves.push([p,s,to])}})}
   const top=moves.sort((a,b)=>b[0].ovr-a[0].ovr).slice(0,4);if(top.length)clNews(cl,`Transfer portal: ${top.map(([p,a,b])=>`${p.name} (${a} → ${b})`).join(", ")}${moves.length>4?` and ${moves.length-4} more`:""}.`,"rec")}
-function portalOffers(){if(C.forceJuco&&!C.fate?.flags?.ret){return shuffle([...JUCOS]).slice(0,3)}const cl=C.cl,o=calcOvr(C.a,C.pos),h=C.hist[C.hist.length-1]||{ppg:0},want=clamp(25+o*.6+h.ppg*1.2*(isJuco(C.school)?.4:1),20,95)-(isJuco(C.school)?22:0);
+function portalOffers(){const cl=C.cl,o=calcOvr(C.a,C.pos),h=C.hist[C.hist.length-1]||{ppg:0},want=clamp(25+o*.6+h.ppg*1.2*(isJuco(C.school)?.4:1),20,95)-(isJuco(C.school)?22:0);
   const sch=Object.keys(cl.teams).filter(s=>s!==C.school&&!cl.teams[s].juco).sort((a,b)=>Math.abs(cl.teams[a].pres-want)-Math.abs(cl.teams[b].pres-want));return shuffle(sch.slice(0,10)).slice(0,4).sort((a,b)=>cl.teams[b].pres-cl.teams[a].pres)}
 function mcPortal(){C.portal??=portalOffers();const cl=C.cl;
   return mcHead("Transfer portal")+`<section class="hero" style="grid-template-columns:1fr"><div class="hero-txt"><div><button class="opt" data-act="mcback" data-v="decide">← Back</button></div><div class="kicker">${sl(C.y)} offseason · immediate eligibility</div><h2>Pick your next school</h2>
@@ -3244,7 +3252,7 @@ function drawPortrait(c,look,jersey,trim,num){const x=c.getContext("2d");x.image
   const sp0=hlSprite(hlOpts(look||{},jersey,trim,num,79,{}));x.drawImage(sp0,8,10,24,24,0,0,c.width,c.height)}
 
 /*RPG_BEGIN*/
-/* ---------- CAREER SKELETON: 2026 start, star tiers, backstory-gated recruiting, JUCO, five-year eligibility, the Prologue ---------- */
+/* ---------- CAREER SKELETON: 2026 start, star tiers, recruiting offers, eligibility ---------- */
 const START_Y=2026,LAST_DATA_Y=2025,ELIG=5;
 const STARS={5:{sp:300,n:"Five-star",tag:"No growth bonus.",d:"Every skill starts at 70."},
  4:{sp:300,n:"Four-star",tag:"+10% points per college level.",d:"Every skill starts at 65."},
@@ -3281,17 +3289,7 @@ function mcPrologue(){const P=plgPanels(),i=clamp(C.plg||0,0,P.length-1),p=P[i],
 function plgNav(d){const P=plgPanels();const n=(C.plg||0)+d;if(n>=P.length){plgFinish();return}C.plg=Math.max(0,n);saveC();mcRender()}
 function plgPick(v){const[k,j]=v.split(":");(C.plgPick??={})[k]=+j;saveC();mcRender()}
 function plgFinish(){C.bonds={};C.plgDone=true;C.offers=null;C.stage="offers";saveC();mcRender()}
-/* seed the rival onto a real roster and the friend onto yours; called when you commit to a school */
-function bondsSeed(){const cl=C.cl,b=C.bonds;if(!cl||!b||b.seeded)return;b.seeded=true;
-  if(b.rival){const pr=s=>cl.teams[s].pres,sch=Object.keys(cl.teams).filter(s=>s!==C.school&&!cl.teams[s].juco).sort((a,c)=>pr(c)-pr(a));
-    const pool=b.rival.where==="top"?sch.slice(0,10):b.rival.where==="mid"?sch.slice(10,50):sch.slice(0,30);const s=pick(pool);
-    const cand=cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&!p.real&&p.cls===1).sort((x,y)=>y.ovr-x.ovr)[0]||cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&!p.real)[0];
-    if(cand){const top=Math.max(...cl.teams[s].roster.map(id=>cl.players[id]?.ovr||0));cand.name=b.rival.name;cand.pos=C.pos;cand.ovr=Math.max(cand.ovr,calcOvr(C.a,C.pos)+ri(0,4),top+1);cand.rival=true;b.rival.pid=cand.pid;b.rival.school=s;cl.rivalPid=cand.pid;bondRivalSched(cl)}}
-  if(b.friend&&b.friend.k==="big"){const t=cl.teams[C.school];const fk=t.roster.map(id=>cl.players[id]).filter(p=>p&&!p.real&&p.pid!=="me").sort((x,y)=>x.ovr-y.ovr)[0];
-    if(fk){fk.name=b.friend.name;fk.pos="C";fk.ht=82;fk.cls=1;fk.friend=true;b.friend.pid=fk.pid}}
-  if(b.friend&&b.friend.k!=="big"){const sch=Object.keys(cl.teams).filter(s=>s!==C.school&&!cl.teams[s].juco);const s=pick(sch);const c=cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&!p.real&&p.cls===1)[0];if(c){c.name=b.friend.name;c.friend=true;b.friend.pid=c.pid;b.friend.school=s}}
-  if(b.coach)cl.teams[C.school].coach=b.coach.name.replace(/^Coach /,"")}
-/* ---- prologue scenes drawn with the hub's pieces ---- */
+function bondsSeed(){}
 function plgDraw(kind){const cv=$("plg-cv");if(!cv)return;const W=cv.clientWidth||800,H=cv.clientHeight||300,sc=clamp(Math.round(Math.min(W/400,H/180)),1,3),iw=Math.ceil(W/sc),ih=Math.ceil(H/sc);
   if(cv.width!==iw*sc||cv.height!==ih*sc){cv.width=iw*sc;cv.height=ih*sc}const g=cv.getContext("2d");g.setTransform(sc,0,0,sc,0,0);g.imageSmoothingEnabled=false;const floorY=Math.round(ih*.76),hc="#2f6fd6";
   let seed=hsh(kind+C.name);const rr=()=>{seed=(Math.imul(seed,1103515245)+12345)>>>0;return(seed>>>8)/16777216};
@@ -3329,7 +3327,7 @@ let PLGT=null;function plgLoop(){clearTimeout(PLGT);if(!$("plg-cv"))return;const
 
 /* =====================================================================
    MYCAREER RPG CORE: skills (point-buy), body, origins, traits, EXP, levels,
-   daily events, rested EXP, goals, respec + loadouts
+   goals, respec + loadouts
    ===================================================================== */
 const SKL=[
  ["CLS","Close shot","Shooting","Shots from 0 to 5 feet: floaters, hooks, putbacks."],
@@ -3379,14 +3377,6 @@ const TRAITS=[
  {k:"twoway",n:"Two-Way Mindset",up:"+5 to every defense skill",down:"-3 to every shooting skill",sk:{PER:5,INT:5,STL:5,BLK:5},skx:{CLS:-3,MID:-3,THR:-3,FT:-3}},
  {k:"bigfoot",n:"Heavy Feet",up:"+8 strength and +6 post moves",down:"-6 speed and -6 acceleration",sk:{STR:8,PST:6},skx:{SPD:-6,ACC:-6}},
  {k:"natural",n:"Natural Talent",up:"30 extra starting points",down:"Level-ups give 1 fewer skill point",sp:30,spLv:-1}];
-const DAYEV=[
- {k:"sun",n:"Rest Day Sunday",d:"Rested EXP builds twice as fast and quest rewards are doubled.",xp:1,q:2,rest:2,ic:"☾"},
- {k:"mon",n:"Double EXP Monday",d:"2x EXP from every game.",xp:2,ic:"2×"},
- {k:"tue",n:"Two-Drop Tuesday",d:"2x crate keys from games and quests.",xp:1,drop:2,ic:"🗝"},
- {k:"wed",n:"Brotherhood Wednesday",d:"2x friendship from Bond moments (Bonds arrive soon) and 1.5x EXP from wins.",xp:1,winx:1.5,bond:2,ic:"🤝"},
- {k:"thu",n:"Training Thursday",d:"+3 bonus skill points on every level-up.",xp:1,spB:3,ic:"+SP"},
- {k:"fri",n:"Friday Night Lights",d:"4x EXP from every game.",xp:4,ic:"4×"},
- {k:"sat",n:"Lucky Saturday",d:"1.5x EXP and 1.5x crate keys.",xp:1.5,drop:1.5,ic:"★"}];
 const today=()=>({k:"none",n:"",d:"",xp:1,q:1,rest:1,drop:1,winx:1,bond:1,spB:0,ic:""});
 const needXP=L=>xpNeed(L);
 const skCost=v=>{const R=rpgS();return costAt(v,grRef(R),grCeil(R))};
@@ -3422,22 +3412,24 @@ function rpgApply(){const R=rpgS();if(!R)return;const age=rpgAge(),s=rpgSkills(R
 function rpgPot(R,age){const s=rpgSkills(R,age),o=calcOvr(skToA(s),C?.pos||"SF");return clamp(Math.round(o+30+(R.body.ht-78)*1.2-Math.max(0,age-19)*3),50,99)}
 /* ---- EXP ---- */
 function spPerLv(R){return grantAt(R.lv,R)}
-function rpgRest(R){const now=Date.now();if(R.last){const h=(now-R.last)/36e5,cap=needXP(R.lv)*1.5;if(h>.25)R.rest=Math.min(cap,(R.rest||0)+h*needXP(R.lv)*.12*(today().rest||1)*(1+(typeof gearMods==="function"&&C?.gear?(gearMods().rest||0)+(C.spon?.active?.some(d=>d.pay&&d.pay.rest)?1:0):0)))}R.last=now}
+function rpgRest(R){R.last=Date.now()}
 function rpgXP(R,amt,why){if(!R||amt<=0)return 0;amt=Math.round(amt);R.exp+=amt;R.xpLog=[{t:why,x:amt},...(R.xpLog||[])].slice(0,12);let ups=0;
-  R.xpTot=(R.xpTot||0)+amt;{const src=R.xpSrc??={};const k=/^Practice/.test(why||'')?'prac':/pts/.test(why||'')?'game':'other';src[k]=(src[k]||0)+amt}while(R.lv<lvCap()&&R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const g=spPerLv(R);R.spLv=(R.spLv||0)+g;ups++;(R.pend??=[]).push({lv:R.lv,sp:g})}
+  R.xpTot=(R.xpTot||0)+amt;{const src=R.xpSrc??={};const k=/^Practice/.test(why||'')?'prac':/pts/.test(why||'')?'game':'other';src[k]=(src[k]||0)+amt}while(R.lv<lvCap()&&R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const g=spPerLv(R);R.spLv=(R.spLv||0)+g;ups++;(R.pend??=[]).push({lv:R.lv,sp:g});rpgLvBox(R.lv)}
   if(ups){rpgGoalsCheck(R)}return amt}
+/* advancement boxes */
+const BOXLV=[5,10,20,30,40,50,60];
+function rpgLvBox(L){if(!BOXLV.includes(L)||typeof gearBox!=="function")return;try{const it=gearBox(`Level ${L}`);if(it&&it.slot)toast(`Level ${L} box: ${GRAR[it.rar][0]} ${gName(it)} ${gStars(it)}`);else if(it&&it.shard)toast(`Level ${L} box: a perk shard`)}catch(e){console.error(e)}}
 /* one game for your player: line = {min,pts,reb,ast,stl,blk,fgm,fga,tpm}, w = won */
-function rpgGame(ln,w,kind,mg){const R=rpgS();if(!R||!ln)return;const ev=today();
+function rpgGame(ln,w,kind,mg){const R=rpgS();if(!R||!ln)return;
   const played=!!(C&&C._played)||!!window.__forcePlayed;if(C)C._played=false;
   if(!ln.min){rpgXP(R,15,"Practice reps");return}
   let x=35+2.6*ln.pts+2.2*ln.reb+2.6*ln.ast+4*((ln.stl||0)+(ln.blk||0))+(w?26:0)+(kind&&kind!=="reg"?40:0);x*=1+(STARX[R.stars||3]||0);
   x*=(typeof C!=="undefined"&&C&&C.stage!=="college")?XP_NBA:XP_COL;if(played)x*=XP_PLAYED;
-  let bonus=0;if(R.rest>0){bonus=Math.min(R.rest,x);R.rest-=bonus}
+  const bonus=0;
   const r=R.rec??={g:0,maxPts:0,maxAst:0,maxReb:0,maxSB:0,dd:0,st:0,bestSt:0,pts:0,w:0};r.g++;r.pts+=ln.pts;r.maxPts=Math.max(r.maxPts,ln.pts);r.maxAst=Math.max(r.maxAst,ln.ast);r.maxReb=Math.max(r.maxReb,ln.reb);r.maxSB=Math.max(r.maxSB,(ln.stl||0)+(ln.blk||0));
   if([ln.pts,ln.reb,ln.ast,ln.stl||0,ln.blk||0].filter(v=>v>=10).length>=2)r.dd++;if(w){r.w++;r.st++;r.bestSt=Math.max(r.bestSt,r.st)}else r.st=0;
-  R.keyFrac=(R.keyFrac||0)+(w?.34:.15)*(ev.drop||1);while(R.keyFrac>=1){R.keyFrac--;R.keys=(R.keys||0)+1}
-  rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${played?" · played":""}${bonus?" · rested":""}`);rpgGoalsCheck(R);try{originCheck()}catch(e){}if(window.__autoPrac)try{pracAuto()}catch(e){console.error(e)}
-  try{if(typeof C!=="undefined"&&C&&C.stage==="college"){attnGame(ln,w,kind,mg);for(const s of SLOTS){const it=C.gear?.eq?.[s];if(it)it.games=(it.games||0)+1}}}catch(e){console.error(e)}
+  rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${played?" · played":""}`);rpgGoalsCheck(R);try{originCheck()}catch(e){}if(window.__autoPrac)try{pracAuto()}catch(e){console.error(e)}
+  try{if(typeof C!=="undefined"&&C){attnGame(ln,w,kind,mg);gearGame(ln,w,kind,mg)}}catch(e){console.error(e)}
   R.lastGame={x:Math.round(x+bonus),b:Math.round(bonus)};if(typeof jobCheck==="function")setTimeout(jobCheck,0)}
 /* ---- goals: always three within reach ---- */
 const GOALS=[
@@ -3453,10 +3445,10 @@ const GOALS=[
 function rpgGoals(R){R.goals??={};const out=[];for(const[k,txt,ns,f,flag]of GOALS){const i=R.goals[k]||0;if(i>=ns.length)continue;const n=ns[i],v=f(R);out.push({k,t:txt.replace("{n}",n.toLocaleString()),n:flag?1:n,v:flag?(v?1:0):Math.min(v,n),i,pct:flag?(v?1:0):Math.min(1,v/n)})}
   return out.sort((a,b)=>b.pct-a.pct)}
 function rpgGoalsCheck(R){if(!R)return;let any=true,guard=0;while(any&&guard++<20){any=false;for(const g of rpgGoals(R))if(g.pct>=1){R.goals[g.k]=g.i+1;const xp=Math.round(needXP(R.lv)*.25);(R.done??=[]).unshift({t:g.t,x:xp});R.done=R.done.slice(0,30);
-      if(g.i>=1)R.keys=(R.keys||0)+Math.max(1,Math.round((today().drop||1)));R.exp+=xp;R.xpTot=(R.xpTot||0)+xp;(R.xpSrc??={}).goal=(R.xpSrc.goal||0)+xp;while(R.lv<lvCap()&&R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
-      (R.toast??=[]).push(`Goal complete: ${g.t} (+${xp.toLocaleString()} EXP${g.i>=1?", +1 crate key":""})`);any=true}}}
+      R.exp+=xp;R.xpTot=(R.xpTot||0)+xp;(R.xpSrc??={}).goal=(R.xpSrc.goal||0)+xp;while(R.lv<lvCap()&&R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
+      (R.toast??=[]).push(`Goal complete: ${g.t} (+${xp.toLocaleString()} EXP)`);any=true}}}
 /* ---- new careers start here ---- */
-function rpgNew(){return{v:1,origin:"custom",stars:3,tags:[],traits:[],body:{ht:78,wt:205,ws:82},pos:"SF",alloc:{},lv:1,exp:0,spLv:0,spBonus:0,rest:0,last:Date.now(),keys:0,goals:{},loads:[null,null,null],rec:null}}
+function rpgNew(){return{v:1,origin:"custom",stars:3,tags:[],traits:[],body:{ht:78,wt:205,ws:82},pos:"SF",alloc:{},lv:1,exp:0,spLv:0,spBonus:0,last:Date.now(),goals:{},loads:[null,null,null],rec:null}}
 function autoBuild(R,age,style){R.alloc={};const pri={shooter:["THR","MID","SIQ","FT","CLS","HND","PER","SPD","ACC","CLU"],slasher:["LAY","DNK","ACC","SPD","VRT","HND","DRW","CLS","STR","PER"],
     playmaker:["HND","PAS","VIS","ACC","MID","SPD","SIQ","STL","PER","THR"],twoway:["PER","STL","THR","MID","ACC","SPD","INT","VRT","SIQ","DRB"],big:["INT","BLK","DRB","ORB","CLS","DNK","PST","STR","VRT","STA"]}[style];
   let guard=0;while(rpgFree(R)>0&&guard++<4000){const s=rpgSkills(R,age);let best=null,bv=-1e9;pri.forEach((k,i)=>{const w=(10-i)*1.4-(s[k]-50)*.35;if(w>bv&&skCost(s[k])<=rpgFree(R)){bv=w;best=k}});if(!best)break;R.alloc[best]=(R.alloc[best]||0)+skCost(s[best])}}
@@ -3514,8 +3506,8 @@ function originEdges(kind,ctx,R){R=R||C?.rpg;if(!R)return[];const out=[];const p
   if(R.origin==="legacy"&&["cross","hesi","jab","pump","drive","post","screen","handoff"].includes(kind))out.push(["Their best defender",-1]);
   return out}
 /* every edge on one of your rolls: body, origin. kind = option key or shot type */
-function myEdges(kind,ctx,type){const R=C?.rpg;if(!R)return[];const jm=k=>typeof jobMods==="function"?jobMods(k):[];const a=[...bodyEdges(kind,R),...originEdges(kind,ctx,R)];for(const e of jm(kind))if(!a.some(x=>x[0]===e[0]))a.push(e);
-  if(type&&type!==kind){for(const e of [...bodyEdges(type,R),...originEdges(type,ctx,R),...jm(type)])if(!a.some(x=>x[0]===e[0]))a.push(e)}return a}
+function myEdges(kind,ctx,type){const R=C?.rpg;if(!R)return[];const jm=k=>typeof jobMods==="function"?jobMods(k):[];const ge=k=>typeof gearEdges==="function"?gearEdges(k,ctx,null):[];const a=[...bodyEdges(kind,R),...originEdges(kind,ctx,R)];for(const e of [...jm(kind),...ge(kind)])if(!a.some(x=>x[0]===e[0]))a.push(e);
+  if(type&&type!==kind){for(const e of [...bodyEdges(type,R),...originEdges(type,ctx,R),...jm(type),...ge(type)])if(!a.some(x=>x[0]===e[0]))a.push(e)}return a}
 function originCheck(){try{const R=C?.rpg;if(!R||R.oPerk||R.oOffered||(R.lv||1)<5)return;R.oOffered=true;const pool=OPOOL[R.origin]||OPOOL.custom;
   lifeRoll({title:"Level five",quiet:true,txt:[`~Level five. One edge, your choice. It stays with you.`],mods:[],dc:0,opts:pool.map(k=>({t:OPERKS[k].n,d:OPERKS[k].d,go:()=>{R.oPerk=k;saveC();return[`~${OPERKS[k].n}. It is on your card now.`]}}))})}catch(e){console.error(e)}}
 /* ---------- practice: two drills per game week, each a short chain of rolls ---------- */
@@ -3550,164 +3542,180 @@ window.__growth={costRange,grantAt,grantsTo,xpNeed,GR_K,check(){const R0={stars:
   let xc=0;for(let L=1;L<20;L++)xc+=xpNeed(L);let xn=0;for(let L=20;L<LVCAP;L++)xn+=xpNeed(L);
   return{spAtCap:tot,costMaxAll:need,ratio:+(tot/need).toFixed(4),xpCollegeTo20:xc,xpNbaTo70:xn,grantLv10:grantAt(10,R0),grantLv70:grantAt(70,R0),costOneSkill:costRange(NBA_FLOOR,SKCEIL,SKREF_NBA,SKCEIL)}}};
 
-/* ---------- ATTENTION, SPONSORS, THE LOCKER ---------- */
-/* Attention 0-100 decides who can see you. Reputation 0-100 is what they think when they do. */
-function attnBase(){const t=C?.cl?.teams?.[C.school];if(!t)return 2;if(t.juco)return 2;return t.pres>=80?40:t.pres>=60?25:t.pres>=40?12:6}
-function attnInit(){if(C.attn==null){C.attn=Math.max(attnBase(),(typeof ORIGINS!=="undefined"&&ORIGINS.find(o=>o.k===C.rpg?.origin)?.attn)||0);C.rep=50;C.cash=0;C.spon={active:[],offers:[],seen:[],log:[]};C.gear={eq:{},bag:[],pity:{r:0,e:0},mem:{}};C.attnLog=[]}}
+/* ---------- ATTENTION and SPONSORS. Attention 0-100 decides which set-makers can see you and how many deals you can hold. A deal pays NIL money every week and makes its set drop more. ---------- */
+function attnBase(){const t=C?.cl?.teams?.[C.school];if(!t)return 2;return t.pres>=80?40:t.pres>=60?25:t.pres>=40?12:6}
+function attnInit(){if(C.attn==null){C.attn=Math.max(attnBase(),(typeof ORIGINS!=="undefined"&&ORIGINS.find(o=>o.k===C.rpg?.origin)?.attn)||0);C.spon={active:[],offers:[],seen:[],log:[]};C.attnLog=[]}
+  C.spon??={active:[],offers:[],seen:[],log:[]};C.attnLog??=[];if(C.spon.active.some(d=>d.person||!d.set)){C.spon.active=C.spon.active.filter(d=>!d.person&&d.set)}if(C.spon.offers.some(d=>d.person||!d.set))C.spon.offers=C.spon.offers.filter(d=>!d.person&&d.set)}
 function attnAdd(n,why){attnInit();const was=C.attn;C.attn=clamp(Math.round(C.attn+n),0,100);if(Math.round(n))C.attnLog=[{t:why,x:Math.round(n)},...(C.attnLog||[])].slice(0,14);
-  if(was<15&&C.attn>=15)archSay("Somebody posted the clip. People know your name now. Not many. Some.","The first spike");
-  if(was<40&&C.attn>=40)archSay("Forty. You have a second slot in your life. Spend it on a person; the brands will find you anyway.","Attention 40");
-  if(was<70&&C.attn>=70)archSay("Seventy. National. Your mother's coworkers ask about you. She says you are fine. You should call her.","Attention 70")}
-function repAdd(n,why){attnInit();C.rep=clamp(Math.round(C.rep+n),0,100)}
-function slots(){attnInit();return C.stage==="done"?4:C.attn>=70?3:C.attn>=40?2:1}
-function judgment(){const s=C.sk||{};return Math.round(((s.SIQ||50)-50)/10+((s.VIS||50)-50)/20+(((C.bonds?.mother?.lv)||50)-50)/25)}
+  if(was<15&&C.attn>=15)archSay(["~Attention fifteen. Somebody posted the clip. The local brands can see you now."],"Attention",{quiet:true,sys:true});
+  if(was<40&&C.attn>=40)archSay(["~Attention forty. Regional. A second deal slot, and the bigger set-makers."],"Attention",{quiet:true,sys:true});
+  if(was<70&&C.attn>=70)archSay(["~Attention seventy. National. Three slots. Everybody can see you."],"Attention",{quiet:true,sys:true})}
+function slots(){attnInit();return C.attn>=70?3:C.attn>=40?2:1}
 /* game hook: called from rpgGame */
 function attnGame(ln,w,kind,mg){attnInit();let n=0;const why=[];
   if(ln.pts>=35){n+=3;why.push("35-point game")}else if(ln.pts>=28){n+=1;why.push("28-point game")}
-  if(kind&&kind!=="reg"&&w){n+=kind==="ncaa"?10:4;why.push(kind==="ncaa"?"tournament win":"March")}
+  if(kind&&kind!=="reg"&&w){n+=kind==="ncaa"?10:kind==="po"?6:4;why.push(kind==="ncaa"?"tournament win":kind==="po"?"playoff win":"March")}
   if(mg&&mg.ork&&mg.ork<=10&&w&&!apRk(C.cl,C.school)){n+=4;why.push("upset")}
-  const gp=C.season?.tot?.gp||0;if((ln.pts>=30||(mg&&mg.ork&&mg.ork<=5&&w))&&gp-(C.lastViral||-9)>=6){const roll=1+Math.floor(R()*20),mod=((C.rpg?.traits||[]).includes("showman")?2:0)+(C.bonds?.friend?.k==="manager"?2:0);if(roll+mod>=17){C.lastViral=gp;const v=5+Math.floor(R()*8);n+=v;why.push("the clip went viral");C.spon.log.unshift({t:`A clip from the ${mg?.opp||"game"} game passed a million views.`,y:C.y})}}
+  const gp=C.season?.tot?.gp||0;if((ln.pts>=30||(mg&&mg.ork&&mg.ork<=5&&w))&&gp-(C.lastViral||-9)>=6){const roll=1+Math.floor(R()*20);if(roll>=17){C.lastViral=gp;const v=5+Math.floor(R()*8);n+=v;why.push("the clip went viral")}}
   if(n)attnAdd(n,why.join(", "));
-  sponsorMoment(ln,w,kind,mg);}
+  sponsorMoment(ln,w,kind,mg)}
 /* weekly hook: rankings, decay, payouts */
 function attnWeek(){attnInit();const nba=typeof G!=="undefined"&&G?.career&&C.stage!=="college";const rk=nba?0:apRk(C.cl,C.school);let n=nba?-1:-1.5;if(rk)n+=rk<=3?2:rk<=10?1.5:1;if(nba){const t=user();if(t&&t.w>t.l*1.5)n+=1.5}attnAdd(n,rk?`AP #${rk}`:nba?"the league":"quiet week");C.week=(C.week||0)+1;
-  for(const d of C.spon.active){d.wk=(d.wk||0)+1;if(d.pay.crate&&d.wk%4===0){C.rpg.keys=(C.rpg.keys||0)+d.pay.crate;C.spon.log.unshift({t:`${d.name}: ${d.pay.crate} crate key${d.pay.crate>1?"s":""} arrived.`,y:C.y})}if(d.pay.cash){C.cash+=d.pay.cash/4}if(d.pay.attn&&d.wk%2===0)attnAdd(d.pay.attn,d.name)}
-  C.posted=false}
-/* social media: one post a week, a Judgment roll */
-function socialPost(){attnInit();if(C.posted){toast("You already posted this week.");return}C.posted=true;const roll=1+Math.floor(R()*20),mod=judgment()+((C.rpg?.origin==="scholar")?2:0),tot=roll+mod;
-  if(roll===1){attnAdd(4,"the screenshot");repAdd(-8,"screenshot");archSay(`Natural 1. You posted it. You deleted it. Four thousand people had already saved it. Reputation −8. Attention +4, which is the problem with Attention.`,"The post")}
-  else if(tot>=10){const v=(C.rpg?.origin==="blacktop")?4:2;attnAdd(v,"a post that landed");archSay(`${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot} vs DC 10. It landed. +${v} Attention. Nobody screenshotted anything. This time.`,"The post")}
-  else{repAdd(-3,"a post that did not land");archSay(`${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot} vs DC 10. It did not land. Reputation −3. The replies are mostly about your shoes.`,"The post")}
-  saveC();csWins()}
-/* ===== the pool ===== */
+  let pay=0;for(const d of C.spon.active){d.wk=(d.wk||0)+1;pay+=d.pay}
+  let stip=0;if(nba){try{const me=P(G.career.pid);stip=Math.round((me?.contract?.amt||1e6)*.0007)}catch(e){stip=700}}else{const t=C.cl?.teams?.[C.school];stip=Math.round(((t&&t.pres)||30)*40)}
+  if(typeof nilAdd==="function"){if(pay)nilAdd(pay,"from your deals");if(stip)nilAdd(stip,nba?"from your contract":"program stipend")}}
+/* ===== the set-makers ===== */
 const BRANDS=[
- {k:"bluelot",n:"Blue Lot Used Cars",tier:0,pay:{cash:400,item:"earl"},clause:"Two commercials a year in which you hold keys and smile.",agenda:"The owner is Coach's brother-in-law.",intro:"Blue Lot has watched you play twice and would like to give you a 2014 sedan. The sedan is named Earl. I did not name it. Earl has a check-engine light that Blue Lot describes as \"informational.\" Your mother will receive $400 a month, which is the first number in this game that matters."},
- {k:"dubs",n:"Dub's Barbershop",tier:0,pay:{swag:1},clause:"You get cut there before every home game, including the 8 a.m. ones.",agenda:"Dub knows every scout who sits in his chair.",intro:"Dub has a chair with your name on it, written on tape. He would like you in it before every home game. In exchange: a lifetime of free cuts and one point of Swagger, which Dub insists is the same thing."},
- {k:"pinestreet",n:"Pine Street Tacos",tier:0,pay:{crate:1},clause:"A menu item is named after you. It is a mistake and you must defend it publicly.",agenda:"None. Tacos.",intro:"Pine Street Tacos would like to name a menu item after you. They have already done it. It has pineapple on it. A Locker Crate a month to say you like it on camera."},
- {k:"midstate",n:"Mid-State Tire & Lube",tier:0,pay:{cash:250},clause:"A billboard by the highway with your face at 1.4x life size.",agenda:"The owner wants to be a booster and does not know the rules.",intro:"Mid-State Tire & Lube wants your face on the highway, slightly larger than life. $250 a month and free rotations for Earl. The owner asked me whether this counts as a booster payment. I told him I am a narrator."},
- {k:"brightline",n:"Brightline Dental",tier:0,pay:{swag:1,cash:100},clause:"Six cleanings a year, on camera.",agenda:"The dentist owns the naming rights to the JUCO gym.",intro:"Brightline Dental would like to be responsible for your smile. Six cleanings a year, filmed. The dentist also owns the name on the gym you play in, which he mentions twice."},
- {k:"crispy",n:"CRISPY™ Compression Wear",tier:1,pay:{crate:1,item:"answer"},clause:"Their logo lives on your left arm. You may not cover it with a wristband you like more.",agenda:"They want the arm. A year later they want the number.",intro:"CRISPY would like you to know they \"saw something in you.\" What they saw was a 14-second clip, viewed 1.1 million times, 40% of those by bots. One Locker Crate a month and the exclusive right to your left arm. Their legal team has asked me to remind you that Crispy is a lifestyle."},
- {k:"harbor",n:"Harbor Nutrition",tier:1,pay:{crate:1,rare:1},clause:"You endorse a powder. The powder is fine. The ads say \"fine\" in a way that gets a letter from Compliance.",agenda:"Owned by Vantage.",intro:"Harbor Nutrition makes a powder. They describe it as fine. A Legendary-eligible crate on signing and a crate a month after. Their parent company is not listed on the contract, which I noticed, and which you may not."},
- {k:"stanthony",n:"Saint Anthony's Credit Union",tier:1,pay:{cash:300,crate:1},clause:"One financial literacy seminar a semester, delivered by you, to freshmen who do not listen.",agenda:"None, which I find suspicious.",intro:"Saint Anthony's Credit Union would like to open a fund in your name and have you explain compound interest to eighteen-year-olds. $300 a month to your mother. I have read the whole contract. There is nothing in it. I have read it twice."},
- {k:"northgate",n:"Northgate Mattress",tier:1,pay:{rest:2},clause:"Your sleep schedule is posted weekly.",agenda:"They are tracking your rested EXP for a study.",intro:"Northgate Mattress will double your rested EXP in exchange for your sleep schedule, posted weekly, to an audience that is mostly Northgate Mattress."},
- {k:"truform",n:"TruForm Trainers",tier:1,pay:{gear:"acc"},clause:"You train with their guy, who is replacing Coach's warm-up.",agenda:"The trainer is good. Coach notices.",intro:"TruForm would like to replace your warm-up with their warm-up. Their guy is good. Coach watched the first session from the doorway and did not say anything, which for Coach is saying something."},
- {k:"lantern",n:"Lantern Tutoring",tier:1,pay:{rep:1},clause:"Twice-weekly sessions, on game-day mornings.",agenda:"The tutor wants a quote for the website.",intro:"Lantern Tutoring will keep you eligible for free in exchange for your game-day mornings. The tutor already knows your schedule. The tutor already knows a lot."},
- {k:"vellum",n:"Vellum Streaming",tier:1,pay:{attn:3},clause:"Everything you say on stream belongs to them.",agenda:"They clip the worst line.",intro:"Vellum would like you to stream. Three Attention a week while you are live. Everything you say on stream belongs to Vellum, including the thing you will say in week six."},
- {k:"hendry",n:"The Hendry Group",tier:2,pay:{rare:1,item:"suit"},clause:"Exclusive representation \"when the time comes.\" The time comes whenever they say.",agenda:"They are the agent at the gate, with letterhead.",intro:"The Hendry Group represents eleven players you have heard of. They would like to represent you, eventually, exclusively, at a time of their choosing. A suit arrives in the mail. It fits. The contract was in the pocket."},
- {k:"kinetic",n:"Kinetic Sports Drink",tier:2,pay:{crate:2,gear:"clu"},clause:"You cannot be seen holding water on camera.",agenda:"Nothing darker than that. I find this exhausting.",intro:"Kinetic would like to be the only liquid you hold on camera. Two crates a month and a bottle that improves your Clutch, by which they mean the bottle is blue. I looked for an agenda. There is not one. It is just the water thing."},
- {k:"apex",n:"Apex Footwear",tier:2,pay:{crate:2,gear:"vert"},clause:"Shoes only. Resoled Sophomore Shoes are breach of contract.",agenda:"They drop you the day the rival signs.",intro:"Apex is offering a colorway. Your colorway. Two crates a month and shoes that add to your Vertical, which is what shoes do in advertisements. The contract names every other shoe you own, by brand, and forbids them."},
- {k:"meridian",n:"Meridian Wireless",tier:2,pay:{cash:600},clause:"Your phone is theirs, including the messages.",agenda:"They know about the party before you do.",intro:"Meridian Wireless will pay your mother $600 a month and give you a phone. The phone is theirs. The messages on it are theirs. They have not said what they do with them. I have a guess."},
- {k:"goldstd",n:"Gold Standard Insurance",tier:2,pay:{cash:350,rep:1},clause:"A clause about \"conduct\" that I will read twice.",agenda:"They pay the friend's hospital bill. Quietly.",intro:"Gold Standard would like to insure your career. There is a clause about conduct. I am going to read it to you twice. The second time, listen."},
- {k:"rook",n:"Rook Gaming Chairs",tier:2,pay:{attn:5},clause:"A stream a week, in the chair.",agenda:"The chair is fine.",intro:"Rook would like you in a chair, streaming, once a week. Five Attention a week. The chair is fine. That is the whole deal. Sometimes it is."},
- {k:"halcyon",n:"Halcyon Watches",tier:2,pay:{rep:2,item:"watch"},clause:"You wear it at the draft and in court.",agenda:"It stops the night the Fate card fires. I will not say anything.",intro:"Halcyon makes watches for people who are about to be photographed. Two Reputation and a watch you will wear at the draft and, the contract specifies, in court, should it come to that. I thought that was a strange thing to specify."},
- {k:"parkside",n:"Parkside Realty",tier:1,pay:{cash:200,house:5},clause:"Five years with the same sponsor.",agenda:"They will sell it the week you leave the state.",intro:"Parkside Realty will buy your mother a house in five years if you stay with them for five years. I did the math on what happens if you leave in year four. So did they."},
- {k:"overtime",n:"Overtime Energy",tier:1,pay:{gear:"sta"},clause:"A can in every post.",agenda:"Owned by the rival's father.",intro:"Overtime Energy would like a can in every post. The can improves Stamina, allegedly. The company is owned by a man whose last name you will recognize from a roster."},
- {k:"summit",n:"Summit Outfitters",tier:2,pay:{rare:1,item:"jacket"},clause:"Only in March.",agenda:"They make the ladders you cut nets from.",intro:"Summit only sponsors March. A crate that can roll Legendary and a jacket you may wear for one month a year. They also make the ladders. Every net you have ever seen cut was cut from a Summit."},
- {k:"ledger",n:"The Ledger",tier:1,pay:{attn:2},clause:"One episode a month in which you say something.",agenda:"The host is the journalist from the people pool.",intro:"The Ledger is a podcast network. They would like an episode a month in which you say something. Not anything. Something. Two Attention a week. The host already has a file on you and it is flattering, so far."},
- {k:"vantage",n:"Vantage",tier:9,pay:{crate:4,cash:5000,attn:10},clause:"Everything.",agenda:"I know this one.",intro:"Vantage. Everything you want. I know this one."}];
-const PEOPLE=[
- {k:"dub_p",n:"Dub (the barber)",tier:0,person:true,wants:"Your chair every game day",later:"He hears every scout. He tells you which ones are lying.",pay:{swag:1},intro:"Dub, again, but as a person this time. He wants nothing from you except Thursdays. He hears everything in that chair, and he is willing to tell you which of it is true."},
- {k:"marisol",n:"Marisol (the trainer)",tier:1,person:true,wants:"Three mornings a week, 6 a.m.",later:"Your NBA trainer, who knows your knee was never the problem.",pay:{gear:"sta"},intro:"Marisol trains people who are about to be famous and people who used to be. She wants three mornings a week at six. She does not want money yet. That is how you know she is good."},
- {k:"lyle",n:"Pastor Lyle",tier:0,person:true,wants:"Sundays",later:"The courtroom. He speaks for you when Coach cannot.",pay:{rep:1},intro:"Pastor Lyle wants your Sundays. He does not say what for. He has sat in a courtroom for other boys from your block and he is telling you this in the gentlest possible way."},
- {k:"nia",n:"Nia (the journalist)",tier:1,person:true,wants:"One honest answer a month",later:"The profile that moves you up a draft board, or the piece that ends a career. Depends on the month.",pay:{attn:2},intro:"Nia writes long and publishes rarely. She wants one honest answer a month. She will know if it is not. What she does with it depends on the month."},
- {k:"rico",n:"Rico (sneaker reseller)",tier:0,person:true,wants:"Game-worn shoes",later:"The Apex contact. He sets up the signature deal, or he sells your pair the night you lose.",pay:{cash:150},intro:"Rico resells shoes. He would like yours, worn. He pays in cash and in introductions. One of the introductions is Apex. One of them is a man named Lonnie, and I would skip that one."},
- {k:"tasha",n:"The manager who films",tier:1,person:true,wants:"Access",later:"A production company with your name on it.",pay:{attn:3},req:"manager",intro:"She has four years of your highlights on a hard drive and would like the next four. Three Attention a week, rising with views. She will also have the lowlights. She has always had the lowlights."},
- {k:"ray",n:"Uncle Ray",tier:0,person:true,wants:"To be seen with you",later:"He introduces you to your father's agent. That is not a gift.",pay:{cash:100},req:"legacy",intro:"Uncle Ray would like to be seen with you. He knows your father's agent. He says this like it's a gift. It is not, but it is information."},
- {k:"bell",n:"Coach Bell (the JUCO coach)",tier:0,person:true,wants:"A season of your best",later:"A recommendation that opens the Return card.",pay:{rep:2},req:"juco",intro:"Coach Bell has sent eleven players to Division I and does not mention it. He wants one season of your best. In exchange, a phone call to someone who passed on you, at the right moment, in your favor."},
- {k:"prof",n:"The Professor",tier:0,person:true,wants:"Office hours",later:"The letter that keeps you eligible, or the law-school reference you use at 35.",pay:{rep:1},req:"scholar",intro:"The Professor would like you at office hours. Not for help. For company, she says, which is a lie, and for a letter later, which is not."},
- {k:"lonnie",n:"Lonnie (the bookie)",tier:0,person:true,wants:"Information",later:"A debt you did not know you had.",pay:{cash:800},cursed:true,intro:"Lonnie would like to know how your ankle feels. He pays well for conversation. I am going to say this once, in plain language, because the dice are not involved yet: do not."},
- {k:"yusuf",n:"Yusuf (the local rapper)",tier:1,person:true,wants:"A verse in which you appear",later:"Your walk-out music and a fanbase that does not watch basketball.",pay:{attn:4},intro:"Yusuf has a verse with your name in it and would like your permission after the fact. Four Attention a week from people who have never seen a basketball game and now have a reason to."},
- {k:"okafor",n:"Mrs. Okafor (the booster)",tier:1,person:true,wants:"Dinner once a month",later:"A job for your mother and a Compliance file for you.",pay:{cash:500},cursed:true,intro:"Mrs. Okafor would like you at dinner once a month. The food is excellent. Your mother would have a job by Tuesday. Compliance would have a file by Wednesday."},
- {k:"vince",n:"Vince (the retired player)",tier:2,person:true,wants:"To tell you about his knee",later:"The only person who tells you the truth about the Hendry Group.",pay:{rep:2},intro:"Vince played nine years and talks about his knee like it's a person who left him. He wants to tell you about it. He is the only one who will tell you the truth about the Hendry Group, so listen to the knee first."},
- {k:"sam",n:"Sam (the equipment manager)",tier:0,person:true,wants:"Your old gear",later:"The hospital wristband. He was there.",pay:{crate:1},intro:"Sam runs the equipment room and would like your old gear, for reasons he does not explain. He gives you a crate a month from a closet nobody else has a key to."},
- {k:"kid",n:"The kid in the stands",tier:0,person:true,wants:"Your autograph, once",later:"The Replacement, ten years early.",pay:{swag:1},intro:"There is a kid in the stands who has been there every game. He would like an autograph. Once. He will not ask again. I am telling you now so that in ten years you understand why he knows your plays."},
- {k:"dre_p",n:"Dre",tier:0,person:true,wants:"Nothing yet",later:"Everything, later.",pay:{rep:1},intro:"Dre wants nothing. That is the deal. I have seen a lot of deals and this is the only one I would sign without reading."}];
-const GEN={arch:[["apparel","Apparel","a tee with your number on it, slightly wrong","Apparel"],["local","a local business","a sandwich named after you","Deli"],["trainer","a trainer","a warm-up you did not ask for","Performance"],["media","a podcast","forty minutes a month of you saying something","Podcast"],["agent","a representation group","a suit that fits","Group"],["booster","a booster","dinner","Foundation"],["nutrition","a supplement company","a powder described as fine","Nutrition"],["app","an app","your face on a loading screen","App"],["bank","a bank","a seminar","Savings Bank"],["dealer","a dealership","a car with a name","Motors"],["restaurant","a restaurant","a booth","Grill"],["barber","a barbershop","a chair","Barbershop"],["church","a congregation","Sundays","Fellowship"],["landlord","a property company","an apartment with a view of the practice facility","Properties"]],
-  names:["Harbor","Lakeside","North Loop","Westgate","Pine Street","Summit","Granite","Blue Lot","Ridge","Union","Prairie","Capitol","Oak Park","Riverside","Midtown","Southside","Crescent","Beacon","Atlas","Canyon"],
-  clauses:["They own your left arm.","Two commercials a year holding something and smiling.","One post a week with the product visible.","You may not be seen with the competitor's product, which they define broadly.","A seminar a semester.","An appearance at the owner's kid's birthday party, annually.","Your number on the product, slightly wrong.","Exclusive representation at a time of their choosing.","A clause about conduct, read twice.","Everything you say on their platform belongs to them.","A billboard, 1.4x life size.","You endorse the product, which is fine.","You wear it at the draft.","You wear it in court, should it come to that.","Five years, or the deal reverses."],
-  agendas:["None. I checked twice.","The owner wants to be a booster and does not know the rules.","Owned by a company you have not heard of yet.","The owner is related to someone on your coaching staff.","They want the arm, then the number.","They clip the worst line.","They are tracking you for a study.","They will sell it the week you leave.","They know about the party before you do.","They are the agent at the gate, with letterhead.","The owner's kid plays your position at a rival school.","They are good at this, which is worse."]};
-function genSponsor(){attnInit();const seen=C.spon.seen;let s;for(let i=0;i<8;i++){const a=pick(GEN.arch),n=pick(GEN.names),k="g:"+a[0]+":"+n;if(seen.includes(k))continue;
-    const tier=C.attn>=70?2:C.attn>=40?1:0,pay=tier===0?{cash:100+ri(0,3)*50}:tier===1?{crate:1,cash:ri(1,3)*100}:{crate:2,cash:ri(3,8)*100,attn:ri(1,3)};
-    s={k,n:`${n} ${a[3]}`,tier,pay,clause:pick(GEN.clauses),agenda:pick(GEN.agendas),gen:true,intro:`${n} ${a[1].replace(/^an? /,"")} would like you to know they saw something in you. What they saw was ${C.attn>=40?"the clip":"a box score"}. They are offering ${payText(pay)} and ${a[2]}.`};break}
-  return s}
-function payText(p){const o=[];if(p.crate)o.push(`${p.crate} Locker Crate${p.crate>1?"s":""} a month`);if(p.rare)o.push("a Rare-or-better crate on signing");if(p.cash)o.push(`$${p.cash} a month in NIL money`);if(p.attn)o.push(`+${p.attn} Attention a week`);if(p.swag)o.push(`+${p.swag} Swagger`);if(p.rep)o.push(`+${p.rep} Reputation a month`);if(p.rest)o.push("double rested EXP");if(p.gear)o.push("a piece of gear");if(p.item)o.push("an item");if(p.house)o.push("a house, in five years");return o.join(", ")||"nothing you can hold"}
-/* who can see you right now */
+ {k:"apex",n:"Apex Footwear",set:"apex",tier:1,pay:5000,clause:"Shoes only. Nothing else on your feet, on camera or off."},
+ {k:"crispy",n:"CRISPY Compression Wear",set:"crispy",tier:0,pay:2000,clause:"Their logo lives on your left arm."},
+ {k:"kinetic",n:"Kinetic Sports Drink",set:"kinetic",tier:1,pay:5000,clause:"You cannot be seen holding water on camera."},
+ {k:"truform",n:"TruForm Trainers",set:"truform",tier:0,pay:2000,clause:"You train with their guy, who replaces the warm-up."},
+ {k:"harbor",n:"Harbor Nutrition",set:"harbor",tier:1,pay:5000,clause:"You endorse a powder. The powder is fine."},
+ {k:"summit",n:"Summit Outfitters",set:"summit",tier:2,pay:12000,clause:"Only in March and the playoffs. They make the ladders."},
+ {k:"apex2",n:"Apex Signature",set:"apex",tier:2,pay:12000,clause:"Your colorway. The contract names every other shoe you own and forbids them."},
+ {k:"crispy2",n:"CRISPY Pro",set:"crispy",tier:2,pay:12000,clause:"They want the arm, then the number."},
+ {k:"kinetic2",n:"Kinetic Elite",set:"kinetic",tier:2,pay:12000,clause:"A can in every post."},
+ {k:"truform2",n:"TruForm Performance",set:"truform",tier:1,pay:5000,clause:"Your sleep schedule is posted weekly."},
+ {k:"harbor2",n:"Harbor Labs",set:"harbor",tier:2,pay:12000,clause:"Six commercials a year in which you hold the powder and smile."},
+ {k:"summit0",n:"Summit Local",set:"summit",tier:0,pay:2000,clause:"A billboard by the highway, 1.4 times life size."},
+ {k:"vantage",n:"Vantage",set:"vantage",tier:9,pay:40000,clause:"Everything."}];
 function sponsorPool(){attnInit();const a=C.attn,tier=a>=70?2:a>=40?1:a>=15?0:-1;const have=new Set([...C.spon.active.map(d=>d.k),...C.spon.offers.map(d=>d.k)]),seen=C.spon.seen;
-  const ok=s=>{if(have.has(s.k))return false;if(s.tier===9)return C.stage==="done"&&a>=70;if(tier<0)return s.tier===0&&["bluelot","dubs","brightline","kid","sam","lyle"].includes(s.k)&&a>=6;if(s.tier>tier)return false;
-    if(s.req==="manager"&&C.bonds?.friend?.k!=="manager")return false;if(s.req==="legacy"&&C.rpg?.origin!=="legacy")return false;if(s.req==="scholar"&&C.rpg?.origin!=="scholar")return false;if(s.req==="juco"&&!isJuco(C.school))return false;return true};
-  const pool=[...BRANDS,...PEOPLE].filter(ok);const fresh=pool.filter(s=>!seen.includes(s.k));return fresh.length?fresh:pool}
+  const ok=s=>{if(have.has(s.k))return false;if(s.tier===9)return C.stage!=="college"&&a>=85;if(tier<0)return s.tier===0&&a>=6;return s.tier<=tier};
+  const pool=BRANDS.filter(ok);const fresh=pool.filter(s=>!seen.includes(s.k));return fresh.length?fresh:pool}
 function sponsorMoment(ln,w,kind,mg){attnInit();if(C.spon.offers.length>=2)return;const a=C.attn;let p=a<6?0:a<15?.06:a<40?.12:.2;if(ln.pts>=25)p+=.15;if(kind&&kind!=="reg"&&w)p+=.2;if(mg?.ork&&mg.ork<=10&&w)p+=.15;
-  if(R()>p)return;const pool=sponsorPool();let s=pool.length&&R()<.8?pick(pool):genSponsor();if(!s)return;C.spon.offers.push({...s,when:C.y});C.spon.seen.push(s.k);try{localStorage.setItem("hoopsSeen",JSON.stringify([...new Set([...(JSON.parse(localStorage.getItem("hoopsSeen")||"[]")),s.k])].slice(-200)))}catch(e){}
-  archSay(s.intro+(s.clause&&!s.person?` The clause: ${s.clause}`:s.person?` Wants: ${s.wants}.`:"")+" Accept? Rolls: none. Regret: pending.",`New ${s.person?"person":"sponsor"}: ${s.n}`,{offer:s.k})}
-function sponsorAccept(k){attnInit();const i=C.spon.offers.findIndex(o=>o.k===k);if(i<0)return;if(C.spon.active.length>=slots()){toast(`No free slot. You have ${slots()} in your life right now.`);return}const s=C.spon.offers.splice(i,1)[0];s.wk=0;s.since=C.y;C.spon.active.push(s);
-  const p=s.pay;if(p.rare){C.rpg.keys=(C.rpg.keys||0)+1;C.gear.pity.r=99}if(p.crate)C.rpg.keys=(C.rpg.keys||0)+p.crate;if(p.item)grantItem(p.item,s.n);if(p.gear)grantItem("gear_"+p.gear,s.n);if(p.cash)C.cash+=p.cash;if(p.swag)C.swag=(C.swag||0)+p.swag;if(p.rep)repAdd(p.rep*2,s.n);
-  C.spon.log.unshift({t:`Signed with ${s.n}.${s.agenda&&!s.person?"":""}`,y:C.y});attnAdd(s.person?1:3,"a new deal");saveC();csWins()}
-function sponsorDecline(k){attnInit();const i=C.spon.offers.findIndex(o=>o.k===k);if(i<0)return;const s=C.spon.offers.splice(i,1)[0];C.spon.log.unshift({t:`Passed on ${s.n}.`,y:C.y});if(s.k==="lonnie")repAdd(3,"saying no to Lonnie");saveC();csWins()}
-function sponsorDrop(k){attnInit();const i=C.spon.active.findIndex(o=>o.k===k);if(i<0)return;const s=C.spon.active.splice(i,1)[0];repAdd(-4,"a broken deal");C.spon.log.unshift({t:`Walked away from ${s.n}. Reputation −4.`,y:C.y});saveC();csWins()}
-/* ===== the Architect speaks (non-blocking card, queued) ===== */
+  if(R()>p)return;const pool=sponsorPool();if(!pool.length)return;const s=pick(pool);C.spon.offers.push({...s,when:C.y});C.spon.seen.push(s.k);
+  const S=typeof GSETS!=="undefined"?GSETS[s.set]:null;
+  archSay([`~${s.n} would like a deal. $${s.pay.toLocaleString()} a week in NIL money.`,`~The clause: ${s.clause}`,S?`~While it runs, ${S.n} gear drops twice as often. ${S.n} set: ${S.tt} with two pieces. ${S.four.t} with four.`:""].filter(Boolean),`Offer: ${s.n}`,{offer:s.k,quiet:true,sys:true})}
+function sponsorAccept(k){attnInit();const i=C.spon.offers.findIndex(o=>o.k===k);if(i<0)return;if(C.spon.active.length>=slots()){toast(`No free slot. You have ${slots()} right now.`);return}const s=C.spon.offers.splice(i,1)[0];s.wk=0;s.since=C.y;C.spon.active.push(s);
+  C.spon.log.unshift({t:`Signed with ${s.n}. $${s.pay.toLocaleString()} a week.`,y:C.y});attnAdd(3,"a new deal");saveC();csWins()}
+function sponsorDecline(k){attnInit();const i=C.spon.offers.findIndex(o=>o.k===k);if(i<0)return;const s=C.spon.offers.splice(i,1)[0];C.spon.log.unshift({t:`Passed on ${s.n}.`,y:C.y});saveC();csWins()}
+function sponsorDrop(k){attnInit();const i=C.spon.active.findIndex(o=>o.k===k);if(i<0)return;const s=C.spon.active.splice(i,1)[0];attnAdd(-3,"a broken deal");C.spon.log.unshift({t:`Walked away from ${s.n}.`,y:C.y});saveC();csWins()}
+/* ===== the System speaks (non-blocking card, queued) ===== */
 const archP=r=>(Array.isArray(r)?r:[r]).map(x=>{x=String(x);if(x.startsWith("*"))return`<p class="nar">${esc(x.slice(1))}</p>`;if(x.startsWith("~"))return`<p class="sys">${esc(x.slice(1))}</p>`;
   const m=x.match(/^([A-Z][A-Z .'’-]{0,18}):\s(.*)$/s);if(m)return`<p class="dlg"><b class="who ${m[1]==="YOU"?"me":""}">${esc(m[1])}</b>${esc(m[2])}</p>`;return`<p>${esc(x)}</p>`}).join("");
 function archSay(txt,title,opt){attnInit();try{if(opt&&opt.sys)SFX.text()}catch(e){}(C.archQ??=[]).push({txt,title,...(opt||{})});setTimeout(archFlush,0)}
 function archFlush(){if(!$("modal").hidden||!$("live").hidden)return;if(!C?.archQ?.length){if(typeof lifeFlush==="function")lifeFlush();return}const m=C.archQ.shift();saveC();
   openModal(`<div class="arch-card ${m.quiet?"quiet":""}"><small>${m.quiet?"":"System · "}${esc(m.title||"")}</small>${archP(m.txt)}<div class="actions">${m.offer?`<button class="btn" data-act="spacc" data-v="${esc(m.offer)}">Accept</button><button class="btn ghost" data-act="spdec" data-v="${esc(m.offer)}">Decline</button><button class="btn ghost" data-act="close">Decide later</button>`:`<button class="btn" data-act="close">Continue</button>`}</div></div>`)}
-/* ===== windows ===== */
-function attnHtml(){attnInit();const a=C.attn,tier=a>=70?"National":a>=40?"Regional":a>=15?"Local":"Nobody knows your name";
-  return`<div class="at-top"><div class="at-meter"><i style="width:${a}%"></i><span>ATTENTION ${a}</span></div><div class="mp-kv"><span>Tier</span><b>${tier}</b><span>Slots</span><b>${C.spon.active.length} / ${slots()}</b><span>Reputation</span><b>${C.rep}</b><span>Swagger</span><b>${C.swag||0}</b><span>Sent home</span><b>$${Math.round(C.cash).toLocaleString()}</b></div></div>
-  <div class="st-row"><span>This week</span><button class="mp-btn sm ${C.posted?"":"go"}" data-act="post" ${C.posted?"disabled":""}>${C.posted?"Posted":"Post something"}</button><small class="mp-lab">Judgment roll vs DC 10 · Natural 1 is a screenshot</small></div>
-  ${C.spon.offers.length?`<div class="mp-grp"><div class="mp-gh">Offers on the table</div>${C.spon.offers.map(o=>`<div class="sp-row"><div><b>${esc(o.n)}</b><small>${esc(payText(o.pay))}</small><small class="cl">${esc(o.person?"Wants: "+o.wants:"Clause: "+o.clause)}</small></div><div class="sp-b"><button class="mp-btn sm go" data-act="spacc" data-v="${esc(o.k)}">Accept</button><button class="mp-btn sm" data-act="spdec" data-v="${esc(o.k)}">Pass</button></div></div>`).join("")}</div>`:""}
-  <div class="mp-grp"><div class="mp-gh">Your slots</div>${C.spon.active.length?C.spon.active.map(o=>`<div class="sp-row"><div><b>${esc(o.n)}</b><small>${esc(payText(o.pay))} · since ${sl(o.since)}</small><small class="cl">${esc(o.person?"Later: "+o.later:"Clause: "+o.clause)}</small></div><div class="sp-b"><button class="mp-btn sm" data-act="spdrop" data-v="${esc(o.k)}">Walk away</button></div></div>`).join(""):`<div class="mp-note">Empty. ${a<15?"Nobody can see you yet. Score, win, post, or wait for the clip.":"Offers arrive after moments: a 25-piece, an upset, March."}</div>`}</div>
+/* ===== window ===== */
+function attnHtml(){attnInit();const a=C.attn,tier=a>=70?"National":a>=40?"Regional":a>=15?"Local":"Nobody knows your name";const S=k=>typeof GSETS!=="undefined"&&GSETS[k]?GSETS[k].n+" set":"";
+  return`<div class="at-top"><div class="at-meter"><i style="width:${a}%"></i><span>ATTENTION ${a}</span></div><div class="mp-kv"><span>Tier</span><b>${tier}</b><span>Deal slots</span><b>${C.spon.active.length} / ${slots()}</b><span>NIL money</span><b>$${(typeof gearS==="function"&&gearS()?.nil||0).toLocaleString()}</b></div></div>
+  ${C.spon.offers.length?`<div class="mp-grp"><div class="mp-gh">Offers on the table</div>${C.spon.offers.map(o=>`<div class="sp-row"><div><b>${esc(o.n)}</b><small>$${o.pay.toLocaleString()} a week · ${S(o.set)} drops twice as often</small><small class="cl">Clause: ${esc(o.clause)}</small></div><div class="sp-b"><button class="mp-btn sm go" data-act="spacc" data-v="${esc(o.k)}">Accept</button><button class="mp-btn sm" data-act="spdec" data-v="${esc(o.k)}">Pass</button></div></div>`).join("")}</div>`:""}
+  <div class="mp-grp"><div class="mp-gh">Your deals</div>${C.spon.active.length?C.spon.active.map(o=>`<div class="sp-row"><div><b>${esc(o.n)}</b><small>$${o.pay.toLocaleString()} a week · ${S(o.set)} · since ${sl(o.since)}</small><small class="cl">Clause: ${esc(o.clause)}</small></div><div class="sp-b"><button class="mp-btn sm" data-act="spdrop" data-v="${esc(o.k)}">Walk away</button></div></div>`).join(""):`<div class="mp-note">Empty. ${a<15?"Nobody can see you yet. Score, win, or wait for the clip.":"Offers arrive after moments: a 25-piece, an upset, March, the playoffs."}</div>`}</div>
   ${C.attnLog.length?`<div class="mp-grp"><div class="mp-gh">Attention log</div><ul class="mp-log">${C.attnLog.slice(0,8).map(l=>`<li><b>${l.x>0?"+":""}${l.x}</b>${esc(l.t)}</li>`).join("")}</ul></div>`:""}
   ${C.spon.log.length?`<ul class="mp-log">${C.spon.log.slice(0,6).map(l=>`<li><b>${sl(l.y)}</b>${esc(l.t)}</li>`).join("")}</ul>`:""}`}
-/* ===== THE LOCKER ===== */
-const SLOTS=["head","arm","hands","legs","feet","charm"];
-const ITEMS={
- answer:{n:"Compression Sleeve, \"The Answer\"",r:"rare",slot:"arm",mods:{swag:2,contestTrail:1},bs:"Issued to a 6-foot guard with a bad elbow. The elbow healed. He kept wearing it, because by then the sleeve was the point. This one has never been washed. I checked. Swagger, it turns out, is partly a smell."},
- handbook:{n:"Student-Athlete Handbook, 11th ed.",r:"common",slot:"charm",mods:{compliance:-1},bs:"Nobody has read this. Not you, not the coaches, not the people who wrote it. It exists so that when something goes wrong, someone can point at it. It is heavy enough to matter in a fight, which it specifically prohibits."},
- tape:{n:"Taped Ankles",r:"common",slot:"feet",mods:{friendReroll:1},bs:"Your friend's, not yours. You never get hurt in this game. He does. The tape is for him and it helps less than you both pretend."},
- headband:{n:"Headband, Sweat-Darkened",r:"uncommon",slot:"head",mods:{sta:5,coachRep:-1},bs:"Old-school coaches see a headband and think of someone they did not like in 1994. The headband does not care. It has outlasted three of them."},
- towel:{n:"Hot-Hand Towel",r:"uncommon",slot:"hands",mods:{streak:1},cursed:true,bs:"Streaky by design. +3 on your next shot after a make, −2 after a miss. The towel believes in momentum the way your uncle believes in the lottery."},
- earl:{n:"Earl's Keys",r:"common",slot:"charm",mods:{coachTrust:1},bs:"Blue Lot's sedan. Check-engine light described as informational. Coach drove it 11,000 miles to watch you play. The miles are the item."},
- lanyard:{n:"Mother's Lanyard",r:"rare",slot:"charm",mods:{rest:1},bound:true,bs:"Her work badge from the night shift. She gave it to you so you would know what the money was for. You will forget. The lanyard will not."},
- warmup:{n:"The Warm-Up Shirt You Were Not Supposed To Keep",r:"uncommon",slot:"charm",mods:{swagRoad:1},bs:"Taken from the school that did not offer you. They have noticed. Compliance has a file. The file has a tab."},
- clipboard:{n:"Coach's Clipboard",r:"epic",slot:"hands",mods:{coachAdvice:15},bs:"Thirty years of plays, none of which work, and one page at the back that is not a play. He does not know you have seen it."},
- wristband:{n:"Hospital Wristband",r:"rare",slot:"arm",mods:{trust:2},bs:"From the night you went. The one in the box is from the night you did not. Only one exists per playthrough."},
- suit:{n:"Draft-Night Suit (Hendry Group)",r:"rare",slot:"charm",mods:{draftRep:2},bs:"The suit fits. The contract was in the pocket."},
- page4:{n:"Page Four of the Codex",r:"legendary",slot:"charm",mods:{fateReveal:1},bs:"A play drawn in pencil by a man who refused a deal. The play is unguardable. It was never run."},
- resoled:{n:"Sophomore Shoes, Resoled",r:"common",slot:"feet",mods:{acc:3,swag:-1},bs:"Resoled twice. Your mother knows a man. Nobody in the league will wear these and you will score on all of them."},
- rivaljersey:{n:"Rival's Jersey, Swapped",r:"epic",slot:"charm",mods:{vsRival:3},bs:"You swapped after the game you lost. He framed yours. You keep his in a drawer. I decline to say which of you is handling this better."},
- filmkey:{n:"Film-Room Key",r:"uncommon",slot:"charm",mods:{siq:2},bs:"Dre says the key is lost. The key is in Dre's bag. This is the first secret in the game and it is small on purpose."},
- vantagecard:{n:"Vantage Card",r:"legendary",slot:"charm",mods:{all:5},cursed:true,bs:"Black. No number. Everything you want. I know this one."},
- walkontowel:{n:"Walk-On's Towel",r:"rare",slot:"hands",mods:{benchTrust:1},bs:"He hit the shot. Not you. The towel was on his shoulder. He gave it to you and said \"keep it,\" which is the nicest thing anyone says in this game."},
- rosary:{n:"Gas Station Rosary",r:"common",slot:"charm",mods:{oneRoll:1},bs:"Bought at 2 a.m. in a town that is mostly a gas station. Not religious. Works anyway."},
- lanyard27:{n:"Tournament Lanyard, 2027",r:"uncommon",slot:"charm",mods:{rep:1},bs:"All-access until the Sunday you lost. Then it was a lanyard."},
- watch:{n:"Halcyon Watch",r:"rare",slot:"arm",mods:{rep:2},bs:"For people who are about to be photographed. It keeps time until it does not."},
- jacket:{n:"Summit Tournament Jacket",r:"rare",slot:"head",mods:{march:2},bs:"Worn one month a year. The zipper is a ladder rung. I am not being poetic; check the zipper."},
- gear_acc:{n:"TruForm Trainers",r:"uncommon",slot:"feet",mods:{acc:4},bs:"Their guy's shoes. Lighter than yours. Coach has opinions about the laces."},
- gear_clu:{n:"Kinetic Bottle (blue)",r:"uncommon",slot:"hands",mods:{clu:3},bs:"Improves Clutch, by which they mean it is blue."},
- gear_vert:{n:"Apex Colorway",r:"rare",slot:"feet",mods:{vrt:4,swag:1},bs:"Your colorway. Two of these exist. The other pair is on the rival."},
- gear_sta:{n:"Overtime Can (unopened)",r:"common",slot:"hands",mods:{sta:3},bs:"Unopened on purpose. The caffeine is in the label."}};
-const RAR={common:["Common","#8a90a0"],uncommon:["Uncommon","#2fa84a"],rare:["Rare","#3b7ddd"],epic:["Epic","#8a2be2"],legendary:["Legendary","#f5a623"]};
-const CRATE_POOL=Object.keys(ITEMS).filter(k=>!["lanyard","page4","vantagecard","wristband","walkontowel","rivaljersey","suit","watch","jacket","earl","clipboard"].includes(k));
-function grantItem(k,from){attnInit();if(!ITEMS[k])return;const have=C.gear.bag.find(x=>x.k===k)||Object.values(C.gear.eq).find(x=>x&&x.k===k);if(have){C.rpg.keys=(C.rpg.keys||0)+1;C.spon.log.unshift({t:`${ITEMS[k].n} again. Converted to a crate key.`,y:C.y});return}
-  const it={k,from:from||"",got:C.y,games:0};C.gear.bag.push(it);C.spon.log.unshift({t:`New item: ${ITEMS[k].n}${from?" (from "+from+")":""}.`,y:C.y});return it}
-function openCrate(){attnInit();const R0=C.rpg;if(!(R0.keys>0)){toast("No crate keys. They come from games, goals and sponsors.");return}R0.keys--;const p=C.gear.pity;p.r++;p.e++;
-  let r=R();let rar=r<.005?"legendary":r<.03?"epic":r<.13?"rare":r<.4?"uncommon":"common";if(p.r>=10&&["common","uncommon"].includes(rar))rar="rare";if(p.e>=40)rar="epic";if(p.r>=99)rar=R()<.1?"legendary":"rare";
-  if(["rare","epic","legendary"].includes(rar))p.r=0;if(["epic","legendary"].includes(rar))p.e=0;
-  const pool=CRATE_POOL.filter(k=>ITEMS[k].r===rar);const k=pool.length?pick(pool):pick(CRATE_POOL);const it=ITEMS[k];C.lastCrate={k,rar};
-  const dup=!!(C.gear.bag.find(x=>x.k===k)||Object.values(C.gear.eq).find(x=>x&&x.k===k));grantItem(k,"a crate");
-  archSay(`${RAR[rar][0]}. ${it.n.replace(/\.$/,"")}. ${it.bs}${dup?" You already had one. I turned it into a key.":""}`,"Locker Crate");saveC();csWins()}
-function equip(k){attnInit();const i=C.gear.bag.findIndex(x=>x.k===k);if(i<0)return;const it=C.gear.bag.splice(i,1)[0],slot=ITEMS[k].slot;if(C.gear.eq[slot])C.gear.bag.push(C.gear.eq[slot]);C.gear.eq[slot]=it;saveC();csWins()}
-function unequip(slot){attnInit();const it=C.gear.eq[slot];if(!it)return;delete C.gear.eq[slot];C.gear.bag.push(it);saveC();csWins()}
-function gearMods(){attnInit();const m={};for(const s of SLOTS){const it=C.gear.eq[s];if(!it)continue;for(const k in ITEMS[it.k].mods)m[k]=(m[k]||0)+ITEMS[it.k].mods[k]}return m}
-/* item modifiers on your shots: used by shotMods when the shooter is you */
-function gearShotMods(type,ctx){if(typeof C==="undefined"||!C||!ctx.me)return[];const g=gearMods(),out=[];const sw=(C.swag||0)+(g.swag||0)+(g.swagRoad&&!ctx.home?g.swagRoad:0);
-  if(g.contestTrail&&ctx.contest&&ctx.trailing)out.push(["The Answer",g.contestTrail]);if(sw>=3&&ctx.contest)out.push(["Swagger",1]);if(g.streak&&ctx.lastMade!=null)out.push(["Hot-Hand Towel",ctx.lastMade?3:-2]);
-  if(g.clu&&ctx.clutch)out.push(["Kinetic bottle",.5]);if(g.vsRival&&ctx.vsRival)out.push(["Rival's jersey",g.vsRival]);if(g.march&&ctx.march)out.push(["Summit jacket",1]);if(g.all)out.push(["Vantage",g.all]);return out}
-function lockerHtml(){attnInit();const g=C.gear,R0=C.rpg;
-  const slot=s=>{const it=g.eq[s];return`<div class="lk-slot"><small>${s}</small>${it?`<b style="color:${RAR[ITEMS[it.k].r][1]}">${esc(ITEMS[it.k].n)}</b><button class="mp-btn sm" data-act="uneq" data-v="${s}">Take off</button>`:`<i>empty</i>`}</div>`};
-  return`<div class="lk-top"><div class="lk-crate"><b>${R0.keys||0}</b><small>crate keys</small><button class="mp-btn ${R0.keys>0?"main":""}" data-act="crate" ${R0.keys>0?"":"disabled"}>Open a crate</button><small class="mp-lab">Pity: Rare within ${Math.max(0,10-g.pity.r)} · Epic within ${Math.max(0,40-g.pity.e)}</small></div><div class="lk-slots">${SLOTS.map(slot).join("")}</div></div>
-  <div class="mp-grp"><div class="mp-gh">Bag · ${g.bag.length}</div>${g.bag.length?g.bag.map(it=>{const d=ITEMS[it.k];return`<div class="lk-item"><div><b style="color:${RAR[d.r][1]}">${esc(d.n)}</b><small>${RAR[d.r][0]} · ${d.slot} · ${Object.entries(d.mods).map(([k,v])=>`${k} ${v>0?"+":""}${v}`).join(", ")}</small><p>${esc(d.bs)}</p>${it.from?`<small class="cl">From ${esc(it.from)}, ${sl(it.got)}</small>`:""}</div><button class="mp-btn sm go" data-act="equip" data-v="${it.k}">Equip</button></div>`}).join(""):`<div class="mp-note">Empty. Crates come from games (half a key per win), goals, and sponsors.</div>`}</div>`}
-window.__attn={attnAdd,openCrate,grantItem,sponsorMoment};
+window.__attn={attnAdd,sponsorMoment};
+
+/* ---------- gear.js: six slots, grades, rarities, sets, drops, pity, power-ups (PLAN.md §4). Replaces the Locker. ---------- */
+const GSLOTS=["feet","hands","head","arm","legs","jersey"];
+const GSLOTN={feet:"Feet",hands:"Hands",head:"Head",arm:"Arm",legs:"Legs",jersey:"Jersey"};
+const GNOUN={feet:"Runners",hands:"Grips",head:"Band",arm:"Sleeve",legs:"Tights",jersey:"Jersey"};
+/* main edges: fixed by slot or rolled from the slot's pool */
+const GMAIN={
+  accel:{n:"Acceleration",on:["drive","cut","euro","spin","rodunk","rolay"]},
+  handle:{n:"Handle",on:["cross","hesi","handoff","step","steal"]},
+  siq:{n:"Shot IQ",on:["jab","pump","charge","rotate","lane","callfor"]},
+  three:{n:"Three",on:["three"]},mid:{n:"Mid",on:["mid"]},pass:{n:"Passing",on:["pass"]},block:{n:"Block",on:["block"]},
+  energy:{n:"Energy",on:[],stat:"energy"},vert:{n:"Vertical",on:["dunk","block","crash"]},str:{n:"Strength",on:["post","dropstep","screen","drawfoul"]},reb:{n:"Rebounding",on:["crash"],stat:"reb"},
+  clutch:{n:"Clutch",on:[],ctx:"clutch"},draw:{n:"Draw fouls",on:["drawfoul"],stat:"draw"},perd:{n:"Perimeter D",on:["hands","steal","rotate"]},intd:{n:"Interior D",on:["block","charge"]}};
+const GSLOTMAIN={feet:["accel"],hands:["handle"],head:["siq"],arm:["three","mid","pass","block"],legs:["energy","vert","str","reb"],jersey:["clutch","draw","perd","intd"]};
+/* substats: single moves */
+const GSUB=["cross","hesi","jab","pump","drive","screen","handoff","post","spin","dropstep","step","euro","drawfoul","three","mid","rim","dunk","cs3","floater","pass","callfor","cut","crash","hands","steal","block","charge","rotate","lane"];
+const GSUBN={cross:"Crossover",hesi:"Hesitation",jab:"Jab step",pump:"Pump fake",drive:"Drive",screen:"Screens",handoff:"Hand-off",post:"Post up",spin:"Spin",dropstep:"Drop step",step:"Step-through",euro:"Euro step",drawfoul:"Draw foul",three:"Threes",mid:"Jumpers",rim:"Layups",dunk:"Dunks",cs3:"Catch and shoot",floater:"Floater",pass:"Passes",callfor:"Call for it",cut:"Cuts",crash:"Crash the glass",hands:"Contest",steal:"Steal",block:"Block",charge:"Charge",rotate:"Rotate",lane:"Jump the lane"};
+const GRAR={common:["Common","#8a90a0",1],uncommon:["Uncommon","#2fa84a",2],rare:["Rare","#3b7ddd",3],epic:["Epic","#8a2be2",4],legendary:["Legendary","#f5a623",4]};
+const GRARS=["common","uncommon","rare","epic","legendary"];
+/* sets: 2-piece edge, 4-piece rule */
+const GSETS={
+  apex:{n:"Apex",two:{on:["dunk","rodunk"],val:.5,lab:"Apex (2)"},four:{rule:"dunkMomPlus",t:"A made dunk swings momentum one more."},tt:"+0.5 on dunks"},
+  crispy:{n:"CRISPY",two:{on:["hands"],val:.5,lab:"CRISPY (2)"},four:{rule:"shadow",t:"Your man shoots at −1 all game."},tt:"+0.5 on contests"},
+  kinetic:{n:"Kinetic",two:{ctx:"clutch",val:.5,lab:"Kinetic (2)"},four:{rule:"clutchReroll1",t:"Natural 1s are rerolled in the last two minutes."},tt:"+0.5 on every roll in the last two minutes"},
+  truform:{n:"TruForm",two:{stat:"drain",val:.1,lab:"TruForm (2)"},four:{rule:"zeroDefEnergy",t:"Defensive cards cost no energy."},tt:"Energy drains 10% slower"},
+  harbor:{n:"Harbor",two:{on:["pass"],val:.5,lab:"Harbor (2)"},four:{rule:"teamOpenPlus1",t:"Teammates get +1 on shots off your passes."},tt:"+0.5 on passes"},
+  summit:{n:"Summit",two:{ctx:"boss",val:1,lab:"Summit (2)"},four:{rule:"bossPlus1",t:"+1 more in playoff and tournament games."},tt:"+1 in playoff and tournament games"},
+  vantage:{n:"Vantage",legend:true,two:{all:true,val:1,lab:"Vantage (2)"},four:{rule:"noNat1",t:"Natural 1s never happen."},tt:"+1 on everything"}};
+const GSETK=Object.keys(GSETS);
+const GBASE={1:400,2:900,3:2000,4:4500,5:10000,6:22000};
+function gearS(){if(typeof C==="undefined"||!C)return null;const G0=(C.gearv2??={bag:[],eq:{},pity:{c:0,r:0,e:0},nil:0,log:[],seq:0,sort:"grade",filt:"all"});if(C.cash&&!G0.cashMoved){G0.nil+=Math.round(C.cash);G0.cashMoved=true}if(C.gear&&!G0.oldMoved){const n=(C.gear.bag||[]).length+Object.values(C.gear.eq||{}).filter(Boolean).length;G0.nil+=n*2000;G0.oldMoved=true;if(n)G0.log.unshift({t:`The old Locker was retired: ${n} items became $${(n*2000).toLocaleString()}.`});delete C.gear}return G0}
+const gradeCap=()=>{const s=(typeof C!=="undefined"&&C&&C.seasonN)||1;return Math.min(6,3+s)};
+function nilAdd(n,why){const G0=gearS();if(!G0||!n)return;G0.nil=Math.max(0,Math.round(G0.nil+n));if(why)G0.log.unshift({t:`${n>0?"+":"−"}$${Math.abs(Math.round(n)).toLocaleString()} ${why}`});G0.log=G0.log.slice(0,20)}
+/* make a piece */
+function gearMake(o){const G0=gearS();const slot=o.slot||pick(GSLOTS),rar=o.rar||"common",grade=clamp(o.grade||1,1,6);
+  const setK=o.set||(rar==="legendary"?"vantage":pick(GSETK.filter(k=>!GSETS[k].legend)));const main=pick(GSLOTMAIN[slot]);
+  const n=GRAR[rar][2],pool=GSUB.filter(k=>!GMAIN[main].on.includes(k));const subs=[];for(let i=0;i<n;i++){const k=pick(pool.filter(x=>!subs.some(s=>s.k===x)));subs.push({k,v:.5})}
+  return{id:"g"+(++G0.seq),slot,rar,grade,set:setK,main,subs,rank:0,spent:0,got:C.y}}
+const gName=g=>`${GSETS[g.set].n} ${GNOUN[g.slot]}`;
+const gMainVal=g=>g.grade*.5;
+const gStars=g=>"★".repeat(g.grade)+"☆".repeat(6-g.grade);
+/* drops */
+function gearRoll(kind){const G0=gearS();if(!G0)return null;const p=G0.pity;p.c++;p.r++;p.e++;const boss=kind==="boss",finals=kind==="finals",box=kind==="box";
+  let r=Math.random();let rar=r<.55?"common":r<.83?"uncommon":r<.95?"rare":"epic";
+  if(box&&!boss)rar=GRARS[Math.min(3,GRARS.indexOf(rar)+1)];if(boss)rar=GRARS[Math.min(3,GRARS.indexOf(rar)+1)];
+  if(p.c>=4&&rar==="common")rar="uncommon";if(p.r>=12&&GRARS.indexOf(rar)<2)rar="rare";if(p.e>=40&&GRARS.indexOf(rar)<3)rar="epic";
+  if(finals)rar="legendary";
+  if(GRARS.indexOf(rar)>=1)p.c=0;if(GRARS.indexOf(rar)>=2)p.r=0;if(GRARS.indexOf(rar)>=3)p.e=0;
+  const nba=C.stage!=="college";let g=nba?2+Math.floor(Math.random()*3):1+Math.floor(Math.random()*3);if(boss)g++;if(!nba)g=Math.min(g,3);if(finals)g=5;g=Math.min(g,finals?5:gradeCap());
+  const fav=C.spon?.active?.map(d=>d.set).filter(Boolean)||[];const set=fav.length&&Math.random()<fav.length/6&&rar!=="legendary"?pick(fav):null;
+  const it=gearMake({rar,grade:g,set});G0.bag.push(it);G0.log.unshift({t:`${GRAR[rar][0]} ${gName(it)} ${gStars(it)}${kind&&kind!=="game"?" ("+(finals?"the Finals":boss?"boss game":"box")+")":""}`});G0.log=G0.log.slice(0,20);return it}
+function gearGame(ln,w,kind,mg){const G0=gearS();if(!G0||!ln||!ln.min)return;const boss=(C.stage==="college"&&((mg&&mg.ork&&mg.ork<=25)||(kind&&kind!=="reg")))||(C.stage!=="college"&&kind==="po");
+  if(Math.random()<.7||boss){const it=gearRoll(boss?"boss":"game");if(it&&GRARS.indexOf(it.rar)>=2)toast(`${GRAR[it.rar][0]} drop: ${gName(it)} ${gStars(it)}`)}}
+function gearBox(why){const G0=gearS();if(!G0)return null;const J=typeof jobS==="function"?jobS():null;
+  if(J&&J.perks&&J.perks.length&&Math.random()<.2){const k=pick(J.perks);J.rank??={};if((J.rank[k]||0)<3){J.rank[k]=(J.rank[k]||0)+1;const n=perkDef(k)?.n||k;G0.log.unshift({t:`Perk shard: ${n} is rank ${J.rank[k]} (${why})`});return{shard:k}}}
+  const it=gearRoll("box");return it}
+function gearFinals(){const it=gearRoll("finals");return it}
+/* edges the engine reads */
+function gearEq(){const G0=gearS();return G0?GSLOTS.map(s=>G0.eq[s]).filter(Boolean):[]}
+function gearSetCount(){const m={};for(const g of gearEq())m[g.set]=(m[g.set]||0)+1;return m}
+function gearEdges(kind,ctx,type){const out=[],add=(n,v)=>{const i=out.findIndex(x=>x[0]===n);if(i>=0)out[i][1]+=v;else out.push([n,v])};
+  for(const g of gearEq()){const M=GMAIN[g.main],v=gMainVal(g)+g.rank*0;const hit=M.on.includes(kind)||(type&&M.on.includes(type))||(M.ctx&&ctx&&ctx[M.ctx]);if(hit)add(M.n,v);
+    for(const s of g.subs)if(s.k===kind||(type&&s.k===type))add(GSUBN[s.k],s.v)}
+  const sc=gearSetCount();for(const k in sc){const S=GSETS[k];if(sc[k]>=2){const t=S.two;if(t.all||(t.on&&(t.on.includes(kind)||(type&&t.on.includes(type))))||(t.ctx&&ctx&&ctx[t.ctx]))add(t.lab,t.val)}
+    if(sc[k]>=4&&S.four.rule==="bossPlus1"&&ctx&&ctx.boss)add("Summit (4)",1)}
+  return out.map(x=>[x[0],Math.round(x[1]*2)/2]).filter(x=>x[1])}
+function gearStat(k){let v=0;for(const g of gearEq()){if(GMAIN[g.main].stat===k)v+=gMainVal(g)}const sc=gearSetCount();for(const s in sc)if(sc[s]>=2&&GSETS[s].two.stat===k)v+=GSETS[s].two.val;return v}
+function gearRule(key){const sc=gearSetCount();for(const k in sc){if(sc[k]>=4&&GSETS[k].four.rule===key)return 1;if(GSETS[k].legend&&sc[k]>=1&&GSETS[k].four.rule===key)return 1}for(const g of gearEq())if(g.rar==="legendary"&&GSETS[g.set].four.rule===key)return 1;return null}
+/* natural 1 protection: Vantage always, Kinetic 4-piece in the last two minutes */
+function gearNat1(ctl){if(gearRule("noNat1"))return true;if(gearRule("clutchReroll1")&&ctl&&ctl.clutchNow)return true;return false}
+/* money sinks */
+const gCost=g=>Math.round(GBASE[g.grade]*(1+.35*g.rank));
+function gearFind(id){const G0=gearS();return G0.bag.find(x=>x.id===id)||GSLOTS.map(s=>G0.eq[s]).find(x=>x&&x.id===id)}
+function gearPower(id){const G0=gearS(),g=gearFind(id);if(!g||g.rank>=12)return;const c=gCost(g);if(G0.nil<c){toast(`Not enough NIL money. $${c.toLocaleString()} to power up.`);return}
+  G0.nil-=c;g.spent+=c;g.rank++;let note="";if(g.rank%3===0){const open=GSUB.filter(k=>!GMAIN[g.main].on.includes(k)&&!g.subs.some(s=>s.k===k));
+    if(g.subs.length<4&&open.length&&Math.random()<.35){const k=pick(open);g.subs.push({k,v:.5});note=` New substat: ${GSUBN[k]} +0.5.`}else{const s=pick(g.subs);s.v+=.5;note=` ${GSUBN[s.k]} +0.5.`}}
+  G0.log.unshift({t:`${gName(g)} +${g.rank}.${note}`});toast(`+${g.rank}.${note}`);saveC()}
+function gearReapp(id,i){const G0=gearS(),g=gearFind(id);if(!g||!g.subs[i])return;const c=g.rank?Math.round(GBASE[g.grade]*(1+.35*(g.rank-1))):GBASE[g.grade];if(G0.nil<c){toast(`Not enough NIL money. $${c.toLocaleString()} to reappraise.`);return}
+  const open=GSUB.filter(k=>!GMAIN[g.main].on.includes(k)&&!g.subs.some(s=>s.k===k));if(!open.length)return;G0.nil-=c;g.spent+=c;const was=g.subs[i].k;g.subs[i].k=pick(open);G0.log.unshift({t:`${gName(g)}: ${GSUBN[was]} became ${GSUBN[g.subs[i].k]}.`});saveC()}
+function gearSalvage(id){const G0=gearS(),i=G0.bag.findIndex(x=>x.id===id);if(i<0)return;const g=G0.bag.splice(i,1)[0];const v=Math.round(g.spent*.3+300*g.grade);G0.nil+=v;G0.log.unshift({t:`Salvaged ${gName(g)} for $${v.toLocaleString()}.`});saveC()}
+function gearMerge(grade){const G0=gearS();grade=+grade;if(grade>=6)return;const fee=GBASE[grade];const five=G0.bag.filter(x=>x.grade===grade).sort((a,b)=>GRARS.indexOf(a.rar)-GRARS.indexOf(b.rar)||a.rank-b.rank).slice(0,5);
+  if(five.length<5){toast(`Need five ${grade}★ pieces in the bag.`);return}if(G0.nil<fee){toast(`Not enough NIL money. $${fee.toLocaleString()} to merge.`);return}
+  G0.nil-=fee;for(const g of five)G0.bag.splice(G0.bag.indexOf(g),1);const rar=GRARS[Math.max(...five.map(x=>GRARS.indexOf(x.rar)))];const it=gearMake({grade:Math.min(grade+1,gradeCap()),rar:rar==="legendary"?"epic":rar,set:pick(five).set});G0.bag.push(it);
+  G0.log.unshift({t:`Merged five ${grade}★ into ${gName(it)} ${gStars(it)}.`});toast(`Merged: ${gName(it)} ${gStars(it)}`);saveC()}
+function gearEquip(id){const G0=gearS(),i=G0.bag.findIndex(x=>x.id===id);if(i<0)return;const g=G0.bag.splice(i,1)[0];if(G0.eq[g.slot])G0.bag.push(G0.eq[g.slot]);G0.eq[g.slot]=g;saveC()}
+function gearUnequip(slot){const G0=gearS(),g=G0.eq[slot];if(!g)return;delete G0.eq[slot];G0.bag.push(g);saveC()}
+/* the Locker */
+function gFits(g){const c=typeof jobCls==="function"?jobCls():null;if(!c)return true;const want={scorer:["three","mid","str","draw","vert"],playmaker:["pass","clutch","handle","accel"],defense:["block","perd","intd","vert","reb"]}[(typeof jobS==="function"&&jobS().cls)||""]||[];return GSLOTMAIN[g.slot].length===1||want.includes(g.main)}
+function gRow(g,eq){const col=GRAR[g.rar][1];const subs=g.subs.map((s,i)=>`<span class="g-sub">${GSUBN[s.k]} +${s.v}${!eq?`<button class="g-re" data-act="greapp" data-v="${g.id}" data-i="${i}" title="Reappraise: reroll this stat">↻</button>`:""}</span>`).join("");
+  const rule=g.rar==="legendary"?`<span class="g-sub g-rule">${esc(GSETS[g.set].four.t)}</span>`:"";
+  return`<div class="g-row" style="--rc:${col}"><div class="g-head"><b>${esc(gName(g))}</b><i>${gStars(g)}${g.rank?` +${g.rank}`:""}</i><small style="color:${col}">${GRAR[g.rar][0]}</small></div>
+    <div class="g-main">${GMAIN[g.main].n} +${gMainVal(g)}<small> · ${GSLOTN[g.slot]} · ${GSETS[g.set].n} set: ${GSETS[g.set].tt}</small></div><div class="g-subs">${subs}${rule}</div>
+    <div class="g-act">${eq?`<button class="mp-btn sm" data-act="guneq" data-v="${g.slot}">Take off</button>`:`<button class="mp-btn sm go" data-act="gequip" data-v="${g.id}">Equip</button>`}<button class="mp-btn sm" data-act="gpower" data-v="${g.id}" ${g.rank>=12?"disabled":""}>${g.rank>=12?"Maxed":`Power up $${gCost(g).toLocaleString()}`}</button>${eq?"":`<button class="mp-btn sm" data-act="gsalv" data-v="${g.id}">Salvage $${(Math.round(g.spent*.3+300*g.grade)).toLocaleString()}</button>`}</div></div>`}
+function lockerHtml(){const G0=gearS();if(!G0)return"";const p=G0.pity,sc=gearSetCount();
+  const slots=GSLOTS.map(s=>{const g=G0.eq[s];return`<div class="g-slot ${g?"":"empty"}"><small>${GSLOTN[s]}</small>${g?gRow(g,true):`<i>Empty · ${GSLOTMAIN[s].map(k=>GMAIN[k].n).join(" / ")}</i>`}</div>`}).join("");
+  const sets=Object.keys(sc).filter(k=>sc[k]>=2).map(k=>`<span class="chip">${GSETS[k].n} ${sc[k]>=4?"4-piece: "+esc(GSETS[k].four.t):"2-piece: "+esc(GSETS[k].tt)}</span>`).join("")||`<span class="mp-lab">No set bonus yet. Two pieces of one set is a bonus; four is a rule.</span>`;
+  let bag=[...G0.bag];const f=G0.filt||"all";if(f==="fit")bag=bag.filter(gFits);else if(f!=="all")bag=bag.filter(g=>g.slot===f);
+  bag.sort((a,b)=>b.grade-a.grade||GRARS.indexOf(b.rar)-GRARS.indexOf(a.rar)||b.rank-a.rank);
+  const grades=[1,2,3,4,5];const counts={};for(const g of G0.bag)counts[g.grade]=(counts[g.grade]||0)+1;
+  return`<div class="g-top"><div class="g-nil"><b>$${G0.nil.toLocaleString()}</b><small>NIL money · powers up, reappraises, merges</small></div>
+    <div class="g-pity"><small>Pity</small><span>Uncommon in ${Math.max(0,4-p.c)}</span><span>Rare in ${Math.max(0,12-p.r)}</span><span>Epic in ${Math.max(0,40-p.e)}</span><small>${C.stage==="college"?"College drops top out at 3★":`Grade cap ${gradeCap()}★ this season · the Finals drops 5★`}</small></div></div>
+    <div class="g-sets">${sets}</div>
+    <div class="g-slots">${slots}</div>
+    <div class="mp-grp"><div class="mp-gh">Bag · ${G0.bag.length}</div>
+    <div class="g-filt">${[["all","All"],["fit","Fits my class"],...GSLOTS.map(s=>[s,GSLOTN[s]])].map(([k,l])=>`<button class="mp-btn sm ${f===k?"on":""}" data-act="gfilt" data-v="${k}">${l}</button>`).join("")}</div>
+    <div class="g-filt">${grades.filter(g=>(counts[g]||0)>=5).map(g=>`<button class="mp-btn sm" data-act="gmerge" data-v="${g}">Merge five ${g}★ → ${g+1}★ ($${GBASE[g].toLocaleString()})</button>`).join("")}</div>
+    ${bag.length?bag.map(g=>gRow(g,false)).join(""):`<div class="mp-note">Empty. Every game you play drops gear seven times in ten. Boss games drop better.</div>`}</div>
+    ${G0.log.length?`<ul class="mp-log">${G0.log.slice(0,8).map(l=>`<li>${esc(l.t)}</li>`).join("")}</ul>`:""}`}
+function gearAct(act,d){const G0=gearS();if(!G0)return false;
+  switch(act){case"gequip":gearEquip(d.v);break;case"guneq":gearUnequip(d.v);break;case"gpower":gearPower(d.v);break;case"greapp":gearReapp(d.v,+d.i);break;case"gsalv":gearSalvage(d.v);break;case"gmerge":gearMerge(d.v);break;case"gfilt":G0.filt=d.v;break;default:return false}
+  try{openSheet("inv")}catch(e){}return true}
+window.__gear={gearS,gearRoll,gearBox,gearMake,gearEdges,gearRule,gearStat,nilAdd,GSETS,GMAIN};
 
 /* ---------- life.js: the choice card and the d20 card outside of games (job advancements, sponsor offers). ---------- */
 function lifeRoll(o){(C.lifeQ??=[]).push(o);setTimeout(lifeFlush,0)}
@@ -3837,7 +3845,7 @@ function prof(p){if(!p)return null;if(p.sk)return p.sk;if(p.pid==="me"&&typeof C
     ORB:r(a.REB*.9+h+t(11)*8),DRB:r(a.REB+h),SPD:r(a.ATH-h*2),ACC:r(a.ATH-h*1.5+t(12)*6),VRT:r(a.ATH+t(13)*8),STR:r(40+(wt-210)/4+h*2+a.REB*.3),STA:r(55+a.ATH*.3+t(14)*10),CLU:r(IQ+t(15)*12)};
   if(PROFC.size>3000)PROFC.clear();PROFC.set(key,s);return s}
 const usageP=s=>Math.pow((s.THR*.2+s.MID*.2+s.LAY*.2+s.DNK*.1+s.PST*.1+s.HND*.1+s.SIQ*.1)/60,3.2);
-function enMax(r){const s=prof(r.p);const sta=s.STA+(r.p.pid==="me"&&typeof gearMods==="function"&&C?.gear?(gearMods().sta||0):0);return Math.round(40+sta*.8)}
+function enMax(r){const s=prof(r.p);const ge=(typeof LV!=="undefined"&&LV?.ctl?.hero!=null&&String(r.p.pid)===String(LV.ctl.hero))||r.p.pid==="me"?(typeof gearStat==="function"?gearStat("energy")*4:0):0;return Math.round(40+s.STA*.8+ge)}
 function fatigue(r){if(r.en==null)return 0;const m=enMax(r);return clamp(((m-r.en)/m-.22)*1.5,0,1)}
 function enSpend(r,n){if(!r||r.en==null)return;r.en=Math.max(0,r.en-n)}
 window.enMax=enMax;window.enSpend=enSpend;
@@ -3852,7 +3860,6 @@ function shotMods(type,s,ctx){const K=PV.skl,m=[];const add=(n,v)=>{v=Math.round
   else if(type==="dunk"){add("Dunk",drK((s.DNK-PV.ref)/(K*.8)));add("Vertical",(s.VRT-PV.ref)/25)}else{add("Post moves",drK((s.PST-PV.ref)/K));add("Strength",(s.STR-PV.ref)/30)}
   add("Shot IQ",(s.SIQ-PV.ref)/40);if(ctx.open)add("Open look",PV.open);if(ctx.contest)add("Contested",-1);if(ctx.fat>0)add("Low energy",-ctx.fat*PV.fat);
   if(ctx.clutch)add("Clutch",(s.CLU-PV.ref)/PV.clu);if(ctx.hot)add("Heating up",1);if(ctx.home)add("Home crowd",.5);
-  if(ctx.me&&typeof gearShotMods==="function")for(const g of gearShotMods(type,ctx))add(g[0],g[1]);
   return m}
 const modSum=m=>m.reduce((a,x)=>a+x[1],0);
 const pMake=(mod,dc)=>clamp((21+mod-dc)/20,.03,.97);
@@ -3885,7 +3892,7 @@ function defOptions(s,d,ctx){const sk=v=>Math.round((v-PV.ref)/PV.skl*2)/2,out=[
   out.push({k:"steal",lab:"Gamble for the steal",mods:sm,mod:modSum(sm),dc:sdc,pct:pMake(modSum(sm)+1,sdc),pts:0,def:true,note:"Miss and he is open."});
   const bm=[["Block",sk(d.BLK)],["Height",clamp(Math.round(-ctx.dh/2*2)/2,-2,2)]];const bdc=14+Math.round((Math.max(s.LAY,s.DNK)-PV.ref)/8);
   out.push({k:"block",lab:"Go for the block",mods:bm,mod:modSum(bm),dc:bdc,pct:pMake(modSum(bm)+1,bdc),pts:0,def:true,note:"Miss and it is a foul a third of the time."});
-  const cm=[["Interior D",sk(d.INT)],["Judgment",clamp(typeof judgment==="function"?judgment():0,-2,2)]];
+  const cm=[["Interior D",sk(d.INT)],["Shot IQ",Math.round((d.SIQ-PV.ref)/PV.skl)/2]];
   out.push({k:"charge",lab:"Take the charge",mods:cm,mod:modSum(cm),dc:16,pct:pMake(modSum(cm)+1,16),pts:0,def:true,note:"Miss and it is a blocking foul."});
   if(typeof myEdges==="function")out.forEach(o=>{const e=myEdges(o.k,ctx);if(e.length){o.mods=[...o.mods,...e];o.mod=modSum(o.mods);o.pct=pMake(o.mod+1,o.dc)}});
   if(typeof jobMoves==="function")for(const mv of jobMoves("def")){const pm=PMOVE[mv.k];if(!pm)continue;const base=out.find(o=>o.k===pm.on);if(!base)continue;const m2=[...base.mods,[pm.lab,pm.mod]],md=modSum(m2);out.push({...base,lab:pm.lab,mods:m2,mod:md,pct:pMake(md+1,base.dc),job:mv.key,perk:true,note:`${mv.src}. ${mv.once==="game"?"Once a game":"Once a quarter"}.`})}
@@ -3913,6 +3920,7 @@ function possPick(i){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return
 function possTap(auto){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="tap")return;clearTimeout(o.auto);const x=LV.cl?.x??0,d=Math.abs(x-.5),z=(o.zone||.12)/2;
   const tap=auto?-1:d<=z?4:d<=z+.08?2:d<=z+.16?0:-2;possResolve(w,tap)}
 function possResolve(w,tap){try{SFX.dice()}catch(e){}const o=LV.pm,x=o.pick;if(x.job&&typeof jobMarkUsed==="function")jobMarkUsed(x.job);o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
+  if(o.roll===1&&typeof gearNat1==="function"&&gearNat1(LV.ctl)){o.roll=1+Math.floor(Math.random()*20);o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.rer=1}
   const nat20=o.roll===20,nat1=o.roll===1;o.made=nat1?false:nat20?true:o.total>=x.dc;
   o.verdict=x.kind==="setup"?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?"SUCCESS":"STOPPED"):x.kind==="offball"?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?"GOT IT":"NOTHING THERE"):x.kind==="help"?(o.made?"GOT THERE":"TOO LATE"):x.def?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?(x.k==="hands"?"CONTESTED":x.k==="steal"?"STEAL":x.k==="block"?"BLOCKED":"CHARGE"):(x.k==="hands"?"LATE":x.k==="steal"?"HE IS BY YOU":x.k==="block"?"BIT ON IT":"BLOCKING FOUL")):x.pass?(o.made?"GOOD PASS":"PICKED OFF"):nat20?"NATURAL 20 — AND ONE":nat1?"NATURAL 1":o.made?(tap===4?"PERFECT · SPLASH":"GOOD"):"MISS";
   o.why=!o.made&&!nat1?(x.mods.find(m=>m[1]<0)?"":"the defender got a hand up"):"";
@@ -4117,19 +4125,19 @@ function jobName(){const c=jobCls();if(!c)return null;const J=jobS(),s=jobSpec()
 /* edges for a roll kind: class edge, spec edge, equipped edge perks. Master is x1.5 on all of them. */
 function jobMods(kind){const c=jobCls();if(!c)return[];const J=jobS(),mul=J.m3?1.5:1,out=[];
   if(c.edge.on.includes(kind))out.push([c.n,c.edge.val*mul]);const s=jobSpec();if(s&&s.edge.on.includes(kind))out.push([s.n,s.edge.val*mul]);
-  for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="edge"&&p.apply.on.includes(kind))out.push([p.n,p.apply.val*mul])}
+  for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="edge"&&p.apply.on.includes(kind))out.push([p.n,(p.apply.val+.5*((J.rank||{})[k]||0))*mul])}
   if(J.m4)out.push(["Legend",.5]);return out}
-function jobRule(key){const c=jobCls();if(!c)return null;for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="rule"&&p.apply.rule===key)return p.apply.val}return null}
+function jobRule(key){const c=jobCls();if(c)for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="rule"&&p.apply.rule===key)return p.apply.val}return typeof gearRule==="function"?gearRule(key):null}
 function jobLinks(ev){const c=jobCls();if(!c)return null;for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="link"&&p.apply.from===ev)return p.apply.to}return null}
-const jobRuleName=key=>{for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="rule"&&p.apply.rule===key)return p.n}return""};
+const jobRuleName=key=>{for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="rule"&&p.apply.rule===key)return p.n}if(typeof GSETS!=="undefined")for(const s in GSETS)if(GSETS[s].four.rule===key)return GSETS[s].n+" (4)";return""};
 /* moves available in a situation ("def" for the defensive card). Legend adds a second use. */
 function jobMoves(sit){const c=jobCls();if(!c)return[];const out=[];
   const cm=c.move;if(cm){const from=cm==="stepback"?["space","lane","collapse"]:cm==="lob"?["collapse"]:["def"];if(from.includes(sit)&&!jobUsed(cm))out.push({k:cm,key:cm,once:"quarter",src:c.n})}
-  for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="move"&&p.apply.from.includes(sit)&&!jobUsed(k,p.apply.once)&&!out.some(x=>x.k===p.apply.adds))out.push({k:p.apply.adds,key:k,once:p.apply.once,src:p.n})}
+  for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="move"&&p.apply.from.includes(sit)&&!jobUsed(k,p.apply.once)&&!out.some(x=>x.k===p.apply.adds))out.push({k:p.apply.adds,key:k,once:p.apply.once,src:p.n,rank:(jobS().rank||{})[k]||0})}
   return out}
 function jobActives(){return[]}
 const jobQ=()=>LV?.ev?.length?LV.ev[LV.ev.length-1].q:1;
-function jobUsed(k,once){const J=jobS(),u=J.used[k];if(!u)return false;const g=`${C.y}-${LV?.gameId||0}`;const n=jobS().m4?2:1;
+function jobUsed(k,once){const J=jobS(),u=J.used[k];if(!u)return false;const g=`${C.y}-${LV?.gameId||0}`;const n=(jobS().m4?2:1)+(((jobS().rank||{})[k]||0)>=2?1:0);
   if(once==="game"||(perkDef(k)?.apply?.once==="game"))return u.g===g&&u.n>=n;return u.g===g&&u.q===jobQ()&&u.n>=n}
 function jobMarkUsed(k){const J=jobS(),g=`${C.y}-${LV?.gameId||0}`,q=jobQ(),u=J.used[k];const game=perkDef(k)?.apply?.once==="game";
   if(u&&u.g===g&&(game||u.q===q))u.n++;else J.used[k]={g,q,n:1}}
@@ -4169,7 +4177,7 @@ const CH_TYPEN={three:"three",mid:"jumper",rim:"layup",dunk:"dunk",post:"hook"};
 const chHalf=v=>Math.round(v*2)/2;
 const chSk=v=>chHalf(((v??65)-PV.ref)/PV.skl);
 const chSum=m=>m.reduce((a,x)=>a+x[1],0);
-function chFin(o){o.mods=(o.mods||[]).filter(m=>m[1]!==0);o.mod=chSum(o.mods);o.pct=o.noroll?1:pMake(o.mod+1,o.dc);o.pts=o.pts??0;return o}
+function chFin(o){if(o.rk3)(o.mods??=[]).push(["Rank 3",1]);o.mods=(o.mods||[]).filter(m=>m[1]!==0);o.mod=chSum(o.mods);o.pct=o.noroll?1:pMake(o.mod+1,o.dc);o.pts=o.pts??0;return o}
 function chSeenPen(E,k){const n=(E.seen&&E.seen.k===k?E.seen.n:0)+1-(typeof jobRule==="function"&&jobRule("seenHalved3")?1:0);return n>=4?-2:n>=3?-1:0}
 const CH_DEAL=["cross","hesi","jab","pump","screen","handoff"];
 /* which setup gets dealt at the top this possession, weighted by the player's game */
@@ -4223,7 +4231,7 @@ function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;
     K("kick","Bail out to {n}",false,0);if(!finOnly){const tq=typeof jobRule==="function"&&jobRule("resetCost3");out.push(chFin({k:"reset",kind:"setup",lab:"Reset the offense",note:tq?"No roll. Three seconds, no energy. Back to the top.":"No roll. Six seconds and some energy. Back to the top.",mods:[],dc:0,noroll:true,sec:tq?3:6,en:tq?0:1}))}}
   else if(sit==="corner"||sit==="wing"){F("cs3","Catch and shoot","three",{},[["Catch and shoot",1]],0,"Feet set. He is closing out.");dealt("pump");drv();K("kick","Swing it to {n}",false,0)}
   else if(sit==="runout"){F("rodunk","Dunk on the run-out","dunk",{open:true},[["Run-out",1]],1,"Nobody back. Worth more than two.");F("rolay","Layup on the run-out","rim",{open:true},[["Run-out",1]],0,null);K("kick","Hit the trailer, {n}",true,0)}
-  if(typeof jobMoves==="function")for(const mv of jobMoves(sit)){const tag={job:mv.key,perk:true},nt=`${mv.src}. ${mv.once==="game"?"Once a game":"Once a quarter"}.`;
+  if(typeof jobMoves==="function")for(const mv of jobMoves(sit)){const tag={job:mv.key,perk:true,...(mv.rank>=3?{rk3:1}:{})},nt=`${mv.src}. ${mv.once==="game"?"Once a game":"Once a quarter"}.`;
     if(mv.k==="stepback")F("stepback","Step-back jumper","mid",{open:true},[["Step-back",1.5]],0,nt+" He is behind you.",null,tag);
     else if(mv.k==="stepback3"&&!E.no3x)F("stepback3","Step-back three","three",{open:true},[["Step-back",1.5]],0,nt+" He is behind you.",null,tag);
     else if(mv.k==="fade")F("fade","Fadeaway","mid",{},[["Fadeaway",1.5]],0,nt+" Falling away from him.",null,tag);
@@ -4264,7 +4272,7 @@ function chainAuto(opts,greed,n){greed=greed??.5;let bestF=null,bestS=null;
   if(bestS)return bestS.x;
   return opts.find(x=>x.k==="reset")||opts[0]}
 /* a roll exactly like the card's: d20 + mod + 1 vs DC; natural 20 succeeds, natural 1 fails */
-function chainRoll(ctl,x){if(x.noroll)return{k:x.k,made:true,opt:x,roll:null};const d=kroll(ctl,"me"),tot=d+x.mod+1,made=d===1?false:d===20?true:tot>=x.dc;ktrack(ctl,"me",made);return{k:x.k,made,nat20:d===20,nat1:d===1,roll:d,total:tot,opt:x}}
+function chainRoll(ctl,x){if(x.noroll)return{k:x.k,made:true,opt:x,roll:null};let d=kroll(ctl,"me");if(d===1&&typeof gearNat1==="function"&&gearNat1(ctl))d=kroll(ctl,"me");const tot=d+x.mod+1,made=d===1?false:d===20?true:tot>=x.dc;ktrack(ctl,"me",made);return{k:x.k,made,nat20:d===20,nat1:d===1,roll:d,total:tot,opt:x}}
 window.__chain={chainOpts,chainAuto,chainRoll,CH_SIT};
 /* test harness (PLAN.md M2 acceptance): play n games where every card is answered by the auto policy through the same
    generator path a player uses, and n legacy games on the same matchups with no player control. */
@@ -4295,7 +4303,7 @@ function skGroups(R,age,edit){const s=rpgSkills(R,age);return SKG.map(g=>`<div c
 function mpWin(title,body,opt={}){return`<div class="mp-win ${opt.cls||""}"><div class="mp-title"><b>${title}</b>${opt.right||""}${opt.close?`<button class="mp-x" data-act="${opt.close}" aria-label="Close">×</button>`:""}</div><div class="mp-body">${body}</div></div>`}
 function rpgSummary(R,age){const s=rpgSkills(R,age),a=skToA(s),pos=C?.pos||rpgP()?.pos||"SF",ovr=calcOvr(a,pos);
   return`<div class="mp-sum"><div><small>Archetype</small><b>${archName(s,R.body.ht)}</b></div><div><small>Overall</small><b>${ovr}</b></div><div><small>Points left</small><b class="${rpgFree(R)>0?"hot":""}">${rpgFree(R)}</b></div><div><small>Height</small><b>${ftin(R.body.ht)}</b></div><div><small>Wingspan</small><b>${ftin(R.body.ws)}</b></div><div><small>Weight</small><b>${R.body.wt} lb</b></div></div>`}
-/* ---- creation: origin → body & look → skills → traits ---- */
+/* ---- creation: origin → stars → body & look → skills ---- */
 const CSTEPS=[["origin","Origin"],["stars","Stars"],["body","Body & look"],["skills","Skills"]];
 function mcCreate(){
   C.rpg??=rpgNew();const R=C.rpg,st=C.cs||"origin",i=CSTEPS.findIndex(x=>x[0]===st),age=18;
@@ -4320,27 +4328,25 @@ function mcCreate(){
   else if(st==="skills")body=`<div class="mp-two"><div class="mp-col">${mpWin("Skills",`<div class="mp-pts"><span>${rpgTotal(R)} to start (${"★".repeat(R.stars||3)}, floor ${grFloor(R)}). A point costs 2 below the league average (${grRef(R)}), then 4, 7 and 11 as you climb, and 16 for the last four before ${grCeil(R)}.</span><b>${rpgFree(R)}</b></div>
       <div class="actions"><button class="mp-btn" data-act="rauto" data-v="shooter">Auto: Shooter</button><button class="mp-btn" data-act="rauto" data-v="slasher">Slasher</button><button class="mp-btn" data-act="rauto" data-v="playmaker">Playmaker</button><button class="mp-btn" data-act="rauto" data-v="twoway">Two-way</button><button class="mp-btn" data-act="rauto" data-v="big">Big</button><button class="mp-btn" data-act="rreset">Reset</button></div>${skGroups(R,age,true)}`)}</div>
       <div class="mp-col mp-stick">${mpWin("Showcase",`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>`+rpgSummary(R,age))}</div></div>`;
-  else body=mpWin("Traits (pick up to 2)",`<div class="mp-orig">${TRAITS.map(t=>{const on=R.traits.includes(t.k);return`<button class="mp-card ${on?"picked":""}" data-act="rtrait" data-v="${t.k}" ${!on&&R.traits.length>=2?"disabled":""}><b>${t.n}</b><p class="up">▲ ${t.up}</p><p class="dn">▼ ${t.down}</p></button>`}).join("")}</div>`)
-    +mpWin("Summary",rpgSummary(R,age)+`<div class="mp-note">You can respec for free at any time from the Character window (press C) and save three loadouts.</div>`);
   return mcHead(`Create your player. Choose a backstory and a star rating, build his body, spend ${rpgTotal(R)} skill points.`)+`<div class="mp">${steps}${body}${nav}</div>`;
 }
 /* ---- the Character window (in college and in the league) ---- */
-function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetTab||"stat");const t=C?.sheetTab||tab||"stat",age=rpgAge(),s=rpgSkills(R,age),ev=today();
-  const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],...(C&&C.stage!=="college"?[["inv","Locker"],["attn","Fame"]]:[])];
+function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetTab||"stat");const t=C?.sheetTab||tab||"stat",age=rpgAge(),s=rpgSkills(R,age);
+  const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],["inv","Locker"],["attn","Deals"]];
   let body="";
-  if(t==="stat")body=`<div class="mp-two"><div class="mp-col">${mpWin(esc(rpgName()),`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>${rpgSummary(R,age)}<div class="mp-kv"><span>Level</span><b>${R.lv}</b><span>EXP</span><b>${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()}</b><span>Origin</span><b>${ORIGINS.find(o=>o.k===R.origin)?.n||"Custom"}</b><span>Traits</span><b>${R.traits.map(k=>TRAITS.find(x=>x.k===k)?.n).filter(Boolean).join(", ")||"None"}</b><span>Crate keys</span><b>${R.keys||0}</b><span>Rested EXP</span><b>${Math.round(R.rest||0).toLocaleString()}</b></div>`)}</div>
+  if(t==="stat")body=`<div class="mp-two"><div class="mp-col">${mpWin(esc(rpgName()),`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>${rpgSummary(R,age)}<div class="mp-kv"><span>Level</span><b>${R.lv}</b><span>EXP</span><b>${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()}</b><span>Origin</span><b>${ORIGINS.find(o=>o.k===R.origin)?.n||"Custom"}</b><span>Stars</span><b>${"★".repeat(R.stars||3)}</b><span>NIL money</span><b>$${(typeof gearS==="function"&&gearS()?.nil||0).toLocaleString()}</b></div>`)}</div>
     <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${mpWin(typeof jobName==="function"&&jobName()?"Class · "+esc(jobName()):"Class",typeof jobPanel==="function"?jobPanel():"")}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
   else if(t==="skills")body=mpWin("Skills",`<div class="mp-pts"><button class="mp-btn sm" data-act="rrespec">Respec (free)</button><b>${rpgFree(R)}</b></div>${skGroups(R,age,true)}`);
   else if(t==="goals"){const gs=rpgGoals(R);body=mpWin("Goals",`<div class="mp-goals">${gs.slice(0,8).map(g=>`<div class="mp-goal"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></div>`).join("")}</div>`)
     +mpWin("Completed",`<ul class="mp-log">${(R.done||[]).slice(0,12).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>Nothing yet. Play a game.</li>"}</ul>`)}
   else if(t==="loads")body=mpWin("Loadouts",`<div class="mp-note">Save your current build to a slot and swap builds any time: a shooter for the season, a two-way build for the playoffs.</div><div class="mp-loads">${[0,1,2].map(i=>{const L=R.loads?.[i];return`<div class="mp-load"><b>Slot ${i+1}</b><span>${L?`${esc(L.n)} · ${L.pts} pts`:"Empty"}</span><span class="actions"><button class="mp-btn sm" data-act="rsave" data-v="${i}">Save here</button>${L?`<button class="mp-btn sm main" data-act="rload" data-v="${i}">Load</button>`:""}</span></div>`}).join("")}</div>`);
-  else if(t==="inv")body=mpWin("Locker",lockerHtml());else if(t==="attn")body=mpWin("Attention & sponsors",attnHtml());
-  else body=mpWin("Today's event",`<div class="mp-ev big"><span class="ic">${ev.ic}</span><div><b>${ev.n}</b><p>${ev.d}</p></div></div><div class="mp-week">${DAYEV.map((d,i)=>`<div class="${d===ev?"on":""}"><small>${["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][i]}</small><span>${d.ic}</span><em>${d.n.replace(/ (Sunday|Monday|Tuesday|Wednesday|Thursday|Friday|Saturday)/,"")}</em></div>`).join("")}</div><div class="mp-note">Rested EXP builds while you're away and is spent as bonus EXP on your next games. There are no streaks to lose.</div>`);
+  else if(t==="inv")body=mpWin("Locker",lockerHtml());else if(t==="attn")body=mpWin("Attention and deals",attnHtml());
+  else body=mpWin("Class",typeof jobPanel==="function"?jobPanel():"");
   openModal(`<div class="mp mp-sheet"><div class="mp-top"><nav class="mp-tabs">${tabs.map(([k,l])=>`<button data-act="rsheet" data-v="${k}" aria-current="${k===t}">${l}</button>`).join("")}</nav><button class="mp-x" data-act="close" aria-label="Close">×</button></div>${body}</div>`);
   showLoop();paintAvatars($("sheet"));
 }
 /* ---- the EXP bar shown under the header ---- */
-function rpgBar(){const R=rpgS();if(!R)return"";const pct=Math.min(100,R.exp/needXP(R.lv)*100),ev=today(),g=rpgGoals(R)[0],free=rpgFree(R);
+function rpgBar(){const R=rpgS();if(!R)return"";const pct=Math.min(100,R.exp/needXP(R.lv)*100),g=rpgGoals(R)[0],free=rpgFree(R);
   return`<div class="rpgbar" id="rpgbar"><button class="rpg-lv" data-act="rsheet" data-v="stat" title="Character (C)">Lv <b>${R.lv}</b></button><button class="rpg-xp" data-act="rsheet" data-v="stat" aria-label="EXP ${Math.round(pct)}%"><i style="width:${pct}%"></i><span>EXP ${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()} (${pct.toFixed(1)}%)</span></button>
   ${free>0?`<button class="rpg-sp hot" data-act="rsheet" data-v="skills" title="Skills (K)">+${free} SP</button>`:`<button class="rpg-sp" data-act="rsheet" data-v="skills" title="Skills (K)">Skills</button>`}
   ${typeof pracWeek==="function"&&pracWeek()?`<button class="rpg-sp${pracLeft()?" hot":""}" data-act="drill" title="Practice: two drills per game week">Practice (${pracLeft()})</button>`:""}${g?`<button class="rpg-goal" data-act="rsheet" data-v="goals" title="Goals (J)">◎ ${esc(g.t)} <small>${g.v.toLocaleString()}/${g.n.toLocaleString()}</small></button>`:""}</div>`}
@@ -4354,7 +4360,7 @@ function rpgKeys(e){if(e.metaKey||e.ctrlKey||e.altKey)return;const tag=e.target?
   const k=e.key.toLowerCase();if(k==="c")openSheet("stat");else if(k==="k")openSheet("skills");else if(k==="j")openSheet("goals");else return;e.preventDefault()}
 
 /* ---------- MyCareer game shell: pixel gym scene + MapleStory HUD + windows ---------- */
-const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],today:["Today","E"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"]};
+const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"]};
 function csView(k){const cl=C.cl;switch(k){case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
   case"log":{const s=C.season,last=s.games.slice().reverse();return`<section class="panel"><h3>${sl(cl.y)} game log</h3>${last.length?`<div class="tw"><table><thead><tr><th class="l">Result</th><th class="l">Opponent</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th></tr></thead><tbody>${last.map(g=>`<tr class="${g.w?"r-w":"r-l"}"><td class="l"><b class="${g.w?"wl-w":"wl-l"}">${g.w?"W":"L"}</b> ${g.us}-${g.them}</td><td class="l name">${g.home?"vs":"at"} ${esc(g.label||tLbl(cl,g.opp))}</td><td>${g.ln.min}</td><td class="hi">${g.ln.pts}</td><td>${g.ln.reb}</td><td>${g.ln.ast}</td><td>${g.ln.stl}</td><td>${g.ln.blk}</td><td>${g.ln.fgm??0}-${g.ln.fga??0}</td></tr>`).join("")}</tbody></table></div>`:"<p class='mp-note'>No games yet. Press Space to play.</p>"}</section>`}
   case"keys":return keybindsHtml();case"style":return styleHtml();case"case":return caseHtml();case"play":return settingsHtml();case"attn":return attnHtml();
@@ -4362,7 +4368,7 @@ function csView(k){const cl=C.cl;switch(k){case"roster":return clRoster(C.school
   default:return""}}
 function csWinHtml(k){const R=rpgS();if(["stat","skills","quests","today"].includes(k)){C.sheetTab=k==="quests"?"goals":k;return null}
   return`<div class="mp-win cs-w" data-win="${k}" style="left:${(C.winPos?.[k]?.x)??(60+Object.keys(C.wins||{}).indexOf(k)*28)}px;top:${(C.winPos?.[k]?.y)??(48+Object.keys(C.wins||{}).indexOf(k)*28)}px;width:${k==="rec"||k==="prog"||k==="sched"?"640px":k==="keys"||k==="style"||k==="play"?"420px":k==="inv"||k==="attn"?"560px":"520px"}"><div class="mp-title" data-drag="${k}"><b>${CSWIN[k][0]}</b><button class="mp-x" data-act="cswin" data-v="${k}" data-close="1" aria-label="Close">×</button></div><div class="mp-body">${csView(k)}</div></div>`}
-function csToggle(k){if(["stat","skills","quests","today"].includes(k)){openSheet(k==="quests"?"goals":k);return}C.wins??={};
+function csToggle(k){if(["stat","skills","quests","inv","attn"].includes(k)){openSheet(k==="quests"?"goals":k);return}C.wins??={};
   if(C.wins[k]){delete C.wins[k]}else{if(innerWidth<=760)C.wins={};C.wins[k]=1}csWins()}
 function csWins(){const host=$("cs-wins");if(!host)return;host.innerHTML=Object.keys(C.wins||{}).map(csWinHtml).filter(Boolean).join("");paintAvatars(host);saveC()}
 function csDragInit(){const host=$("cs-wins");if(!host||host.dataset.drag)return;host.dataset.drag=1;let d=null;
@@ -4374,7 +4380,7 @@ function csLoop(){hubStart()}
 /* ---- the shell ---- */
 function mcCollege(){
   const cl=C.cl;if(!cl||!cl.players.me){clJoin()}syncMe();const t=cl.teams[C.school],rk=apRk(cl,C.school),R=rpgS(),nx=myNext(cl),s=C.season;
-  const pct=R?Math.min(100,R.exp/needXP(R.lv)*100):0,ev=today(),free=R?rpgFree(R):0,gs=R?rpgGoals(R).slice(0,3):[];
+  const pct=R?Math.min(100,R.exp/needXP(R.lv)*100):0,free=R?rpgFree(R):0,gs=R?rpgGoals(R).slice(0,3):[];
   const nxt=nx?`${nx.kind==="reg"?(nx.home?"vs ":"at "):`${esc(nx.lab)}: `}${tLbl(cl,nx.opp)}`:cl.phase==="done"?"Season complete":"Waiting on the next round";
   const cc=C.cere?.[0],ccl={mm:"Midnight Madness",senior:"Senior Night",sel:"Selection Sunday",conf:"Conference champs",nc:"National champs"}[cc?.type];
   const busy=C.clBusy;let act="";
@@ -4382,7 +4388,7 @@ function mcCollege(){
   else if(nx){const pm=playMode(),pmn=PLAYMODES.find(x=>x[0]===pm)?.[1]||"";act=`<button class="mp-btn" data-act="cswin" data-v="play" title="Play settings (W)">${esc(pmn)}</button><button class="mp-btn main" data-act="${pm==="sim"?"clsim":"clwatch"}" data-v="1" data-hold="clmenu">${cl.phase==="reg"?"Play next game":"Play next round"}<small>${esc(nxt)} · Space</small></button><button class="mp-btn" data-act="clmenu">Sim ⋯</button>`}
   else act=`<button class="mp-btn main" data-act="clsim" data-v="${cl.phase==="reg"?"1":"end"}">${cl.phase==="reg"?"Next day":cl.phase==="ct"?"Sim to Selection Sunday":"Sim the tournament"}</button>`;
   const keys=[["stat","Char","C"],["skills","Skills","K"],["inv","Locker","I"],["quests","Goals","J"],["roster","Team","T"],["sched","Sched","S"],["log","Log","O"],["poll","Top 25","R"],["stand","Stand","D"],["prog","Program","P"],["news","News","N"],["reel","Clips","H"],["case","Trophy","G"]];
-  if(cl.ncaa)keys.push(["brk","Bracket","B"]);keys.push(["attn","Fame","M"],["play","Play","W"],["style","Style","V"],["keys","Keys","Y"]);
+  if(cl.ncaa)keys.push(["brk","Bracket","B"]);keys.push(["attn","Deals","M"],["play","Play","W"],["style","Style","V"],["keys","Keys","Y"]);
   setTimeout(()=>{csLoop();csWins();csDragInit();archFlush()},0);
   return`<div class="cs ${busy?"busy":""}">
     <div class="cs-scene"><canvas id="cs-cv"></canvas><div id="cs-tags" class="cs-wins"></div>
@@ -4393,12 +4399,12 @@ function mcCollege(){
       <div class="cs-next">${act}</div>${hubPad()}</div>
     <div class="cs-hud"><div class="cs-lv"><b><small>LV.</small>${R?.lv||1}</b><span>${esc(C.name)} · ${esc((typeof jobName==="function"&&jobName())||archName(rpgSkills(R||rpgNew(),C.age||18),C.ht))}</span></div>
       <button class="cs-xp" data-act="cswin" data-v="stat" aria-label="EXP"><i style="width:${pct}%"></i><span>EXP ${R?R.exp.toLocaleString():0} [${pct.toFixed(2)}%]</span></button>
-      <button class="cs-ev${pracLeft()?" hot":""}" data-act="drill" title="Practice: two drills per game week (E)"><b>${pracLeft()}</b>Practice</button><button class="cs-ev" data-act="cswin" data-v="attn" title="Attention"><b>${(attnInit(),C.attn)}</b>ATTN · ${C.spon.active.length}/${slots()} slots${C.spon.offers.length?` · <span style="color:#ffd166">${C.spon.offers.length} offer${C.spon.offers.length>1?"s":""}</span>`:""}</button>
+      <button class="cs-ev${pracLeft()?" hot":""}" data-act="drill" title="Practice: two drills per game week (E)"><b>${pracLeft()}</b>Practice</button><button class="cs-ev" data-act="cswin" data-v="attn" title="Attention"><b>${(attnInit(),C.attn)}</b>ATTN · ${C.spon.active.length}/${slots()} deals${C.spon.offers.length?` · <span style="color:#ffd166">${C.spon.offers.length} offer${C.spon.offers.length>1?"s":""}</span>`:""}</button>
       <div class="cs-keys">${keys.map(([k,l,key])=>`<button class="cs-k ${k==="skills"&&free>0?"hot":""}" data-act="cswin" data-v="${k}" title="${CSWIN[k][0]} (${key})"><i>${key}</i>${k==="skills"&&free>0?`+${free}`:l}</button>`).join("")}</div></div></div>`;
 }
 function csKeys(e){if(!C||C.stage!=="college"||$("mc").hidden||!$("live").hidden)return false;if(hubKeyDown(e))return true;if(e.metaKey||e.ctrlKey||e.altKey)return false;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return false;
   const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn"};if(e.key.toLowerCase()==="e"){if(!$("modal").hidden)closeModal();else openDrill();e.preventDefault();return true}const k=map[e.key.toLowerCase()];if(!k)return false;
-  if(!$("modal").hidden){closeModal();if(["stat","skills","quests","today"].includes(k))return true}csToggle(k);e.preventDefault();return true}
+  if(!$("modal").hidden){closeModal();if(["stat","skills","quests","inv","attn"].includes(k))return true}csToggle(k);e.preventDefault();return true}
 
 /* ---------- HUB: walkable side-scroller maps (MapleStory-style) ---------- */
 const ASSET="assets/";
@@ -4436,28 +4442,20 @@ const PAL={wall:"#eadfc7",wall2:"#d9ccae",pad:"#2b3a6b",trim:"#8a6a4a"};
 function hubMaps(){const cl=C.cl,t=cl.teams[C.school],hc=t.color||"#2f6fd6",dk=mixc(hc,"#000000",.35),hour=new Date().getHours(),sky=hour>=20||hour<6?"night":hour>=17?"sunset":hour>=6&&hour<9?"sunset":"day";
   const tm=(t.roster||[]).map(id=>cl.players[id]).filter(p=>p&&p.pid!=="me").sort((a,b)=>b.ovr-a.ovr)[0];
   const gym={id:"gym",name:esc(C.school)+" Gym",w:1240,floorFrac:.76,sky,hc,dk,
-    props:[{k:"door",x:44,img:"props2/door.png",label:"To the shop",portal:"shop",spawn:520,sign:"SHOP"},
+    props:[{k:"door",x:44,img:"props2/door.png",label:"To the equipment room",portal:"shop",spawn:520,sign:"GEAR"},
       {k:"trophy",x:150,img:"props2/trophycase.png",label:"Trophy case",act:"goals"},
       {k:"pennant",x:230,img:"props2/pennant.png",wall:true,wy:86},
       {k:"board",x:700,label:"Scoreboard",act:"sched",wall:true,board:true},
       {k:"bulletin",x:900,img:"props2/bulletin.png",label:"Team bulletin",act:"news",wall:true,wy:90},
       ],
-    npcs:[{id:"coach",name:"Coach "+(t.coach||"Harlan"),x:560,look:{style:"A",tone:2,hairc:7,jersey:"#2b2f40",shorts:"#2b2f40",shoes:"#222222"},face:1,lines:[`${C.name.split(" ")[0]}, you're ${t.w}-${t.l}. ${t.w>=t.l?"Keep the standard.":"We fix it in practice."}`,"Space plays the next game. Walk to the door for the hallway.","Shooters shoot. Passers pass. Know which one you are tonight."]},
+    npcs:[{id:"coach",name:"Coach "+(t.coach||"Harlan"),x:560,look:{style:"A",tone:2,hairc:7,jersey:"#2b2f40",shorts:"#2b2f40",shoes:"#222222"},face:1,lines:[`${C.name.split(" ")[0]}, you're ${t.w}-${t.l}. ${t.w>=t.l?"Keep the standard.":"We fix it in practice."}`,"Space plays the next game. The door goes to the equipment room.","Shooters shoot. Passers pass. Know which one you are tonight."]},
       tm?{id:"tm",name:shortNm(tm),x:1000,look:charLook({style:hsh(tm.pid)%2?"B":"A",tone:5-clamp(+(lookOf(tm,tm.pid).skin??lookFor(tm.pid).skin)||0,0,5),hairc:hsh(tm.pid+"h")%6,jersey:hc,shorts:hc}),anim:"drib",face:-1,lines:[`${tm.ovr} overall and I still can't guard you in practice.`,"You see the Top 25? Check the R window.","Run it back after film."]}:null].filter(Boolean),
     spawn:380};
-  const hall={id:"hall",name:"School hallway",w:2484,floorFrac:.86,bg:"maps/hall.png",bgH:239,bgFloor:186,bgScale:1,hc,dk,
-    props:[{k:"gymdoor",x:1128,label:"To the gym",portal:"gym",spawn:110,sign:"GYM",wall:true,wy:72,w:44,h:110,invisible:true},
-      {k:"halltc",x:757,label:"Trophy case",act:"goals",wall:true,wy:52,w:70,h:95,invisible:true},
-      {k:"class",x:2066,label:"Classroom — opens next drop",act:"soon",wall:true,wy:76,w:70,h:100,invisible:true},
-      {k:"street",x:2416,label:"Street exit — opens next drop",act:"soon",wall:true,wy:76,w:30,h:100,invisible:true}],
-    npcs:[{id:"friend",name:"Dre",x:1480,look:{style:"B",tone:1,hairc:0,jersey:"#8a2be2",shorts:"#222222",shoes:"#ffffff"},face:-1,lines:["Yo. Film room's locked again. Coach took the key.","When you make it, don't forget who rebounded for you at 6 a.m.","Bonds system drops soon. I'm the first one. Be nice."]},
-      {id:"student",name:"Jas",x:1900,look:{style:"A",tone:3,hairc:2,jersey:"#e06d8a",shorts:"#2b3a6b",shoes:"#ffffff"},face:-1,lines:["You're the basketball kid, right? Stats test is Friday.","The classroom opens next drop. Bring a pencil."]}],
-    spawn:1060};
-  const shop={id:"shop",name:"The shop",w:720,floorFrac:.76,sky:"day",hc:"#6b4f2c",dk:"#2a1e12",
+  const shop={id:"shop",name:"Equipment room",w:720,floorFrac:.76,sky:"day",hc:"#6b4f2c",dk:"#2a1e12",
     props:[{k:"out",x:40,img:"props2/door.png",label:"Back to the gym",portal:"gym",spawn:120,sign:"GYM"},
-      {k:"counter",x:360,label:"Counter — the shop opens with the next build. NIL money spends here.",act:"soon",wall:true,wy:120,w:200,h:60,invisible:true},
-      {k:"shelf",x:560,img:"props2/trophycase.png",label:"Shelves",act:"inv"}],
-    npcs:[{id:"clerk",name:"Sam",x:300,look:{style:"A",tone:3,hairc:1,jersey:"#3b5b3b",shorts:"#222222",shoes:"#ffffff"},face:1,lines:["Not open yet. Soon.","Bring money. Not the fake kind."]}],spawn:520};
+      {k:"counter",x:360,label:"Counter: power up, reappraise, merge",act:"inv",wall:true,wy:120,w:200,h:60,invisible:true},
+      {k:"shelf",x:560,img:"props2/trophycase.png",label:"Your Locker",act:"inv"}],
+    npcs:[{id:"clerk",name:"Sam",x:300,look:{style:"A",tone:3,hairc:1,jersey:"#3b5b3b",shorts:"#222222",shoes:"#ffffff"},face:1,lines:["NIL money powers gear up. That is all it is for.","Five pieces of one grade and I can make one better.","Every game drops something. Bring it here."]}],spawn:520};
   return{gym,shop}}
 function hubGo(id,spawn){const m=hubMaps()[id];if(!m)return;HUB.map=id;HUB.px=spawn??m.spawn;HUB.vx=0;HUB.vy=0;HUB.py=0;HUB.target=null;HUB.talk=null;HUB.bubble=null;HUB.cam=0;C.hubMap=id;C.hubX=HUB.px;HUB.flash=1}
 function hubEnsure(){if(!HUB.map||!hubMaps()[HUB.map]){hubGo(C.hubMap||"gym",C.hubX)}}
@@ -4527,7 +4525,7 @@ function drawBgMap(g,m,iw,ih,floorY,cam,t){const bg=hubImg(m.bg);g.fillStyle="#1
 /* interaction */
 function nearProp(p,m,ih,floorY){const b=propBox(p,m,ih,floorY);return Math.abs(HUB.px-(b.x+b.w/2))<Math.max(40,b.w/2+16)}
 function hubAct(p){if(!p)return;if(p.portal){hubGo(p.portal,p.spawn);return}
-  switch(p.act){case"drill":openDrill();break;case"goals":csToggle("case");break;case"sched":csToggle("sched");break;case"news":csToggle("news");break;
+  switch(p.act){case"drill":openDrill();break;case"inv":openSheet("inv");break;case"goals":csToggle("case");break;case"sched":csToggle("sched");break;case"news":csToggle("news");break;
     case"shoot":{{const dir=HUB.px<=p.x?1:-1;HUB.dunk={t0:performance.now(),x0:HUB.px,x1:p.x-dir*30,dir}}break}
     case"soon":toast(p.label);break}}
 function hubTalk(n){if(!n)return;const i=(n._i=((n._i||0)+1)%n.lines.length);HUB.talk=n.id;HUB.bubble={id:n.id,txt:n.lines[i],until:(performance.now()-HUB.t0)/1000+4};HUB.face=HUB.px<n.x?1:-1}
@@ -4721,7 +4719,7 @@ function* liveGen(SD,opt,ctl){
     const shooters=mates.length&&mates.reduce((a,m)=>a+m.s.THR,0)/mates.length>=66,PD=D.map(x=>prof(x.p));
     return{P,s,d,h:prof(helpR.p),df,helpR,meR,mates,big,shooters,no3x,mom:chMom(),seen:ctl?ctl.seen:null,perks:chPerks(),dh:hgt(meR.p)-hgt(df.p),dhH:hgt(meR.p)-hgt(helpR.p),
       dSTL:PD.reduce((a,x)=>a+x.STL,0)/PD.length,dPERavg:PD.reduce((a,x)=>a+x.PER,0)/PD.length,mm:big?prof((D[O.indexOf(big.r)]||df).p):d,
-      cap:CLK<=24?4:5,ctx:{home:o===0&&HOME>0,clutch,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,hot2:meR.hot.length>=2&&meR.hot.slice(-2).every(x=>x),fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
+      cap:CLK<=24?4:5,ctx:{home:o===0&&HOME>0,clutch,boss:!!opt.boss,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,hot2:meR.hot.length>=2&&meR.hot.slice(-2).every(x=>x),fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
   const chCard=(E,P,lead,extra)=>({opts:null,chain:true,sit:P.sit,sitName:CH_SIT[P.sit]||"",chips:P.log.slice(-6),title:lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`,
     sub:`${chClk()} · shot clock ${Math.max(0,Math.round(P.clk))}${P.flags.hurry?" · Hurry":""}${P.late&&lead===-3&&t<=30?" · Down three: a two does not tie":""}`,meta:{en:Math.round(E.meR.en),em:enMax(E.meR),mom:ctl?ctl.mom||0:0,moves:P.n},dname:E.df.p.name,dnote:`PER ${E.d.PER} · INT ${E.d.INT} · STL ${E.d.STL}`,
     timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(E.s.THR,E.s.MID,E.s.LAY),...(extra||{})});
@@ -4767,16 +4765,16 @@ function* liveGen(SD,opt,ctl){
         const fouled=!made&&R()<PV.foul[tg.type]*(1+(s2.DRW-PV.ref)/60);chNote(P,meR);
         return yield* finish(r2,dr2,p2,dr2.p,tg.type,made,fouled,{open:true,home:o===0&&HOME>0,clutch},{me:1,pass:1,assistTo:meR,lob:!!x.lob,dunk:tg.type==="dunk"})}
       const type=x.type;P.log.push({t:x.lab,ok});
-      const fouled=ans.nat20||R()<PV.foul[type]*(1+(E.s.DRW-PV.ref)/60)*(ok?.5:1.3)*((type==="rim"||type==="dunk")&&(typeof jobRule==="function"&&jobRule("contactFouls"))?1.5:1);
+      const fouled=ans.nat20||R()<PV.foul[type]*(1+(E.s.DRW-PV.ref)/60)*(ok?.5:1.3)*((type==="rim"||type==="dunk")&&(typeof jobRule==="function"&&jobRule("contactFouls"))?1.5:1)*(1+(typeof gearStat==="function"?gearStat("draw"):0)*.1);
       const dR=x.vs==="help"?E.helpR:df;chNote(P,meR);
       return yield* finish(meR,dR,meR.p,dR.p,type,ok,fouled,{...E.ctx,open:x.open,contest:x.contest},{me:1,dunk:type==="dunk"})}
     return false};
   const play=function*(){
     const O=on[o],D=on[1-o];nposs++;const uo=o===US,ud=US>=0&&!uo,co=uo?ctl.off:"bal",cd=ud?ctl.def:"man";
-    const lead=sc[o]-sc[1-o],late=q>=np&&t<360,clutch=q>=np&&t<=120&&Math.abs(lead)<=6;
+    const lead=sc[o]-sc[1-o],late=q>=np&&t<360,clutch=q>=np&&t<=120&&Math.abs(lead)<=6;if(ctl)ctl.clutchNow=q>=np&&t<=120;
     const paceF=late&&lead<-6?.78:late&&lead>8?1.18:1;
     const dur=clamp(avgDur*rnd(.55,1.5)*paceF,4,CLK);t-=dur;elapsed+=dur;sinceSub+=dur;
-    [...O,...D].forEach(r=>{r.min+=dur/60;r.b.min+=dur/60;r.stint+=dur/60;const s=prof(r.p);r.en=Math.max(0,r.en-dur/60*(1.7-(s.STA-PV.ref)/80))});R2[0].concat(R2[1]).forEach(r=>{if(!O.includes(r)&&!D.includes(r)){r.stint=Math.max(0,r.stint-dur/40);r.en=Math.min(enMax(r),r.en+dur/60*3.6)}});
+    [...O,...D].forEach(r=>{r.min+=dur/60;r.b.min+=dur/60;r.stint+=dur/60;const s=prof(r.p),gd=ctl&&ctl.hero!=null&&String(r.p.pid)===String(ctl.hero)&&typeof gearStat==="function"?gearStat("drain"):0;r.en=Math.max(0,r.en-dur/60*(1.7-(s.STA-PV.ref)/80)*(1-gd))});R2[0].concat(R2[1]).forEach(r=>{if(!O.includes(r)&&!D.includes(r)){r.stint=Math.max(0,r.stint-dur/40);r.en=Math.min(enMax(r),r.en+dur/60*3.6)}});
     const PO=O.map(r=>prof(r.p)),PD=D.map(r=>prof(r.p));
     const avgS=(P,ks)=>P.reduce((a,s)=>a+ks.reduce((b,k)=>b+s[k],0)/ks.length,0)/P.length,avgFat=O.reduce((a,r)=>a+fatigue(r),0)/5;
     // turnover
@@ -4811,7 +4809,7 @@ function* liveGen(SD,opt,ctl){
           if(x.k==="crash"&&ans.made)ctl.crash=true}}
       const i=O.indexOf(sh),df=D[i]||pick(D),p=sh.p,dp=df.p,s=PO[i],d=prof(dp);
       const keyed=sh.hot.length>=4&&sh.hot.slice(-3).every(x=>x),open=R()<clamp(.22+(avgS(PO,["PAS","VIS"])-PV.ref)*.004+(co==="pnr"?.08:0)-(cd==="zone"?.04:0)+(keyed?-.1:0),.05,.5);
-      const ctx={open,contest:!open&&R()<.3,fat:fatigue(sh),clutch,hot:keyed,home:o===0&&HOME>0,dh:hgt(p)-hgt(dp),sh:hgt(p),keyed,me:false,trailing:lead<0,lastMade:sh.hot.length?sh.hot[sh.hot.length-1]:null,vsRival:typeof C!=="undefined"&&C?.bonds?.rival?.pid!=null&&String(dp.pid)===String(C.bonds.rival.pid)};
+      const ctx={open,contest:!open&&R()<.3,fat:fatigue(sh),clutch,hot:keyed,home:o===0&&HOME>0,dh:hgt(p)-hgt(dp),sh:hgt(p),keyed,me:false,trailing:lead<0,lastMade:sh.hot.length?sh.hot[sh.hot.length-1]:null};
       let type,made,fouled;
       // defensive call: my matchup has the ball
       let forceBlk=false,forceFoul=false;
@@ -4853,7 +4851,7 @@ function* liveGen(SD,opt,ctl){
       const verb=type==="three"?pick(["drills a three","buries it from deep","splashes a triple"]):type==="dunk"?pick(["throws it down","hammers it home","rises and dunks"]):type==="rim"?pick(["finishes at the rim","lays it in","scoops it in"]):type==="post"?pick(["scores on the block","drops in the hook","spins baseline and scores"]):pick(["hits the jumper","knocks down the pull-up","nails the elbow J"]);
       const heat=sh.hot.length>=4&&sh.hot.slice(-4).every(v=>v)?" He's heating up!":"";
       const homeT=o===0&&HOME>0,big=!!(x.dunk||x.lob)&&type==="dunk";
-      if(ctl&&US>=0){const k=o===US?1:-1;ctl.mom=clamp((ctl.mom||0)+k*(big?(homeT?3:2)+(o===US&&x.me&&C?.rpg?.origin==="blacktop"?1:0):1)+(o===US&&x.me&&type==="three"&&(typeof jobRule==="function"&&jobRule("momentumTeamPlus"))?1:0),-5,5);if(o===US){ctl.runOpp=0;if(big&&x.me)ctl.dunkTax=true}else ctl.runOpp=(ctl.runOpp||0)+pts}
+      if(ctl&&US>=0){const k=o===US?1:-1;ctl.mom=clamp((ctl.mom||0)+k*(big?(homeT?3:2)+(o===US&&x.me&&C?.rpg?.origin==="blacktop"?1:0):1)+(o===US&&x.me&&type==="three"&&(typeof jobRule==="function"&&jobRule("momentumTeamPlus"))?1:0)+(o===US&&x.me&&big&&typeof gearRule==="function"&&gearRule("dunkMomPlus")?1:0),-5,5);if(o===US){ctl.runOpp=0;if(big&&x.me)ctl.dunkTax=true}else ctl.runOpp=(ctl.runOpp||0)+pts}
       const call=x.me&&big?(x.lob?` ${lname(x.assistTo.p)} lobs it and ${p.name} finishes it at the rim. ${homeT?"The building is on its feet.":"In their building."}`:` ${p.name} THROWS IT DOWN. ${homeT?"The crowd goes wild.":"You can hear their gym go quiet."}`):"";
       push("make",call?`${cx.clutch?"CLUTCH! ":""}${call.trim()}`:`${cx.clutch?"CLUTCH! ":""}${p.name} ${verb}${ast?` (assist ${lname(ast.p)})`:""}.${heat}`,{sh:p.pid,as:ast?.p.pid,d:dp.pid,shot:stype,dist,ang,pts,...cx,...(big&&x.me?{dunk:1}:{})});
       if(fouled){df.pf++;tfoul[1-o]++;push("foul",`And one! ${dp.name} fouls ${lname(p)}.`,{sh:p.pid,d:dp.pid});shootFT(sh,1,df)}
@@ -5455,6 +5453,7 @@ document.addEventListener("click",e=>{
   const b=e.target.closest("[data-act]");if(!b||b.disabled)return;
   if(b.tagName==="INPUT")return; // checkbox handled on change
   const d=b.dataset,pid=d.pid!=null?+d.pid:null;
+  if(typeof gearAct==="function"&&/^g(equip|uneq|power|reapp|salv|merge|filt)$/.test(d.act)){gearAct(d.act,d);return}
   switch(d.act){
     case"tab":G.tab=d.v;(G.lastSub??={})[grpOf(d.v)[0]]=d.v;closeModal();render();window.scrollTo(0,0);return;
     case"pomenu":poMenu();return;
@@ -5504,7 +5503,7 @@ document.addEventListener("click",e=>{
     case"editlook":lookModal();return;
     case"credits":openModal(creditsHtml());return;
     case"lifego":lifeGo();return;case"lifeskip":lifeSkip();return;case"lifeopt":lifeOpt(+d.v);return;
-    case"spacc":closeModal();sponsorAccept(d.v);return;case"spdec":closeModal();sponsorDecline(d.v);return;case"spdrop":sponsorDrop(d.v);return;case"post":socialPost();return;case"crate":openCrate();return;case"equip":equip(d.v);return;case"uneq":unequip(d.v);return;
+    case"spacc":closeModal();sponsorAccept(d.v);return;case"spdec":closeModal();sponsorDecline(d.v);return;case"spdrop":sponsorDrop(d.v);return;
     case"posspick":possPick(+d.v);return;case"possauto":possAuto();return;case"pmset":pmSet(d.v);return;
     case"kbset":kbSet(d.v);return;case"kbreset":KB={...KBDEF};kbSave();csWins();return;case"stset":styleSet(d.v);return;
     case"lookset":lookSet(d.k,+d.v);return;
@@ -5536,7 +5535,7 @@ document.addEventListener("click",e=>{
       rpgApply();if(rpgP())save();else saveC();if(!$("modal").hidden){const sc=$("sheet").scrollTop;openSheet();$("sheet").scrollTop=sc}else{const sc=$("mc").scrollTop;mcRender();$("mc").scrollTop=sc}return}
     case"rauto":{autoBuild(C.rpg,18,d.v);rpgApply();mcRender();return}
     case"rreset":{C.rpg.alloc={};rpgApply();mcRender();return}
-    case"rtrait":{const R=C.rpg,i=R.traits.indexOf(d.v);if(i>=0)R.traits.splice(i,1);else if(R.traits.length<2)R.traits.push(d.v);if(rpgFree(R)<0)R.traits.splice(R.traits.indexOf(d.v),1);rpgApply();mcRender();return}
+    
     case"rsheet":{if(C)C.sheetTab=d.v;openSheet(d.v);return}
     case"rrespec":{const R=rpgS();R.alloc={};rpgApply();if(rpgP())save();else saveC();openSheet("skills");toast("All points refunded.");return}
     case"rsave":{const R=rpgS(),age=rpgAge();(R.loads??=[null,null,null])[+d.v]={n:archName(rpgSkills(R,age),R.body.ht),pts:rpgSpent(R),alloc:{...R.alloc}};if(rpgP())save();else saveC();openSheet("loads");return}
