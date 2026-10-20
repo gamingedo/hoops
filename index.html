@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="f43506d7da";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="f929077c0e";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -645,7 +645,7 @@ body{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
   .bar .btn{font-size:14px;padding:13px 6px}
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
-.cs-ev.hot{border-color:#ffd166;color:#ffd166}.drill-steps{display:grid;gap:6px;margin:8px 0}.drill-step{border:1px solid #2a3550;border-radius:8px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 8px}.drill-step em{grid-column:1/-1;font-style:normal;opacity:.85}.drill-step.cur{border-color:#ffd166}.drill-step.ok{border-color:#6cb8ff;background:rgba(108,184,255,.08)}.drill-step.no{border-color:#ffa24c;background:rgba(255,162,76,.08)}
+.jp{display:grid;gap:6px}.jp-row{display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center;padding:6px 8px;border:1px solid rgba(127,127,127,.35);border-radius:6px}.jp-row b{font-weight:700}.jp-row span{grid-column:1/-1;font-size:12px;opacity:.85}.jp-row button{grid-row:1;grid-column:2}.jp-row.off{opacity:.5}.cs-ev.hot{border-color:#ffd166;color:#ffd166}.drill-steps{display:grid;gap:6px;margin:8px 0}.drill-step{border:1px solid #2a3550;border-radius:8px;padding:8px 10px;display:grid;grid-template-columns:1fr auto;gap:2px 8px}.drill-step em{grid-column:1/-1;font-style:normal;opacity:.85}.drill-step.cur{border-color:#ffd166}.drill-step.ok{border-color:#6cb8ff;background:rgba(108,184,255,.08)}.drill-step.no{border-color:#ffa24c;background:rgba(255,162,76,.08)}
 </style>
 </head>
 <body>
@@ -1484,7 +1484,7 @@ function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v47";
+const BUILD="v48";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -3514,8 +3514,8 @@ function originEdges(kind,ctx,R){R=R||C?.rpg;if(!R)return[];const out=[];const p
   if(R.origin==="legacy"&&["cross","hesi","jab","pump","drive","post","screen","handoff"].includes(kind))out.push(["Their best defender",-1]);
   return out}
 /* every edge on one of your rolls: body, origin. kind = option key or shot type */
-function myEdges(kind,ctx,type){const R=C?.rpg;if(!R)return[];const a=[...bodyEdges(kind,R),...originEdges(kind,ctx,R)];
-  if(type&&type!==kind){for(const e of [...bodyEdges(type,R),...originEdges(type,ctx,R)])if(!a.some(x=>x[0]===e[0]))a.push(e)}return a}
+function myEdges(kind,ctx,type){const R=C?.rpg;if(!R)return[];const jm=k=>typeof jobMods==="function"?jobMods(k):[];const a=[...bodyEdges(kind,R),...originEdges(kind,ctx,R)];for(const e of jm(kind))if(!a.some(x=>x[0]===e[0]))a.push(e);
+  if(type&&type!==kind){for(const e of [...bodyEdges(type,R),...originEdges(type,ctx,R),...jm(type)])if(!a.some(x=>x[0]===e[0]))a.push(e)}return a}
 function originCheck(){try{const R=C?.rpg;if(!R||R.oPerk||R.oOffered||(R.lv||1)<5)return;R.oOffered=true;const pool=OPOOL[R.origin]||OPOOL.custom;
   lifeRoll({title:"Level five",quiet:true,txt:[`~Level five. One edge, your choice. It stays with you.`],mods:[],dc:0,opts:pool.map(k=>({t:OPERKS[k].n,d:OPERKS[k].d,go:()=>{R.oPerk=k;saveC();return[`~${OPERKS[k].n}. It is on your card now.`]}}))})}catch(e){console.error(e)}}
 /* ---------- practice: two drills per game week, each a short chain of rolls ---------- */
@@ -3853,7 +3853,6 @@ function shotMods(type,s,ctx){const K=PV.skl,m=[];const add=(n,v)=>{v=Math.round
   add("Shot IQ",(s.SIQ-PV.ref)/40);if(ctx.open)add("Open look",PV.open);if(ctx.contest)add("Contested",-1);if(ctx.fat>0)add("Low energy",-ctx.fat*PV.fat);
   if(ctx.clutch)add("Clutch",(s.CLU-PV.ref)/PV.clu);if(ctx.hot)add("Heating up",1);if(ctx.home)add("Home crowd",.5);
   if(ctx.me&&typeof gearShotMods==="function")for(const g of gearShotMods(type,ctx))add(g[0],g[1]);
-  if(ctx.me&&typeof jobMods==="function")for(const g of jobMods(type))add(g[0],g[1]);
   return m}
 const modSum=m=>m.reduce((a,x)=>a+x[1],0);
 const pMake=(mod,dc)=>clamp((21+mod-dc)/20,.03,.97);
@@ -3889,8 +3888,8 @@ function defOptions(s,d,ctx){const sk=v=>Math.round((v-PV.ref)/PV.skl*2)/2,out=[
   const cm=[["Interior D",sk(d.INT)],["Judgment",clamp(typeof judgment==="function"?judgment():0,-2,2)]];
   out.push({k:"charge",lab:"Take the charge",mods:cm,mod:modSum(cm),dc:16,pct:pMake(modSum(cm)+1,16),pts:0,def:true,note:"Miss and it is a blocking foul."});
   if(typeof myEdges==="function")out.forEach(o=>{const e=myEdges(o.k,ctx);if(e.length){o.mods=[...o.mods,...e];o.mod=modSum(o.mods);o.pct=pMake(o.mod+1,o.dc)}});
-  if(typeof jobMods==="function")out.forEach(o=>{const jm=jobMods(o.k);if(jm.length){o.mods=[...o.mods,...jm];o.mod=modSum(o.mods);o.pct=pMake(o.mod+1,o.dc)}});
-  if(typeof jobActives==="function")for(const a of jobActives("def")){if(jobUsed(a.k))continue;const base=out.find(o=>o.k===a.on);if(!base)continue;const m2=[...base.mods,[a.lab,a.mod]],md=modSum(m2);out.push({...base,lab:a.lab,mods:m2,mod:md,pct:pMake(md+1,base.dc),job:a.k,note:a.note})}
+  if(typeof jobMoves==="function")for(const mv of jobMoves("def")){const pm=PMOVE[mv.k];if(!pm)continue;const base=out.find(o=>o.k===pm.on);if(!base)continue;const m2=[...base.mods,[pm.lab,pm.mod]],md=modSum(m2);out.push({...base,lab:pm.lab,mods:m2,mod:md,pct:pMake(md+1,base.dc),job:mv.key,perk:true,note:`${mv.src}. ${mv.once==="game"?"Once a game":"Once a quarter"}.`})}
+  if(window.__chSeen)for(const o of out){window.__chSeen["d:"+o.lab]=1;for(const m of o.mods)window.__chSeen["m:"+m[0]]=1}
   return out}
 /* karmic dice: damp streaks of identical outcomes (toggle) */
 function kroll(state,key){let r=1+Math.floor(R()*20);if(!state||state.karmic===false)return r;const st=state.k??={};const s=st[key]||0;
@@ -3961,10 +3960,83 @@ ST.job1=()=>SP_(`~Level ten.`,`~Everything until now was the same for everybody.
 ST.job1Done=(P)=>SP_(`~${P.n}. Noted.`,`~There is a new line on your card. Once a quarter. Do not waste it.`);
 ST.job2=(P)=>SP_(`~Level twenty. ${P.n} was the shape. This is the edge.`);
 ST.job2Done=(s)=>SP_(`~${s.n}. Another line on the card.`);
-ST.job3=()=>SP_(`~Level forty-five. Most players never see this number.`,`~Your passives are half again as strong.`);
+ST.job3=()=>SP_(`~Level forty-five. Most players never see this number.`,`~Your edges are half again as strong.`);
 ST.job3Done=()=>SP_(`~Master. The word is accurate.`);
 ST.job4=()=>SP_(`~Level sixty-five.`,`~Everything you do is a little better now. That is the whole message.`);
 ST.job4Done=()=>SP_(`~Legend. Keep going.`);
+ST.job1Late=()=>SP_(`~Level ten was a while ago. Pick.`);
+ST.clsLine=k=>({scorer:"+0.5 on every shot. Move: Step-back, once a quarter.",playmaker:"+0.5 on passes. Move: the lob when the help comes, once a quarter.",defense:"+0.5 on every defensive roll. Move: Lock him up, once a quarter."})[k];
+ST.num=n=>({30:"thirty",40:"forty",50:"fifty",60:"sixty"})[n]||String(n);
+ST.kindName=k=>({edge:"edge",move:"new move",rule:"rule",link:"link"})[k]||k;
+ST.perkPick=L=>SP_(`~Level ${ST.num(L)}. One more. Pick it.`);
+ST.perkDone=p=>SP_(`~${p.n}. It is on your card.`);
+/* perk names and what they do (player-facing) */
+ST.perks={
+ euro:{n:"Euro Step",t:"When the help comes, sidestep it into an open lane. Once a quarter. A miss is a charge."},
+ contact:{n:"And-One",t:"At the rim, the foul comes half again as often."},
+ downhill:{n:"Downhill",t:"+1.5 on drives."},
+ posterizer:{n:"Posterizer",t:"+1.5 on dunks, run-outs included."},
+ softtouch:{n:"Soft Touch",t:"+1.5 on floaters and layups through the help."},
+ pullup:{n:"Pull-up Artist",t:"+1.5 on pull-up and step-back jumpers."},
+ creator:{n:"Shot Creator",t:"The first time you get space, it does not cost a move."},
+ toughshot:{n:"Tough Shot Maker",t:"+2 on forced jumpers after you pick up your dribble."},
+ fade:{n:"Fadeaway",t:"A fadeaway jumper from the block, from space, or with your dribble picked up. Once a quarter."},
+ hesipull:{n:"Hesi Pull-up",t:"+1.5 on hesitations."},
+ deep:{n:"Deep Range",t:"A deep three from the top that ignores the set defender. Once a quarter."},
+ catchshoot:{n:"Catch and Shoot",t:"+1.5 on catch-and-shoot threes."},
+ step3:{n:"Step-back Three",t:"A step-back three with space, in the lane, or when the help comes. Once a quarter."},
+ heater:{n:"Heater",t:"After two makes in a row, +1.5 on threes until you miss."},
+ trigger:{n:"Quick Trigger",t:"+1 on pull-up threes."},
+ dropstep:{n:"Drop Step",t:"+1.5 on drop steps."},
+ hookshot:{n:"Hook Shot",t:"+1.5 on hooks."},
+ spincycle:{n:"Spin Cycle",t:"+1.5 on spins."},
+ faceup:{n:"Face Up",t:"A face-up jumper from the block with an open look. Once a quarter."},
+ postpass:{n:"Inside Out",t:"Teammates get +1 on shots off your passes."},
+ curl:{n:"Curl",t:"+1.5 on calling for the ball."},
+ backdoor:{n:"Backdoor",t:"+1.5 on cuts."},
+ corner:{n:"Corner Three",t:"+1.5 on catch-and-shoot threes and spot-ups."},
+ gravity:{n:"Gravity",t:"When you are on the floor without the ball, teammates get +0.5 on their shots."},
+ nodeny:{n:"Hard to Deny",t:"Calling for the ball never takes the denial penalty."},
+ tablesetter:{n:"Table Setter",t:"Teammates get +1 on shots off your passes."},
+ vision:{n:"Vision",t:"+1.5 on kick-outs, skip passes and dump-offs."},
+ tempo:{n:"Tempo",t:"Resetting the offense costs three seconds and no energy."},
+ coach:{n:"Coach on the Floor",t:"Your timeouts wipe out their momentum completely."},
+ readcov:{n:"Read the Coverage",t:"Before you call the screen, the card tells you whether they will switch, hedge or drop."},
+ hesitation:{n:"Hesitation",t:"+1.5 on hesitations."},
+ crossover:{n:"Crossover",t:"+1.5 on crossovers."},
+ shifty:{n:"Shifty",t:"They need one more look before they have seen it."},
+ scorefirst:{n:"Score First",t:"+1 on pull-up threes and pull-up jumpers."},
+ comboStep:{n:"Step-back",t:"A step-back jumper with space or in the lane. Once a quarter."},
+ navigator:{n:"Screen Navigator",t:"+1.5 on calling for screens."},
+ switchhunt:{n:"Switch Hunter",t:"Screens get you a switch more often."},
+ pocket:{n:"Pocket Pass",t:"+1.5 on dump-offs."},
+ lobcity:{n:"Lob City",t:"+1.5 on lobs."},
+ dho:{n:"Hand-off",t:"+1.5 on hand-offs."},
+ push:{n:"Push It",t:"After your team gets a defensive rebound, you sometimes start the next trip on a run-out."},
+ outlet:{n:"Outlet",t:"When a teammate gets a steal, half the time you start on the run-out."},
+ breakfinish:{n:"Finisher",t:"+1.5 on run-out dunks and layups."},
+ hitahead:{n:"Hit Ahead",t:"+1 on kick-outs."},
+ swing:{n:"Swing",t:"Your made threes swing momentum one more."},
+ clamps:{n:"Clamps",t:"+1.5 on contests."},
+ disciplined:{n:"Disciplined",t:"A missed steal does not leave him open."},
+ tireless:{n:"Tireless",t:"Defensive cards cost no energy."},
+ shutdown:{n:"Shut Him Down",t:"Once a game, a contest at +5."},
+ shadow:{n:"Shadow",t:"Your man shoots at −1 all game, whether you get a card or not."},
+ wall:{n:"Wall",t:"+1.5 on blocks."},
+ vertical:{n:"Verticality",t:"A missed block is never a foul."},
+ swatstart:{n:"Swat to Start",t:"When your team rebounds your block, you start on the run-out."},
+ chargetaker:{n:"Charge Taker",t:"+1.5 on taking charges."},
+ anchor:{n:"Anchor",t:"+1.5 on help rotations."},
+ quickhands:{n:"Quick Hands",t:"+1.5 on steals."},
+ lanes:{n:"Passing Lanes",t:"+1.5 on jumping passing lanes."},
+ recover:{n:"Recover",t:"A missed steal does not leave him open."},
+ picksix:{n:"Pick Six",t:"+1 on run-out dunks and layups."},
+ leakout:{n:"Leak Out",t:"When a teammate gets a steal, half the time you start on the run-out."},
+ crasher:{n:"Crash",t:"+1.5 on crashing the glass."},
+ putback:{n:"Putback",t:"When you crash and get the rebound, you go straight back up from under the rim."},
+ screener:{n:"Screen Setter",t:"+1.5 on screens."},
+ helpside:{n:"Help Side",t:"+1 on help rotations and jumping lanes."},
+ talker:{n:"Talker",t:"With you on the floor, their shots are at −0.5."}};
 
 /* ---------- sfx.js: small synthesized sounds. No files, no licenses. Off switch in Play settings. ---------- */
 let AC=null;const sfxOn=()=>typeof C!=="undefined"&&C&&C.sfx!==false;
@@ -3986,42 +4058,106 @@ const SFX={
   tap(){if(!sfxOn())return;tone(1000,.03,"square",.03)}};
 window.SFX=SFX;
 
-/* ---------- jobs.js: job advancement. Lv 10 / 20 / 35 / 50. Actives are new options on the card; passives are named modifiers on the dice. ---------- */
-const JOBLV=[10,20,45,65];
-const JOBS={
-  scorer:{n:"Scorer",d:"You get buckets. The card gets a step-back.",act:{k:"stepback",lab:"Step-back",type:"mid",mod:2,note:"Once a quarter. Creates space."},pas:[["three","Scorer",.5],["mid","Scorer",.5]],
-    spec:{sniper:{n:"Sniper",d:"The three is the whole thing.",act:{k:"relocate",lab:"Relocate and fire",type:"three",mod:2.5,note:"Once a quarter. Open look from deep."},pas:[["three","Sniper",1]]},
-          slasher:{n:"Slasher",d:"You live at the rim and the line.",act:{k:"eurostep",lab:"Euro step",type:"rim",mod:2.5,foul:1.5,note:"Once a quarter. Draws contact."},pas:[["rim","Slasher",1],["dunk","Slasher",.5]]}}},
-  playmaker:{n:"Playmaker",d:"You run it. The card gets a lob.",act:{k:"lob",lab:"Throw the lob",pass:true,mod:2,note:"Once a quarter. Best big, at the rim."},pas:[["pass","Playmaker",1]],
-    spec:{floor:{n:"Floor General",d:"Everyone is better with you on the floor.",act:{k:"setup",lab:"Set the table",pass:true,mod:3,note:"Once a quarter. The open man, guaranteed look."},pas:[["pass","Floor General",1]]},
-          combo:{n:"Combo Guard",d:"Score or pass. They cannot sit on either.",act:{k:"hesi",lab:"Hesitation pull-up",type:"mid",mod:2,note:"Once a quarter."},pas:[["mid","Combo",.5],["pass","Combo",.5]]}}},
-  wing:{n:"Two-way Wing",d:"You guard their best and still score. The card gets a chase-down.",act:{k:"chasedown",lab:"Chase-down block",def:true,on:"block",mod:3,note:"Once a quarter."},pas:[["block","Wing",.5],["steal","Wing",.5]],
-    spec:{stopper:{n:"Stopper",d:"Their best player has a bad night.",act:{k:"lockup",lab:"Lock him up",def:true,on:"hands",mod:3,note:"Once a quarter. A real contest."},pas:[["hands","Stopper",1],["steal","Stopper",.5]]},
-          threeD:{n:"3-and-D",d:"Corner threes and closeouts.",act:{k:"corner",lab:"Corner three",type:"three",mod:2,note:"Once a quarter."},pas:[["three","3-and-D",.5],["hands","3-and-D",.5]]}}},
-  big:{n:"Big",d:"You own the paint. The card gets a seal.",act:{k:"seal",lab:"Seal and finish",type:"post",mod:2.5,note:"Once a quarter. Deep position."},pas:[["post","Big",.5],["block","Big",.5]],
-    spec:{anchor:{n:"Rim Protector",d:"Nothing easy at the rim.",act:{k:"wall",lab:"Wall up",def:true,on:"block",mod:3,note:"Once a quarter. Verticality."},pas:[["block","Anchor",1],["charge","Anchor",.5]]},
-          stretch:{n:"Stretch Big",d:"Pick and pop. They have to come out.",act:{k:"pop",lab:"Pick and pop",type:"three",mod:2,note:"Once a quarter."},pas:[["three","Stretch",1]]}}},
-  glue:{n:"Glue Guy",d:"The extra pass, the charge, the winning. The card gets an extra pass.",act:{k:"extra",lab:"Extra pass",pass:true,mod:2.5,note:"Once a quarter. The ball finds the open man."},pas:[["pass","Glue",.5],["charge","Glue",1]],
-    spec:{hustle:{n:"Hustle",d:"Loose balls, charges, the stuff that wins.",act:{k:"dive",lab:"Dive on it",def:true,on:"steal",mod:3,note:"Once a quarter."},pas:[["steal","Hustle",1],["charge","Hustle",.5]]},
-          captain:{n:"Captain",d:"The locker room is yours.",act:{k:"settle",lab:"Settle them down",pass:true,mod:2,note:"Once a quarter. A clean possession."},pas:[["pass","Captain",1]]}}}};
-const jobS=()=>(C.job??={path:null,spec:null,m3:false,m4:false,sig:null,used:{}});
-function jobTier(){const J=jobS();return J.m4?4:J.m3?3:J.spec?2:J.path?1:0}
-function jobName(){const J=jobS();if(!J.path)return null;const P=JOBS[J.path];const s=J.spec?P.spec[J.spec]:null;return(J.m4?"Legend ":J.m3?"Master ":"")+(s?s.n:P.n)}
-/* passives: named modifiers on a roll of a given kind */
-function jobMods(kind){const J=jobS();if(!J.path)return[];const P=JOBS[J.path],out=[];const push=(arr)=>arr.forEach(([k,n,v])=>{if(k===kind)out.push([n,v*(J.m3?1.5:1)])});
-  push(P.pas);if(J.spec)push(P.spec[J.spec].pas);if(J.m4)out.push(["Legend",.5]);return out}
-/* actives: one per tier, once a quarter */
-function jobActives(side){const J=jobS();if(!J.path)return[];const P=JOBS[J.path],acts=[P.act];if(J.spec)acts.push(P.spec[J.spec].act);
-  return acts.filter(a=>side==="def"?a.def:!a.def)}
-function jobUsed(k){const q=LV?.ctl?.st?(LV.ev.length?LV.ev[LV.ev.length-1].q:1):1;const J=jobS();return J.used[k]===`${C.y}-${LV?.gameId||0}-${q}`}
-function jobMarkUsed(k){const q=LV?.ev?.length?LV.ev[LV.ev.length-1].q:1;jobS().used[k]=`${C.y}-${LV?.gameId||0}-${q}`}
-/* advancement: a scene with a choice, not a menu */
-function jobCheck(){try{const R=rpgS();if(!R||!C)return;const J=jobS(),lv=R.lv,t=jobTier();
-  if(t===0&&lv>=JOBLV[0]&&!J.offered1){J.offered1=true;lifeRoll({title:"Level ten",quiet:true,txt:ST.job1(),mods:[],dc:0,opts:Object.keys(JOBS).map(k=>({t:JOBS[k].n,d:JOBS[k].d,go:()=>{J.path=k;return ST.job1Done(JOBS[k])}}))})}
-  else if(t===1&&lv>=JOBLV[1]&&!J.offered2){J.offered2=true;const P=JOBS[J.path];lifeRoll({title:"Level twenty",quiet:true,txt:ST.job2(P),mods:[],dc:0,opts:Object.keys(P.spec).map(k=>({t:P.spec[k].n,d:P.spec[k].d,go:()=>{J.spec=k;return ST.job2Done(P.spec[k])}}))})}
-  else if(t===2&&lv>=JOBLV[2]&&!J.offered3){J.offered3=true;lifeRoll({title:"Level forty-five",quiet:true,txt:ST.job3(),mods:[],dc:0,opts:[{t:"Name it",d:"Your signature. The System will not name it for you.",go:()=>{J.m3=true;return ST.job3Done()}}]})}
-  else if(t===3&&lv>=JOBLV[3]&&!J.offered4){J.offered4=true;lifeRoll({title:"Level sixty-five",quiet:true,txt:ST.job4(),mods:[],dc:0,opts:[{t:"Keep going",d:"",go:()=>{J.m4=true;return ST.job4Done()}}]})}}catch(e){console.error(e)}}
-window.__jobs={jobS,jobCheck,JOBS,jobMods};
+/* ---------- jobs.js: classes, specializations, perks (PLAN.md §3).
+   Lv 10 class, Lv 20 specialization, perk picks at 30/40/50/60 from the specialization's pool, Master at 45 (+50% edges), Legend at 65.
+   Perk kinds: edge (named modifier on rolls), move (a new option on the card, once a quarter or once a game), rule (changes how a step works), link (one event starts a situation).
+   Player-facing text lives in story.js as ST.perks. ---------- */
+const JOBLV=[10,20,45,65],PERKLV=[30,40,50,60];
+const E_=(on,val)=>({kind:"edge",apply:{on,val}}),M_=(adds,from,once)=>({kind:"move",apply:{adds,from,once:once||"quarter"}}),R_=(rule,val)=>({kind:"rule",apply:{rule,val:val??1}}),L_=(from,to)=>({kind:"link",apply:{from,to}});
+const CLASSES={
+ scorer:{n:"Scorer",d:"You get buckets.",edge:{on:["three","mid","rim","dunk","post"],val:.5},move:"stepback",
+  specs:{
+   inside:{n:"Slasher",d:"The rim and the line.",edge:{on:["drive","rim","dunk","layhelp"],val:1},pool:{
+     euro:M_("euro",["collapse"]),contact:R_("contactFouls"),downhill:E_(["drive"],1.5),posterizer:E_(["dunk","rodunk"],1.5),softtouch:E_(["floater","layhelp"],1.5)}},
+   mid:{n:"Midrange Assassin",d:"The pull-up nobody wants to give you.",edge:{on:["mid"],val:1},pool:{
+     pullup:E_(["pullmid","stepback"],1.5),creator:R_("spaceLasts"),toughshot:E_(["forced"],2),fade:M_("fade",["seal","picked","space"]),hesipull:E_(["hesi"],1.5)}},
+   outside:{n:"Sniper",d:"The three is the whole thing.",edge:{on:["three"],val:1},pool:{
+     deep:M_("deep3",["top"]),catchshoot:E_(["cs3"],1.5),step3:M_("stepback3",["space","lane","collapse"]),heater:R_("heatCheck"),trigger:E_(["pull3"],1)}},
+   post:{n:"Post Scorer",d:"Back him down. Finish over him.",edge:{on:["post","seal"],val:1},pool:{
+     dropstep:E_(["dropstep"],1.5),hookshot:E_(["hook"],1.5),spincycle:E_(["spin"],1.5),faceup:M_("faceup",["seal"]),postpass:R_("teamOpenPlus1")}},
+   offball:{n:"Movement Shooter",d:"You never stop moving. Somebody loses you.",edge:{on:["callfor","cut","cs3"],val:1},pool:{
+     curl:E_(["callfor"],1.5),backdoor:E_(["cut"],1.5),corner:E_(["cs3","spot"],1.5),gravity:R_("gravity"),nodeny:R_("noCallFor")}}}},
+ playmaker:{n:"Playmaker",d:"You run it.",edge:{on:["pass"],val:.5},move:"lob",
+  specs:{
+   floor:{n:"Floor General",d:"Everyone is better with you on the floor.",edge:{on:["pass"],val:1},pool:{
+     tablesetter:R_("teamOpenPlus1"),vision:E_(["kick","skip","dump"],1.5),tempo:R_("resetCost3"),coach:R_("timeoutFullReset"),readcov:R_("seeCoverage")}},
+   combo:{n:"Combo Guard",d:"Score or pass. They cannot sit on either.",edge:{on:["cross","hesi","pull3","pullmid"],val:.5},pool:{
+     hesitation:E_(["hesi"],1.5),crossover:E_(["cross"],1.5),shifty:R_("seenHalved3"),scorefirst:E_(["pull3","pullmid"],1),comboStep:M_("stepback",["space","lane"])}},
+   pnr:{n:"Pick-and-Roll Maestro",d:"Two-man game. Pick your poison.",edge:{on:["screen","handoff"],val:1},pool:{
+     navigator:E_(["screen"],1.5),switchhunt:R_("screenSwitchMore"),pocket:E_(["dump"],1.5),lobcity:E_(["lob"],1.5),dho:E_(["handoff"],1.5)}},
+   transition:{n:"Transition Engine",d:"Every miss is a chance to run.",edge:{on:["rodunk","rolay"],val:1},pool:{
+     push:R_("pushAfterReb"),outlet:L_("teamSteal","runout"),breakfinish:E_(["rodunk","rolay"],1.5),hitahead:E_(["kick"],1),swing:R_("momentumTeamPlus")}}}},
+ defense:{n:"Defense",d:"You guard their best.",edge:{on:["hands","steal","block","charge","rotate","lane"],val:.5},move:"lockup",
+  specs:{
+   stopper:{n:"Lockdown",d:"Their best player has a bad night.",edge:{on:["hands"],val:1},pool:{
+     clamps:E_(["hands"],1.5),disciplined:R_("noBite"),tireless:R_("zeroDefEnergy"),shutdown:M_("shutdown",["def"],"game"),shadow:R_("shadow")}},
+   rim:{n:"Rim Protector",d:"Nothing easy at the rim.",edge:{on:["block"],val:1},pool:{
+     wall:E_(["block"],1.5),vertical:R_("noBlockFoul"),swatstart:L_("block","runout"),chargetaker:E_(["charge"],1.5),anchor:E_(["rotate"],1.5)}},
+   hawk:{n:"Ball Hawk",d:"Hands in every passing lane.",edge:{on:["steal","lane"],val:1},pool:{
+     quickhands:E_(["steal"],1.5),lanes:E_(["lane"],1.5),recover:R_("noBite"),picksix:E_(["rodunk","rolay"],1),leakout:L_("teamSteal","runout")}},
+   glue:{n:"Glue Guy",d:"The stuff that does not show up in the box score.",edge:{on:["crash","screen","rotate"],val:1},pool:{
+     crasher:E_(["crash"],1.5),putback:L_("oreb","putback"),screener:E_(["screen"],1.5),helpside:E_(["rotate","lane"],1),talker:R_("teamDefPlus")}}}}};
+/* the moves perks can add, by key: what the card shows */
+const PMOVE={stepback:{lab:"Step-back jumper",type:"mid"},stepback3:{lab:"Step-back three",type:"three"},euro:{lab:"Euro step"},lob:{lab:"Throw the lob"},
+  fade:{lab:"Fadeaway",type:"mid"},deep3:{lab:"Deep three",type:"three"},faceup:{lab:"Face-up jumper",type:"mid"},lockup:{lab:"Lock him up",on:"hands",mod:3},shutdown:{lab:"Shut him down",on:"hands",mod:5}};
+const OLDMAP={scorer:["scorer",null],playmaker:["playmaker",null],wing:["defense","stopper"],big:["scorer","post"],glue:["defense","glue"]};
+function jobS(){if(typeof C==="undefined"||!C)return{cls:null,spec:null,perks:[],used:{},offered:{}};const J=(C.job??={cls:null,spec:null,perks:[],eq:null,m3:false,m4:false,used:{},offered:{}});
+  if(J.path!==undefined){const m=OLDMAP[J.path],SM={sniper:"outside",slasher:"inside",floor:"floor",combo:"combo",stopper:"stopper",threeD:"stopper",anchor:"post",stretch:"post",hustle:"glue",captain:"glue"};if(m){const old=J.spec;J.cls=m[0];J.spec=old?(CLASSES[m[0]].specs[SM[old]]?SM[old]:(m[1]||Object.keys(CLASSES[m[0]].specs)[0])):null}else{J.cls=null;J.spec=null}
+    J.offered={};if(J.cls)J.offered[10]=1;if(J.spec)J.offered[20]=1;if(J.m3)J.offered[45]=1;if(J.m4)J.offered[65]=1;delete J.path;delete J.offered1;delete J.offered2;delete J.offered3;delete J.offered4;delete J.sig;
+    if(J.spec&&!CLASSES[J.cls].specs[J.spec])J.spec=null;if(!J.spec)delete J.offered[20]}
+  J.perks??=[];J.used??={};J.offered??={};return J}
+const jobCls=()=>{const J=jobS();return J.cls?CLASSES[J.cls]:null};
+const jobSpec=()=>{const J=jobS(),c=jobCls();return c&&J.spec?c.specs[J.spec]:null};
+function perkDef(k){for(const c of Object.values(CLASSES))for(const s of Object.values(c.specs))if(s.pool[k])return{k,...s.pool[k],n:(ST.perks?.[k]?.n)||k,text:(ST.perks?.[k]?.t)||""};return null}
+const perkSlots=()=>C?.stage==="college"?3:5;
+/* equipped perks: the pool picks, capped by slots (the origin perk takes one slot) */
+function jobEq(){const J=jobS(),cap=Math.max(0,perkSlots()-((C?.rpg?.oPerk)?1:0)),off=J.off||[];return J.perks.filter(k=>!off.includes(k)).slice(0,cap)}
+function jobTier(){const J=jobS();return J.m4?4:J.m3?3:J.spec?2:J.cls?1:0}
+function jobName(){const c=jobCls();if(!c)return null;const J=jobS(),s=jobSpec();return(J.m4?"Legend ":J.m3?"Master ":"")+(s?s.n:c.n)}
+/* edges for a roll kind: class edge, spec edge, equipped edge perks. Master is x1.5 on all of them. */
+function jobMods(kind){const c=jobCls();if(!c)return[];const J=jobS(),mul=J.m3?1.5:1,out=[];
+  if(c.edge.on.includes(kind))out.push([c.n,c.edge.val*mul]);const s=jobSpec();if(s&&s.edge.on.includes(kind))out.push([s.n,s.edge.val*mul]);
+  for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="edge"&&p.apply.on.includes(kind))out.push([p.n,p.apply.val*mul])}
+  if(J.m4)out.push(["Legend",.5]);return out}
+function jobRule(key){const c=jobCls();if(!c)return null;for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="rule"&&p.apply.rule===key)return p.apply.val}return null}
+function jobLinks(ev){const c=jobCls();if(!c)return null;for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="link"&&p.apply.from===ev)return p.apply.to}return null}
+const jobRuleName=key=>{for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="rule"&&p.apply.rule===key)return p.n}return""};
+/* moves available in a situation ("def" for the defensive card). Legend adds a second use. */
+function jobMoves(sit){const c=jobCls();if(!c)return[];const out=[];
+  const cm=c.move;if(cm){const from=cm==="stepback"?["space","lane","collapse"]:cm==="lob"?["collapse"]:["def"];if(from.includes(sit)&&!jobUsed(cm))out.push({k:cm,key:cm,once:"quarter",src:c.n})}
+  for(const k of jobEq()){const p=perkDef(k);if(p&&p.kind==="move"&&p.apply.from.includes(sit)&&!jobUsed(k,p.apply.once)&&!out.some(x=>x.k===p.apply.adds))out.push({k:p.apply.adds,key:k,once:p.apply.once,src:p.n})}
+  return out}
+function jobActives(){return[]}
+const jobQ=()=>LV?.ev?.length?LV.ev[LV.ev.length-1].q:1;
+function jobUsed(k,once){const J=jobS(),u=J.used[k];if(!u)return false;const g=`${C.y}-${LV?.gameId||0}`;const n=jobS().m4?2:1;
+  if(once==="game"||(perkDef(k)?.apply?.once==="game"))return u.g===g&&u.n>=n;return u.g===g&&u.q===jobQ()&&u.n>=n}
+function jobMarkUsed(k){const J=jobS(),g=`${C.y}-${LV?.gameId||0}`,q=jobQ(),u=J.used[k];const game=perkDef(k)?.apply?.once==="game";
+  if(u&&u.g===g&&(game||u.q===q))u.n++;else J.used[k]={g,q,n:1}}
+/* advancement: a card with a choice */
+function jobCheck(){try{const R=rpgS();if(!R||!C)return;const J=jobS(),lv=R.lv,O=J.offered;
+  if(!J.cls&&lv>=JOBLV[0]&&!O[10]){O[10]=1;lifeRoll({title:"Level ten",quiet:true,txt:J.late10?ST.job1Late():ST.job1(),mods:[],dc:0,opts:Object.keys(CLASSES).map(k=>({t:CLASSES[k].n,d:CLASSES[k].d+" "+ST.clsLine(k),go:()=>{J.cls=k;saveC();return ST.job1Done(CLASSES[k])}}))});return}
+  if(J.cls&&!J.spec&&lv>=JOBLV[1]&&!O[20]){O[20]=1;const c=CLASSES[J.cls];lifeRoll({title:"Level twenty",quiet:true,txt:ST.job2(c),mods:[],dc:0,opts:Object.keys(c.specs).map(k=>({t:c.specs[k].n,d:c.specs[k].d+` +${c.specs[k].edge.val} on ${c.specs[k].edge.on.map(perkOnName).join(", ")}.`,go:()=>{J.spec=k;saveC();return ST.job2Done(c.specs[k])}}))});return}
+  if(J.spec)for(const L of PERKLV){if(lv>=L&&!O[L]){O[L]=1;const pool=Object.keys(jobSpec().pool).filter(k=>!J.perks.includes(k));if(!pool.length)continue;
+    lifeRoll({title:`Level ${ST.num(L)}`,quiet:true,txt:ST.perkPick(L),mods:[],dc:0,opts:pool.map(k=>{const p=perkDef(k);return{t:p.n,d:`${p.text} (${ST.kindName(p.kind)})`,go:()=>{J.perks.push(k);saveC();return ST.perkDone(p)}}})});return}}
+  if(J.spec&&!J.m3&&lv>=JOBLV[2]&&!O[45]){O[45]=1;lifeRoll({title:"Level forty-five",quiet:true,txt:ST.job3(),mods:[],dc:0,opts:[{t:"Master",d:"Every class, specialization and perk edge is half again as strong.",go:()=>{J.m3=true;saveC();return ST.job3Done()}}]});return}
+  if(J.m3&&!J.m4&&lv>=JOBLV[3]&&!O[65]){O[65]=1;lifeRoll({title:"Level sixty-five",quiet:true,txt:ST.job4(),mods:[],dc:0,opts:[{t:"Legend",d:"+0.5 on every roll. Every move perk gets a second use.",go:()=>{J.m4=true;saveC();return ST.job4Done()}}]});return}
+  if(lv>=JOBLV[0]&&!J.cls&&O[10]&&!J.late10){J.late10=1;delete O[10];setTimeout(jobCheck,0)}}catch(e){console.error(e)}}
+const PERK_ON={three:"threes",mid:"jumpers",rim:"layups",dunk:"dunks",post:"post shots",drive:"drives",layhelp:"layups through help",pass:"passes",cross:"crossovers",hesi:"hesitations",pull3:"pull-up threes",pullmid:"pull-up jumpers",
+  screen:"screens",handoff:"hand-offs",rodunk:"run-out dunks",rolay:"run-out layups",hands:"contests",steal:"steals",block:"blocks",charge:"charges",rotate:"rotations",lane:"jumping lanes",crash:"crashing the glass",
+  callfor:"calling for the ball",cut:"cuts",cs3:"catch-and-shoot threes",seal:"seals",spot:"spot-ups",kick:"kick-outs",skip:"skip passes",dump:"dump-offs",lob:"lobs",floater:"floaters",forced:"forced jumpers",stepback:"step-backs",
+  dropstep:"drop steps",hook:"hooks",spin:"spins"};
+const perkOnName=k=>PERK_ON[k]||k;
+/* sheet: class, specialization, perks, slots */
+function jobPanel(){const c=jobCls();if(!c)return`<div class="mp-note">None yet. Level 10 picks a class: Scorer, Playmaker or Defense.</div>`;const J=jobS(),s=jobSpec(),mul=J.m3?1.5:1,eq=jobEq(),R=rpgS();
+  const nxt=!J.spec?20:PERKLV.find(L=>!J.offered[L])||(!J.m3?45:!J.m4?65:null);
+  const line=(n,t,on)=>`<div class="jp-row ${on===false?"off":""}"><b>${esc(n)}</b><span>${esc(t)}</span></div>`;
+  return`<div class="jp">${line(c.n,`+${c.edge.val*mul} on ${c.edge.on.map(perkOnName).join(", ")}. Move: ${PMOVE[c.move].lab}, once a quarter.`)}
+    ${s?line(s.n,`+${s.edge.val*mul} on ${s.edge.on.map(perkOnName).join(", ")}.`):""}
+    ${R?.oPerk&&typeof OPERKS!=="undefined"?line(OPERKS[R.oPerk].n,OPERKS[R.oPerk].d+" (origin)"):""}
+    ${J.perks.map(k=>{const p=perkDef(k),on=eq.includes(k);return`<div class="jp-row ${on?"":"off"}"><b>${esc(p.n)}</b><span>${esc(p.text)}</span>${J.perks.length>Math.max(0,perkSlots()-(R?.oPerk?1:0))?`<button class="mp-btn sm" data-act="jobeq" data-v="${k}">${on?"Unequip":"Equip"}</button>`:""}</div>`}).join("")}
+    <div class="mp-note">Perk slots: ${eq.length+(R?.oPerk?1:0)} of ${perkSlots()} (${C?.stage==="college"?"three in college":"five in the NBA"}).${J.m4?" Legend: +0.5 on everything, every move twice.":J.m3?" Master: edges x1.5.":""} ${nxt?`Next: Lv ${nxt}.`:"Nothing left to unlock."}</div></div>`}
+function jobEqToggle(k){const J=jobS(),off=(J.off??=[]);if(jobEq().includes(k)){off.push(k)}else{J.off=off.filter(x=>x!==k);const cap=Math.max(0,perkSlots()-(C?.rpg?.oPerk?1:0)),eq=J.perks.filter(x=>!J.off.includes(x));if(eq.length>cap){const drop=eq.find(x=>x!==k);if(drop)J.off.push(drop)}}saveC()}
+window.__jobs={jobS,jobCheck,CLASSES,jobMods,jobRule,jobLinks,jobMoves,perkDef,jobEq};
 
 /* ---------- chain.js: the possession chain (PLAN.md §2). Pure option builders and the auto policy.
    The driver that walks the chain lives in liveGen (franchise.html), because it needs the game's closures.
@@ -4034,15 +4170,12 @@ const chHalf=v=>Math.round(v*2)/2;
 const chSk=v=>chHalf(((v??65)-PV.ref)/PV.skl);
 const chSum=m=>m.reduce((a,x)=>a+x[1],0);
 function chFin(o){o.mods=(o.mods||[]).filter(m=>m[1]!==0);o.mod=chSum(o.mods);o.pct=o.noroll?1:pMake(o.mod+1,o.dc);o.pts=o.pts??0;return o}
-function chSeenPen(E,k){const n=(E.seen&&E.seen.k===k?E.seen.n:0)+1;return n>=4?-2:n>=3?-1:0}
+function chSeenPen(E,k){const n=(E.seen&&E.seen.k===k?E.seen.n:0)+1-(typeof jobRule==="function"&&jobRule("seenHalved3")?1:0);return n>=4?-2:n>=3?-1:0}
 const CH_DEAL=["cross","hesi","jab","pump","screen","handoff"];
 /* which setup gets dealt at the top this possession, weighted by the player's game */
 function chDeal(s){const w={cross:s.HND,hesi:(s.HND+s.SIQ)/2,jab:s.SIQ*.8,pump:(s.SIQ+s.THR)/2*.8,screen:62,handoff:s.PAS*.8};
   const ks=CH_DEAL,ws=ks.map(k=>Math.pow(w[k]/60,3));let r=Math.random()*ws.reduce((a,b)=>a+b,0);for(let i=0;i<ks.length;i++){r-=ws[i];if(r<=0)return ks[i]}return ks[0]}
-/* perk moves available from the player's job (M3 replaces this with the class table) */
-function chPerks(){const out=new Set();try{if(typeof jobS!=="function"||typeof C==="undefined"||!C)return out;const J=jobS();if(!J.path)return out;
-  const P=typeof JOBS!=="undefined"?JOBS[J.path]:null;if(!P)return out;const acts=[P.act,...(J.spec&&P.spec[J.spec]?[P.spec[J.spec].act]:[])].filter(Boolean);
-  for(const a of acts){const m={stepback:"stepback",relocate:"stepback3",eurostep:"euro",lob:"lob",setup:"lob",hesi:"stepback",corner:"stepback3",pop:"stepback3"}[a.k];if(m&&!(typeof jobUsed==="function"&&jobUsed(a.k)))out.add(m+"|"+a.k)}}catch(e){}return out}
+function chPerks(){return new Set()}
 const chHas=(E,m)=>{for(const x of E.perks)if(x.split("|")[0]===m)return x.split("|")[1];return null};
 
 /* the options for the current situation */
@@ -4051,13 +4184,13 @@ function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;
   const ddc=(base,stat,div)=>Math.round(base+((stat??65)-PV.ref)/(div||PV.skl));
   const S=(k,lab,note,mods,dc,sec,en,x)=>{if(finOnly)return;out.push(chFin({k,kind:"setup",lab,note,mods:tail([...mods,...myEdges(k,E.ctx)],k,true),dc,sec,en,...(x||{})}))};
   const F=(k,lab,type,cx,extra,dcAdd,note,vs,x)=>{if(type==="three"&&E.no3x)return;const ctx={...E.ctx,...cx,me:true};const mods=shotMods(type,s,ctx).filter(m=>m[0]!=="Tired");
-    for(const m of [...(extra||[]),...myEdges(k,ctx,type)])mods.push(m);if(E.mom)mods.push(["Momentum",E.mom]);const dp=vs==="help"?h:vs==="mm"?(E.mm||d):d;
+    for(const m of [...(extra||[]),...myEdges(k,ctx,type)])mods.push(m);if(type==="three"&&E.ctx.hot2&&typeof jobRule==="function"&&jobRule("heatCheck"))mods.push([jobRuleName("heatCheck"),1.5]);if(E.mom)mods.push(["Momentum",E.mom]);const dp=vs==="help"?h:vs==="mm"?(E.mm||d):d;
     out.push(chFin({k,kind:"finish",type,lab,note,mods,dc:shotDC(type,dp,{...ctx,dh:vs==="help"?E.dhH:E.dh})+(dcAdd||0),pts:type==="three"?3:2,open:!!cx.open,contest:!!cx.contest,vs:vs||"man",...(x||{})}))};
   const K=(k,lab,openShot,dcAdd,bonus,pick,x)=>{const mates=(E.mates||[]).filter(m=>!pick||pick(m));if(!mates.length)return;
-    const swing=k==="kick"&&!openShot;const pm=[["Passing",chHalf(chSk(s.PAS)*(swing?.5:1))],["Court vision",chHalf((s.VIS-PV.ref)/25)]];for(const e of myEdges("pass",E.ctx))pm.push(e);if(E.ctx.fat>0)pm.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)pm.push(["Momentum",E.mom]);
+    const swing=k==="kick"&&!openShot;const pm=[["Passing",chHalf(chSk(s.PAS)*(swing?.5:1))],["Court vision",chHalf((s.VIS-PV.ref)/25)]];for(const e of myEdges(k,E.ctx,"pass"))pm.push(e);if(E.ctx.fat>0)pm.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)pm.push(["Momentum",E.mom]);
     const pdc=Math.round((swing?5:7)+(E.dSTL-PV.ref)/14+(dcAdd||0));const pp=pMake(chSum(pm)+1,pdc);
     let best=null;for(const m of mates){const type=x&&x.type?x.type:m.type;if(type==="three"&&E.no3x)continue;const c={open:openShot,contest:!openShot,home:E.ctx.home,fat:m.fat};const sm=shotMods(type,m.s,c).filter(z=>z[0]!=="Tired");
-      for(const b of bonus||[])sm.push(b);if(E.mom)sm.push(["Momentum",E.mom]);const sdc=shotDC(type,m.ds,{...c,dh:m.dh}),sp=pMake(chSum(sm)+1,sdc),ev=sp*(type==="three"?3:2);
+      for(const b of bonus||[])sm.push(b);if(typeof jobRule==="function"&&jobRule("teamOpenPlus1"))sm.push([jobRuleName("teamOpenPlus1"),1]);if(E.mom)sm.push(["Momentum",E.mom]);const sdc=shotDC(type,m.ds,{...c,dh:m.dh}),sp=pMake(chSum(sm)+1,sdc),ev=sp*(type==="three"?3:2);
       if(!best||ev>best.ev)best={m,type,sm,sdc,sp,ev}}
     if(!best)return;const comb=pp*best.sp;
     out.push({...chFin({k,kind:"pass",pass:true,lab:lab.replace("{n}",best.m.name),mods:pm,dc:pdc,sec:2,en:0,...(x||{})}),
@@ -4066,14 +4199,13 @@ function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;
   const pull=(cx,extra,lab,note)=>{const t3=E.no3x?null:shotMods("three",s,{...E.ctx,...cx}),tm=shotMods("mid",s,{...E.ctx,...cx});
     const ev3=t3?pMake(chSum(t3)+1,shotDC("three",d,{...E.ctx,...cx}))*3:0,evm=pMake(chSum(tm)+1,shotDC("mid",d,{...E.ctx,...cx}))*2;
     const type=ev3>=evm?"three":"mid";F(type==="three"?"pull3":"pullmid",(lab||"Pull-up")+" "+(type==="three"?"three":"jumper"),type,cx,extra,0,note)};
-  const perkStep=()=>{const j3=chHas(E,"stepback3"),j=chHas(E,"stepback");if(j3&&!E.no3x)F("stepback3","Step-back three","three",{open:true},[["Step-back",1.5]],0,"Perk. Once a quarter. He is behind you.",null,{job:j3,perk:true});
-    else if(j)F("stepback","Step-back jumper","mid",{open:true},[["Step-back",1.5]],0,"Perk. Once a quarter. He is behind you.",null,{job:j,perk:true})};
+  const perkStep=()=>{};
   const drv=(bonus,note)=>S("drive","Drive",note||"Beat your man and the possession opens up.",[["Handle",chSk(s.HND)],["Acceleration",chHalf((s.ACC-PV.ref)/20)],...(bonus||[])],ddc(12,d.PER),3,1.5);
   const dealt=k=>{if(k==="cross")S("cross","Crossover","Make space. Fail and you picked up your dribble.",[["Handle",chSk(s.HND)]],ddc(12,d.PER),2,1);
     else if(k==="hesi")S("hesi","Hesitation","Freeze him. If he bites, he is off balance.",[["Handle",chSk(s.HND)],["Shot IQ",chHalf((s.SIQ-PV.ref)/20)]],ddc(12,d.PER),2,0.5);
     else if(k==="jab")S("jab","Jab step","Read him. A little space if it works. Costs nothing if it does not.",[["Shot IQ",chSk(s.SIQ)]],ddc(11,d.PER),1,0);
     else if(k==="pump")S("pump","Pump fake","Get him in the air.",[["Shot IQ",chSk(s.SIQ)],["Shooter's respect",chHalf((s.THR-PV.ref)/20)]],ddc(12,d.PER),1,0);
-    else if(k==="screen"&&E.big)S("screen",`Call for ${E.big.name}'s screen`,"Their coverage decides: switch, hedge or drop.",[["Screener",chSk(E.big.s.STR)]],ddc(11,E.dPERavg),3,0.5);
+    else if(k==="screen"&&E.big){let cn="Their coverage decides: switch, hedge or drop.";if(typeof jobRule==="function"&&jobRule("seeCoverage")){P.cov??=1+Math.floor(Math.random()*20);const sw=jobRule("screenSwitchMore")?12:8;cn=`${jobRuleName("seeCoverage")}: they will ${P.cov<=sw?"switch":P.cov<=15?"hedge":"drop"}.`}S("screen",`Call for ${E.big.name}'s screen`,cn,[["Screener",chSk(E.big.s.STR)]],ddc(11,E.dPERavg),3,0.5);}
     else if(k==="handoff"&&E.big)S("handoff",`Hand-off with ${E.big.name}`,"Come off it with space.",[["Passing",chSk(s.PAS)]],ddc(10,d.PER),2,0.5)};
   if(sit==="top"){drv();pull({contest:true},fl.pullPlus?[["Drop coverage",1]]:[["Set defender",-1.5]]);dealt(P.deal);if(s.PST>=56)S("post","Post up","Back him down. Seal, then hook, spin or drop step.",[["Post moves",chSk(s.PST)],["Strength",chHalf((s.STR-PV.ref)/20)]],ddc(12,d.INT)+Math.round((d.STR-PV.ref)/20),4,1.5);
     else if(P.deal!=="screen")dealt("screen");K("kick","Swing it to {n}",false,0)}
@@ -4081,8 +4213,6 @@ function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;
   else if(sit==="offbal"){drv([["Off balance",2]],"He is in the air. The lane is right there.");pull({open:true});S("drawfoul","Draw the foul","Go into him. Two free throws if it works.",[["Draw fouls",chSk(s.DRW)]],ddc(12,d.PER),1,0.5);K("kick","Kick to {n}",false,0)}
   else if(sit==="collapse"){F("layhelp","Layup through the help","rim",{contest:true},null,0,"Over the help.","help");F("floater","Floater over the help","mid",{},null,1,"Soft and high. Harder than a jumper, easier than going through him.","help");
     K("kick","Kick to the open man, {n}",true,-1);if(E.big&&E.big.inside)K("dump","Dump off to {n}",true,-1,null,m=>m.inside,{type:"rim"});else if(E.shooters)K("skip","Skip pass to {n}",true,1,[["Skip pass",1]],m=>m.type==="three");
-    const lob=chHas(E,"lob");if(lob&&E.big)K("lob","Throw the lob to {n}",true,1,[["Lob",2]],m=>m===E.big,{type:"dunk",job:lob,perk:true,lob:true});
-    const eu=chHas(E,"euro");if(eu)S("euro","Euro step","Perk. Sidestep the help into the lane. Fail is a charge.",[["Acceleration",chSk(s.ACC)],["Handle",chHalf((s.HND-PV.ref)/20)]],ddc(13,h.INT),2,1,{job:eu,perk:true});
     perkStep()}
   else if(sit==="lane"){F("layup",fl.under?"Layup in traffic":"Layup","rim",fl.under?{contest:true}:{open:true},null,0,fl.under?"Under the basket, bodies around you.":"Nobody between you and the rim.");if(!fl.under)F("dunk","Dunk","dunk",{open:true},null,3,"Harder than the layup. Worth more than two: momentum, and the crowd.");perkStep();K("kick","Kick out to {n}",false,0)}
   else if(sit==="mismatch"){S("post","Post the small man","Mismatch. Back him down.",[["Post moves",chSk(s.PST)],["Mismatch",2]],ddc(12,(E.mm||d).INT),4,1.5);drv([["Mismatch",2]],"The big man is guarding you. Go by him.");pull({open:true},null,"Pull-up over the big");K("kick","Kick to {n}",false,0)}
@@ -4090,19 +4220,29 @@ function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;
   else if(sit==="seal"){F("hook","Hook shot","post",{},null,0,null);S("spin","Spin baseline","Beat him on the spin and the rim is yours.",[["Post moves",chSk(s.PST)],["Acceleration",chHalf((s.ACC-PV.ref)/20)]],ddc(13,d.INT),2,1);
     S("dropstep","Drop step","Strength against strength. Fail and you shoot the hook at a disadvantage.",[["Strength",chSk(s.STR)]],ddc(12,d.STR),2,1);K("kick","Kick out of the double to {n}",true,0)}
   else if(sit==="picked"){F("forced","Forced jumper","mid",{contest:true},[["Dribble picked up",-2]],0,null);S("step","Step-through","Pivot under him. A natural 1 is a travel.",[["Shot IQ",chHalf((s.SIQ-PV.ref)/20)],["Strength",chHalf((s.STR-PV.ref)/20)]],ddc(13,d.INT),2,0.5);
-    K("kick","Bail out to {n}",false,0);if(!finOnly)out.push(chFin({k:"reset",kind:"setup",lab:"Reset the offense",note:"No roll. Six seconds and some energy. Back to the top.",mods:[],dc:0,noroll:true,sec:6,en:1}))}
+    K("kick","Bail out to {n}",false,0);if(!finOnly){const tq=typeof jobRule==="function"&&jobRule("resetCost3");out.push(chFin({k:"reset",kind:"setup",lab:"Reset the offense",note:tq?"No roll. Three seconds, no energy. Back to the top.":"No roll. Six seconds and some energy. Back to the top.",mods:[],dc:0,noroll:true,sec:tq?3:6,en:tq?0:1}))}}
   else if(sit==="corner"||sit==="wing"){F("cs3","Catch and shoot","three",{},[["Catch and shoot",1]],0,"Feet set. He is closing out.");dealt("pump");drv();K("kick","Swing it to {n}",false,0)}
   else if(sit==="runout"){F("rodunk","Dunk on the run-out","dunk",{open:true},[["Run-out",1]],1,"Nobody back. Worth more than two.");F("rolay","Layup on the run-out","rim",{open:true},[["Run-out",1]],0,null);K("kick","Hit the trailer, {n}",true,0)}
+  if(typeof jobMoves==="function")for(const mv of jobMoves(sit)){const tag={job:mv.key,perk:true},nt=`${mv.src}. ${mv.once==="game"?"Once a game":"Once a quarter"}.`;
+    if(mv.k==="stepback")F("stepback","Step-back jumper","mid",{open:true},[["Step-back",1.5]],0,nt+" He is behind you.",null,tag);
+    else if(mv.k==="stepback3"&&!E.no3x)F("stepback3","Step-back three","three",{open:true},[["Step-back",1.5]],0,nt+" He is behind you.",null,tag);
+    else if(mv.k==="fade")F("fade","Fadeaway","mid",{},[["Fadeaway",1.5]],0,nt+" Falling away from him.",null,tag);
+    else if(mv.k==="faceup")F("faceup","Face-up jumper","mid",{open:true},[["Face up",1]],0,nt+" He gave you room.",null,tag);
+    else if(mv.k==="deep3"&&!E.no3x)F("deep3","Deep three","three",{},[["Deep range",.5]],1,nt+" From the logo. No set defender out there.",null,tag);
+    else if(mv.k==="euro"&&!finOnly)S("euro","Euro step",nt+" Sidestep the help into the lane. Fail is a charge.",[["Acceleration",chSk(s.ACC)],["Handle",chHalf((s.HND-PV.ref)/20)]],ddc(13,h.INT),2,1,tag);
+    else if(mv.k==="lob"&&E.big)K("lob","Throw the lob to {n}",true,1,[["Lob",2]],m=>m===E.big,{type:"dunk",...tag,lob:true})}
   if(P.late&&P.lead>0&&P.n===0&&!fl.milk&&sit==="top")out.push(chFin({k:"milk",kind:"setup",lab:"Milk the clock",note:"No roll. Burns twenty seconds. Fewer moves after it.",mods:[],dc:0,sec:20,noroll:true}));
+  if(window.__chSeen)for(const o of out){window.__chSeen["o:"+o.lab.replace(/ to .*| over .*/,"")]=1;for(const m of o.mods)window.__chSeen["m:"+m[0]]=1}
   return out}
 
 /* off the ball: your team has it, the ball is elsewhere */
 function chainOffball(E){const cfE=o=>chFin(o.noroll?o:{...o,mods:[...o.mods,...myEdges(o.k,E.ctx)]});const s=E.s,d=E.d,out=[];const t=(mods)=>{if(E.ctx.fat>0)mods.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)mods.push(["Momentum",E.mom]);return mods};
-  const deny=Math.floor((E.touches||0)/2.5);out.push(cfE({k:"callfor",kind:"offball",lab:"Call for the ball",note:`Get open for ${E.pgName}. Success puts the ball in your hands at the top.${deny?" They are denying you.":""}`,mods:t([["Getting open",chHalf((s.SPD-PV.ref)/20+(s.SIQ-PV.ref)/20)],[`${E.pgName}'s vision`,chHalf((E.pgVIS-PV.ref)/20)],...(deny?[["They are denying you",-deny]]:[])]),dc:12}));
+  const deny=typeof jobRule==="function"&&jobRule("noCallFor")?0:Math.floor((E.touches||0)/2.5);out.push(cfE({k:"callfor",kind:"offball",lab:"Call for the ball",note:`Get open for ${E.pgName}. Success puts the ball in your hands at the top.${deny?" They are denying you.":""}`,mods:t([["Getting open",chHalf((s.SPD-PV.ref)/20+(s.SIQ-PV.ref)/20)],[`${E.pgName}'s vision`,chHalf((E.pgVIS-PV.ref)/20)],...(deny?[["They are denying you",-deny]]:[])]),dc:12}));
   out.push(cfE({k:"cut",kind:"offball",lab:"Cut to the rim",note:"Lose your man. If it works, the pass comes and the lane is yours.",mods:t([["Acceleration",chSk(s.ACC)]]),dc:Math.round(12+(d.PER-PV.ref)/PV.skl),en:1}));
   out.push(cfE({k:"spot",kind:"offball",lab:"Spot up",note:`No roll. If ${E.handlerName} looks your way (${Math.round(E.spotP*100)}%), you catch it in the corner.`,mods:[],dc:0,noroll:true}));
   out.push(cfE({k:"screen",kind:"offball",lab:`Screen for ${E.handlerName}`,note:"His shot gets your screen if it works.",mods:t([["Strength",chSk(s.STR)]]),dc:11,en:1}));
   out.push(cfE({k:"crash",kind:"offball",lab:"Crash the glass",note:"If the shot misses, you are first to it.",mods:t([["Offensive rebounding",chSk(s.ORB)],["Strength",chHalf((s.STR-PV.ref)/20)]]),dc:12,en:1}));
+  if(window.__chSeen)for(const o of out){window.__chSeen["o:"+o.lab]=1;for(const m of o.mods)window.__chSeen["m:"+m[0]]=1}
   return out}
 
 /* help defense: late and close, or during their run, when your man does not have it */
@@ -4110,6 +4250,7 @@ function chainHelp(E){const cfE=o=>chFin(o.noroll?o:{...o,mods:[...o.mods,...myE
   out.push(cfE({k:"rotate",kind:"help",def:true,lab:"Rotate and contest",note:"Get a hand up on their shooter.",mods:[["Perimeter D",chSk(s.PER)],["Distance",-1]],dc:11}));
   out.push(cfE({k:"lane",kind:"help",def:true,lab:"Jump the passing lane",note:"A steal is a run-out. Miss and your man is open.",mods:[["Steal",chSk(s.STL)],["Anticipation",chHalf((s.SIQ-PV.ref)/20)]],dc:16}));
   out.push(cfE({k:"home",kind:"help",def:true,lab:"Stay home",note:"No roll. Do not leave your man.",mods:[],dc:0,noroll:true}));
+  if(window.__chSeen)for(const o of out){window.__chSeen["o:"+o.lab]=1;for(const m of o.mods)window.__chSeen["m:"+m[0]]=1}
   return out}
 
 /* the auto policy: used by the CPU walking your player's chain, by "let the coach pick", and by the test bot.
@@ -4188,7 +4329,7 @@ function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetT
   const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],...(C&&C.stage!=="college"?[["inv","Locker"],["attn","Fame"]]:[])];
   let body="";
   if(t==="stat")body=`<div class="mp-two"><div class="mp-col">${mpWin(esc(rpgName()),`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>${rpgSummary(R,age)}<div class="mp-kv"><span>Level</span><b>${R.lv}</b><span>EXP</span><b>${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()}</b><span>Origin</span><b>${ORIGINS.find(o=>o.k===R.origin)?.n||"Custom"}</b><span>Traits</span><b>${R.traits.map(k=>TRAITS.find(x=>x.k===k)?.n).filter(Boolean).join(", ")||"None"}</b><span>Crate keys</span><b>${R.keys||0}</b><span>Rested EXP</span><b>${Math.round(R.rest||0).toLocaleString()}</b></div>`)}</div>
-    <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${typeof jobName==="function"&&jobName()?mpWin("Job · "+esc(jobName()),`<div class="mp-note">${(()=>{const J=jobS(),P=JOBS[J.path],s=J.spec?P.spec[J.spec]:null;const acts=[P.act,...(s?[s.act]:[])],pas=[...P.pas,...(s?s.pas:[])];return`<b>Actives</b> (once a quarter): ${acts.map(a=>esc(a.lab)).join(", ")}.<br><b>Passives</b>: ${pas.map(x=>`${esc(x[1])} +${x[2]*(J.m3?1.5:1)} on ${x[0]}`).join(", ")}${J.m4?", Legend +0.5 on everything":""}.<br>Next: ${J.m4?"nothing left; that was the last one":"Lv "+(J.m3?65:J.spec?45:J.path?20:10)}.`})()}</div>`):mpWin("Job",`<div class="mp-note">None yet. The System will text you at level 10.</div>`)}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
+    <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${mpWin(typeof jobName==="function"&&jobName()?"Class · "+esc(jobName()):"Class",typeof jobPanel==="function"?jobPanel():"")}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
   else if(t==="skills")body=mpWin("Skills",`<div class="mp-pts"><button class="mp-btn sm" data-act="rrespec">Respec (free)</button><b>${rpgFree(R)}</b></div>${skGroups(R,age,true)}`);
   else if(t==="goals"){const gs=rpgGoals(R);body=mpWin("Goals",`<div class="mp-goals">${gs.slice(0,8).map(g=>`<div class="mp-goal"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></div>`).join("")}</div>`)
     +mpWin("Completed",`<ul class="mp-log">${(R.done||[]).slice(0,12).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>Nothing yet. Play a game.</li>"}</ul>`)}
@@ -4580,13 +4721,13 @@ function* liveGen(SD,opt,ctl){
     const shooters=mates.length&&mates.reduce((a,m)=>a+m.s.THR,0)/mates.length>=66,PD=D.map(x=>prof(x.p));
     return{P,s,d,h:prof(helpR.p),df,helpR,meR,mates,big,shooters,no3x,mom:chMom(),seen:ctl?ctl.seen:null,perks:chPerks(),dh:hgt(meR.p)-hgt(df.p),dhH:hgt(meR.p)-hgt(helpR.p),
       dSTL:PD.reduce((a,x)=>a+x.STL,0)/PD.length,dPERavg:PD.reduce((a,x)=>a+x.PER,0)/PD.length,mm:big?prof((D[O.indexOf(big.r)]||df).p):d,
-      cap:CLK<=24?4:5,ctx:{home:o===0&&HOME>0,clutch,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
+      cap:CLK<=24?4:5,ctx:{home:o===0&&HOME>0,clutch,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,hot2:meR.hot.length>=2&&meR.hot.slice(-2).every(x=>x),fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
   const chCard=(E,P,lead,extra)=>({opts:null,chain:true,sit:P.sit,sitName:CH_SIT[P.sit]||"",chips:P.log.slice(-6),title:lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`,
     sub:`${chClk()} · shot clock ${Math.max(0,Math.round(P.clk))}${P.flags.hurry?" · Hurry":""}${P.late&&lead===-3&&t<=30?" · Down three: a two does not tie":""}`,meta:{en:Math.round(E.meR.en),em:enMax(E.meR),mom:ctl?ctl.mom||0:0,moves:P.n},dname:E.df.p.name,dnote:`PER ${E.d.PER} · INT ${E.d.INT} · STL ${E.d.STL}`,
     timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(E.s.THR,E.s.MID,E.s.LAY),...(extra||{})});
   const chNote=(P,meR)=>{const l=P.log.filter(x=>!x.info).map(x=>x.t);if(l.length>1)push("chain",l.join(" → ")+".",{sh:meR.p.pid,me:1})};
   const chainRun=function*(meR,inter,start,clutch,lead){if(ctl)ctl.touches=(ctl.touches||0)+1;
-    const P={sit:start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"?4:0),n:0,flags:{},log:[],deal:chDeal(prof(meR.p)),lead,late:q>=np&&t<=120};if(P.late&&lead<0){P.clk=Math.min(P.clk,12);P.flags.hurry=1}
+    const P={sit:start==="putback"?"lane":start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"||start==="putback"?4:0),n:0,flags:start==="putback"?{under:true}:{},log:[],deal:chDeal(prof(meR.p)),lead,late:q>=np&&t<=120};if(P.late&&lead<0){P.clk=Math.min(P.clk,12);P.flags.hurry=1}
     for(let guard=0;guard<14;guard++){
       const E=chEnv(meR,P,clutch);let opts=chainOpts(E);if(!opts.length){P.n=9;opts=chainOpts(E)}
       let ans=null;
@@ -4610,13 +4751,14 @@ function* liveGen(SD,opt,ctl){
               P.log.push({t:`Help: ${rr}${hm>=0?"+":""}${hm} vs ${hdc}, ${col?"they collapse":"they stay home"}`,ok:!col,info:true});P.sit=col?"collapse":"lane";P.flags.under=false}
             else if(nat1)return TO("stripped");else P.sit="picked";break;
           case"euro":if(ok){P.sit="lane";P.flags.under=false}else return TO("charge");break;
-          case"screen":if(ok){const rr=1+Math.floor(R()*20);if(rr<=8){P.sit="mismatch";P.log.push({t:"They switch",ok:true,info:true})}else if(rr<=15){P.sit="space";P.log.push({t:"They hedge",ok:true,info:true})}else{P.sit="top";P.flags.pullPlus=true;P.log.push({t:"They drop. The pull-up is there",ok:true,info:true})}}else P.sit="picked";break;
+          case"screen":if(ok){const rr=P.cov||1+Math.floor(R()*20);P.cov=null;if(rr<=((typeof jobRule==="function"&&jobRule("screenSwitchMore"))?12:8)){P.sit="mismatch";P.log.push({t:"They switch",ok:true,info:true})}else if(rr<=15){P.sit="space";P.log.push({t:"They hedge",ok:true,info:true})}else{P.sit="top";P.flags.pullPlus=true;P.log.push({t:"They drop. The pull-up is there",ok:true,info:true})}}else P.sit="picked";break;
           case"post":if(ok)P.sit="seal";else if(nat1)return TO("travel");else P.sit="picked";break;
           case"spin":P.sit=ok?"lane":"picked";P.flags.under=false;break;
           case"dropstep":if(ok){P.sit="lane";P.flags.under=true}else{P.flags.hookPen=1;P.sit="seal"}break;
           case"step":if(ok){P.sit="lane";P.flags.under=true}else if(nat1)return TO("travel");break;
           case"drawfoul":if(ok){df.pf++;tfoul[1-o]++;chNote(P,meR);push("foul",`${df.p.name} fouls ${lname(meR.p)}. He went right into him.`,{sh:meR.p.pid,d:df.p.pid,me:1});shootFT(meR,2,df);o=1-o;return false}P.sit="picked";break;
           case"reset":P.sit="top";P.flags={};break}
+        if(P.sit==="space"&&!P.flags.sl&&(typeof jobRule==="function"&&jobRule("spaceLasts"))){P.flags.sl=1;P.n--;P.log.push({t:jobRuleName("spaceLasts")+": that move was free",ok:true,info:true})}
         continue}
       if(x.kind==="pass"){const tg=x.tgt;P.log.push({t:x.lab,ok});
         if(!ok&&!nat1&&R()<.75&&P.n<5){P.log.push({t:"Deflected. Still yours",ok:false,info:true});P.sit="picked";P.n++;P.clk-=3;continue}
@@ -4625,7 +4767,7 @@ function* liveGen(SD,opt,ctl){
         const fouled=!made&&R()<PV.foul[tg.type]*(1+(s2.DRW-PV.ref)/60);chNote(P,meR);
         return yield* finish(r2,dr2,p2,dr2.p,tg.type,made,fouled,{open:true,home:o===0&&HOME>0,clutch},{me:1,pass:1,assistTo:meR,lob:!!x.lob,dunk:tg.type==="dunk"})}
       const type=x.type;P.log.push({t:x.lab,ok});
-      const fouled=ans.nat20||R()<PV.foul[type]*(1+(E.s.DRW-PV.ref)/60)*(ok?.5:1.3);
+      const fouled=ans.nat20||R()<PV.foul[type]*(1+(E.s.DRW-PV.ref)/60)*(ok?.5:1.3)*((type==="rim"||type==="dunk")&&(typeof jobRule==="function"&&jobRule("contactFouls"))?1.5:1);
       const dR=x.vs==="help"?E.helpR:df;chNote(P,meR);
       return yield* finish(meR,dR,meR.p,dR.p,type,ok,fouled,{...E.ctx,open:x.open,contest:x.contest},{me:1,dunk:type==="dunk"})}
     return false};
@@ -4641,7 +4783,7 @@ function* liveGen(SD,opt,ctl){
     const toP=clamp(PV.to-(avgS(PO,["HND","VIS","PAS"])-PV.ref)*PV.toS+(avgS(PD,["STL","PER"])-PV.ref)*PV.toD+(cd==='press'?.03:0)+(co==='iso'?.01:0)+avgFat*.03,.05,.3);
     if(R()<toP){
       const h=wpick(O,(r,i)=>usageP(PO[i])*Math.pow(PV.ref/((PO[i].HND+PO[i].VIS)/2),2));h.b.tov=(h.b.tov||0)+1;
-      if(R()<.62){const s=wpick(D,(r,i)=>Math.pow((PD[i].STL+PD[i].PER*.4)/(PV.ref*1.4),3));s.b.stl++;push("stl",`${s.p.name} picks off ${lname(h.p)}'s pass. Steal.`,{h:h.p.pid,d:s.p.pid})}
+      if(R()<.62){const s=wpick(D,(r,i)=>Math.pow((PD[i].STL+PD[i].PER*.4)/(PV.ref*1.4),3));s.b.stl++;if(ud&&ctl&&ctl.hero!=null&&String(s.p.pid)!==String(ctl.hero)&&D.some(r=>String(r.p.pid)===String(ctl.hero))&&(typeof jobLinks==="function"&&jobLinks("teamSteal"))==="runout"&&R()<.5)ctl.runout=true;push("stl",`${s.p.name} picks off ${lname(h.p)}'s pass. Steal.`,{h:h.p.pid,d:s.p.pid})}
       else push("to",`Turnover by ${h.p.name}${pick([" — traveling."," — offensive foul."," — out of bounds."," — bad pass."])}`,{h:h.p.pid});
       o=1-o;return}
     if(R()<.07){const fo=pick(D);fo.pf++;tfoul[1-o]++;if(tfoul[1-o]>=BON){const sh=wpick(O,(r,i)=>usageP(PO[i])*(1+(PO[i].DRW-PV.ref)/80));shootFT(sh,2,null);o=1-o;return}}
@@ -4651,8 +4793,9 @@ function* liveGen(SD,opt,ctl){
     let tries=0;
     while(tries++<3){
       let sh=wpick(O,(r,i)=>usageP(PO[i])*(r===isoR?3:1)*(1-fatigue(r)*.4)*(r.hot.length>=4&&r.hot.slice(-3).every(x=>x)?1.4:1));
-      if(meR&&tries===1){
+      if(meR&&(tries===1||ctl.putback)){
         const inter=!opt.quiet&&mode!=="watch"&&mode!=="sim"&&(mode==="touches"||mode==="every"||(mode==="clutch"&&clutch));
+        if(ctl.putback){ctl.putback=false;push("chain",`${lname(meR.p)} has it under the rim.`,{sh:meR.p.pid,me:1});return yield* chainRun(meR,inter,"putback",clutch,lead)}
         if(ctl.runout){ctl.runout=false;return yield* chainRun(meR,inter,"runout",clutch,lead)}
         if(sh===meR)return yield* chainRun(meR,inter,"top",clutch,lead);
         const offOK=CLK>24||clutch||(ctl.runOpp||0)>=8||Math.abs(ctl.mom||0)>=3||(typeof C!=="undefined"&&C&&C.offAll===true);
@@ -4678,20 +4821,21 @@ function* liveGen(SD,opt,ctl){
         if(q>=np&&t<=120&&lead>0)opts.push({k:"foul",lab:"Foul to stop the clock",mods:[],mod:0,dc:0,pct:1,pts:0,def:true,noroll:true,note:"He shoots two. The clock stops."});
         const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Down ${lead}`:`Up ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}`,timing:typeof C!=="undefined"&&C?C.timing===true:false,skl:Math.max(d.PER,d.STL,d.BLK)}};
         if(da&&da.k==="foul"){df.pf++;tfoul[1-o]++;push("foul",`${dp.name} fouls ${p.name} on purpose. The clock stops.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
-        if(da&&da.k!=="hands")enSpend(df,2);if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});ctl.runout=true;o=1-o;return}ctx.open=true;ctx.contest=false;df.stint+=.6}
-        else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(da.nat1||R()<.35)forceFoul=true;else{ctx.open=true;ctx.contest=false}}
+        if(da&&da.k!=="hands"&&!(typeof jobRule==="function"&&jobRule("zeroDefEnergy")))enSpend(df,2);if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});ctl.runout=true;o=1-o;return}if(!(typeof jobRule==="function"&&jobRule("noBite"))){ctx.open=true;ctx.contest=false;df.stint+=.6}}
+        else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(!(typeof jobRule==="function"&&jobRule("noBlockFoul"))&&(da.nat1||R()<.35))forceFoul=true;else{ctx.open=true;ctx.contest=false}}
         else if(da&&da.k==="charge"){if(da.made){sh.b.tov=(sh.b.tov||0)+1;df.b.chg=(df.b.chg||0)+1;push("to",`${p.name} lowers the shoulder. ${dp.name} is set. Charge.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}df.pf++;tfoul[1-o]++;push("foul",`Blocking foul on ${dp.name}.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
         else if(da&&da.k==="hands"&&da.made){ctx.contest=true;ctx.open=false}}
       else if(ud&&ctl&&ctl.hero!=null&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&defOn!=="off"&&(clutch||(ctl.runOpp||0)>=8)){const meD=D.find(r=>String(r.p.pid)===String(ctl.hero));
         if(meD){const opts=chainHelp({me:prof(meD.p)}),clk=chClk();
           let ha=yield{poss:{opts,def:true,title:"Help defense · "+(lead===0?"Tied":lead>0?`They lead by ${lead}`:`You lead by ${-lead}`),sub:clk+((ctl.runOpp||0)>=8?` · they are on a ${ctl.runOpp}-0 run`:" · late and close"),dname:p.name,dnote:`THR ${s.THR} · MID ${s.MID} · HND ${s.HND}`,timing:false,skl:prof(meD.p).PER}};
           if(!ha||!ha.opt)ha=chainRoll(ctl,opts[2]);
-          if(ha.k==="rotate"){enSpend(meD,1.5);if(ha.made){ctx.contest=true;ctx.open=false}}
-          else if(ha.k==="lane"){enSpend(meD,2);if(ha.made){meD.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${meD.p.name} jumps the passing lane. Steal.`,{h:p.pid,d:meD.p.pid,me:1});ctl.runout=true;o=1-o;return}ctx.open=true;ctx.contest=false}}}
+          if(ha.k==="rotate"){if(!(typeof jobRule==="function"&&jobRule("zeroDefEnergy")))enSpend(meD,1.5);if(ha.made){ctx.contest=true;ctx.open=false}}
+          else if(ha.k==="lane"){if(!(typeof jobRule==="function"&&jobRule("zeroDefEnergy")))enSpend(meD,2);if(ha.made){meD.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${meD.p.name} jumps the passing lane. Steal.`,{h:p.pid,d:meD.p.pid,me:1});ctl.runout=true;o=1-o;return}ctx.open=true;ctx.contest=false}}}
       // CPU resolution with the same dice
       const w=shotWeights(s,d,ctx,{tf,no3x,co,cd});type=wpick(Object.keys(w),k=>w[k]);if(forceBlk&&type==="three")type=s.LAY>=s.MID?"rim":"mid";
       const mmv=ctl&&US>=0?(o===US?chMom():-chMom()):0,scr=ctl&&o===US&&ctl.screenB?1:0,tax=ctl&&o!==US&&ctl.dunkTax?1:0;if(scr)ctl.screenB=0;if(tax)ctl.dunkTax=false;
-      const mod=modSum(shotMods(type,s,ctx))+1+hb*8+mmv+scr,dc=shotDC(type,d,ctx)+tax,roll=kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
+      const hero=ctl&&ctl.hero!=null?String(ctl.hero):null,gv=hero&&o===US&&meR&&sh!==meR&&(typeof jobRule==="function"&&jobRule("gravity"))?.5:0,tdp=hero&&ud&&D.some(r=>String(r.p.pid)===hero)&&(typeof jobRule==="function"&&jobRule("teamDefPlus"))?.5:0,shd=hero&&ud&&String(dp.pid)===hero&&(typeof jobRule==="function"&&jobRule("shadow"))?1:0;
+      const mod=modSum(shotMods(type,s,ctx))+1+hb*8+mmv+scr+gv-tdp-shd,dc=shotDC(type,d,ctx)+tax,roll=kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
       fouled=forceBlk?false:forceFoul?true:roll===20?true:R()<PV.foul[type]*(1+(s.DRW-PV.ref)/60)*(made?.5:1.3)*(co==="inside"?1.2:1);
       const cont=yield* finish(sh,df,p,dp,type,made,fouled,ctx,{forceBlk,me:forceBlk||forceFoul?1:0});if(!cont)return;
     }
@@ -4709,7 +4853,7 @@ function* liveGen(SD,opt,ctl){
       const verb=type==="three"?pick(["drills a three","buries it from deep","splashes a triple"]):type==="dunk"?pick(["throws it down","hammers it home","rises and dunks"]):type==="rim"?pick(["finishes at the rim","lays it in","scoops it in"]):type==="post"?pick(["scores on the block","drops in the hook","spins baseline and scores"]):pick(["hits the jumper","knocks down the pull-up","nails the elbow J"]);
       const heat=sh.hot.length>=4&&sh.hot.slice(-4).every(v=>v)?" He's heating up!":"";
       const homeT=o===0&&HOME>0,big=!!(x.dunk||x.lob)&&type==="dunk";
-      if(ctl&&US>=0){const k=o===US?1:-1;ctl.mom=clamp((ctl.mom||0)+k*(big?(homeT?3:2)+(o===US&&x.me&&C?.rpg?.origin==="blacktop"?1:0):1),-5,5);if(o===US){ctl.runOpp=0;if(big&&x.me)ctl.dunkTax=true}else ctl.runOpp=(ctl.runOpp||0)+pts}
+      if(ctl&&US>=0){const k=o===US?1:-1;ctl.mom=clamp((ctl.mom||0)+k*(big?(homeT?3:2)+(o===US&&x.me&&C?.rpg?.origin==="blacktop"?1:0):1)+(o===US&&x.me&&type==="three"&&(typeof jobRule==="function"&&jobRule("momentumTeamPlus"))?1:0),-5,5);if(o===US){ctl.runOpp=0;if(big&&x.me)ctl.dunkTax=true}else ctl.runOpp=(ctl.runOpp||0)+pts}
       const call=x.me&&big?(x.lob?` ${lname(x.assistTo.p)} lobs it and ${p.name} finishes it at the rim. ${homeT?"The building is on its feet.":"In their building."}`:` ${p.name} THROWS IT DOWN. ${homeT?"The crowd goes wild.":"You can hear their gym go quiet."}`):"";
       push("make",call?`${cx.clutch?"CLUTCH! ":""}${call.trim()}`:`${cx.clutch?"CLUTCH! ":""}${p.name} ${verb}${ast?` (assist ${lname(ast.p)})`:""}.${heat}`,{sh:p.pid,as:ast?.p.pid,d:dp.pid,shot:stype,dist,ang,pts,...cx,...(big&&x.me?{dunk:1}:{})});
       if(fouled){df.pf++;tfoul[1-o]++;push("foul",`And one! ${dp.name} fouls ${lname(p)}.`,{sh:p.pid,d:dp.pid});shootFT(sh,1,df)}
@@ -4721,6 +4865,9 @@ function* liveGen(SD,opt,ctl){
     const crash=ctl&&o===US&&ctl.crash;if(ctl)ctl.crash=false;const meO=crash?O.find(r=>String(r.p.pid)===String(ctl.hero)):null;
     const offR=R()<orbP*(crash?1.6:1),rt=offR?O:D,rb=offR&&meO&&R()<.6?meO:wpick(rt,r=>{const s=prof(r.p);return Math.pow((offR?s.ORB:s.DRB)/PV.ref,USE.reb)*Math.pow(hgt(r.p)/79,2.5)*(1+(s.VRT-PV.ref)/150)});if(R()>.12)rb.b.reb++;
     push("reb",`${offR?"Offensive":"Defensive"} rebound, ${rb.p.name}.`,{rb:rb.p.pid,off:offR});
+    if(ctl&&ctl.hero!=null&&US>=0){const hero=String(ctl.hero);
+      if(!offR&&o!==US&&D.some(r=>String(r.p.pid)===hero)){if(blk&&String(blk.p.pid)===hero&&(typeof jobLinks==="function"&&jobLinks("block"))==="runout")ctl.runout=true;else if((typeof jobRule==="function"&&jobRule("pushAfterReb"))&&R()<.1)ctl.runout=true}
+      if(offR&&meO&&rb===meO&&(typeof jobLinks==="function"&&jobLinks("oreb"))==="putback")ctl.putback=true}
     if(!offR){o=1-o;return false}return true;
   };
   function shootFT(sh,n,df){let m=0;for(let i=0;i<n;i++){sh.b.fta++;if(R()<ftp(sh.p)){sh.b.ftm++;sh.b.pts++;sc[o]++;m++}}
@@ -5395,7 +5542,7 @@ document.addEventListener("click",e=>{
     case"rsave":{const R=rpgS(),age=rpgAge();(R.loads??=[null,null,null])[+d.v]={n:archName(rpgSkills(R,age),R.body.ht),pts:rpgSpent(R),alloc:{...R.alloc}};if(rpgP())save();else saveC();openSheet("loads");return}
     case"rload":{const R=rpgS(),L=R.loads?.[+d.v];if(!L)return;R.alloc={...L.alloc};let guard=0;while(rpgFree(R)<0&&guard++<500){const k=Object.keys(R.alloc).sort((a,b)=>R.alloc[b]-R.alloc[a])[0];R.alloc[k]--}rpgApply();if(rpgP())save();else saveC();openSheet("skills");toast(`Loaded: ${L.n}`);return}
     case"mcschool":C.school=d.v;C.stage="college";seasonSetup();bondsSeed();mcRender();return;
-    case"plgnav":plgNav(+d.v);return;case"plgpick":plgPick(d.v);return;case"drill":openDrill();return;case"drillgo":drillGo(d.v);return;case"drillroll":drillRoll();rpgMount();return;case"rstars":{C.rpg.stars=+d.v;C.stars=+d.v;C.rpg.alloc={};saveC();mcRender();return}
+    case"plgnav":plgNav(+d.v);return;case"plgpick":plgPick(d.v);return;case"drill":openDrill();return;case"jobeq":jobEqToggle(d.v);openSheet("stat");return;case"drillgo":drillGo(d.v);return;case"drillroll":drillRoll();rpgMount();return;case"rstars":{C.rpg.stars=+d.v;C.stars=+d.v;C.rpg.alloc={};saveC();mcRender();return}
     case"mcgame":{const n=+d.n,s=C.season;for(let i=0;i<n&&s.games.length<31;i++)collegeGame(s.opps[s.games.length],false);mcRender();return}
     case"mctourney":{const s=C.season;while(s.games.length<31)collegeGame(s.opps[s.games.length],false);runTourney();closeSeason();
       if(C.legacy){mcRender();legacyCatchUp(C.y+1).then(()=>{mcRender();toast(`Meanwhile in the NBA: the ${G.recaps?.[0]?.champ||"season"} wrapped up.`)});return}mcRender();return}
@@ -5453,7 +5600,7 @@ document.addEventListener("click",e=>{
     case"lvtab":["feed","box","coach"].forEach(k=>{const el=$("lv-"+k),bt=$("lvt-"+k);if(el)el.hidden=d.v!==k;if(bt)bt.className="btn xs"+(d.v===k?"":" ghost")});if(d.v==="box")lvBoxHtml();if(d.v==="coach")lvCoach();return;
     case"lvoff":LV.ctl.off=d.v;lvCoach();return;
     case"lvdef":LV.ctl.def=d.v;lvCoach();return;
-    case"lvto":if(LV.ctl.to>0){LV.ctl.to--;LV.ctl.boost=5;const m0=LV.ctl.mom||0;LV.ctl.mom=m0>0?Math.max(0,m0-3):Math.min(0,m0+3);LV.ctl.runOpp=0;lvPop("TIMEOUT",LV.ctl.side);toast("Timeout. Your guys get a lift for the next few trips.")}lvCoach();return;
+    case"lvto":if(LV.ctl.to>0){LV.ctl.to--;LV.ctl.boost=5;const m0=LV.ctl.mom||0;LV.ctl.mom=m0<0&&(typeof jobRule==="function"&&jobRule("timeoutFullReset"))?0:m0>0?Math.max(0,m0-3):Math.min(0,m0+3);LV.ctl.runOpp=0;lvPop("TIMEOUT",LV.ctl.side);toast("Timeout. Your guys get a lift for the next few trips.")}lvCoach();return;
     case"lvsubout":LV.subOut=String(LV.subOut)===String(d.v)?null:d.v;lvCoach();return;
     case"lvsubin":lvSubIn(d.v);LV.ctl.subNow=true;return;
     case"lvready":lvReady();return;
