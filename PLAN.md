@@ -34,32 +34,30 @@ When this plan and old code disagree, this plan wins. When this plan is silent, 
 - Cut and never to return: traits, daily EXP events (replaced by a flat ×1.6 game EXP), loadouts, archetype names on the HUD, the hallway map, the hoop prop, recruiting UI, franchise/GM screens in the pro stage, the Architect, Codex, star tiers 2–4.
 
 
-### 1a. The MMO loop (decided 2026-10-20, supersedes anything career-shaped below)
+### 1a. The loop (decided 2026-10-20, supersedes anything career-shaped below)
 
-- **No career length.** No aging decline, no retirement, no epilogue, no Hall of Fame finish line (the HOF becomes a ladder rank). Contracts and free agency stay, as a way to change teams.
-- **College is the tutorial:** one season (a 1★ junior college start may need two, with a transfer). It teaches the chain, practice, energy and the class pick at Lv 10. It ends with a **grade** (S/A/B/C/D) from efficiency, wins, awards and challenges.
-- **The grade decides the draft and the starter box:** S offers a choice of three teams including a contender, plus a legendary starter box; A three teams, epic; B two teams, rare; C one team (second round), uncommon; D undrafted → G League team, common. (Choice of team, not the real-NBA inversion where the best prospects go to the worst teams.)
-- **Seasons are content patches.** Each pro season: level cap rises (Season 1 cap 75, then +10 a season), the **league average (PV.ref) rises by 3**, the stat ceiling rises by 3 (99, 102, 105, …), a new loot tier unlocks, and the ladder partly resets (you keep a rank floor). Every league player's ratings track the league average; new draft classes come in stronger; bosses keep up.
-- **The league is the ruler, not 99.** All dice are relative to PV.ref, so percentages stay realistic while every number rises.
-- **The season is the raid.** Regular season = the dungeon crawl (EXP, NIL money, common–rare drops, boss matchups with drop tables); record sets the seed. **Playoffs = four raid wings**: each round won drops a box one rarity higher (rare, epic, epic, legendary). **The Finals = the raid boss**: a guaranteed legendary from the new tier, the season's biggest NIL payout, and a **championship ring** (unique per season, equippable, its own edge; the ring shelf is the long-term trophy case). Losing a round ends the run; you keep what you earned.
-- **Your team is your party.** The offseason is party-building: free agency, trade requests, choosing where you sign. NIL money and reputation decide which teams want you. Money has two uses: the shop and the party.
+- **A basketball MMO/gacha for one player.** No story. The System speaks only on level-ups, loot and offers, one dry voice, one or two sentences.
+- **College is the tutorial season.** One season (1★ starts at a junior college; may need a second). It teaches the chain, off-ball, defense cards, energy, practice and the class pick at Lv 10. It ends with a **grade** (S/A/B/C/D) from efficiency, wins, awards and challenges.
+- **College-only perks:** equippable badges earned only in college ("Freshman of the Year", "Conference Player of the Year", "Final Four", "National Champion", "Buzzer Beater", "Giant Killer", "Triple-Double", "Forty Burger"). Each is a small named edge. **Three perk slots in college, five in the NBA.**
+- **The draft and the forced respec.** The grade decides options: S = choice of three teams including a contender + legendary starter box; A = three teams, epic; B = two teams, rare; C = one team (second round), uncommon; D = undrafted → G League team, common. **Everyone is set to Lv 20 at the draft; if you passed 20 in college you keep your level.** Points reset to **500 plus the skill points your levels paid out in college**; you rebuild knowing the game. Perks, items, money, class and specialization carry.
+- **The NBA season is the raid.** Regular season = the dungeon (EXP, money, common–rare drops, a named boss matchup per game with a drop table); record sets the seed. **Playoffs = a gauntlet of real champions** (9 Innings model): the league is generated players, but each playoff round is a real historical team from the game's NBA.com-derived data (e.g. R1 2004 Pistons, R2 2014 Spurs, Conf Finals 2016 Cavaliers, Finals 1996 Bulls / 2017 Warriors / 2024 Nuggets). The gauntlet rotates every season. Each round won drops a box one rarity higher (rare, epic, epic, legendary). **The Finals = the raid boss:** a guaranteed legendary from the season's new tier, the biggest payout of the year, and a **championship ring** (unique per season, equippable, own edge; the ring shelf is the trophy case).
+- **NBA-only perks:** "All-Star", "All-NBA", "Fifty Piece", "Game 7", "Closer", "Ring". Same slot system.
+- **No difficulty setting.** One mode. Difficulty ramps in the playoffs: each round's bosses are better and their DCs climb +1 per round, printed.
+- **Seasons are content patches:** level cap 70 in Season 1 (+10 a season after), PV.ref +3, stat ceiling +3, a new loot tier, partial ladder reset, the gauntlet rotates. No aging, no retirement. Contracts and free agency stay: **your team is your party**; money buys the shop and the party.
+- **Hall of Fame board (NBA only).** Every league player, CPU included, earns points: ring 10, MVP 12, Finals MVP 8, All-NBA 6/4/3, DPOY 5, All-Star 2, statistical titles 3 each. **No Rookie of the Year.** Seeded with the real greats at their real totals. Two views: this season, all time. **Titles are held, not kept**, and a CPU holder uses the perk against you:
+  - **#1 The GOAT:** once a quarter, declare any roll a natural 20; natural 1s are rerolled; +1 on every roll all game.
+  - **#2–5 Pantheon:** +1 on every roll in the fourth quarter and overtime, plus one declared 20 a game.
+  - **#6–10 Legend:** moves cost 20% less energy.
 
 ### 1b. Creation and growth (decided 2026-10-20)
 
 - **Everyone starts with 300 SP.**
-- **Stars 1–5 set the starting floor of every skill and the growth rate** (option A+D):
-  | Stars | Floor | Growth | College offers |
-  |---|---|---|---|
-  | 5★ | 55 | normal | blue bloods |
-  | 4★ | 50 | +0.5 SP/level | high-majors |
-  | 3★ | 45 | +1 SP/level, +5% EXP | mid-majors |
-  | 2★ | 40 | +1.5 SP/level, +10% EXP | low-majors |
-  | 1★ | 35 | +2 SP/level, +20% EXP | junior college |
-  (The per-level bonus scales with the per-level grant below: treat it as a % of the level's SP, i.e. 4★ +10%, 3★ +20%, 2★ +30%, 1★ +40%.)
-- **Cost per skill point, by distance above the league average (PV.ref):** below average 2; average to +10: 4; +10 to +20: 7; +20 to +30: 11; the top band (last 4 points to the ceiling): 16.
-- **SP per level is set so that reaching the season's level cap gives exactly enough to max every skill to that season's ceiling** from a 3★ floor, with the grant growing by level (about 30 at Lv 10, about 130 at Lv 70). Compute the table in code from the cost curve; do not hand-type it.
-- **Origins** = a starting shape (which skills get +floor) plus one perk at Lv 5 from a two-option pool. No biographies. Every promise on the origin card must do something visible on the dice or the card; remove any that do not.
-- **EXP outside games:** two **practice slots per game week** (a drill = a 3–4 roll chain with the same dice; EXP plus progress toward that skill); the hub gym's scoreboard starts a drill; **challenges** (one-time feats, EXP + loot, replace goals); **offseason camps** (3–4 bigger drills, skippable); **boss bonus EXP**; rested EXP stays. No timers, no streaks.
+- **Stars set the floor of every skill and the growth rate:** 5★ 70, 4★ 65, 3★ 60, 2★ 55, 1★ 50; growth bonus to each level's SP grant: 5★ +0%, 4★ +10%, 3★ +20%, 2★ +30%, 1★ +40%; EXP bonus 0/0/+5%/+10%/+20%. College offers by stars (blue bloods → junior college).
+- **Height and wingspan are sliders.** Wingspan above height → printed edges on contests, steals, blocks, rebounds ("Length"); below height → edges on jumpers, handle, step-back ("Quick release"). Height already feeds blocks, boards and finishing; keep it.
+- **Cost per skill point, by distance above PV.ref:** below average 2; average to +10: 4; +10 to +20: 7; +20 to +30: 11; top band (last 4 to the ceiling): 16.
+- **Level curve for one season:** a player who plays his games and practices reaches ~70 by the Finals; a player who sims everything lands ~50–55. Compute needXP and the SP-per-level table in code so that Lv 70 affords max-all from a 3★ floor; verify with `__chainBot` and a full-season sim before anything else in M2.5.
+- **Origins** = starting shape + one perk at Lv 5 from a two-option pool. No biographies.
+- **EXP outside games:** two practice slots per game week (a drill = 3–4 roll chain), the gym scoreboard starts a drill, challenges (one-time feats, replace goals), offseason camps (skippable), boss bonus EXP, rested EXP. No timers, no streaks.
 
 ## 2. The chain: state machine spec
 
@@ -184,7 +182,7 @@ Save migration: on load, if `C.job.path` exists (old 5-path), map scorer→score
 
 **M5 — the season loop (v50):** §1a. Tutorial grade and draft choice; no aging/retirement; season rollover (cap +10, PV.ref +3, ceiling +3, league ratings track, stronger draft classes, new loot tier, partial ladder reset); playoffs as raid wings; Finals loot and ring; offseason party-building (free agency, trade request). Tests: three simulated seasons run back to back with league FG% within realistic bands each season; a champion receives exactly one ring and one guaranteed legendary; a first-round exit receives one rare box.
 
-**M6 — ladder, encounters, difficulty (v51):** §5. **M7 — aesthetics (v52+).**
+**M6 — ladder and encounters (v51):** §5 without the difficulty setting (one mode; the playoff ramp is the difficulty). **M7 — aesthetics (v52+)**, including a different setting for the NBA hub.
 
 ## 7. Working rules for the executor
 
