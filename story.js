@@ -143,3 +143,13 @@ ST.epCoachGone=()=>SP_(`There is a clipboard on the shelf behind the podium. Nob
 ST.epCoachHi=(co)=>SP_(`${co.name} drove up. Earl made it.`,`COACH: You heard it every day.`,`YOU: I didn't hold it.`,`COACH: I know. I watched.`);
 ST.epRival=(rv,hh)=>SP_(`${rv.name} texts. ${hh[0]}–${hh[1]}, all told.`,`RIVAL: Good career.`,`*He means it.`);
 ST.epFriend=(fr)=>SP_(`${fr.name} is at the back of the room. He has been at the back of every room.`);
+
+/* ================= JOBS ================= */
+ST.job1=()=>SP_(`Your phone lights up after practice.`,`~Level ten.`,`~Everything until now was the same for everybody. From here it is not.`,`~Pick what you are. I will build the rest around it.`);
+ST.job1Done=(P)=>SP_(`~${P.n}. Fine.`,`~There is a new line on your card. It works once a quarter. Do not waste it.`);
+ST.job2=(P)=>SP_(`~Level twenty. ${P.n} was the shape. This is the edge.`);
+ST.job2Done=(s)=>SP_(`~${s.n}. The card has another line.`);
+ST.job3=()=>SP_(`~Level thirty-five.`,`~Most players never get here. The ones who do stop getting better at numbers and start getting better at themselves.`,`~Your passives are stronger now. That is all. It is a lot.`);
+ST.job3Done=()=>SP_(`~Master. He would have had a word for this. I do not.`);
+ST.job4=()=>SP_(`~Level fifty.`,`~There is one note in his file about this level. It says: if anyone gets here, tell them I said so.`);
+ST.job4Done=()=>SP_(`~He said so.`);

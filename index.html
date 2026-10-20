@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="4e02c9387b";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="4453b7fb26";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -1478,7 +1478,7 @@ function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v42";
+const BUILD="v43";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -2383,7 +2383,7 @@ function openLive(src){
   const [h,a]=src.teams.map(T),mine=src.mine??null,ps={};
   if(src.ps)Object.assign(ps,src.ps);
   else if(src.ctl?.st)src.ctl.st.R2.forEach((rows,k)=>rows.forEach(r=>{ps[r.p.pid]={p:P(r.p.pid)||r.p,k}}));
-  LV={src,gen:src.gen||null,ctl:src.ctl||null,ev:src.ctl?.st?.ev||src.ev,i:0,sub:0,st:0,speed:(src.ctl&&src.ctl.mode&&src.ctl.mode!=="watch")?((typeof C!=="undefined"&&C?.lvSpeed)||4):2,playing:true,mine,ps,teams:[h,a],pos:{},tgt:{},ball:{x:47,y:25,z:0},bt:null,box:{},feedMine:false,last:performance.now(),done:false,genDone:!src.gen,
+  LV={gameId:Date.now(),src,gen:src.gen||null,ctl:src.ctl||null,ev:src.ctl?.st?.ev||src.ev,i:0,sub:0,st:0,speed:(src.ctl&&src.ctl.mode&&src.ctl.mode!=="watch")?((typeof C!=="undefined"&&C?.lvSpeed)||4):2,playing:true,mine,ps,teams:[h,a],pos:{},tgt:{},ball:{x:47,y:25,z:0},bt:null,box:{},feedMine:false,last:performance.now(),done:false,genDone:!src.gen,
     college:!!src.college,court:src.court||null,halves:!!src.halves,no3:!!src.no3,reel:!!src.reel,year:src.year,onDone:src.onDone||null,label:src.label||""};
   Object.keys(ps).forEach(pid=>{LV.pos[pid]={x:47+(ps[pid].k?6:-6)+rnd(-8,8),y:rnd(8,42),ph:0};LV.tgt[pid]={...LV.pos[pid]}});
   const ec=eraClass(src.year||2025);
@@ -3393,7 +3393,7 @@ const DAYEV=[
  {k:"fri",n:"Friday Night Lights",d:"4x EXP from every game.",xp:4,ic:"4×"},
  {k:"sat",n:"Lucky Saturday",d:"1.5x EXP and 1.5x crate keys.",xp:1.5,drop:1.5,ic:"★"}];
 const today=()=>DAYEV[new Date().getDay()];
-const needXP=L=>Math.round(150+85*Math.pow(L,1.6));
+const needXP=L=>L<=20?Math.round(150+85*Math.pow(L,1.6)):9600+(L-20)*500;
 const skCost=v=>v<70?1:v<82?2:v<90?3:v<97?4:5+Math.floor((v-97)/10);
 /* ---- body-driven bases: height raises the floor on size skills and lowers it on quickness ---- */
 function skBase(k,b,age){
@@ -3436,14 +3436,14 @@ function rpgXP(R,amt,why){if(!R||amt<=0)return 0;amt=Math.round(amt);R.exp+=amt;
 function rpgGame(ln,w,kind,mg){const R=rpgS();if(!R||!ln)return;const ev=today();
   if(!ln.min){rpgXP(R,15*ev.xp,"Practice reps");return}
   let x=35+2.6*ln.pts+2.2*ln.reb+2.6*ln.ast+4*((ln.stl||0)+(ln.blk||0))+(w?26*(ev.winx||1):0)+(kind&&kind!=="reg"?40:0);if((C?.stars||5)<=2)x*=1.35;if(typeof isJuco==="function"&&C&&isJuco(C.school))x*=.8;
-  if((R.traits||[]).includes("showman")&&ln.pts>=25)x*=1.15;x*=ev.xp;
+  if((R.traits||[]).includes("showman")&&ln.pts>=25)x*=1.15;if(typeof C!=="undefined"&&C&&C.stage!=="college")x*=4;x*=ev.xp;
   let bonus=0;if(R.rest>0){bonus=Math.min(R.rest,x);R.rest-=bonus}
   const r=R.rec??={g:0,maxPts:0,maxAst:0,maxReb:0,maxSB:0,dd:0,st:0,bestSt:0,pts:0,w:0};r.g++;r.pts+=ln.pts;r.maxPts=Math.max(r.maxPts,ln.pts);r.maxAst=Math.max(r.maxAst,ln.ast);r.maxReb=Math.max(r.maxReb,ln.reb);r.maxSB=Math.max(r.maxSB,(ln.stl||0)+(ln.blk||0));
   if([ln.pts,ln.reb,ln.ast,ln.stl||0,ln.blk||0].filter(v=>v>=10).length>=2)r.dd++;if(w){r.w++;r.st++;r.bestSt=Math.max(r.bestSt,r.st)}else r.st=0;
   R.keyFrac=(R.keyFrac||0)+(w?.34:.15)*(ev.drop||1);while(R.keyFrac>=1){R.keyFrac--;R.keys=(R.keys||0)+1}
   rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${bonus?" · rested":""}${ev.xp>1?` · ${ev.n}`:""}`);rpgGoalsCheck(R);
   try{if(typeof C!=="undefined"&&C&&C.stage==="college"){attnGame(ln,w,kind,mg);for(const s of SLOTS){const it=C.gear?.eq?.[s];if(it)it.games=(it.games||0)+1}}}catch(e){console.error(e)}
-  R.lastGame={x:Math.round(x+bonus),b:Math.round(bonus)}}
+  R.lastGame={x:Math.round(x+bonus),b:Math.round(bonus)};if(typeof jobCheck==="function")setTimeout(jobCheck,0)}
 /* ---- goals: always three within reach ---- */
 const GOALS=[
  ["pts","Score {n} in a game",[12,18,24,30,36,42,50,60],r=>r.rec?.maxPts||0],
@@ -3826,6 +3826,7 @@ function shotMods(type,s,ctx){const K=PV.skl,m=[];const add=(n,v)=>{v=Math.round
   add("Shot IQ",(s.SIQ-PV.ref)/40);if(ctx.open)add("Open look",PV.open);if(ctx.contest)add("Contested",-1);if(ctx.fat>0)add("Tired",-ctx.fat*PV.fat);
   if(ctx.clutch)add("Clutch",(s.CLU-PV.ref)/PV.clu);if(ctx.hot)add("Heating up",1);if(ctx.home)add("Home crowd",.5);
   if(ctx.me&&typeof gearShotMods==="function")for(const g of gearShotMods(type,ctx))add(g[0],g[1]);
+  if(ctx.me&&typeof jobMods==="function")for(const g of jobMods(type))add(g[0],g[1]);
   return m}
 const modSum=m=>m.reduce((a,x)=>a+x[1],0);
 const pMake=(mod,dc)=>clamp((21+mod-dc)/20,.03,.97);
@@ -3845,7 +3846,10 @@ function possOptions(s,d,ctx,opt,mates){const out=[];const types=[["three","Pull
   for(const[k,lab,pts]of types){if(k==="three"&&opt.no3x)continue;if(k==="dunk"&&s.DNK<PV.ref-8&&ctx.sh<78)continue;if(k==="post"&&s.PST<PV.ref-8)continue;
     const mods=shotMods(k,s,ctx),dc=shotDC(k,d,ctx),mod=modSum(mods);out.push({k,lab,pts,mods,mod,dc,pct:pMake(mod+1,dc),foul:PV.foul[k]*(1+(s.DRW-PV.ref)/60)})}
   if(mates&&mates.length){const best=mates.reduce((b,m)=>m.q>b.q?m:b,mates[0]);const mods=[["Passing",Math.round((s.PAS-PV.ref)/PV.skl*2)/2],["Court vision",Math.round((s.VIS-PV.ref)/25*2)/2]];if(ctx.fat>0)mods.push(["Tired",-Math.round(ctx.fat*2)/2]);
-    const dc=9+Math.round((best.stl-PV.ref)/14),mod=modSum(mods);out.push({k:"pass",lab:`Kick to ${best.name} (${best.type==="three"?"open three":best.type==="rim"?"at the rim":"jumper"})`,pts:0,mods,mod,dc,pct:pMake(mod+1,dc),to:best,pass:true})}
+    if(ctx.me&&typeof jobMods==="function")jobMods("pass").forEach(g=>mods.push(g));
+    const dc=9+Math.round((best.stl-PV.ref)/14),mod=modSum(mods);out.push({k:"pass",lab:`Kick to ${best.name} (${best.type==="three"?"open three":best.type==="rim"?"at the rim":"jumper"})`,pts:0,mods,mod,dc,pct:pMake(mod+1,dc),to:best,pass:true});
+    if(ctx.me&&typeof jobActives==="function")for(const a of jobActives("off")){if(!a.pass||jobUsed(a.k))continue;const m2=[...mods,[a.lab,a.mod]],md=modSum(m2);out.push({k:"pass",lab:`${a.lab} → ${best.name}`,pts:0,mods:m2,mod:md,dc,pct:pMake(md+1,dc),to:best,pass:true,job:a.k,note:a.note})}}
+  if(ctx.me&&typeof jobActives==="function")for(const a of jobActives("off")){if(a.pass||jobUsed(a.k))continue;const k=a.type;if(k==="three"&&opt.no3x)continue;const base=out.find(o=>o.k===k);if(!base)continue;const m2=[...base.mods,[a.lab,a.mod]],md=modSum(m2);out.push({k,lab:a.lab,pts:base.pts,mods:m2,mod:md,dc:base.dc,pct:pMake(md+1,base.dc),foul:base.foul*(a.foul||1),job:a.k,note:a.note})}
   return out}
 /* defensive calls: what you do when your man has the ball */
 function defOptions(s,d,ctx){const sk=v=>Math.round((v-PV.ref)/PV.skl*2)/2,out=[];
@@ -3857,6 +3861,8 @@ function defOptions(s,d,ctx){const sk=v=>Math.round((v-PV.ref)/PV.skl*2)/2,out=[
   out.push({k:"block",lab:"Go for the block",mods:bm,mod:modSum(bm),dc:bdc,pct:pMake(modSum(bm)+1,bdc),pts:0,def:true,note:"Miss and it is a foul a third of the time."});
   const cm=[["Interior D",sk(d.INT)],["Judgment",clamp(typeof judgment==="function"?judgment():0,-2,2)]];
   out.push({k:"charge",lab:"Take the charge",mods:cm,mod:modSum(cm),dc:16,pct:pMake(modSum(cm)+1,16),pts:0,def:true,note:"Miss and it is a blocking foul."});
+  if(typeof jobMods==="function")out.forEach(o=>{const jm=jobMods(o.k);if(jm.length){o.mods=[...o.mods,...jm];o.mod=modSum(o.mods);o.pct=pMake(o.mod+1,o.dc)}});
+  if(typeof jobActives==="function")for(const a of jobActives("def")){if(jobUsed(a.k))continue;const base=out.find(o=>o.k===a.on);if(!base)continue;const m2=[...base.mods,[a.lab,a.mod]],md=modSum(m2);out.push({...base,lab:a.lab,mods:m2,mod:md,pct:pMake(md+1,base.dc),job:a.k,note:a.note})}
   return out}
 /* karmic dice: damp streaks of identical outcomes (toggle) */
 function kroll(state,key){let r=1+Math.floor(R()*20);if(!state||state.karmic===false)return r;const st=state.k??={};const s=st[key]||0;
@@ -3875,7 +3881,7 @@ function possPick(i){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return
     if(w.timing&&!x.pass){o.step="tap";o.zone=clamp(.12+(w.skl-40)/400,.1,.26);o.t0=performance.now();o.sp=clamp(5.2-(w.skl-50)*.03,3.2,6);$("lv-clutch").innerHTML=possHtml(w);LV.cl={t0:o.t0,sp:o.sp,zone:o.zone};o.auto=setTimeout(()=>possTap(true),3000)}else possResolve(w,null)}};setTimeout(tick,60)}
 function possTap(auto){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="tap")return;clearTimeout(o.auto);const x=LV.cl?.x??0,d=Math.abs(x-.5),z=(o.zone||.12)/2;
   const tap=auto?-1:d<=z?4:d<=z+.08?2:d<=z+.16?0:-2;possResolve(w,tap)}
-function possResolve(w,tap){try{SFX.dice()}catch(e){}const o=LV.pm,x=o.pick;o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
+function possResolve(w,tap){try{SFX.dice()}catch(e){}const o=LV.pm,x=o.pick;if(x.job&&typeof jobMarkUsed==="function")jobMarkUsed(x.job);o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
   const nat20=o.roll===20,nat1=o.roll===1;o.made=nat1?false:nat20?true:o.total>=x.dc;
   o.verdict=x.def?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?(x.k==="hands"?"CONTESTED":x.k==="steal"?"STEAL":x.k==="block"?"BLOCKED":"CHARGE"):(x.k==="hands"?"LATE":x.k==="steal"?"HE IS BY YOU":x.k==="block"?"BIT ON IT":"BLOCKING FOUL")):x.pass?(o.made?"GOOD PASS":"PICKED OFF"):nat20?"NATURAL 20 — AND ONE":nat1?"NATURAL 1":o.made?(tap===4?"PERFECT · SPLASH":"GOOD"):"MISS";
   o.why=!o.made&&!nat1?(x.mods.find(m=>m[1]<0)?"":"the defender got a hand up"):"";
@@ -4059,6 +4065,16 @@ ST.epCoachHi=(co)=>SP_(`${co.name} drove up. Earl made it.`,`COACH: You heard it
 ST.epRival=(rv,hh)=>SP_(`${rv.name} texts. ${hh[0]}–${hh[1]}, all told.`,`RIVAL: Good career.`,`*He means it.`);
 ST.epFriend=(fr)=>SP_(`${fr.name} is at the back of the room. He has been at the back of every room.`);
 
+/* ================= JOBS ================= */
+ST.job1=()=>SP_(`Your phone lights up after practice.`,`~Level ten.`,`~Everything until now was the same for everybody. From here it is not.`,`~Pick what you are. I will build the rest around it.`);
+ST.job1Done=(P)=>SP_(`~${P.n}. Fine.`,`~There is a new line on your card. It works once a quarter. Do not waste it.`);
+ST.job2=(P)=>SP_(`~Level twenty. ${P.n} was the shape. This is the edge.`);
+ST.job2Done=(s)=>SP_(`~${s.n}. The card has another line.`);
+ST.job3=()=>SP_(`~Level thirty-five.`,`~Most players never get here. The ones who do stop getting better at numbers and start getting better at themselves.`,`~Your passives are stronger now. That is all. It is a lot.`);
+ST.job3Done=()=>SP_(`~Master. He would have had a word for this. I do not.`);
+ST.job4=()=>SP_(`~Level fifty.`,`~There is one note in his file about this level. It says: if anyone gets here, tell them I said so.`);
+ST.job4Done=()=>SP_(`~He said so.`);
+
 /* ---------- bonds.js: the people. Meters that gate scenes. ---------- */
 const BONDK=["mother","coach","friend","rival"];
 const bondOf=k=>C?.bonds?.[k]||null;
@@ -4180,6 +4196,43 @@ const SFX={
   tap(){if(!sfxOn())return;tone(1000,.03,"square",.03)}};
 window.SFX=SFX;
 
+/* ---------- jobs.js: job advancement. Lv 10 / 20 / 35 / 50. Actives are new options on the card; passives are named modifiers on the dice. ---------- */
+const JOBLV=[10,20,35,50];
+const JOBS={
+  scorer:{n:"Scorer",d:"You get buckets. The card gets a step-back.",act:{k:"stepback",lab:"Step-back",type:"mid",mod:2,note:"Once a quarter. Creates space."},pas:[["three","Scorer",.5],["mid","Scorer",.5]],
+    spec:{sniper:{n:"Sniper",d:"The three is the whole thing.",act:{k:"relocate",lab:"Relocate and fire",type:"three",mod:2.5,note:"Once a quarter. Open look from deep."},pas:[["three","Sniper",1]]},
+          slasher:{n:"Slasher",d:"You live at the rim and the line.",act:{k:"eurostep",lab:"Euro step",type:"rim",mod:2.5,foul:1.5,note:"Once a quarter. Draws contact."},pas:[["rim","Slasher",1],["dunk","Slasher",.5]]}}},
+  playmaker:{n:"Playmaker",d:"You run it. The card gets a lob.",act:{k:"lob",lab:"Throw the lob",pass:true,mod:2,note:"Once a quarter. Best big, at the rim."},pas:[["pass","Playmaker",1]],
+    spec:{floor:{n:"Floor General",d:"Everyone is better with you on the floor.",act:{k:"setup",lab:"Set the table",pass:true,mod:3,note:"Once a quarter. The open man, guaranteed look."},pas:[["pass","Floor General",1]]},
+          combo:{n:"Combo Guard",d:"Score or pass. They cannot sit on either.",act:{k:"hesi",lab:"Hesitation pull-up",type:"mid",mod:2,note:"Once a quarter."},pas:[["mid","Combo",.5],["pass","Combo",.5]]}}},
+  wing:{n:"Two-way Wing",d:"You guard their best and still score. The card gets a chase-down.",act:{k:"chasedown",lab:"Chase-down block",def:true,on:"block",mod:3,note:"Once a quarter."},pas:[["block","Wing",.5],["steal","Wing",.5]],
+    spec:{stopper:{n:"Stopper",d:"Their best player has a bad night.",act:{k:"lockup",lab:"Lock him up",def:true,on:"hands",mod:3,note:"Once a quarter. A real contest."},pas:[["hands","Stopper",1],["steal","Stopper",.5]]},
+          threeD:{n:"3-and-D",d:"Corner threes and closeouts.",act:{k:"corner",lab:"Corner three",type:"three",mod:2,note:"Once a quarter."},pas:[["three","3-and-D",.5],["hands","3-and-D",.5]]}}},
+  big:{n:"Big",d:"You own the paint. The card gets a seal.",act:{k:"seal",lab:"Seal and finish",type:"post",mod:2.5,note:"Once a quarter. Deep position."},pas:[["post","Big",.5],["block","Big",.5]],
+    spec:{anchor:{n:"Rim Protector",d:"Nothing easy at the rim.",act:{k:"wall",lab:"Wall up",def:true,on:"block",mod:3,note:"Once a quarter. Verticality."},pas:[["block","Anchor",1],["charge","Anchor",.5]]},
+          stretch:{n:"Stretch Big",d:"Pick and pop. They have to come out.",act:{k:"pop",lab:"Pick and pop",type:"three",mod:2,note:"Once a quarter."},pas:[["three","Stretch",1]]}}},
+  glue:{n:"Glue Guy",d:"The extra pass, the charge, the winning. The card gets an extra pass.",act:{k:"extra",lab:"Extra pass",pass:true,mod:2.5,note:"Once a quarter. The ball finds the open man."},pas:[["pass","Glue",.5],["charge","Glue",1]],
+    spec:{hustle:{n:"Hustle",d:"Loose balls, charges, the stuff that wins.",act:{k:"dive",lab:"Dive on it",def:true,on:"steal",mod:3,note:"Once a quarter."},pas:[["steal","Hustle",1],["charge","Hustle",.5]]},
+          captain:{n:"Captain",d:"The locker room is yours.",act:{k:"settle",lab:"Settle them down",pass:true,mod:2,note:"Once a quarter. A clean possession."},pas:[["pass","Captain",1]]}}}};
+const jobS=()=>(C.job??={path:null,spec:null,m3:false,m4:false,sig:null,used:{}});
+function jobTier(){const J=jobS();return J.m4?4:J.m3?3:J.spec?2:J.path?1:0}
+function jobName(){const J=jobS();if(!J.path)return null;const P=JOBS[J.path];const s=J.spec?P.spec[J.spec]:null;return(J.m4?"Legend ":J.m3?"Master ":"")+(s?s.n:P.n)}
+/* passives: named modifiers on a roll of a given kind */
+function jobMods(kind){const J=jobS();if(!J.path)return[];const P=JOBS[J.path],out=[];const push=(arr)=>arr.forEach(([k,n,v])=>{if(k===kind)out.push([n,v*(J.m3?1.5:1)])});
+  push(P.pas);if(J.spec)push(P.spec[J.spec].pas);if(J.m4)out.push(["Legend",.5]);return out}
+/* actives: one per tier, once a quarter */
+function jobActives(side){const J=jobS();if(!J.path)return[];const P=JOBS[J.path],acts=[P.act];if(J.spec)acts.push(P.spec[J.spec].act);
+  return acts.filter(a=>side==="def"?a.def:!a.def)}
+function jobUsed(k){const q=LV?.ctl?.st?(LV.ev.length?LV.ev[LV.ev.length-1].q:1):1;const J=jobS();return J.used[k]===`${C.y}-${LV?.gameId||0}-${q}`}
+function jobMarkUsed(k){const q=LV?.ev?.length?LV.ev[LV.ev.length-1].q:1;jobS().used[k]=`${C.y}-${LV?.gameId||0}-${q}`}
+/* advancement: a scene with a choice, not a menu */
+function jobCheck(){try{const R=rpgS();if(!R||!C)return;const J=jobS(),lv=R.lv,t=jobTier();
+  if(t===0&&lv>=JOBLV[0]&&!J.offered1){J.offered1=true;lifeRoll({title:"Level ten",quiet:true,txt:ST.job1(),mods:[],dc:0,opts:Object.keys(JOBS).map(k=>({t:JOBS[k].n,d:JOBS[k].d,go:()=>{J.path=k;return ST.job1Done(JOBS[k])}}))})}
+  else if(t===1&&lv>=JOBLV[1]&&!J.offered2){J.offered2=true;const P=JOBS[J.path];lifeRoll({title:"Level twenty",quiet:true,txt:ST.job2(P),mods:[],dc:0,opts:Object.keys(P.spec).map(k=>({t:P.spec[k].n,d:P.spec[k].d,go:()=>{J.spec=k;return ST.job2Done(P.spec[k])}}))})}
+  else if(t===2&&lv>=JOBLV[2]&&!J.offered3){J.offered3=true;lifeRoll({title:"Level thirty-five",quiet:true,txt:ST.job3(),mods:[],dc:0,opts:[{t:"Name it",d:"Your signature. The System will not name it for you.",go:()=>{J.m3=true;return ST.job3Done()}}]})}
+  else if(t===3&&lv>=JOBLV[3]&&!J.offered4){J.offered4=true;lifeRoll({title:"Level fifty",quiet:true,txt:ST.job4(),mods:[],dc:0,opts:[{t:"Keep going",d:"",go:()=>{J.m4=true;return ST.job4Done()}}]})}}catch(e){console.error(e)}}
+window.__jobs={jobS,jobCheck,JOBS,jobMods};
+
 /* ---------- RPG UI: MapleStory-style windows (Stat, Skills, Goals, Loadouts), creation flow, EXP bar ---------- */
 function rpgLook(){const p=rpgP();return p?(p.look||lookOf(p,p.pid)):(C.look??=lookFor(C.name))}
 function rpgJersey(){const p=rpgP();if(p&&p.tid>=0){const t=T(p.tid);return[t.color||"#2f6fd6","#f4f1ea"]}const t=C?.cl?.teams?.[C.school];return[t?.color||"#2f6fd6","#f4f1ea"]}
@@ -4252,8 +4305,8 @@ function rpgKeys(e){if(e.metaKey||e.ctrlKey||e.altKey)return;const tag=e.target?
   const k=e.key.toLowerCase();if(k==="c")openSheet("stat");else if(k==="k")openSheet("skills");else if(k==="j")openSheet("goals");else return;e.preventDefault()}
 
 /* ---------- MyCareer game shell: pixel gym scene + MapleStory HUD + windows ---------- */
-const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],rec:["Recruiting","U"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],today:["Today","E"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"],bonds:["Bonds","F"]};
-function csView(k){const cl=C.cl;switch(k){case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"rec":return clRec();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
+const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],today:["Today","E"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"],bonds:["Bonds","F"]};
+function csView(k){const cl=C.cl;switch(k){case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
   case"log":{const s=C.season,last=s.games.slice().reverse();return`<section class="panel"><h3>${sl(cl.y)} game log</h3>${last.length?`<div class="tw"><table><thead><tr><th class="l">Result</th><th class="l">Opponent</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th></tr></thead><tbody>${last.map(g=>`<tr class="${g.w?"r-w":"r-l"}"><td class="l"><b class="${g.w?"wl-w":"wl-l"}">${g.w?"W":"L"}</b> ${g.us}-${g.them}</td><td class="l name">${g.home?"vs":"at"} ${esc(g.label||tLbl(cl,g.opp))}</td><td>${g.ln.min}</td><td class="hi">${g.ln.pts}</td><td>${g.ln.reb}</td><td>${g.ln.ast}</td><td>${g.ln.stl}</td><td>${g.ln.blk}</td><td>${g.ln.fgm??0}-${g.ln.fga??0}</td></tr>`).join("")}</tbody></table></div>`:"<p class='mp-note'>No games yet. Press Space to play.</p>"}</section>`}
   case"keys":return keybindsHtml();case"style":return styleHtml();case"case":return caseHtml();case"play":return settingsHtml();case"attn":return attnHtml();case"bonds":return bondsHtml();
   case"inv":return lockerHtml();
@@ -4279,7 +4332,7 @@ function mcCollege(){
   if(cl.phase==="done")act=`<button class="mp-btn main" data-act="clwrap">Season wrap-up →</button>`;
   else if(nx){const pm=playMode(),pmn=PLAYMODES.find(x=>x[0]===pm)?.[1]||"";act=`<button class="mp-btn" data-act="cswin" data-v="play" title="Play settings (W)">${esc(pmn)}</button><button class="mp-btn main" data-act="${pm==="sim"?"clsim":"clwatch"}" data-v="1" data-hold="clmenu">${cl.phase==="reg"?"Play next game":"Play next round"}<small>${esc(nxt)} · Space</small></button><button class="mp-btn" data-act="clmenu">Sim ⋯</button>`}
   else act=`<button class="mp-btn main" data-act="clsim" data-v="${cl.phase==="reg"?"1":"end"}">${cl.phase==="reg"?"Next day":cl.phase==="ct"?"Sim to Selection Sunday":"Sim the tournament"}</button>`;
-  const keys=[["stat","Char","C"],["skills","Skills","K"],["inv","Locker","I"],["quests","Goals","J"],["roster","Team","T"],["sched","Sched","S"],["log","Log","O"],["poll","Top 25","R"],["stand","Stand","D"],["rec","Recruit","U"],["prog","Program","P"],["news","News","N"],["reel","Clips","H"],["case","Trophy","G"]];
+  const keys=[["stat","Char","C"],["skills","Skills","K"],["inv","Locker","I"],["quests","Goals","J"],["roster","Team","T"],["sched","Sched","S"],["log","Log","O"],["poll","Top 25","R"],["stand","Stand","D"],["prog","Program","P"],["news","News","N"],["reel","Clips","H"],["case","Trophy","G"]];
   if(cl.ncaa)keys.push(["brk","Bracket","B"]);keys.push(["bonds","Bonds","F"],["attn","Fame","M"],["play","Play","W"],["style","Style","V"],["keys","Keys","Y"]);
   setTimeout(()=>{csLoop();csWins();csDragInit();archFlush()},0);
   return`<div class="cs ${busy?"busy":""}">
@@ -4289,13 +4342,13 @@ function mcCollege(){
       <div class="cs-quest" ${C.sys?.off?"hidden":""}><div class="h"><span>Quest helper</span><span>${gs.length}/3</span></div>${gs.map(g=>`<button class="q" data-act="cswin" data-v="quests"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></button>`).join("")}</div>
       <div id="cs-wins" class="cs-wins"></div>
       <div class="cs-next">${act}</div>${hubPad()}</div>
-    <div class="cs-hud"><div class="cs-lv"><b><small>LV.</small>${R?.lv||1}</b><span>${esc(C.name)} · ${esc(archName(rpgSkills(R||rpgNew(),C.age||18),C.ht))}</span></div>
+    <div class="cs-hud"><div class="cs-lv"><b><small>LV.</small>${R?.lv||1}</b><span>${esc(C.name)} · ${esc((typeof jobName==="function"&&jobName())||archName(rpgSkills(R||rpgNew(),C.age||18),C.ht))}</span></div>
       <button class="cs-xp" data-act="cswin" data-v="stat" aria-label="EXP"><i style="width:${pct}%"></i><span>EXP ${R?R.exp.toLocaleString():0} [${pct.toFixed(2)}%]</span></button>
       <button class="cs-ev" data-act="cswin" data-v="today" title="${esc(ev.d)}"><b>${ev.ic}</b>${ev.n}</button><button class="cs-ev" data-act="cswin" data-v="attn" title="Attention"><b>${(attnInit(),C.attn)}</b>ATTN · ${C.spon.active.length}/${slots()} slots${C.spon.offers.length?` · <span style="color:#ffd166">${C.spon.offers.length} offer${C.spon.offers.length>1?"s":""}</span>`:""}</button>
       <div class="cs-keys">${keys.map(([k,l,key])=>`<button class="cs-k ${k==="skills"&&free>0?"hot":""}" data-act="cswin" data-v="${k}" title="${CSWIN[k][0]} (${key})"><i>${key}</i>${k==="skills"&&free>0?`+${free}`:l}</button>`).join("")}</div></div></div>`;
 }
 function csKeys(e){if(!C||C.stage!=="college"||$("mc").hidden||!$("live").hidden)return false;if(hubKeyDown(e))return true;if(e.metaKey||e.ctrlKey||e.altKey)return false;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return false;
-  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",u:"rec",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn",f:"bonds"};const k=map[e.key.toLowerCase()];if(!k)return false;
+  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn",f:"bonds"};const k=map[e.key.toLowerCase()];if(!k)return false;
   if(!$("modal").hidden){closeModal();if(["stat","skills","quests","today"].includes(k))return true}csToggle(k);e.preventDefault();return true}
 
 /* ---------- HUB: walkable side-scroller maps (MapleStory-style) ---------- */
