@@ -149,7 +149,7 @@ ST.job1=()=>SP_(`Your phone lights up after practice.`,`~Level ten.`,`~Everythin
 ST.job1Done=(P)=>SP_(`~${P.n}. Fine.`,`~There is a new line on your card. It works once a quarter. Do not waste it.`);
 ST.job2=(P)=>SP_(`~Level twenty. ${P.n} was the shape. This is the edge.`);
 ST.job2Done=(s)=>SP_(`~${s.n}. The card has another line.`);
-ST.job3=()=>SP_(`~Level thirty-five.`,`~Most players never get here. The ones who do stop getting better at numbers and start getting better at themselves.`,`~Your passives are stronger now. That is all. It is a lot.`);
+ST.job3=()=>SP_(`~Level forty-five.`,`~Most players never get here. The ones who do stop getting better at numbers and start getting better at themselves.`,`~Your passives are stronger now. That is all. It is a lot.`);
 ST.job3Done=()=>SP_(`~Master. He would have had a word for this. I do not.`);
-ST.job4=()=>SP_(`~Level fifty.`,`~There is one note in his file about this level. It says: if anyone gets here, tell them I said so.`);
+ST.job4=()=>SP_(`~Level sixty-five.`,`~There is one note in his file about this level. It says: if anyone gets here, tell them I said so.`);
 ST.job4Done=()=>SP_(`~He said so.`);

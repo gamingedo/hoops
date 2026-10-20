@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="4453b7fb26";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="6e73894fcf";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -847,7 +847,7 @@ function recordUser(g,label){
   G.results.unshift({label,opp,home,us,them,w:us>them,ot:g.ot});G.results=G.results.slice(0,12);
   try{pressCheck(g,label)}catch(e){}
   try{assignRival();teamRival();rivalNote(g);featNote(g);achScan()}catch(e){console.error(e)}
-  try{const me=G.career&&!G.career.retired&&P(G.career.pid);if(me?.rpg){const r=(g.box[G.userTid]||[]).find(x=>x.pid===me.pid);rpgRest(me.rpg);rpgGame(r||{min:0},us>them,label&&/playoff|final|round|series/i.test(label)?"po":"reg")}}catch(e){console.error(e)}
+  try{const me=G.career&&!G.career.retired&&P(G.career.pid);if(me?.rpg){const r=(g.box[me.tid>=0?me.tid:G.userTid]||g.box[G.userTid]||[]).find(x=>x.pid===me.pid);rpgRest(me.rpg);rpgGame(r||{min:0},us>them,label&&/playoff|final|round|series/i.test(label)?"po":"reg")}}catch(e){console.error(e)}
 }
 function makeSchedule(){
   const n=G.teams.length,gp=G.teams.map(()=>0),days=[],target=seasonLen();let guard=0;
@@ -1478,7 +1478,7 @@ function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v43";
+const BUILD="v44";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -2764,7 +2764,7 @@ function careerOffers(p){
 function acceptOffer(o){
   const p=P(G.career.pid),t=T(o.tid);if(p.tid>=0)toFA(p);
   if(t.roster.length>=RMAX)toFA(best(t.roster.map(P).filter(x=>x!==p),x=>-value(x)));
-  p.tid=t.tid;t.roster.push(p.pid);setContract(p,o.amt,o.yrs);G.career.offers=null;
+  p.tid=t.tid;t.roster.push(p.pid);setContract(p,o.amt,o.yrs);G.career.offers=null;try{syncCareerTeam()}catch(e){}
 }
 function careerTrade(mode){
   const p=P(G.career.pid),from=T(p.tid),want=value(p);
@@ -2829,8 +2829,8 @@ async function autoAdvance(stop,onTick){
   let n=0;const tick=async()=>{if(++n%6===0){onTick&&onTick();await new Promise(r=>setTimeout(r,0))}};
   for(let guard=0;guard<6000&&!stop();guard++){
     switch(G.phase){
-      case"preseason":case"fa":autoFill();startSeason();break;
-      case"season":simDay();break;
+      case"preseason":case"fa":try{syncCareerTeam()}catch(e){}autoFill();startSeason();break;
+      case"season":if(G.day%20===0)try{syncCareerTeam()}catch(e){}simDay();break;
       case"playoffs":playoffDay();break;
       case"draft":revealLottery(true);G.draft.started=true;while(G.draft.i<nPicks())draftPick(G.draft.order[G.draft.i],aiChoice());finishDraft();break;
       case"resign":autoResign();resignDone();break;
@@ -4070,9 +4070,9 @@ ST.job1=()=>SP_(`Your phone lights up after practice.`,`~Level ten.`,`~Everythin
 ST.job1Done=(P)=>SP_(`~${P.n}. Fine.`,`~There is a new line on your card. It works once a quarter. Do not waste it.`);
 ST.job2=(P)=>SP_(`~Level twenty. ${P.n} was the shape. This is the edge.`);
 ST.job2Done=(s)=>SP_(`~${s.n}. The card has another line.`);
-ST.job3=()=>SP_(`~Level thirty-five.`,`~Most players never get here. The ones who do stop getting better at numbers and start getting better at themselves.`,`~Your passives are stronger now. That is all. It is a lot.`);
+ST.job3=()=>SP_(`~Level forty-five.`,`~Most players never get here. The ones who do stop getting better at numbers and start getting better at themselves.`,`~Your passives are stronger now. That is all. It is a lot.`);
 ST.job3Done=()=>SP_(`~Master. He would have had a word for this. I do not.`);
-ST.job4=()=>SP_(`~Level fifty.`,`~There is one note in his file about this level. It says: if anyone gets here, tell them I said so.`);
+ST.job4=()=>SP_(`~Level sixty-five.`,`~There is one note in his file about this level. It says: if anyone gets here, tell them I said so.`);
 ST.job4Done=()=>SP_(`~He said so.`);
 
 /* ---------- bonds.js: the people. Meters that gate scenes. ---------- */
@@ -4197,7 +4197,7 @@ const SFX={
 window.SFX=SFX;
 
 /* ---------- jobs.js: job advancement. Lv 10 / 20 / 35 / 50. Actives are new options on the card; passives are named modifiers on the dice. ---------- */
-const JOBLV=[10,20,35,50];
+const JOBLV=[10,20,45,65];
 const JOBS={
   scorer:{n:"Scorer",d:"You get buckets. The card gets a step-back.",act:{k:"stepback",lab:"Step-back",type:"mid",mod:2,note:"Once a quarter. Creates space."},pas:[["three","Scorer",.5],["mid","Scorer",.5]],
     spec:{sniper:{n:"Sniper",d:"The three is the whole thing.",act:{k:"relocate",lab:"Relocate and fire",type:"three",mod:2.5,note:"Once a quarter. Open look from deep."},pas:[["three","Sniper",1]]},
@@ -4229,8 +4229,8 @@ function jobMarkUsed(k){const q=LV?.ev?.length?LV.ev[LV.ev.length-1].q:1;jobS().
 function jobCheck(){try{const R=rpgS();if(!R||!C)return;const J=jobS(),lv=R.lv,t=jobTier();
   if(t===0&&lv>=JOBLV[0]&&!J.offered1){J.offered1=true;lifeRoll({title:"Level ten",quiet:true,txt:ST.job1(),mods:[],dc:0,opts:Object.keys(JOBS).map(k=>({t:JOBS[k].n,d:JOBS[k].d,go:()=>{J.path=k;return ST.job1Done(JOBS[k])}}))})}
   else if(t===1&&lv>=JOBLV[1]&&!J.offered2){J.offered2=true;const P=JOBS[J.path];lifeRoll({title:"Level twenty",quiet:true,txt:ST.job2(P),mods:[],dc:0,opts:Object.keys(P.spec).map(k=>({t:P.spec[k].n,d:P.spec[k].d,go:()=>{J.spec=k;return ST.job2Done(P.spec[k])}}))})}
-  else if(t===2&&lv>=JOBLV[2]&&!J.offered3){J.offered3=true;lifeRoll({title:"Level thirty-five",quiet:true,txt:ST.job3(),mods:[],dc:0,opts:[{t:"Name it",d:"Your signature. The System will not name it for you.",go:()=>{J.m3=true;return ST.job3Done()}}]})}
-  else if(t===3&&lv>=JOBLV[3]&&!J.offered4){J.offered4=true;lifeRoll({title:"Level fifty",quiet:true,txt:ST.job4(),mods:[],dc:0,opts:[{t:"Keep going",d:"",go:()=>{J.m4=true;return ST.job4Done()}}]})}}catch(e){console.error(e)}}
+  else if(t===2&&lv>=JOBLV[2]&&!J.offered3){J.offered3=true;lifeRoll({title:"Level forty-five",quiet:true,txt:ST.job3(),mods:[],dc:0,opts:[{t:"Name it",d:"Your signature. The System will not name it for you.",go:()=>{J.m3=true;return ST.job3Done()}}]})}
+  else if(t===3&&lv>=JOBLV[3]&&!J.offered4){J.offered4=true;lifeRoll({title:"Level sixty-five",quiet:true,txt:ST.job4(),mods:[],dc:0,opts:[{t:"Keep going",d:"",go:()=>{J.m4=true;return ST.job4Done()}}]})}}catch(e){console.error(e)}}
 window.__jobs={jobS,jobCheck,JOBS,jobMods};
 
 /* ---------- RPG UI: MapleStory-style windows (Stat, Skills, Goals, Loadouts), creation flow, EXP bar ---------- */
@@ -4280,7 +4280,7 @@ function openSheet(tab){const R=rpgS();if(!R)return;C&&(C.sheetTab=tab||C.sheetT
   const tabs=[["stat","Stat"],["skills","Skills"],["goals","Goals"],["loads","Loadouts"],["today","Today"],...(C&&C.stage!=="college"&&C.bonds?[["bonds","Bonds"],["inv","Locker"],["attn","Fame"]]:[])];
   let body="";
   if(t==="stat")body=`<div class="mp-two"><div class="mp-col">${mpWin(esc(rpgName()),`<div class="mp-show one"><canvas data-show='${showData("front")}' width="${SHW}" height="${SHH}"></canvas></div>${rpgSummary(R,age)}<div class="mp-kv"><span>Level</span><b>${R.lv}</b><span>EXP</span><b>${R.exp.toLocaleString()} / ${needXP(R.lv).toLocaleString()}</b><span>Origin</span><b>${ORIGINS.find(o=>o.k===R.origin)?.n||"Custom"}</b><span>Traits</span><b>${R.traits.map(k=>TRAITS.find(x=>x.k===k)?.n).filter(Boolean).join(", ")||"None"}</b><span>Crate keys</span><b>${R.keys||0}</b><span>Rested EXP</span><b>${Math.round(R.rest||0).toLocaleString()}</b></div>`)}</div>
-    <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
+    <div class="mp-col">${mpWin("Ratings",`<div class="mp-kv">${(()=>{const a=skToA(s);return FOCI.filter(([k])=>k!=="DUR").map(([k,l])=>`<span>${l}</span><b>${a[k]}</b>`).join("")})()}</div>`)}${typeof jobName==="function"&&jobName()?mpWin("Job · "+esc(jobName()),`<div class="mp-note">${(()=>{const J=jobS(),P=JOBS[J.path],s=J.spec?P.spec[J.spec]:null;const acts=[P.act,...(s?[s.act]:[])],pas=[...P.pas,...(s?s.pas:[])];return`<b>Actives</b> (once a quarter): ${acts.map(a=>esc(a.lab)).join(", ")}.<br><b>Passives</b>: ${pas.map(x=>`${esc(x[1])} +${x[2]*(J.m3?1.5:1)} on ${x[0]}`).join(", ")}${J.m4?", Legend +0.5 on everything":""}.<br>Next: ${J.m4?"nothing left; that was the last one":"Lv "+(J.m3?65:J.spec?45:J.path?20:10)}.`})()}</div>`):mpWin("Job",`<div class="mp-note">None yet. The System will text you at level 10.</div>`)}${mpWin("Recent EXP",`<ul class="mp-log">${(R.xpLog||[]).slice(0,8).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>No games yet.</li>"}</ul>`)}</div></div>`;
   else if(t==="skills")body=mpWin("Skills",`<div class="mp-pts"><button class="mp-btn sm" data-act="rrespec">Respec (free)</button><b>${rpgFree(R)}</b></div>${skGroups(R,age,true)}`);
   else if(t==="goals"){const gs=rpgGoals(R);body=mpWin("Goals",`<div class="mp-goals">${gs.slice(0,8).map(g=>`<div class="mp-goal"><span>${esc(g.t)}</span><i><b style="width:${g.pct*100}%"></b></i><small>${g.v.toLocaleString()} / ${g.n.toLocaleString()}</small></div>`).join("")}</div>`)
     +mpWin("Completed",`<ul class="mp-log">${(R.done||[]).slice(0,12).map(x=>`<li><b>+${x.x.toLocaleString()}</b> ${esc(x.t)}</li>`).join("")||"<li>Nothing yet. Play a game.</li>"}</ul>`)}
@@ -4611,14 +4611,11 @@ function openMenu(){
   const el=$("menu");el.hidden=false;document.body.style.overflow="hidden";
   const inLeague=G&&G.userTid!=null,car=G?.career&&!G.career.retired&&P(G.career.pid);
   const col=C&&C.stage&&C.stage!=="done"&&C.stage!=="create";
-  el.innerHTML=`<div class="eras-in">${mcHead("Choose a mode.").replace('<button class="eras-x" data-act="menu">← Main menu</button>',"")}
+  el.innerHTML=`<div class="eras-in">${mcHead("A basketball anime with dice.").replace('<button class="eras-x" data-act="menu">← Main menu</button>',"")}
     <div class="menu-grid">
       <button class="menu-card" data-act="m-career" style="--e1:#ff8a3d;--e2:#ffd166;--e3:#16264a"><span class="ty">MC</span><small>MyCareer</small><b>${col?"Continue "+esc(C.name):car?"Continue "+esc(G.career.name):"Create a player"}</b>
-        <p>${col?`${esc(C.school||"Recruiting")} · ${C.stage==="college"?CLASSN[C.cls-1]:"between seasons"}`:car?`${esc(T(P(G.career.pid).tid)?.name||"Free agent")} · age ${P(G.career.pid).age}`:"Spin your ratings from 1,000 NBA greats, play college at a real school, get drafted, chase the Hall of Fame."}</p></button>
-      <button class="menu-card" data-act="m-fr" style="--e1:#2f7df6;--e2:#9ad0ff;--e3:#0b1f4a"><span class="ty">GM</span><small>Franchise</small><b>${inLeague?"Continue the "+esc(user().name):"Choose an era"}</b>
-        <p>${inLeague?`${sl(G.year)} · ${user().w}-${user().l}`:"Take over a real team in any era from 1970 to today and build a dynasty."}</p></button>
+        <p>${col?`${esc(C.school||"Recruiting")} · ${C.stage==="college"?CLASSN[C.cls-1]:"between seasons"}`:car?`${esc(T(P(G.career.pid).tid)?.name||"Free agent")} · age ${P(G.career.pid).age}`:"Two roads. One letter or eleven. A sender with no number. College, the draft, the league, and whatever you make of it."}</p></button>
       ${col||car?`<button class="menu-card" data-act="m-newcareer" style="--e1:#9aa6c0;--e2:#f4f1ea;--e3:#1c2440"><span class="ty">+</span><small>MyCareer</small><b>New player</b><p>Start a fresh career. Your current college career will be replaced.</p></button>`:""}
-      ${inLeague?`<button class="menu-card" data-act="m-newfr" style="--e1:#9aa6c0;--e2:#f4f1ea;--e3:#1c2440"><span class="ty">+</span><small>Franchise</small><b>New league</b><p>Pick a new era. Your current league will be replaced.</p></button>`:""}
     </div><div class="actions" style="margin-top:14px">${rpgS()?`<button class="eras-x" data-act="m-sheet">Character sheet · respec</button>`:""}<button class="eras-x" data-act="saves">Manage saves</button><button class="eras-x" data-act="credits">Credits</button></div><p class="note" style="color:#c9cfe0;margin-top:10px">${cloudLine()}</p></div>`;
 }
 function closeMenu(){$("menu").hidden=true;document.body.style.overflow=""}
@@ -5544,7 +5541,7 @@ C=await loadC();
 openMenu();
 cloudBoot();
 if(G.hist)loadDB().then(render).catch(()=>toast("Couldn't load the history file. Some real-player details are hidden until it loads."));
-window.__hoopsState=()=>G;window.__C=()=>C;window.__adv=(stop)=>autoAdvance(stop);window.__simDay=()=>simDay(false);window.__sheet=t=>openSheet(t);window.__clSim=v=>clSim(v);window.__ctab=v=>{C.ctab=v;mcRender()};window.__swipe=d=>swipeTab(d);window.__lvc=()=>{LV.wait={pid:Object.keys(LV.ps)[0],sht:70,need:'Down 2 · 0:12 left'};openClutch()};window.__clutchTest=n=>{let prompts=0,made=0,att=0;for(let i=0;i<n;i++){const ids=shuffle([...Array(G.teams.length).keys()]);const ctl=mkCtl(0,null);const g=liveGen(nbaSD(ids[0],ids[1]),nbaOpt(),ctl);let r,arg;while(!(r=g.next(arg)).done){arg=undefined;if(r.value&&r.value.clutch){prompts++;arg=1}}r.value.ev.filter(e=>e.clutch).forEach(e=>{att++;if(e.type==="make")made++})}return{prompts,att,made}};window.__lv=()=>LV;window.__dp=(c,p)=>drawPlayer(c,p,null);
+window.__hoopsState=()=>G;window.__C=()=>C;window.__adv=(stop)=>autoAdvance(stop);window.__autoSpend=()=>{const R=rpgS();if(R){autoBuild(R,rpgAge(),"shooter");rpgApply()}};window.__simDay=()=>simDay(false);window.__sheet=t=>openSheet(t);window.__clSim=v=>clSim(v);window.__ctab=v=>{C.ctab=v;mcRender()};window.__swipe=d=>swipeTab(d);window.__lvc=()=>{LV.wait={pid:Object.keys(LV.ps)[0],sht:70,need:'Down 2 · 0:12 left'};openClutch()};window.__clutchTest=n=>{let prompts=0,made=0,att=0;for(let i=0;i<n;i++){const ids=shuffle([...Array(G.teams.length).keys()]);const ctl=mkCtl(0,null);const g=liveGen(nbaSD(ids[0],ids[1]),nbaOpt(),ctl);let r,arg;while(!(r=g.next(arg)).done){arg=undefined;if(r.value&&r.value.clutch){prompts++;arg=1}}r.value.ev.filter(e=>e.clutch).forEach(e=>{att++;if(e.type==="make")made++})}return{prompts,att,made}};window.__lv=()=>LV;window.__dp=(c,p)=>drawPlayer(c,p,null);
 window.__showT=()=>{const d=document.createElement("div");d.style.cssText="position:fixed;inset:0;z-index:9999;background:#1a2440;display:flex;gap:6px;padding:10px;flex-wrap:wrap";document.body.appendChild(d);
   const L=[{skin:4,hair:0,style:7,beard:3,band:1,build:1,shoe:0},{skin:0,hair:4,style:0,beard:1,shoe:1,socks:1},{skin:5,hair:0,style:1,beard:0,shoe:3,wrist:2},{skin:3,hair:0,style:4,beard:2,sleeve:2,shoe:0},{skin:2,hair:1,style:6,gog:1,shoe:2},{skin:1,hair:2,style:2,beard:0,band:2,socks:2}];
   const B=[{ht:81,wt:250,ws:88},{ht:74,wt:185,ws:76},{ht:86,wt:270,ws:92},{ht:78,wt:215,ws:84},{ht:84,wt:240,ws:88},{ht:72,wt:175,ws:73}];
