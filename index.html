@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="68e3199e0b";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="8d9978b677";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -381,6 +381,13 @@ td{border-top:1px solid #ffffff12}
 .plg-cap{position:absolute;left:12px;bottom:10px;background:#000b;color:#fff;padding:6px 10px;border-radius:6px;display:grid}.plg-cap small{font:700 10px Silkscreen,var(--f-mono);color:#ffd166;letter-spacing:.1em}.plg-cap b{font:900 20px var(--f-display);text-transform:uppercase}
 .plg-txt{display:grid;gap:12px}.plg-txt .arch{margin:0;font:500 18px/1.55 var(--f-body);color:#f4f1ea;background:#0d1630e6;border:1px solid #ffffff1c;border-left:4px solid #ffd166;border-radius:8px;padding:14px 16px;font-style:italic}
 .plg-opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}.plg-opts .mp-card{background:linear-gradient(180deg,#fff,#eef0f4)}
+.at-top{display:grid;gap:8px}.at-meter{position:relative;height:26px;background:#000;border:1px solid #5a5f70;border-radius:4px;overflow:hidden}.at-meter i{position:absolute;left:0;top:0;bottom:0;background:linear-gradient(180deg,#ff9bd2,#c2185b)}.at-meter span{position:absolute;inset:0;display:grid;place-items:center;font:700 11px Silkscreen,var(--f-mono);color:#fff;text-shadow:1px 1px 0 #000}
+.sp-row{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px 10px;border-bottom:1px solid #e3e5ea;font-size:13px}.sp-row b{display:block}.sp-row small{display:block;color:#4a4f5e;font-size:11px}.sp-row small.cl{color:#8a5a00}.sp-b{display:grid;gap:4px}
+.lk-top{display:grid;grid-template-columns:150px 1fr;gap:10px}.lk-crate{display:grid;justify-items:center;gap:6px;background:linear-gradient(180deg,#6b4a2f,#4a3220);border:2px solid #2b1b10;border-radius:6px;padding:10px;color:#fff;text-align:center}.lk-crate b{font:900 40px/1 var(--f-display);color:#ffd166}.lk-crate .mp-lab{color:#f4f1ea;font-size:10px}
+.lk-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.lk-slot{background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:6px 8px;display:grid;gap:3px;min-height:70px}.lk-slot small{font:700 10px Silkscreen,var(--f-mono);color:#4a4f5e;text-transform:uppercase}.lk-slot b{font-size:12px;line-height:1.2}.lk-slot i{color:#9aa1b1;font-size:12px}
+.lk-item{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:start;padding:8px 10px;border-bottom:1px solid #e3e5ea;font-size:13px}.lk-item b{display:block}.lk-item small{display:block;color:#4a4f5e;font-size:11px}.lk-item p{margin:4px 0 0;font-size:12px;font-style:italic;color:#2b2b33}.lk-item small.cl{color:#8a5a00;margin-top:2px}
+.arch-card{display:grid;gap:12px;padding:6px}.arch-card small{font:700 11px Silkscreen,var(--f-mono);color:var(--led);letter-spacing:.1em;text-transform:uppercase}.arch-card p{margin:0;font:500 17px/1.55 var(--f-body);font-style:italic;color:#f4f1ea;border-left:4px solid var(--led);padding-left:12px}
+@media (max-width:600px){.lk-top{grid-template-columns:1fr}.lk-slots{grid-template-columns:repeat(2,1fr)}}
 .kb-list{display:grid;gap:4px}.kb-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:6px 10px;font-size:13px;font-weight:600}.kb-key{min-width:64px;border:1px solid #4a4f5e;border-radius:5px;background:linear-gradient(180deg,#fff,#dde1e8);font:700 11px Silkscreen,var(--f-mono);padding:5px 8px;cursor:pointer;box-shadow:0 2px 0 #9aa1b1}
 .st-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap;background:#fff;border:1px solid #cfd3dc;border-radius:5px;padding:8px 10px;font-size:13px;font-weight:600}.st-row>span{min-width:48px;color:#4a4f5e}.st-row .sw-b{width:26px;height:26px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #6b7080;cursor:pointer}.st-row .sw-b.on,.st-row .mp-btn.on{box-shadow:0 0 0 3px #f5a623}.st-row b{font:700 12px Silkscreen,var(--f-mono);min-width:70px;text-align:center}
 /* ===== game viewer ===== */
@@ -1860,7 +1867,7 @@ function playCL(cl,h,a,o){
   if(h===C.school||a===C.school){const home=h===C.school,us=home?hs:as,them=home?as:hs,opp=home?a:h,me=(box[C.school]||[]).find(r=>r.pid==="me");
     const ln=me?{min:me.min,pts:me.pts,reb:me.reb,ast:me.ast,stl:me.stl,blk:me.blk,fgm:me.fgm,fga:me.fga,tpm:me.tpm,tpa:me.tpa}:{min:0,pts:0,reb:0,ast:0,stl:0,blk:0};
     const s=C.season,t=s.tot;if(me){t.gp++;for(const kk of["min","pts","reb","ast","stl","blk"])t[kk]+=ln[kk]}
-    const mg={opp,us,them,w:us>them,ln,label:o.label||null,home,neutral:!!o.neutral,ork:apRk(cl,opp)};s.games.push(mg);if(o.label)s.tlog.push(mg);else mg.w?s.w++:s.l++;try{if(C.rpg){rpgRest(C.rpg);rpgGame(ln,mg.w,o.kind)}}catch(e){console.error(e)}
+    const mg={opp,us,them,w:us>them,ln,label:o.label||null,home,neutral:!!o.neutral,ork:apRk(cl,opp)};s.games.push(mg);if(o.label)s.tlog.push(mg);else mg.w?s.w++:s.l++;try{if(C.rpg){rpgRest(C.rpg);rpgGame(ln,mg.w,o.kind,mg)}}catch(e){console.error(e)}
     g.live=o.watch?{ev:L.ev,teams:[h,a],halves:true,no3:cl.y<1986,mine:me?"me":null,court:{r3:col3(cl.y),lane:12,corner:col3(cl.y)},college:true}:null;g.box=box;return g}
   return g;
 }
@@ -1876,7 +1883,7 @@ function clDay(watch){
   const cl=C.cl;let mine=null;
   if(cl.phase==="reg"){for(const [h,a] of cl.sched[cl.day]||[]){const me=h===C.school||a===C.school;const g=playCL(cl,h,a,{watch:watch&&me,kind:"reg"});if(me)mine=g}
     if(C.cls===4&&mine){const lh=cl.sched.reduce((m,d,i)=>d.some(p=>p[0]===C.school)?i:m,-1);if(cl.day===lh)ccere({type:"senior",y:cl.y,line:`You finish your home career with ${C.season.tot.pts} points this season.`})}
-    cl.day++;if(cl.day%2===0||cl.day>=cl.sched.length){recWeek(cl);apPoll(cl)}if(cl.day>=cl.sched.length)startCT(cl)}
+    cl.day++;if(cl.day%2===0||cl.day>=cl.sched.length){recWeek(cl);apPoll(cl);try{attnWeek()}catch(e){console.error(e)}}if(cl.day>=cl.sched.length)startCT(cl)}
   else if(cl.phase==="ct")mine=ctRound(cl,watch);
   else if(cl.phase==="ncaa")mine=ncaaRound(cl,watch);
   return mine;
@@ -3359,20 +3366,21 @@ function rpgApply(){const R=rpgS();if(!R)return;const age=rpgAge(),s=rpgSkills(R
 function rpgPot(R,age){const s=rpgSkills(R,age),o=calcOvr(skToA(s),C?.pos||"SF");return clamp(Math.round(o+30+(R.body.ht-78)*1.2-Math.max(0,age-19)*3),50,99)}
 /* ---- EXP ---- */
 function spPerLv(R){const og=ORIGINS.find(x=>x.k===R.origin);return Math.max(2,5+(og?.spLv||0)+(R.traits||[]).reduce((a,t)=>a+(TRAITS.find(x=>x.k===t)?.spLv||0),0))}
-function rpgRest(R){const now=Date.now();if(R.last){const h=(now-R.last)/36e5,cap=needXP(R.lv)*1.5;if(h>.25)R.rest=Math.min(cap,(R.rest||0)+h*needXP(R.lv)*.12*(today().rest||1))}R.last=now}
+function rpgRest(R){const now=Date.now();if(R.last){const h=(now-R.last)/36e5,cap=needXP(R.lv)*1.5;if(h>.25)R.rest=Math.min(cap,(R.rest||0)+h*needXP(R.lv)*.12*(today().rest||1)*(1+(typeof gearMods==="function"&&C?.gear?(gearMods().rest||0)+(C.spon?.active?.some(d=>d.pay&&d.pay.rest)?1:0):0)))}R.last=now}
 function rpgXP(R,amt,why){if(!R||amt<=0)return 0;amt=Math.round(amt);R.exp+=amt;R.xpLog=[{t:why,x:amt},...(R.xpLog||[])].slice(0,12);let ups=0;
   while(R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const g=spPerLv(R)+(today().spB||0);R.spLv=(R.spLv||0)+g;ups++;(R.pend??=[]).push({lv:R.lv,sp:g})}
   if(ups){rpgGoalsCheck(R)}return amt}
 /* one game for your player: line = {min,pts,reb,ast,stl,blk,fgm,fga,tpm}, w = won */
-function rpgGame(ln,w,kind){const R=rpgS();if(!R||!ln)return;const ev=today();
+function rpgGame(ln,w,kind,mg){const R=rpgS();if(!R||!ln)return;const ev=today();
   if(!ln.min){rpgXP(R,15*ev.xp,"Practice reps");return}
   let x=55+4*ln.pts+3*ln.reb+4*ln.ast+6*((ln.stl||0)+(ln.blk||0))+(w?40*(ev.winx||1):0)+(kind&&kind!=="reg"?40:0);
   if((R.traits||[]).includes("showman")&&ln.pts>=25)x*=1.15;x*=ev.xp;
   let bonus=0;if(R.rest>0){bonus=Math.min(R.rest,x);R.rest-=bonus}
   const r=R.rec??={g:0,maxPts:0,maxAst:0,maxReb:0,maxSB:0,dd:0,st:0,bestSt:0,pts:0,w:0};r.g++;r.pts+=ln.pts;r.maxPts=Math.max(r.maxPts,ln.pts);r.maxAst=Math.max(r.maxAst,ln.ast);r.maxReb=Math.max(r.maxReb,ln.reb);r.maxSB=Math.max(r.maxSB,(ln.stl||0)+(ln.blk||0));
   if([ln.pts,ln.reb,ln.ast,ln.stl||0,ln.blk||0].filter(v=>v>=10).length>=2)r.dd++;if(w){r.w++;r.st++;r.bestSt=Math.max(r.bestSt,r.st)}else r.st=0;
-  R.keyFrac=(R.keyFrac||0)+(w?.5:.25)*(ev.drop||1);while(R.keyFrac>=1){R.keyFrac--;R.keys=(R.keys||0)+1}
+  R.keyFrac=(R.keyFrac||0)+(w?.34:.15)*(ev.drop||1);while(R.keyFrac>=1){R.keyFrac--;R.keys=(R.keys||0)+1}
   rpgXP(R,x+bonus,`${ln.pts} pts, ${ln.reb} reb, ${ln.ast} ast${w?" · win":""}${bonus?" · rested":""}${ev.xp>1?` · ${ev.n}`:""}`);rpgGoalsCheck(R);
+  try{if(typeof C!=="undefined"&&C&&C.stage==="college"){attnGame(ln,w,kind,mg);for(const s of SLOTS){const it=C.gear?.eq?.[s];if(it)it.games=(it.games||0)+1}}}catch(e){console.error(e)}
   R.lastGame={x:Math.round(x+bonus),b:Math.round(bonus)}}
 /* ---- goals: always three within reach ---- */
 const GOALS=[
@@ -3388,13 +3396,170 @@ const GOALS=[
 function rpgGoals(R){R.goals??={};const out=[];for(const[k,txt,ns,f,flag]of GOALS){const i=R.goals[k]||0;if(i>=ns.length)continue;const n=ns[i],v=f(R);out.push({k,t:txt.replace("{n}",n.toLocaleString()),n:flag?1:n,v:flag?(v?1:0):Math.min(v,n),i,pct:flag?(v?1:0):Math.min(1,v/n)})}
   return out.sort((a,b)=>b.pct-a.pct)}
 function rpgGoalsCheck(R){if(!R)return;let any=true,guard=0;while(any&&guard++<20){any=false;for(const g of rpgGoals(R))if(g.pct>=1){R.goals[g.k]=g.i+1;const xp=Math.round(needXP(R.lv)*(.35+g.i*.05)*(today().q||1));(R.done??=[]).unshift({t:g.t,x:xp});R.done=R.done.slice(0,30);
-      R.keys=(R.keys||0)+Math.max(1,Math.round((today().drop||1)));R.exp+=xp;while(R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R)+(today().spB||0);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
-      (R.toast??=[]).push(`Goal complete: ${g.t} (+${xp.toLocaleString()} EXP, +1 crate key)`);any=true}}}
+      if(g.i>=1)R.keys=(R.keys||0)+Math.max(1,Math.round((today().drop||1)));R.exp+=xp;while(R.exp>=needXP(R.lv)){R.exp-=needXP(R.lv);R.lv++;const gg=spPerLv(R)+(today().spB||0);R.spLv=(R.spLv||0)+gg;(R.pend??=[]).push({lv:R.lv,sp:gg})}
+      (R.toast??=[]).push(`Goal complete: ${g.t} (+${xp.toLocaleString()} EXP${g.i>=1?", +1 crate key":""})`);any=true}}}
 /* ---- new careers start here ---- */
 function rpgNew(){return{v:1,origin:"custom",stars:3,tags:[],traits:[],body:{ht:78,wt:205,ws:82},pos:"SF",alloc:{},lv:1,exp:0,spLv:0,spBonus:0,rest:0,last:Date.now(),keys:0,goals:{},loads:[null,null,null],rec:null}}
 function autoBuild(R,age,style){R.alloc={};const pri={shooter:["THR","MID","SIQ","FT","CLS","HND","PER","SPD","ACC","CLU"],slasher:["LAY","DNK","ACC","SPD","VRT","HND","DRW","CLS","STR","PER"],
     playmaker:["HND","PAS","VIS","ACC","MID","SPD","SIQ","STL","PER","THR"],twoway:["PER","STL","THR","MID","ACC","SPD","INT","VRT","SIQ","DRB"],big:["INT","BLK","DRB","ORB","CLS","DNK","PST","STR","VRT","STA"]}[style];
   let guard=0;while(rpgFree(R)>0&&guard++<4000){const s=rpgSkills(R,age);let best=null,bv=-1e9;pri.forEach((k,i)=>{const w=(10-i)*1.4-(s[k]-50)*.35;if(w>bv&&skCost(s[k])<=rpgFree(R)){bv=w;best=k}});if(!best)break;R.alloc[best]=(R.alloc[best]||0)+skCost(s[best])}}
+
+/* ---------- ATTENTION, SPONSORS, THE LOCKER ---------- */
+/* Attention 0-100 decides who can see you. Reputation 0-100 is what they think when they do. */
+function attnBase(){const t=C?.cl?.teams?.[C.school];if(!t)return 2;if(t.juco)return 2;return t.pres>=80?40:t.pres>=60?25:t.pres>=40?12:6}
+function attnInit(){if(C.attn==null){C.attn=attnBase();C.rep=50;C.cash=0;C.spon={active:[],offers:[],seen:[],log:[]};C.gear={eq:{},bag:[],pity:{r:0,e:0},mem:{}};C.attnLog=[]}}
+function attnAdd(n,why){attnInit();const was=C.attn;C.attn=clamp(Math.round(C.attn+n),0,100);if(Math.round(n))C.attnLog=[{t:why,x:Math.round(n)},...(C.attnLog||[])].slice(0,14);
+  if(was<15&&C.attn>=15)archSay("Somebody posted the clip. People know your name now. Not many. Some.","The first spike");
+  if(was<40&&C.attn>=40)archSay("Forty. You have a second slot in your life. Spend it on a person; the brands will find you anyway.","Attention 40");
+  if(was<70&&C.attn>=70)archSay("Seventy. National. Your mother's coworkers ask about you. She says you're fine. You should call her.","Attention 70")}
+function repAdd(n,why){attnInit();C.rep=clamp(Math.round(C.rep+n),0,100)}
+function slots(){attnInit();return C.stage==="done"?4:C.attn>=70?3:C.attn>=40?2:1}
+function judgment(){const s=C.sk||{};return Math.round(((s.SIQ||50)-50)/10+((s.VIS||50)-50)/20+(((C.bonds?.mother?.lv)||50)-50)/25)}
+/* game hook: called from rpgGame */
+function attnGame(ln,w,kind,mg){attnInit();let n=0;const why=[];
+  if(ln.pts>=35){n+=4;why.push("35-point game")}else if(ln.pts>=25){n+=2;why.push("25-point game")}
+  if(kind&&kind!=="reg"&&w){n+=kind==="ncaa"?10:4;why.push(kind==="ncaa"?"tournament win":"March")}
+  if(mg&&mg.ork&&mg.ork<=10&&w&&!apRk(C.cl,C.school)){n+=4;why.push("upset")}
+  const gp=C.season?.tot?.gp||0;if((ln.pts>=30||(mg&&mg.ork&&mg.ork<=5&&w))&&gp-(C.lastViral||-9)>=6){const roll=1+Math.floor(R()*20),mod=((C.rpg?.traits||[]).includes("showman")?2:0)+(C.bonds?.friend?.k==="manager"?2:0);if(roll+mod>=16){C.lastViral=gp;const v=6+Math.floor(R()*9);n+=v;why.push("the clip went viral");C.spon.log.unshift({t:`A clip from the ${mg?.opp||"game"} game passed a million views.`,y:C.y})}}
+  if(n)attnAdd(n,why.join(", "));
+  sponsorMoment(ln,w,kind,mg)}
+/* weekly hook: rankings, decay, payouts */
+function attnWeek(){attnInit();const rk=apRk(C.cl,C.school);let n=-1;if(rk)n+=rk<=5?3:1;attnAdd(n,rk?`AP #${rk}`:"quiet week");C.week=(C.week||0)+1;
+  for(const d of C.spon.active){d.wk=(d.wk||0)+1;if(d.pay.crate&&d.wk%4===0){C.rpg.keys=(C.rpg.keys||0)+d.pay.crate;C.spon.log.unshift({t:`${d.name}: ${d.pay.crate} crate key${d.pay.crate>1?"s":""} arrived.`,y:C.y})}if(d.pay.cash){C.cash+=d.pay.cash/4}if(d.pay.attn&&d.wk%2===0)attnAdd(d.pay.attn,d.name)}
+  C.posted=false}
+/* social media: one post a week, a Judgment roll */
+function socialPost(){attnInit();if(C.posted){toast("You already posted this week.");return}C.posted=true;const roll=1+Math.floor(R()*20),mod=judgment()+((C.rpg?.origin==="scholar")?2:0),tot=roll+mod;
+  if(roll===1){attnAdd(4,"the screenshot");repAdd(-8,"screenshot");archSay(`Natural 1. You posted it. You deleted it. Four thousand people had already saved it. Reputation −8. Attention +4, which is the problem with Attention.`,"The post")}
+  else if(tot>=10){const v=(C.rpg?.origin==="blacktop")?4:2;attnAdd(v,"a post that landed");archSay(`${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot} vs DC 10. It landed. +${v} Attention. Nobody screenshotted anything. This time.`,"The post")}
+  else{repAdd(-3,"a post that didn't land");archSay(`${roll}${mod>=0?" + ":" − "}${Math.abs(mod)} = ${tot} vs DC 10. It did not land. Reputation −3. The replies are mostly about your shoes.`,"The post")}
+  saveC();csWins()}
+/* ===== the pool ===== */
+const BRANDS=[
+ {k:"bluelot",n:"Blue Lot Used Cars",tier:0,pay:{cash:400,item:"earl"},clause:"Two commercials a year in which you hold keys and smile.",agenda:"The owner is Coach's brother-in-law.",intro:"Blue Lot has watched you play twice and would like to give you a 2014 sedan. The sedan is named Earl. I did not name it. Earl has a check-engine light that Blue Lot describes as \"informational.\" Your mother will receive $400 a month, which is the first number in this game that matters."},
+ {k:"dubs",n:"Dub's Barbershop",tier:0,pay:{swag:1},clause:"You get cut there before every home game, including the 8 a.m. ones.",agenda:"Dub knows every scout who sits in his chair.",intro:"Dub has a chair with your name on it, written on tape. He would like you in it before every home game. In exchange: a lifetime of free cuts and one point of Swagger, which Dub insists is the same thing."},
+ {k:"pinestreet",n:"Pine Street Tacos",tier:0,pay:{crate:1},clause:"A menu item is named after you. It is a mistake and you must defend it publicly.",agenda:"None. Tacos.",intro:"Pine Street Tacos would like to name a menu item after you. They have already done it. It has pineapple on it. A Locker Crate a month to say you like it on camera."},
+ {k:"midstate",n:"Mid-State Tire & Lube",tier:0,pay:{cash:250},clause:"A billboard by the highway with your face at 1.4x life size.",agenda:"The owner wants to be a booster and does not know the rules.",intro:"Mid-State Tire & Lube wants your face on the highway, slightly larger than life. $250 a month and free rotations for Earl. The owner asked me whether this counts as a booster payment. I told him I am a narrator."},
+ {k:"brightline",n:"Brightline Dental",tier:0,pay:{swag:1,cash:100},clause:"Six cleanings a year, on camera.",agenda:"The dentist owns the naming rights to the JUCO gym.",intro:"Brightline Dental would like to be responsible for your smile. Six cleanings a year, filmed. The dentist also owns the name on the gym you play in, which he mentions twice."},
+ {k:"crispy",n:"CRISPY™ Compression Wear",tier:1,pay:{crate:1,item:"answer"},clause:"Their logo lives on your left arm. You may not cover it with a wristband you like more.",agenda:"They want the arm. A year later they want the number.",intro:"CRISPY would like you to know they \"saw something in you.\" What they saw was a 14-second clip, viewed 1.1 million times, 40% of those by bots. One Locker Crate a month and the exclusive right to your left arm. Their legal team has asked me to remind you that Crispy is a lifestyle."},
+ {k:"harbor",n:"Harbor Nutrition",tier:1,pay:{crate:1,rare:1},clause:"You endorse a powder. The powder is fine. The ads say \"fine\" in a way that gets a letter from Compliance.",agenda:"Owned by Vantage.",intro:"Harbor Nutrition makes a powder. They describe it as fine. A Legendary-eligible crate on signing and a crate a month after. Their parent company is not listed on the contract, which I noticed, and which you may not."},
+ {k:"stanthony",n:"Saint Anthony's Credit Union",tier:1,pay:{cash:300,crate:1},clause:"One financial literacy seminar a semester, delivered by you, to freshmen who do not listen.",agenda:"None, which I find suspicious.",intro:"Saint Anthony's Credit Union would like to open a fund in your name and have you explain compound interest to eighteen-year-olds. $300 a month to your mother. I have read the whole contract. There is nothing in it. I have read it twice."},
+ {k:"northgate",n:"Northgate Mattress",tier:1,pay:{rest:2},clause:"Your sleep schedule is posted weekly.",agenda:"They are tracking your rested EXP for a study.",intro:"Northgate Mattress will double your rested EXP in exchange for your sleep schedule, posted weekly, to an audience that is mostly Northgate Mattress."},
+ {k:"truform",n:"TruForm Trainers",tier:1,pay:{gear:"acc"},clause:"You train with their guy, who is replacing Coach's warm-up.",agenda:"The trainer is good. Coach notices.",intro:"TruForm would like to replace your warm-up with their warm-up. Their guy is good. Coach watched the first session from the doorway and did not say anything, which for Coach is saying something."},
+ {k:"lantern",n:"Lantern Tutoring",tier:1,pay:{rep:1},clause:"Twice-weekly sessions, on game-day mornings.",agenda:"The tutor is the Scholar's friend from the Prologue.",intro:"Lantern Tutoring will keep you eligible for free in exchange for your game-day mornings. The tutor already knows your schedule. The tutor already knows a lot."},
+ {k:"vellum",n:"Vellum Streaming",tier:1,pay:{attn:3},clause:"Everything you say on stream belongs to them.",agenda:"They clip the worst line.",intro:"Vellum would like you to stream. Three Attention a week while you're live. Everything you say on stream belongs to Vellum, including the thing you will say in week six."},
+ {k:"hendry",n:"The Hendry Group",tier:2,pay:{rare:1,item:"suit"},clause:"Exclusive representation \"when the time comes.\" The time comes whenever they say.",agenda:"They are the agent at the gate, with letterhead.",intro:"The Hendry Group represents eleven players you have heard of. They would like to represent you, eventually, exclusively, at a time of their choosing. A suit arrives in the mail. It fits. The contract was in the pocket."},
+ {k:"kinetic",n:"Kinetic Sports Drink",tier:2,pay:{crate:2,gear:"clu"},clause:"You cannot be seen holding water on camera.",agenda:"Nothing darker than that. I find this exhausting.",intro:"Kinetic would like to be the only liquid you hold on camera. Two crates a month and a bottle that improves your Clutch, by which they mean the bottle is blue. I looked for an agenda. There isn't one. It's just the water thing."},
+ {k:"apex",n:"Apex Footwear",tier:2,pay:{crate:2,gear:"vert"},clause:"Shoes only. Resoled Sophomore Shoes are breach of contract.",agenda:"They drop you the day the rival signs.",intro:"Apex is offering a colorway. Your colorway. Two crates a month and shoes that add to your Vertical, which is what shoes do in advertisements. The contract names every other shoe you own, by brand, and forbids them."},
+ {k:"meridian",n:"Meridian Wireless",tier:2,pay:{cash:600},clause:"Your phone is theirs, including the messages.",agenda:"They know about the party before you do.",intro:"Meridian Wireless will pay your mother $600 a month and give you a phone. The phone is theirs. The messages on it are theirs. They have not said what they do with them. I have a guess."},
+ {k:"goldstd",n:"Gold Standard Insurance",tier:2,pay:{cash:350,rep:1},clause:"A clause about \"conduct\" that I will read twice.",agenda:"They pay the friend's hospital bill. Quietly.",intro:"Gold Standard would like to insure your career. There is a clause about conduct. I am going to read it to you twice. The second time, listen."},
+ {k:"rook",n:"Rook Gaming Chairs",tier:2,pay:{attn:5},clause:"A stream a week, in the chair.",agenda:"The chair is fine.",intro:"Rook would like you in a chair, streaming, once a week. Five Attention a week. The chair is fine. That is the whole deal. Sometimes it is."},
+ {k:"halcyon",n:"Halcyon Watches",tier:2,pay:{rep:2,item:"watch"},clause:"You wear it at the draft and in court.",agenda:"It stops the night the Fate card fires. I will not say anything.",intro:"Halcyon makes watches for people who are about to be photographed. Two Reputation and a watch you will wear at the draft and, the contract specifies, in court, should it come to that. I thought that was a strange thing to specify."},
+ {k:"parkside",n:"Parkside Realty",tier:1,pay:{cash:200,house:5},clause:"Five years with the same sponsor.",agenda:"They will sell it the week you leave the state.",intro:"Parkside Realty will buy your mother a house in five years if you stay with them for five years. I did the math on what happens if you leave in year four. So did they."},
+ {k:"overtime",n:"Overtime Energy",tier:1,pay:{gear:"sta"},clause:"A can in every post.",agenda:"Owned by the rival's father.",intro:"Overtime Energy would like a can in every post. The can improves Stamina, allegedly. The company is owned by a man whose last name you will recognize from a roster."},
+ {k:"summit",n:"Summit Outfitters",tier:2,pay:{rare:1,item:"jacket"},clause:"Only in March.",agenda:"They make the ladders you cut nets from.",intro:"Summit only sponsors March. A crate that can roll Legendary and a jacket you may wear for one month a year. They also make the ladders. Every net you've ever seen cut was cut from a Summit."},
+ {k:"ledger",n:"The Ledger",tier:1,pay:{attn:2},clause:"One episode a month in which you say something.",agenda:"The host is the journalist from the people pool.",intro:"The Ledger is a podcast network. They would like an episode a month in which you say something. Not anything. Something. Two Attention a week. The host already has a file on you and it is flattering, so far."},
+ {k:"vantage",n:"Vantage",tier:9,pay:{crate:4,cash:5000,attn:10},clause:"Everything.",agenda:"I know this one.",intro:"Vantage. Everything you want. I know this one."}];
+const PEOPLE=[
+ {k:"dub_p",n:"Dub (the barber)",tier:0,person:true,wants:"Your chair every game day",later:"He hears every scout. He tells you which ones are lying.",pay:{swag:1},intro:"Dub, again, but as a person this time. He wants nothing from you except Thursdays. He hears everything in that chair, and he is willing to tell you which of it is true."},
+ {k:"marisol",n:"Marisol (the trainer)",tier:1,person:true,wants:"Three mornings a week, 6 a.m.",later:"Your NBA trainer, who knows your knee was never the problem.",pay:{gear:"sta"},intro:"Marisol trains people who are about to be famous and people who used to be. She wants three mornings a week at six. She does not want money yet. That is how you know she is good."},
+ {k:"lyle",n:"Pastor Lyle",tier:0,person:true,wants:"Sundays",later:"The courtroom. He speaks for you when Coach cannot.",pay:{rep:1},intro:"Pastor Lyle wants your Sundays. He does not say what for. He has sat in a courtroom for other boys from your block and he is telling you this in the gentlest possible way."},
+ {k:"nia",n:"Nia (the journalist)",tier:1,person:true,wants:"One honest answer a month",later:"The profile that moves you up a draft board, or the piece that ends a career. Depends on the month.",pay:{attn:2},intro:"Nia writes long and publishes rarely. She wants one honest answer a month. She will know if it isn't. What she does with it depends on the month."},
+ {k:"rico",n:"Rico (sneaker reseller)",tier:0,person:true,wants:"Game-worn shoes",later:"The Apex contact. He sets up the signature deal, or he sells your pair the night you lose.",pay:{cash:150},intro:"Rico resells shoes. He would like yours, worn. He pays in cash and in introductions. One of the introductions is Apex. One of them is a man named Lonnie, and I would skip that one."},
+ {k:"tasha",n:"The manager who films",tier:1,person:true,wants:"Access",later:"A production company with your name on it.",pay:{attn:3},req:"manager",intro:"She has four years of your highlights on a hard drive and would like the next four. Three Attention a week, rising with views. She will also have the lowlights. She has always had the lowlights."},
+ {k:"ray",n:"Uncle Ray",tier:0,person:true,wants:"To be seen with you",later:"He introduces you to your father's agent. That is not a gift.",pay:{cash:100},req:"legacy",intro:"Uncle Ray would like to be seen with you. He knows your father's agent. He says this like it's a gift. It isn't, but it is information."},
+ {k:"bell",n:"Coach Bell (the JUCO coach)",tier:0,person:true,wants:"A season of your best",later:"A recommendation that opens the Return card.",pay:{rep:2},req:"juco",intro:"Coach Bell has sent eleven players to Division I and does not mention it. He wants one season of your best. In exchange, a phone call to someone who passed on you, at the right moment, in your favor."},
+ {k:"prof",n:"The Professor",tier:0,person:true,wants:"Office hours",later:"The letter that keeps you eligible, or the law-school reference you use at 35.",pay:{rep:1},req:"scholar",intro:"The Professor would like you at office hours. Not for help. For company, she says, which is a lie, and for a letter later, which is not."},
+ {k:"lonnie",n:"Lonnie (the bookie)",tier:0,person:true,wants:"Information",later:"A debt you did not know you had.",pay:{cash:800},cursed:true,intro:"Lonnie would like to know how your ankle feels. He pays well for conversation. I am going to say this once, in plain language, because the dice are not involved yet: do not."},
+ {k:"yusuf",n:"Yusuf (the local rapper)",tier:1,person:true,wants:"A verse in which you appear",later:"Your walk-out music and a fanbase that does not watch basketball.",pay:{attn:4},intro:"Yusuf has a verse with your name in it and would like your permission after the fact. Four Attention a week from people who have never seen a basketball game and now have a reason to."},
+ {k:"okafor",n:"Mrs. Okafor (the booster)",tier:1,person:true,wants:"Dinner once a month",later:"A job for your mother and a Compliance file for you.",pay:{cash:500},cursed:true,intro:"Mrs. Okafor would like you at dinner once a month. The food is excellent. Your mother would have a job by Tuesday. Compliance would have a file by Wednesday."},
+ {k:"vince",n:"Vince (the retired player)",tier:2,person:true,wants:"To tell you about his knee",later:"The only person who tells you the truth about the Hendry Group.",pay:{rep:2},intro:"Vince played nine years and talks about his knee like it's a person who left him. He wants to tell you about it. He is the only one who will tell you the truth about the Hendry Group, so listen to the knee first."},
+ {k:"sam",n:"Sam (the equipment manager)",tier:0,person:true,wants:"Your old gear",later:"The hospital wristband. He was there.",pay:{crate:1},intro:"Sam runs the equipment room and would like your old gear, for reasons he does not explain. He gives you a crate a month from a closet nobody else has a key to."},
+ {k:"kid",n:"The kid in the stands",tier:0,person:true,wants:"Your autograph, once",later:"The Replacement, ten years early.",pay:{swag:1},intro:"There is a kid in the stands who has been there every game. He would like an autograph. Once. He will not ask again. I am telling you now so that in ten years you understand why he knows your plays."},
+ {k:"dre_p",n:"Dre",tier:0,person:true,wants:"Nothing yet",later:"Everything, later.",pay:{rep:1},intro:"Dre wants nothing. That is the deal. I have seen a lot of deals and this is the only one I would sign without reading."}];
+const GEN={arch:[["apparel","Apparel","a tee with your number on it, slightly wrong","Apparel"],["local","a local business","a sandwich named after you","Deli"],["trainer","a trainer","a warm-up you did not ask for","Performance"],["media","a podcast","forty minutes a month of you saying something","Podcast"],["agent","a representation group","a suit that fits","Group"],["booster","a booster","dinner","Foundation"],["nutrition","a supplement company","a powder described as fine","Nutrition"],["app","an app","your face on a loading screen","App"],["bank","a bank","a seminar","Savings Bank"],["dealer","a dealership","a car with a name","Motors"],["restaurant","a restaurant","a booth","Grill"],["barber","a barbershop","a chair","Barbershop"],["church","a congregation","Sundays","Fellowship"],["landlord","a property company","an apartment with a view of the practice facility","Properties"]],
+  names:["Harbor","Lakeside","North Loop","Westgate","Pine Street","Summit","Granite","Blue Lot","Ridge","Union","Prairie","Capitol","Oak Park","Riverside","Midtown","Southside","Crescent","Beacon","Atlas","Canyon"],
+  clauses:["They own your left arm.","Two commercials a year holding something and smiling.","One post a week with the product visible.","You may not be seen with the competitor's product, which they define broadly.","A seminar a semester.","An appearance at the owner's kid's birthday party, annually.","Your number on the product, slightly wrong.","Exclusive representation at a time of their choosing.","A clause about conduct, read twice.","Everything you say on their platform belongs to them.","A billboard, 1.4x life size.","You endorse the product, which is fine.","You wear it at the draft.","You wear it in court, should it come to that.","Five years, or the deal reverses."],
+  agendas:["None. I checked twice.","The owner wants to be a booster and does not know the rules.","Owned by a company you have not heard of yet.","The owner is related to someone on your coaching staff.","They want the arm, then the number.","They clip the worst line.","They are tracking you for a study.","They will sell it the week you leave.","They know about the party before you do.","They are the agent at the gate, with letterhead.","The owner's kid plays your position at a rival school.","They are good at this, which is worse."]};
+function genSponsor(){attnInit();const seen=C.spon.seen;let s;for(let i=0;i<8;i++){const a=pick(GEN.arch),n=pick(GEN.names),k="g:"+a[0]+":"+n;if(seen.includes(k))continue;
+    const tier=C.attn>=70?2:C.attn>=40?1:0,pay=tier===0?{cash:100+ri(0,3)*50}:tier===1?{crate:1,cash:ri(1,3)*100}:{crate:2,cash:ri(3,8)*100,attn:ri(1,3)};
+    s={k,n:`${n} ${a[3]}`,tier,pay,clause:pick(GEN.clauses),agenda:pick(GEN.agendas),gen:true,intro:`${n} ${a[1].replace(/^an? /,"")} would like you to know they saw something in you. What they saw was ${C.attn>=40?"the clip":"a box score"}. They are offering ${payText(pay)} and ${a[2]}.`};break}
+  return s}
+function payText(p){const o=[];if(p.crate)o.push(`${p.crate} Locker Crate${p.crate>1?"s":""} a month`);if(p.rare)o.push("a Rare-or-better crate on signing");if(p.cash)o.push(`$${p.cash} a month to your mother`);if(p.attn)o.push(`+${p.attn} Attention a week`);if(p.swag)o.push(`+${p.swag} Swagger`);if(p.rep)o.push(`+${p.rep} Reputation a month`);if(p.rest)o.push("double rested EXP");if(p.gear)o.push("a piece of gear");if(p.item)o.push("an item");if(p.house)o.push("a house, in five years");return o.join(", ")||"nothing you can hold"}
+/* who can see you right now */
+function sponsorPool(){attnInit();const a=C.attn,tier=a>=70?2:a>=40?1:a>=15?0:-1;const have=new Set([...C.spon.active.map(d=>d.k),...C.spon.offers.map(d=>d.k)]),seen=C.spon.seen;
+  const ok=s=>{if(have.has(s.k))return false;if(s.tier===9)return C.stage==="done"&&a>=70;if(tier<0)return s.tier===0&&["bluelot","dubs","brightline","kid","sam","lyle"].includes(s.k)&&a>=6;if(s.tier>tier)return false;
+    if(s.req==="manager"&&C.bonds?.friend?.k!=="manager")return false;if(s.req==="legacy"&&C.rpg?.origin!=="legacy")return false;if(s.req==="scholar"&&C.rpg?.origin!=="scholar")return false;if(s.req==="juco"&&!isJuco(C.school))return false;return true};
+  const pool=[...BRANDS,...PEOPLE].filter(ok);const fresh=pool.filter(s=>!seen.includes(s.k));return fresh.length?fresh:pool}
+function sponsorMoment(ln,w,kind,mg){attnInit();if(C.spon.offers.length>=2)return;const a=C.attn;let p=a<6?0:a<15?.06:a<40?.12:.2;if(ln.pts>=25)p+=.15;if(kind&&kind!=="reg"&&w)p+=.2;if(mg?.ork&&mg.ork<=10&&w)p+=.15;
+  if(R()>p)return;const pool=sponsorPool();let s=pool.length&&R()<.8?pick(pool):genSponsor();if(!s)return;C.spon.offers.push({...s,when:C.y});C.spon.seen.push(s.k);try{localStorage.setItem("hoopsSeen",JSON.stringify([...new Set([...(JSON.parse(localStorage.getItem("hoopsSeen")||"[]")),s.k])].slice(-200)))}catch(e){}
+  archSay(s.intro+(s.clause&&!s.person?` The clause: ${s.clause}`:s.person?` Wants: ${s.wants}.`:"")+" Accept? Rolls: none. Regret: pending.",`New ${s.person?"person":"sponsor"}: ${s.n}`,{offer:s.k})}
+function sponsorAccept(k){attnInit();const i=C.spon.offers.findIndex(o=>o.k===k);if(i<0)return;if(C.spon.active.length>=slots()){toast(`No free slot. You have ${slots()} in your life right now.`);return}const s=C.spon.offers.splice(i,1)[0];s.wk=0;s.since=C.y;C.spon.active.push(s);
+  const p=s.pay;if(p.rare){C.rpg.keys=(C.rpg.keys||0)+1;C.gear.pity.r=99}if(p.crate)C.rpg.keys=(C.rpg.keys||0)+p.crate;if(p.item)grantItem(p.item,s.n);if(p.gear)grantItem("gear_"+p.gear,s.n);if(p.cash)C.cash+=p.cash;if(p.swag)C.swag=(C.swag||0)+p.swag;if(p.rep)repAdd(p.rep*2,s.n);
+  C.spon.log.unshift({t:`Signed with ${s.n}.${s.agenda&&!s.person?"":""}`,y:C.y});attnAdd(s.person?1:3,"a new deal");saveC();csWins()}
+function sponsorDecline(k){attnInit();const i=C.spon.offers.findIndex(o=>o.k===k);if(i<0)return;const s=C.spon.offers.splice(i,1)[0];C.spon.log.unshift({t:`Passed on ${s.n}.`,y:C.y});if(s.k==="lonnie")repAdd(3,"saying no to Lonnie");saveC();csWins()}
+function sponsorDrop(k){attnInit();const i=C.spon.active.findIndex(o=>o.k===k);if(i<0)return;const s=C.spon.active.splice(i,1)[0];repAdd(-4,"a broken deal");C.spon.log.unshift({t:`Walked away from ${s.n}. Reputation −4.`,y:C.y});saveC();csWins()}
+/* ===== the Architect speaks (non-blocking card, queued) ===== */
+function archSay(txt,title,opt){attnInit();(C.archQ??=[]).push({txt,title,...(opt||{})});setTimeout(archFlush,0)}
+function archFlush(){if(!C?.archQ?.length||!$("modal").hidden||!$("live").hidden)return;const m=C.archQ.shift();saveC();
+  openModal(`<div class="arch-card"><small>The Architect · ${esc(m.title||"")}</small><p>${esc(m.txt)}</p><div class="actions">${m.offer?`<button class="btn" data-act="spacc" data-v="${esc(m.offer)}">Accept</button><button class="btn ghost" data-act="spdec" data-v="${esc(m.offer)}">Decline</button><button class="btn ghost" data-act="close">Decide later</button>`:`<button class="btn" data-act="close">Continue</button>`}</div></div>`)}
+/* ===== windows ===== */
+function attnHtml(){attnInit();const a=C.attn,tier=a>=70?"National":a>=40?"Regional":a>=15?"Local":"Nobody knows your name";
+  return`<div class="at-top"><div class="at-meter"><i style="width:${a}%"></i><span>ATTENTION ${a}</span></div><div class="mp-kv"><span>Tier</span><b>${tier}</b><span>Slots</span><b>${C.spon.active.length} / ${slots()}</b><span>Reputation</span><b>${C.rep}</b><span>Swagger</span><b>${C.swag||0}</b><span>Sent home</span><b>$${Math.round(C.cash).toLocaleString()}</b></div></div>
+  <div class="st-row"><span>This week</span><button class="mp-btn sm ${C.posted?"":"go"}" data-act="post" ${C.posted?"disabled":""}>${C.posted?"Posted":"Post something"}</button><small class="mp-lab">Judgment roll vs DC 10 · Natural 1 is a screenshot</small></div>
+  ${C.spon.offers.length?`<div class="mp-grp"><div class="mp-gh">Offers on the table</div>${C.spon.offers.map(o=>`<div class="sp-row"><div><b>${esc(o.n)}</b><small>${esc(payText(o.pay))}</small><small class="cl">${esc(o.person?"Wants: "+o.wants:"Clause: "+o.clause)}</small></div><div class="sp-b"><button class="mp-btn sm go" data-act="spacc" data-v="${esc(o.k)}">Accept</button><button class="mp-btn sm" data-act="spdec" data-v="${esc(o.k)}">Pass</button></div></div>`).join("")}</div>`:""}
+  <div class="mp-grp"><div class="mp-gh">Your slots</div>${C.spon.active.length?C.spon.active.map(o=>`<div class="sp-row"><div><b>${esc(o.n)}</b><small>${esc(payText(o.pay))} · since ${sl(o.since)}</small><small class="cl">${esc(o.person?"Later: "+o.later:"Clause: "+o.clause)}</small></div><div class="sp-b"><button class="mp-btn sm" data-act="spdrop" data-v="${esc(o.k)}">Walk away</button></div></div>`).join(""):`<div class="mp-note">Empty. ${a<15?"Nobody can see you yet. Score, win, post, or wait for the clip.":"Offers arrive after moments: a 25-piece, an upset, March."}</div>`}</div>
+  ${C.attnLog.length?`<div class="mp-grp"><div class="mp-gh">Attention log</div><ul class="mp-log">${C.attnLog.slice(0,8).map(l=>`<li><b>${l.x>0?"+":""}${l.x}</b>${esc(l.t)}</li>`).join("")}</ul></div>`:""}
+  ${C.spon.log.length?`<ul class="mp-log">${C.spon.log.slice(0,6).map(l=>`<li><b>${sl(l.y)}</b>${esc(l.t)}</li>`).join("")}</ul>`:""}`}
+/* ===== THE LOCKER ===== */
+const SLOTS=["head","arm","hands","legs","feet","charm"];
+const ITEMS={
+ answer:{n:"Compression Sleeve, \"The Answer\"",r:"rare",slot:"arm",mods:{swag:2,contestTrail:1},bs:"Issued to a 6-foot guard with a bad elbow. The elbow healed. He kept wearing it, because by then the sleeve was the point. This one has never been washed. I checked. Swagger, it turns out, is partly a smell."},
+ handbook:{n:"Student-Athlete Handbook, 11th ed.",r:"common",slot:"charm",mods:{compliance:-1},bs:"Nobody has read this. Not you, not the coaches, not the people who wrote it. It exists so that when something goes wrong, someone can point at it. It is heavy enough to matter in a fight, which it specifically prohibits."},
+ tape:{n:"Taped Ankles",r:"common",slot:"feet",mods:{friendReroll:1},bs:"Your friend's, not yours. You never get hurt in this game. He does. The tape is for him and it helps less than you both pretend."},
+ headband:{n:"Headband, Sweat-Darkened",r:"uncommon",slot:"head",mods:{sta:5,coachRep:-1},bs:"Old-school coaches see a headband and think of someone they did not like in 1994. The headband does not care. It has outlasted three of them."},
+ towel:{n:"Hot-Hand Towel",r:"uncommon",slot:"hands",mods:{streak:1},cursed:true,bs:"Streaky by design. +3 on your next shot after a make, −2 after a miss. The towel believes in momentum the way your uncle believes in the lottery."},
+ earl:{n:"Earl's Keys",r:"common",slot:"charm",mods:{coachTrust:1},bs:"Blue Lot's sedan. Check-engine light described as informational. Coach drove it 11,000 miles to watch you play. The miles are the item."},
+ lanyard:{n:"Mother's Lanyard",r:"rare",slot:"charm",mods:{rest:1},bound:true,bs:"Her work badge from the night shift. She gave it to you so you would know what the money was for. You will forget. The lanyard will not."},
+ warmup:{n:"The Warm-Up Shirt You Were Not Supposed To Keep",r:"uncommon",slot:"charm",mods:{swagRoad:1},bs:"Taken from the school that did not offer you. They have noticed. Compliance has a file. The file has a tab."},
+ clipboard:{n:"Coach's Clipboard",r:"epic",slot:"hands",mods:{coachAdvice:15},bs:"Thirty years of plays, none of which work, and one page at the back that is not a play. He does not know you have seen it."},
+ wristband:{n:"Hospital Wristband",r:"rare",slot:"arm",mods:{trust:2},bs:"From the night you went. The one in the box is from the night you did not. Only one exists per playthrough."},
+ suit:{n:"Draft-Night Suit (Hendry Group)",r:"rare",slot:"charm",mods:{draftRep:2},bs:"The suit fits. The contract was in the pocket."},
+ page4:{n:"Page Four of the Codex",r:"legendary",slot:"charm",mods:{fateReveal:1},bs:"A play drawn in pencil by a man who refused a deal. The play is unguardable. It was never run."},
+ resoled:{n:"Sophomore Shoes, Resoled",r:"common",slot:"feet",mods:{acc:3,swag:-1},bs:"Resoled twice. Your mother knows a man. Nobody in the league will wear these and you will score on all of them."},
+ rivaljersey:{n:"Rival's Jersey, Swapped",r:"epic",slot:"charm",mods:{vsRival:3},bs:"You swapped after the game you lost. He framed yours. You keep his in a drawer. I decline to say which of you is handling this better."},
+ filmkey:{n:"Film-Room Key",r:"uncommon",slot:"charm",mods:{siq:2},bs:"Dre says the key is lost. The key is in Dre's bag. This is the first secret in the game and it is small on purpose."},
+ vantagecard:{n:"Vantage Card",r:"legendary",slot:"charm",mods:{all:5},cursed:true,bs:"Black. No number. Everything you want. I know this one."},
+ walkontowel:{n:"Walk-On's Towel",r:"rare",slot:"hands",mods:{benchTrust:1},bs:"He hit the shot. Not you. The towel was on his shoulder. He gave it to you and said \"keep it,\" which is the nicest thing anyone says in this game."},
+ rosary:{n:"Gas Station Rosary",r:"common",slot:"charm",mods:{oneRoll:1},bs:"Bought at 2 a.m. in a town that is mostly a gas station. Not religious. Works anyway."},
+ lanyard27:{n:"Tournament Lanyard, 2027",r:"uncommon",slot:"charm",mods:{rep:1},bs:"All-access until the Sunday you lost. Then it was a lanyard."},
+ watch:{n:"Halcyon Watch",r:"rare",slot:"arm",mods:{rep:2},bs:"For people who are about to be photographed. It keeps time until it doesn't."},
+ jacket:{n:"Summit Tournament Jacket",r:"rare",slot:"head",mods:{march:2},bs:"Worn one month a year. The zipper is a ladder rung. I am not being poetic; check the zipper."},
+ gear_acc:{n:"TruForm Trainers",r:"uncommon",slot:"feet",mods:{acc:4},bs:"Their guy's shoes. Lighter than yours. Coach has opinions about the laces."},
+ gear_clu:{n:"Kinetic Bottle (blue)",r:"uncommon",slot:"hands",mods:{clu:3},bs:"Improves Clutch, by which they mean it is blue."},
+ gear_vert:{n:"Apex Colorway",r:"rare",slot:"feet",mods:{vrt:4,swag:1},bs:"Your colorway. Two of these exist. The other pair is on the rival."},
+ gear_sta:{n:"Overtime Can (unopened)",r:"common",slot:"hands",mods:{sta:3},bs:"Unopened on purpose. The caffeine is in the label."}};
+const RAR={common:["Common","#8a90a0"],uncommon:["Uncommon","#2fa84a"],rare:["Rare","#3b7ddd"],epic:["Epic","#8a2be2"],legendary:["Legendary","#f5a623"]};
+const CRATE_POOL=Object.keys(ITEMS).filter(k=>!["lanyard","page4","vantagecard","wristband","walkontowel","rivaljersey","suit","watch","jacket","earl","clipboard"].includes(k));
+function grantItem(k,from){attnInit();if(!ITEMS[k])return;const have=C.gear.bag.find(x=>x.k===k)||Object.values(C.gear.eq).find(x=>x&&x.k===k);if(have){C.rpg.keys=(C.rpg.keys||0)+1;C.spon.log.unshift({t:`${ITEMS[k].n} again. Converted to a crate key.`,y:C.y});return}
+  const it={k,from:from||"",got:C.y,games:0};C.gear.bag.push(it);C.spon.log.unshift({t:`New item: ${ITEMS[k].n}${from?" (from "+from+")":""}.`,y:C.y});return it}
+function openCrate(){attnInit();const R0=C.rpg;if(!(R0.keys>0)){toast("No crate keys. They come from games, goals and sponsors.");return}R0.keys--;const p=C.gear.pity;p.r++;p.e++;
+  let r=R();let rar=r<.005?"legendary":r<.03?"epic":r<.13?"rare":r<.4?"uncommon":"common";if(p.r>=10&&["common","uncommon"].includes(rar))rar="rare";if(p.e>=40)rar="epic";if(p.r>=99)rar=R()<.1?"legendary":"rare";
+  if(["rare","epic","legendary"].includes(rar))p.r=0;if(["epic","legendary"].includes(rar))p.e=0;
+  const pool=CRATE_POOL.filter(k=>ITEMS[k].r===rar);const k=pool.length?pick(pool):pick(CRATE_POOL);const it=ITEMS[k];C.lastCrate={k,rar};
+  const dup=!!(C.gear.bag.find(x=>x.k===k)||Object.values(C.gear.eq).find(x=>x&&x.k===k));grantItem(k,"a crate");
+  archSay(`${RAR[rar][0]}. ${it.n.replace(/\.$/,"")}. ${it.bs}${dup?" You already had one. I turned it into a key.":""}`,"Locker Crate");saveC();csWins()}
+function equip(k){attnInit();const i=C.gear.bag.findIndex(x=>x.k===k);if(i<0)return;const it=C.gear.bag.splice(i,1)[0],slot=ITEMS[k].slot;if(C.gear.eq[slot])C.gear.bag.push(C.gear.eq[slot]);C.gear.eq[slot]=it;saveC();csWins()}
+function unequip(slot){attnInit();const it=C.gear.eq[slot];if(!it)return;delete C.gear.eq[slot];C.gear.bag.push(it);saveC();csWins()}
+function gearMods(){attnInit();const m={};for(const s of SLOTS){const it=C.gear.eq[s];if(!it)continue;for(const k in ITEMS[it.k].mods)m[k]=(m[k]||0)+ITEMS[it.k].mods[k]}return m}
+/* item modifiers on your shots: used by shotMods when the shooter is you */
+function gearShotMods(type,ctx){if(typeof C==="undefined"||!C||!ctx.me)return[];const g=gearMods(),out=[];const sw=(C.swag||0)+(g.swag||0)+(g.swagRoad&&!ctx.home?g.swagRoad:0);
+  if(g.contestTrail&&ctx.contest&&ctx.trailing)out.push(["The Answer",g.contestTrail]);if(sw>=3&&ctx.contest)out.push(["Swagger",1]);if(g.streak&&ctx.lastMade!=null)out.push(["Hot-Hand Towel",ctx.lastMade?3:-2]);
+  if(g.clu&&ctx.clutch)out.push(["Kinetic bottle",.5]);if(g.vsRival&&ctx.vsRival)out.push(["Rival's jersey",g.vsRival]);if(g.march&&ctx.march)out.push(["Summit jacket",1]);if(g.all)out.push(["Vantage",g.all]);return out}
+function lockerHtml(){attnInit();const g=C.gear,R0=C.rpg;
+  const slot=s=>{const it=g.eq[s];return`<div class="lk-slot"><small>${s}</small>${it?`<b style="color:${RAR[ITEMS[it.k].r][1]}">${esc(ITEMS[it.k].n)}</b><button class="mp-btn sm" data-act="uneq" data-v="${s}">Take off</button>`:`<i>empty</i>`}</div>`};
+  return`<div class="lk-top"><div class="lk-crate"><b>${R0.keys||0}</b><small>crate keys</small><button class="mp-btn ${R0.keys>0?"main":""}" data-act="crate" ${R0.keys>0?"":"disabled"}>Open a crate</button><small class="mp-lab">Pity: Rare within ${Math.max(0,10-g.pity.r)} · Epic within ${Math.max(0,40-g.pity.e)}</small></div><div class="lk-slots">${SLOTS.map(slot).join("")}</div></div>
+  <div class="mp-grp"><div class="mp-gh">Bag · ${g.bag.length}</div>${g.bag.length?g.bag.map(it=>{const d=ITEMS[it.k];return`<div class="lk-item"><div><b style="color:${RAR[d.r][1]}">${esc(d.n)}</b><small>${RAR[d.r][0]} · ${d.slot} · ${Object.entries(d.mods).map(([k,v])=>`${k} ${v>0?"+":""}${v}`).join(", ")}</small><p>${esc(d.bs)}</p>${it.from?`<small class="cl">From ${esc(it.from)}, ${sl(it.got)}</small>`:""}</div><button class="mp-btn sm go" data-act="equip" data-v="${it.k}">Equip</button></div>`}).join(""):`<div class="mp-note">Empty. Crates come from games (half a key per win), goals, and sponsors.</div>`}</div>`}
+window.__attn={attnAdd,openCrate,grantItem,sponsorMoment};
 
 /* ---------- Showcase model: a detailed pixel figure for creation and the character sheet ---------- */
 const SHW=104,SHH=172;
@@ -3505,7 +3670,7 @@ function prof(p){if(!p)return null;if(p.sk)return p.sk;if(p.pid==="me"&&typeof C
     ORB:r(a.REB*.9+h+t(11)*8),DRB:r(a.REB+h),SPD:r(a.ATH-h*2),ACC:r(a.ATH-h*1.5+t(12)*6),VRT:r(a.ATH+t(13)*8),STR:r(40+(wt-210)/4+h*2+a.REB*.3),STA:r(55+a.ATH*.3+t(14)*10),CLU:r(IQ+t(15)*12)};
   if(PROFC.size>3000)PROFC.clear();PROFC.set(key,s);return s}
 const usageP=s=>Math.pow((s.THR*.2+s.MID*.2+s.LAY*.2+s.DNK*.1+s.PST*.1+s.HND*.1+s.SIQ*.1)/60,3.2);
-function fatigue(r){const s=prof(r.p);return clamp(((r.stint||0)-(5+(s.STA-PV.ref)/7))/9,0,1)}
+function fatigue(r){const s=prof(r.p);const sta=s.STA+(r.p.pid==="me"&&typeof gearMods==="function"&&C?.gear?(gearMods().sta||0):0);return clamp(((r.stint||0)-(5+(sta-PV.ref)/7))/9,0,1)}
 /* DC and modifier for a shot type; ctx = {open,fat,clutch,hot,home,dh (shooter ht - defender ht)} */
 function shotDC(type,d,ctx){const K=PV.def;const base=PV.dc[type];
   const dd=type==="three"?(d.PER-PV.ref)/K:type==="mid"?(d.PER-PV.ref)/(K*1.2):type==="rim"?(d.INT-PV.ref)/K+(d.BLK-PV.ref)/30-ctx.dh*.12:type==="dunk"?(d.BLK-PV.ref)/K+(d.INT-PV.ref)/30-ctx.dh*.1:(d.INT-PV.ref)/(K*1.2)+(d.STR-PV.ref)/30-ctx.dh*.08;
@@ -3515,6 +3680,7 @@ function shotMods(type,s,ctx){const K=PV.skl,m=[];const add=(n,v)=>{v=Math.round
   else if(type==="dunk"){add("Dunk",(s.DNK-PV.ref)/(K*.8));add("Vertical",(s.VRT-PV.ref)/25)}else{add("Post moves",(s.PST-PV.ref)/K);add("Strength",(s.STR-PV.ref)/30)}
   add("Shot IQ",(s.SIQ-PV.ref)/40);if(ctx.open)add("Open look",PV.open);if(ctx.contest)add("Contested",-1);if(ctx.fat>0)add("Tired",-ctx.fat*PV.fat);
   if(ctx.clutch)add("Clutch",(s.CLU-PV.ref)/PV.clu);if(ctx.hot)add("Heating up",1);if(ctx.home)add("Home crowd",.5);
+  if(ctx.me&&typeof gearShotMods==="function")for(const g of gearShotMods(type,ctx))add(g[0],g[1]);
   return m}
 const modSum=m=>m.reduce((a,x)=>a+x[1],0);
 const pMake=(mod,dc)=>clamp((21+mod-dc)/20,.03,.97);
@@ -3659,14 +3825,14 @@ function rpgKeys(e){if(e.metaKey||e.ctrlKey||e.altKey)return;const tag=e.target?
   const k=e.key.toLowerCase();if(k==="c")openSheet("stat");else if(k==="k")openSheet("skills");else if(k==="j")openSheet("goals");else return;e.preventDefault()}
 
 /* ---------- MyCareer game shell: pixel gym scene + MapleStory HUD + windows ---------- */
-const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],rec:["Recruiting","U"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Inventory","I"],today:["Today","E"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"]};
+const CSWIN={roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],rec:["Recruiting","U"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],today:["Today","E"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"]};
 function csView(k){const cl=C.cl;switch(k){case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"rec":return clRec();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
   case"log":{const s=C.season,last=s.games.slice().reverse();return`<section class="panel"><h3>${sl(cl.y)} game log</h3>${last.length?`<div class="tw"><table><thead><tr><th class="l">Result</th><th class="l">Opponent</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th></tr></thead><tbody>${last.map(g=>`<tr class="${g.w?"r-w":"r-l"}"><td class="l"><b class="${g.w?"wl-w":"wl-l"}">${g.w?"W":"L"}</b> ${g.us}-${g.them}</td><td class="l name">${g.home?"vs":"at"} ${esc(g.label||tLbl(cl,g.opp))}</td><td>${g.ln.min}</td><td class="hi">${g.ln.pts}</td><td>${g.ln.reb}</td><td>${g.ln.ast}</td><td>${g.ln.stl}</td><td>${g.ln.blk}</td><td>${g.ln.fgm??0}-${g.ln.fga??0}</td></tr>`).join("")}</tbody></table></div>`:"<p class='mp-note'>No games yet. Press Space to play.</p>"}</section>`}
-  case"keys":return keybindsHtml();case"style":return styleHtml();case"case":return caseHtml();case"play":return settingsHtml();
-  case"inv":return`<div class="mp-note">The locker is coming next: sneakers, sleeves, headbands and more, earned from Locker Crates and quests. Crate keys so far: <b>${rpgS()?.keys||0}</b>.</div>`;
+  case"keys":return keybindsHtml();case"style":return styleHtml();case"case":return caseHtml();case"play":return settingsHtml();case"attn":return attnHtml();
+  case"inv":return lockerHtml();
   default:return""}}
 function csWinHtml(k){const R=rpgS();if(["stat","skills","quests","today"].includes(k)){C.sheetTab=k==="quests"?"goals":k;return null}
-  return`<div class="mp-win cs-w" data-win="${k}" style="left:${(C.winPos?.[k]?.x)??(60+Object.keys(C.wins||{}).indexOf(k)*28)}px;top:${(C.winPos?.[k]?.y)??(48+Object.keys(C.wins||{}).indexOf(k)*28)}px;width:${k==="rec"||k==="prog"||k==="sched"?"640px":k==="keys"||k==="style"||k==="play"?"420px":"520px"}"><div class="mp-title" data-drag="${k}"><b>${CSWIN[k][0]}</b><button class="mp-x" data-act="cswin" data-v="${k}" data-close="1" aria-label="Close">×</button></div><div class="mp-body">${csView(k)}</div></div>`}
+  return`<div class="mp-win cs-w" data-win="${k}" style="left:${(C.winPos?.[k]?.x)??(60+Object.keys(C.wins||{}).indexOf(k)*28)}px;top:${(C.winPos?.[k]?.y)??(48+Object.keys(C.wins||{}).indexOf(k)*28)}px;width:${k==="rec"||k==="prog"||k==="sched"?"640px":k==="keys"||k==="style"||k==="play"?"420px":k==="inv"||k==="attn"?"560px":"520px"}"><div class="mp-title" data-drag="${k}"><b>${CSWIN[k][0]}</b><button class="mp-x" data-act="cswin" data-v="${k}" data-close="1" aria-label="Close">×</button></div><div class="mp-body">${csView(k)}</div></div>`}
 function csToggle(k){if(["stat","skills","quests","today"].includes(k)){openSheet(k==="quests"?"goals":k);return}C.wins??={};
   if(C.wins[k]){delete C.wins[k]}else{if(innerWidth<=760)C.wins={};C.wins[k]=1}csWins()}
 function csWins(){const host=$("cs-wins");if(!host)return;host.innerHTML=Object.keys(C.wins||{}).map(csWinHtml).filter(Boolean).join("");paintAvatars(host);saveC()}
@@ -3687,8 +3853,8 @@ function mcCollege(){
   else if(nx){const pm=playMode(),pmn=PLAYMODES.find(x=>x[0]===pm)?.[1]||"";act=`<button class="mp-btn" data-act="cswin" data-v="play" title="Play settings (W)">${esc(pmn)}</button><button class="mp-btn main" data-act="${pm==="sim"?"clsim":"clwatch"}" data-v="1" data-hold="clmenu">${cl.phase==="reg"?"Play next game":"Play next round"}<small>${esc(nxt)} · Space</small></button><button class="mp-btn" data-act="clmenu">Sim ⋯</button>`}
   else act=`<button class="mp-btn main" data-act="clsim" data-v="${cl.phase==="reg"?"1":"end"}">${cl.phase==="reg"?"Next day":cl.phase==="ct"?"Sim to Selection Sunday":"Sim the tournament"}</button>`;
   const keys=[["stat","Char","C"],["skills","Skills","K"],["inv","Locker","I"],["quests","Goals","J"],["roster","Team","T"],["sched","Sched","S"],["log","Log","O"],["poll","Top 25","R"],["stand","Stand","D"],["rec","Recruit","U"],["prog","Program","P"],["news","News","N"],["reel","Clips","H"],["case","Trophy","G"]];
-  if(cl.ncaa)keys.push(["brk","Bracket","B"]);keys.push(["play","Play","W"],["style","Style","V"],["keys","Keys","Y"]);
-  setTimeout(()=>{csLoop();csWins();csDragInit()},0);
+  if(cl.ncaa)keys.push(["brk","Bracket","B"]);keys.push(["attn","Fame","M"],["play","Play","W"],["style","Style","V"],["keys","Keys","Y"]);
+  setTimeout(()=>{csLoop();csWins();csDragInit();archFlush()},0);
   return`<div class="cs ${busy?"busy":""}">
     <div class="cs-scene"><canvas id="cs-cv"></canvas><div id="cs-tags" class="cs-wins"></div>
       <div class="cs-plate"><b>${rk?`#${rk} `:""}${esc(C.school)}</b><small>${CLASSN[C.cls-1]} · ${sl(C.y)} · ${esc(t.conf)} · ${clWhen(cl).split("·")[1]||""}</small><div class="rec">${t.w}-${t.l} <small style="font:600 12px var(--f-body)">${s.tot.gp?mcLine(s.tot):"No games yet"}</small></div>
@@ -3698,11 +3864,11 @@ function mcCollege(){
       <div class="cs-next">${act}</div>${hubPad()}</div>
     <div class="cs-hud"><div class="cs-lv"><b><small>LV.</small>${R?.lv||1}</b><span>${esc(C.name)} · ${esc(archName(rpgSkills(R||rpgNew(),C.age||18),C.ht))}</span></div>
       <button class="cs-xp" data-act="cswin" data-v="stat" aria-label="EXP"><i style="width:${pct}%"></i><span>EXP ${R?R.exp.toLocaleString():0} [${pct.toFixed(2)}%]</span></button>
-      <button class="cs-ev" data-act="cswin" data-v="today" title="${esc(ev.d)}"><b>${ev.ic}</b>${ev.n}</button>
+      <button class="cs-ev" data-act="cswin" data-v="today" title="${esc(ev.d)}"><b>${ev.ic}</b>${ev.n}</button><button class="cs-ev" data-act="cswin" data-v="attn" title="Attention"><b>${(attnInit(),C.attn)}</b>ATTN · ${C.spon.active.length}/${slots()} slots${C.spon.offers.length?` · <span style="color:#ffd166">${C.spon.offers.length} offer${C.spon.offers.length>1?"s":""}</span>`:""}</button>
       <div class="cs-keys">${keys.map(([k,l,key])=>`<button class="cs-k ${k==="skills"&&free>0?"hot":""}" data-act="cswin" data-v="${k}" title="${CSWIN[k][0]} (${key})"><i>${key}</i>${k==="skills"&&free>0?`+${free}`:l}</button>`).join("")}</div></div></div>`;
 }
 function csKeys(e){if(!C||C.stage!=="college"||$("mc").hidden||!$("live").hidden)return false;if(hubKeyDown(e))return true;if(e.metaKey||e.ctrlKey||e.altKey)return false;const tag=e.target?.tagName;if(tag==="INPUT"||tag==="SELECT"||tag==="TEXTAREA")return false;
-  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",u:"rec",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play"};const k=map[e.key.toLowerCase()];if(!k)return false;
+  const map={c:"stat",k:"skills",i:"inv",j:"quests",t:"roster",s:"sched",o:"log",r:"poll",d:"stand",u:"rec",p:"prog",n:"news",h:"reel",g:"case",b:"brk",e:"today",y:"keys",v:"style",w:"play",m:"attn"};const k=map[e.key.toLowerCase()];if(!k)return false;
   if(!$("modal").hidden){closeModal();if(["stat","skills","quests","today"].includes(k))return true}csToggle(k);e.preventDefault();return true}
 
 /* ---------- HUB: walkable side-scroller maps (MapleStory-style) ---------- */
@@ -4038,7 +4204,7 @@ function* liveGen(SD,opt,ctl){
       if(askMe)sh=meR;
       const i=O.indexOf(sh),df=D[i]||pick(D),p=sh.p,dp=df.p,s=PO[i],d=prof(dp);
       const keyed=sh.hot.length>=4&&sh.hot.slice(-3).every(x=>x),open=R()<clamp(.22+(avgS(PO,["PAS","VIS"])-PV.ref)*.004+(co==="pnr"?.08:0)-(cd==="zone"?.04:0)+(keyed?-.1:0),.05,.5);
-      const ctx={open,contest:!open&&R()<.3,fat:fatigue(sh),clutch,hot:keyed,home:o===0&&HOME>0,dh:hgt(p)-hgt(dp),sh:hgt(p),keyed};
+      const ctx={open,contest:!open&&R()<.3,fat:fatigue(sh),clutch,hot:keyed,home:o===0&&HOME>0,dh:hgt(p)-hgt(dp),sh:hgt(p),keyed,me:sh===meR&&p.pid==="me",trailing:lead<0,lastMade:sh.hot.length?sh.hot[sh.hot.length-1]:null,vsRival:typeof C!=="undefined"&&C?.bonds?.rival?.pid!=null&&String(dp.pid)===String(C.bonds.rival.pid)};
       let type,made,fouled,ans=null,assistTo=null,passTo=null;
       if(askMe){
         const mates=O.filter(r=>r!==sh).map((r,j)=>{const ms=prof(r.p),mj=O.indexOf(r),md=prof((D[mj]||df).p),mt=ms.THR>=ms.LAY+4?"three":"rim",mc={...ctx,open:true,fat:fatigue(r),dh:hgt(r.p)-hgt((D[mj]||df).p),sh:hgt(r.p)},q=pMake(modSum(shotMods(mt,ms,mc)),shotDC(mt,md,mc))*(mt==="three"?3:2);return{r,name:lname(r.p),type:mt,q,stl:(PD.reduce((a,x)=>a+x.STL,0)/5)}});
@@ -4267,7 +4433,7 @@ window.addEventListener("pagehide",()=>{saveNow();if(CL.on)cloudPush().catch(()=
    RENDER
    ===================================================================== */
 let toastT;function toast(m){const t=$("toast");t.textContent=m;t.hidden=false;clearTimeout(toastT);toastT=setTimeout(()=>t.hidden=true,3200)}
-function closeModal(){$("modal").hidden=true;$("sheet").innerHTML="";if(G&&$("view"))paintAvatars($("view"))}
+function closeModal(){$("modal").hidden=true;$("sheet").innerHTML="";if(G&&$("view"))paintAvatars($("view"));if(typeof archFlush==="function"&&C?.archQ?.length)setTimeout(archFlush,120)}
 function openModal(html){$("sheet").innerHTML=html;$("modal").hidden=false;$("sheet").scrollTop=0}
 const outChip=p=>p.inj>1?(p.playHurt&&G.phase==="playoffs"?'<span class="chip red">Playing hurt</span>':`<span class="chip red">Out ${p.inj-1}</span>`):"";
 const pName=(p,tags)=>`<button class="linkish" data-act="player" data-pid="${p.pid}">${esc(p.name)}</button>${p.lab?'<span class="chip lab">Lab</span>':""}${outChip(p)}${tags?durTag(p)+(p.rest&&p.tid===G.userTid?`<span class="chip">Rest: ${REST[p.rest][0]}</span>`:""):""}`;
@@ -4716,6 +4882,7 @@ document.addEventListener("click",e=>{
       if(d.act==="mclookrand")C.look=lookFor(Math.random());else{C.look??={};C.look[d.k]=+d.v}const sc=$("mc").scrollTop;mcRender();$("mc").scrollTop=sc;return}
     case"editlook":lookModal();return;
     case"credits":openModal(creditsHtml());return;
+    case"spacc":closeModal();sponsorAccept(d.v);return;case"spdec":closeModal();sponsorDecline(d.v);return;case"spdrop":sponsorDrop(d.v);return;case"post":socialPost();return;case"crate":openCrate();return;case"equip":equip(d.v);return;case"uneq":unequip(d.v);return;
     case"posspick":possPick(+d.v);return;case"possauto":possAuto();return;case"pmset":pmSet(d.v);return;
     case"kbset":kbSet(d.v);return;case"kbreset":KB={...KBDEF};kbSave();csWins();return;case"stset":styleSet(d.v);return;
     case"lookset":lookSet(d.k,+d.v);return;
