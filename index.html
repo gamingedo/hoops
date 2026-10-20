@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="6dacb2c686";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="4e02c9387b";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -538,7 +538,7 @@ body{padding-bottom:calc(150px + env(safe-area-inset-bottom,0px))}
   .lv-court{grid-column:1;grid-row:1/span 7;align-self:start}.lv>*:not(.lv-court){grid-column:2}
   .lv-feed{max-height:52vh}
 }
-@media (min-width:1000px) and (min-height:541px){
+@media (min-width:860px) and (min-height:541px){
   .lv{max-width:none;grid-template-columns:auto minmax(300px,1fr);grid-auto-rows:min-content;column-gap:16px;padding-block:8px;align-items:start}
   .lv-top{grid-column:1/span 2;grid-row:1}
   .lv-court{grid-column:1;grid-row:2;align-self:start}.lv-me{grid-column:1;grid-row:3}.lv-ctl{grid-column:1;grid-row:4}
@@ -1478,7 +1478,8 @@ function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
+const BUILD="v42";
+function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
   el.style.setProperty("--e1","#ff8a3d");el.style.setProperty("--e2","#ffd166");el.style.setProperty("--e3","#16264a");
@@ -3090,7 +3091,7 @@ function hlSprite(o){if(!(o.fr>=0))o={...o,fr:Math.abs(Math.floor(o.fr))||0};con
 const wx=x=>(x+HL.X0)*HL.PPF,wy=y=>HL.CROWD+HL.FAR+y*HL.VS;
 function sp(x,y,z=0){return{x:Math.round(wx(x)-(LV.camX||0)),y:Math.round(wy(y)-z*HL.ZS-(LV.camY||0))}}
 function lvResize(){const c=$("lv-c");if(!c||!LV)return;const land=innerWidth>innerHeight&&innerHeight<=540;let w,h;
-  const wide=!land&&innerWidth>=1000;
+  const wide=!land&&innerWidth>=860;
   if(land){w=Math.min(innerWidth*.68,(innerHeight-16)*1.75);h=Math.min(innerHeight-16,w*.66);c.parentElement.style.width=w+"px"}
   else if(wide){w=Math.min(innerWidth*.6,(innerHeight-150)*1.9,1100);h=Math.min(innerHeight-150,w*.62);c.parentElement.style.width=Math.round(w)+"px"}
   else{c.parentElement.style.width="";w=c.parentElement.clientWidth||360;h=w*.8}
@@ -3846,6 +3847,17 @@ function possOptions(s,d,ctx,opt,mates){const out=[];const types=[["three","Pull
   if(mates&&mates.length){const best=mates.reduce((b,m)=>m.q>b.q?m:b,mates[0]);const mods=[["Passing",Math.round((s.PAS-PV.ref)/PV.skl*2)/2],["Court vision",Math.round((s.VIS-PV.ref)/25*2)/2]];if(ctx.fat>0)mods.push(["Tired",-Math.round(ctx.fat*2)/2]);
     const dc=9+Math.round((best.stl-PV.ref)/14),mod=modSum(mods);out.push({k:"pass",lab:`Kick to ${best.name} (${best.type==="three"?"open three":best.type==="rim"?"at the rim":"jumper"})`,pts:0,mods,mod,dc,pct:pMake(mod+1,dc),to:best,pass:true})}
   return out}
+/* defensive calls: what you do when your man has the ball */
+function defOptions(s,d,ctx){const sk=v=>Math.round((v-PV.ref)/PV.skl*2)/2,out=[];
+  const hm=[["Perimeter D",sk(d.PER)],["Interior D",sk(d.INT)*.5]];if(ctx.fat>0)hm.push(["Tired",-Math.round(ctx.fat*2)/2]);
+  out.push({k:"hands",lab:"Hands up, stay down",mods:hm,mod:modSum(hm),dc:10,pct:pMake(modSum(hm)+1,10),pts:0,def:true,note:"Contest. No risk."});
+  const sm=[["Steal",sk(d.STL)],["Quick hands",Math.round((d.PER-PV.ref)/25*2)/2]];if(ctx.fat>0)sm.push(["Tired",-Math.round(ctx.fat*2)/2]);const sdc=14+Math.round((s.HND-PV.ref)/6);
+  out.push({k:"steal",lab:"Gamble for the steal",mods:sm,mod:modSum(sm),dc:sdc,pct:pMake(modSum(sm)+1,sdc),pts:0,def:true,note:"Miss and he is open."});
+  const bm=[["Block",sk(d.BLK)],["Height",clamp(Math.round(-ctx.dh/2*2)/2,-2,2)]];const bdc=14+Math.round((Math.max(s.LAY,s.DNK)-PV.ref)/8);
+  out.push({k:"block",lab:"Go for the block",mods:bm,mod:modSum(bm),dc:bdc,pct:pMake(modSum(bm)+1,bdc),pts:0,def:true,note:"Miss and it is a foul a third of the time."});
+  const cm=[["Interior D",sk(d.INT)],["Judgment",clamp(typeof judgment==="function"?judgment():0,-2,2)]];
+  out.push({k:"charge",lab:"Take the charge",mods:cm,mod:modSum(cm),dc:16,pct:pMake(modSum(cm)+1,16),pts:0,def:true,note:"Miss and it is a blocking foul."});
+  return out}
 /* karmic dice: damp streaks of identical outcomes (toggle) */
 function kroll(state,key){let r=1+Math.floor(R()*20);if(!state||state.karmic===false)return r;const st=state.k??={};const s=st[key]||0;
   if(s<=-3&&r<=8)r=Math.min(20,r+5);else if(s>=4&&r>=14)r=Math.max(1,r-5);return r}
@@ -3853,8 +3865,8 @@ function ktrack(state,key,hit){if(!state)return;const st=state.k??={};st[key]=hi
 /* ===== minigame UI (inside the live viewer) ===== */
 function openPoss(){const w=LV.wait;if(!w)return;const el=$("lv-clutch");LV.pm={step:"pick",opts:w.opts,t0:performance.now()};LV.playing=false;
   el.innerHTML=possHtml(w);el.hidden=false;el.classList.add("pm");}
-function possHtml(w){const o=LV.pm;const hdr=`<div class="pm-h"><div><b>${esc(w.title)}</b><small>${esc(w.sub)}</small></div><div class="pm-vs"><small>Guarded by</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>`;
-  if(o.step==="pick")return hdr+`<div class="pm-opts">${w.opts.map((x,i)=>`<button class="pm-o" data-act="posspick" data-v="${i}"><i>${i+1}</i><span><b>${esc(x.lab)}</b><small>${x.mods.map(m=>`${m[0]} ${m[1]>0?"+":""}${m[1]}`).join(" · ")||"No modifiers"}</small></span><em><b>${Math.round(x.pct*100)}%</b><small>DC ${x.dc} · ${x.mod>=0?"+":""}${x.mod}</small></em></button>`).join("")}</div><div class="pm-foot"><button class="pm-auto" data-act="possauto">Let the coach pick (Esc)</button><span>Press 1–${w.opts.length}</span></div>`;
+function possHtml(w){const o=LV.pm;const hdr=`<div class="pm-h"><div><b>${esc(w.title)}</b><small>${esc(w.sub)}</small></div><div class="pm-vs"><small>${w.def?"Guarding":"Guarded by"}</small><b>${esc(w.dname)}</b><small>${esc(w.dnote)}</small></div></div>`;
+  if(o.step==="pick")return hdr+`<div class="pm-opts">${w.opts.map((x,i)=>`<button class="pm-o" data-act="posspick" data-v="${i}"><i>${i+1}</i><span><b>${esc(x.lab)}</b><small>${x.mods.map(m=>`${m[0]} ${m[1]>0?"+":""}${m[1]}`).join(" · ")||"No modifiers"}${x.note?` · ${esc(x.note)}`:""}</small></span><em><b>${Math.round(x.pct*100)}%</b><small>DC ${x.dc} · ${x.mod>=0?"+":""}${x.mod}</small></em></button>`).join("")}</div><div class="pm-foot"><button class="pm-auto" data-act="possauto">Let the coach pick (Esc)</button><span>Press 1–${w.opts.length}</span></div>`;
   const x=o.pick;const die=`<div class="pm-die ${o.step==="roll"?"spin":""}" id="pm-die"><b>${o.step==="roll"?"?":o.roll}</b></div>`;
   if(o.step==="roll"||o.step==="tap")return hdr+`<div class="pm-res">${die}<div class="pm-sum"><b>${esc(x.lab)}</b><div>d20 <span id="pm-r">${o.roll??"…"}</span> ${x.mod>=0?"+":""}${x.mod} ${o.step==="tap"?`+ timing <span id="pm-t">?</span>`:""} vs DC ${x.dc}</div></div></div>${o.step==="tap"?`<div class="cl-bar2 pm-bar"><i class="zone" style="left:${50-o.zone*50}%;width:${o.zone*100}%"></i><i class="ndl" id="cl-ndl"></i></div><div class="cl-tap">TAP (Space) ON THE GOLD</div>`:""}`;
   return hdr+`<div class="pm-res">${die}<div class="pm-sum"><b class="${o.made?"ok":"no"}">${esc(o.verdict)}</b><div>${o.roll}${x.mod>=0?" + ":" − "}${Math.abs(x.mod)}${o.tap!=null?` ${o.tap>=0?"+":"−"} ${Math.abs(o.tap)}`:""} = <b>${o.total}</b> vs DC ${x.dc}${o.why?` · ${esc(o.why)}`:""}</div></div></div>`}
@@ -3865,11 +3877,11 @@ function possTap(auto){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="tap")retur
   const tap=auto?-1:d<=z?4:d<=z+.08?2:d<=z+.16?0:-2;possResolve(w,tap)}
 function possResolve(w,tap){try{SFX.dice()}catch(e){}const o=LV.pm,x=o.pick;o.tap=tap;o.total=o.roll+x.mod+(tap??(w.timing?0:1));o.step="done";
   const nat20=o.roll===20,nat1=o.roll===1;o.made=nat1?false:nat20?true:o.total>=x.dc;
-  o.verdict=x.pass?(o.made?"GOOD PASS":"PICKED OFF"):nat20?"NATURAL 20 — AND ONE":nat1?"NATURAL 1":o.made?(tap===4?"PERFECT · SPLASH":"GOOD"):"MISS";
+  o.verdict=x.def?(nat20?"NATURAL 20":nat1?"NATURAL 1":o.made?(x.k==="hands"?"CONTESTED":x.k==="steal"?"STEAL":x.k==="block"?"BLOCKED":"CHARGE"):(x.k==="hands"?"LATE":x.k==="steal"?"HE IS BY YOU":x.k==="block"?"BIT ON IT":"BLOCKING FOUL")):x.pass?(o.made?"GOOD PASS":"PICKED OFF"):nat20?"NATURAL 20 — AND ONE":nat1?"NATURAL 1":o.made?(tap===4?"PERFECT · SPLASH":"GOOD"):"MISS";
   o.why=!o.made&&!nat1?(x.mods.find(m=>m[1]<0)?"":"the defender got a hand up"):"";
   ktrack(LV.ctl,"me",o.made);$("lv-clutch").innerHTML=possHtml(w);
   setTimeout(()=>{if(!LV)return;LV.arg={k:x.k,made:o.made,nat20,nat1,tap,roll:o.roll,total:o.total,opt:x};LV.wait=null;LV.pm=null;LV.cl=null;const el=$("lv-clutch");el.hidden=true;el.classList.remove("pm");LV.playing=true},nat20||nat1?1300:850)}
-function possAuto(){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;let bi=0,bv=-1;w.opts.forEach((x,i)=>{const v=x.pass?x.pct*1.4:x.pct*x.pts+x.foul*1.3;if(v>bv){bv=v;bi=i}});possPick(bi)}
+function possAuto(){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;let bi=0,bv=-1;w.opts.forEach((x,i)=>{const v=x.def?(x.k==="hands"?1:x.pct*.9):x.pass?x.pct*1.4:x.pct*x.pts+x.foul*1.3;if(v>bv){bv=v;bi=i}});possPick(bi)}
 function possKey(e){if(!LV?.pm)return false;const o=LV.pm;if(o.step==="pick"){const n=parseInt(e.key);if(n>=1&&n<=(LV.wait?.opts.length||0)){possPick(n-1);return true}if(e.key==="Escape"){possAuto();return true}}
   if(o.step==="tap"&&(e.key===" "||e.key==="Enter")){possTap(false);return true}return false}
 /* settings */
@@ -3880,9 +3892,10 @@ function settingsHtml(){const pm=playMode();return`<div class="mp-note">How you 
   <div class="st-row"><span>Timing tap</span><button class="mp-btn sm ${C.timing!==false?"on":""}" data-act="pmset" data-v="timing:1">On</button><button class="mp-btn sm ${C.timing===false?"on":""}" data-act="pmset" data-v="timing:0">Off</button><small class="mp-lab">Off = flat +1, never a penalty</small></div>
   <div class="st-row"><span>Karmic dice</span><button class="mp-btn sm ${C.karmic!==false?"on":""}" data-act="pmset" data-v="karmic:1">On</button><button class="mp-btn sm ${C.karmic===false?"on":""}" data-act="pmset" data-v="karmic:0">Off</button><small class="mp-lab">Softens long streaks, both teams</small></div>
   <div class="st-row"><span>On the bench</span><button class="mp-btn sm ${C.benchFF!==false?"on":""}" data-act="pmset" data-v="bench:1">Skip ahead</button><button class="mp-btn sm ${C.benchFF===false?"on":""}" data-act="pmset" data-v="bench:0">Watch</button><small class="mp-lab">Fast-forwards until you check back in</small></div>
+  <div class="st-row"><span>Defensive calls</span><button class="mp-btn sm ${(C.defCalls||"on")==="on"?"on":""}" data-act="pmset" data-v="def:on">My matchup</button><button class="mp-btn sm ${C.defCalls==="clutch"?"on":""}" data-act="pmset" data-v="def:clutch">Clutch only</button><button class="mp-btn sm ${C.defCalls==="off"?"on":""}" data-act="pmset" data-v="def:off">Off</button><small class="mp-lab">Steal, block, charge, or hands up when your man has it</small></div>
   <div class="st-row"><span>Sound</span><button class="mp-btn sm ${C.sfx!==false?"on":""}" data-act="pmset" data-v="sfx:1">On</button><button class="mp-btn sm ${C.sfx===false?"on":""}" data-act="pmset" data-v="sfx:0">Off</button><small class="mp-lab">Dice, net, rim, whistle</small></div>
   <div class="st-row"><span>Game speed</span>${[2,4,8].map(s=>`<button class="mp-btn sm ${(C.lvSpeed||4)===s?"on":""}" data-act="pmset" data-v="speed:${s}">${s}×</button>`).join("")}</div>`}
-function pmSet(v){const[k,val]=v.split(":");if(k==="mode")C.playMode=val;else if(k==="timing")C.timing=val==="1";else if(k==="karmic")C.karmic=val==="1";else if(k==="speed")C.lvSpeed=+val;else if(k==="bench")C.benchFF=val==="1";else if(k==="sfx")C.sfx=val==="1";saveC();csWins();if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const b=document.querySelector('.cs-next');if(b)mcRender()},0)}
+function pmSet(v){const[k,val]=v.split(":");if(k==="mode")C.playMode=val;else if(k==="timing")C.timing=val==="1";else if(k==="karmic")C.karmic=val==="1";else if(k==="speed")C.lvSpeed=+val;else if(k==="bench")C.benchFF=val==="1";else if(k==="sfx")C.sfx=val==="1";else if(k==="def")C.defCalls=val;saveC();csWins();if(typeof mcRender==="function"&&$("cs-cv"))setTimeout(()=>{const b=document.querySelector('.cs-next');if(b)mcRender()},0)}
 
 /* calibration harness (tests only) */
 window.__cal=function(n=40,yr){const cl=C.cl;if(yr){cl.y=yr}const ids=Object.keys(cl.teams),A={fga:0,fgm:0,tpa:0,tpm:0,fta:0,ftm:0,tov:0,stl:0,blk:0,ast:0,reb:0,pts:0,poss:0,g:0,ot:0},P=[];
@@ -4635,11 +4648,21 @@ function* liveGen(SD,opt,ctl){
           return yield* finish(r2,df2,p2,df2.p,type,made,fouled,c2,{me:1,pass:1,assistTo})}
         else{type=ans.k;made=ans.made;fouled=ans.nat20||(R()<PV.foul[type]*(1+(s.DRW-PV.ref)/60)*(ans.made?.5:1.3))}
         return yield* finish(sh,df,p,dp,type,made,fouled,ctx,{me:1,ans})}
+      // defensive call: my matchup has the ball
+      let forceBlk=false,forceFoul=false;
+      const defOn=typeof C!=="undefined"&&C?(C.defCalls||"on"):"off";
+      if(ud&&ctl&&ctl.hero!=null&&String(dp.pid)===String(ctl.hero)&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&(defOn==="on"||(defOn==="clutch"&&clutch))){
+        const opts=defOptions(s,d,ctx),clk=`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
+        const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}`,timing:typeof C!=="undefined"&&C?C.timing!==false:true,skl:Math.max(d.PER,d.STL,d.BLK)}};
+        if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}ctx.open=true;ctx.contest=false;df.stint+=.6}
+        else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(da.nat1||R()<.35)forceFoul=true;else{ctx.open=true;ctx.contest=false}}
+        else if(da&&da.k==="charge"){if(da.made){sh.b.tov=(sh.b.tov||0)+1;df.b.chg=(df.b.chg||0)+1;push("to",`${p.name} lowers the shoulder. ${dp.name} is set. Charge.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}df.pf++;tfoul[1-o]++;push("foul",`Blocking foul on ${dp.name}.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
+        else if(da&&da.k==="hands"&&da.made){ctx.contest=true;ctx.open=false}}
       // CPU resolution with the same dice
-      const w=shotWeights(s,d,ctx,{tf,no3x,co,cd});type=wpick(Object.keys(w),k=>w[k]);
-      const mod=modSum(shotMods(type,s,ctx))+1+hb*8,dc=shotDC(type,d,ctx),roll=kroll(ctl,"c"+p.pid),total=roll+mod;made=roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
-      fouled=roll===20?true:R()<PV.foul[type]*(1+(s.DRW-PV.ref)/60)*(made?.5:1.3)*(co==="inside"?1.2:1);
-      const cont=yield* finish(sh,df,p,dp,type,made,fouled,ctx,{});if(!cont)return;
+      const w=shotWeights(s,d,ctx,{tf,no3x,co,cd});type=wpick(Object.keys(w),k=>w[k]);if(forceBlk&&type==="three")type=s.LAY>=s.MID?"rim":"mid";
+      const mod=modSum(shotMods(type,s,ctx))+1+hb*8,dc=shotDC(type,d,ctx),roll=kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
+      fouled=forceBlk?false:forceFoul?true:roll===20?true:R()<PV.foul[type]*(1+(s.DRW-PV.ref)/60)*(made?.5:1.3)*(co==="inside"?1.2:1);
+      const cont=yield* finish(sh,df,p,dp,type,made,fouled,ctx,{forceBlk,me:forceBlk||forceFoul?1:0});if(!cont)return;
     }
     o=1-o;
   };
@@ -4658,7 +4681,7 @@ function* liveGen(SD,opt,ctl){
       if(fouled){df.pf++;tfoul[1-o]++;push("foul",`And one! ${dp.name} fouls ${lname(p)}.`,{sh:p.pid,d:dp.pid});shootFT(sh,1,df)}
       o=1-o;return false}
     if(fouled){df.pf++;tfoul[1-o]++;push("foul",`${dp.name} fouls ${lname(p)} on the ${TYPEN[type]}.`,{sh:p.pid,d:dp.pid,shot:stype,dist,ang});sh.b.fga--;if(type==="three")sh.b.tpa--;shootFT(sh,pts,df);o=1-o;return false}
-    const D=on[1-o],O=on[o];let blk=null;if(type!=="three"&&R()<PV.blk*Math.pow(prof(dp).BLK/PV.ref,2.5)*Math.pow(hgt(dp)/79,3)*(type==="mid"?.4:1)){blk=df;df.b.blk++}
+    const D=on[1-o],O=on[o];let blk=null;if(x.forceBlk){blk=df;df.b.blk++}else if(type!=="three"&&R()<PV.blk*Math.pow(prof(dp).BLK/PV.ref,2.5)*Math.pow(hgt(dp)/79,3)*(type==="mid"?.4:1)){blk=df;df.b.blk++}
     push(blk?"blk":"miss",blk?`${dp.name} swats ${lname(p)}'s shot!`:`${p.name} misses the ${TYPEN[type]}${ctx.contest?" over a hand":""}.`,{sh:p.pid,d:dp.pid,shot:stype,dist,ang,blk:!!blk,...cx});
     const PO=O.map(r=>prof(r.p)),PD=D.map(r=>prof(r.p)),orbP=clamp(PV.orb+(PO.reduce((a,s)=>a+s.ORB,0)-PD.reduce((a,s)=>a+s.DRB,0))/5*.004+(O.reduce((a,r)=>a+hgt(r.p),0)-D.reduce((a,r)=>a+hgt(r.p),0))/5*.01,.12,.45);
     const offR=R()<orbP,rt=offR?O:D,rb=wpick(rt,r=>{const s=prof(r.p);return Math.pow((offR?s.ORB:s.DRB)/PV.ref,USE.reb)*Math.pow(hgt(r.p)/79,2.5)*(1+(s.VRT-PV.ref)/150)});if(R()>.12)rb.b.reb++;
@@ -5484,9 +5507,9 @@ window.__liveTest=n=>{const out={pts:0,fga:0,fgm:0,tpa:0,fta:0,ast:0,reb:0,stl:0
 <script>
 if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").then(reg=>{
   const show=w=>{const b=document.getElementById("upd");b.hidden=false;document.getElementById("upd-go").onclick=()=>{try{saveNow()}catch(e){}w.postMessage("skip")}};
-  if(reg.waiting&&navigator.serviceWorker.controller)show(reg.waiting);
+  if(reg.waiting&&navigator.serviceWorker.controller){try{saveNow()}catch(e){}reg.waiting.postMessage("skip")}
   reg.addEventListener("updatefound",()=>{const w=reg.installing;w&&w.addEventListener("statechange",()=>{if(w.state==="installed"&&navigator.serviceWorker.controller)show(w)})});
-  setInterval(()=>reg.update().catch(()=>{}),30*60*1000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)reg.update().catch(()=>{})});
+  reg.update().catch(()=>{});setInterval(()=>reg.update().catch(()=>{}),10*60*1000);document.addEventListener("visibilitychange",()=>{if(!document.hidden)reg.update().catch(()=>{})});
 }).catch(()=>{})});let r=false;navigator.serviceWorker.addEventListener("controllerchange",()=>{if(r)return;r=true;location.reload()})}
 </script>
 </body>
