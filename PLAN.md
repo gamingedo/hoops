@@ -281,6 +281,16 @@ Never: logins, timers, energy gates, extra currencies, passes.
 - court.js: about 40 choreographies (drive, crossover, hesitation, jab, pump fake, screen, hand-off, post-up, spin, drop step, step-through, Euro step, draw the foul, reset, milk; the set-up for each finish; kick, skip, dump-off, lob; hands up, steal, block, charge, rotate, jump the lane, foul; call for it, cut, spot up, screen, crash) and 12 situation layouts, reshaped by the look (a zone puts five in a 2-3, a drop sinks the big, a double team sends two at you, the help steps into the lane when it collapses). A worked move and a stopped one end differently (beaten, cut off, stripped, charge).
 - Shots you call rise from where the choreography left you. Every beat waits for the players to arrive (up to 1.6 s extra) so the ball never leaves before you get there.
 
+**Palette and title screen (shipped v54).** Ship notes:
+- Theme v2 (one CSS layer at the end of the style block): twilight backgrounds (#121a33 to #0b1024 with a blue and violet glow), ivory cards with thin gold trim for windows, the character sheet, the pre-game and post-game cards and the play-call rows; one gold accent (#e2b660) for the main button, the selected tab and legendary; good stays blue and bad stays orange (darker #2f7fd6 and #c8641c on ivory). Rarity: common #9ba1b0, uncommon teal #3fb6a4 (was green), rare #4f8ff0, epic #a07cf0, legendary gold #f0c060 (was orange, which read as "bad"). The court keeps its broadcast look.
+- Main menu is a title screen: a night game in a full building (scoreboard, scrolling ribbon, crowd, light beams, a court in perspective), the HOOPS logo, one ivory card that continues your career (name, team or school, level, record, title) or starts one, and quiet links. The old copy ("a basketball anime with dice", the story teaser) is gone.
+- The equipment room is cut. The GEAR door in the gym opens the Locker; saves that were standing in the room land in the gym.
+- Decided, not yet built: original sprites replace the licensed packs (sprite sheet artifact), the NBA years get an arena practice court (no condo), character creation gets the new sprites, sprite outlines go to deep plum.
+
+**Base game, then freeze (decided 2026-10-20).** Base game done means: (1) art swap: original sprites on the court, new character creation, the college gym and the NBA arena, licensed packs out of the credits; (2) feel: sound, music, impact on dunks, blocks and big drops; (3) the first ten minutes: a guided first game; (4) the long game: something to chase after the GOAT title; (5) a bug sweep and a full-career playtest by the player. After that, features freeze; new ideas go to the expansion list.
+
+**Expansion list.** Legends: earned, never bought. Beat a historical boss in the Finals and a legend from that team can join your squad, or reach a Hall of Fame milestone to unlock one from that era. Turns the boss raids into a collection chase with no currency and no pulls.
+
 ## 7. Working rules for the executor
 
 - Edit module files, rebuild with ins.py + make_main.py, syntax-check, run the named tests, then build the PWA and push, then publish the artifact. Bump BUILD.

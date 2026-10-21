@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="dd005b14b8";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="be951326e6";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -716,6 +716,111 @@ html.phone .modal .sheet:has(.mp-sheet){width:100%;max-height:none;height:100dvh
 html.phone .mp-sheet .mp-top{position:sticky;top:-10px;z-index:2;background:inherit;padding-bottom:6px}html.phone .mp-sheet .mp-x{width:40px;height:40px;font-size:22px}
 html.phone .mp-sheet .mp-two{grid-template-columns:1fr}
 html.phone .pm-h,html.phone .pm-meta,html.phone .pm-opts{width:100%}html.phone .pm-h>div,html.phone .pm-o>span{min-width:0;overflow-wrap:anywhere}html.phone .pm-o{grid-template-columns:24px minmax(0,1fr) auto}
+
+/* ===================== THEME v2: twilight, ivory, one gold (PLAN §8) ===================== */
+:root{--floor:#121a33;--floor-2:#0b1024;--floor-line:#ffffff06;--ink:#1d2747;--ink-2:#27325a;--ink-3:#33407a;--ink-line:#3a4777;
+  --led:#f0c870;--led-dim:#b8893a;--leather:#e2b660;--leather-hi:#f6dca0;--paper:#f6efe0;--muted:#c3cbe6;
+  --ivory:#f6efe0;--parch:#ece2cc;--inkg:#2a2d48;--gold:#e2b660;--gold2:#b8893a;--goldlt:#f6dca0;--up:#2f7fd6;--dn:#c8641c;--brown:#6d6656;--seam:#e3d5b4}
+body{background:var(--floor);background-image:radial-gradient(1100px 620px at 80% -10%,#33438a 0,transparent 62%),radial-gradient(900px 520px at -5% 110%,#3b2c6e55 0,transparent 60%),linear-gradient(180deg,#121a33,#0b1024);background-attachment:fixed}
+body::before{background:var(--floor)}
+/* buttons: the one gold, and quiet ghosts */
+.btn{background:linear-gradient(180deg,#f8e3ad,var(--gold) 60%,#d4a04c);color:var(--inkg);border:1px solid #fff3d0;box-shadow:0 0 0 1px var(--gold2),0 6px 16px -8px #e2b66088;border-radius:12px}
+.btn:hover:not(:disabled){background:linear-gradient(180deg,#fbecc6,#e9c272 60%,#dcae5c)}
+.btn.ghost{background:#ffffff10;color:var(--paper);border:1px solid #ffffff2a;box-shadow:none}
+.btn.ghost:hover:not(:disabled){background:#ffffff1c}
+/* windows, sheets and panels inside them: ivory with gold trim */
+.mp-win{background:var(--ivory);border:1px solid var(--gold);border-radius:14px;box-shadow:inset 0 0 0 3px #fff9,0 12px 30px #0009;color:var(--inkg)}
+.mp-title{background:linear-gradient(180deg,#fbf5e8,var(--parch));color:var(--inkg);border-bottom:1px solid #d9caa6;font:800 15px/1 var(--f-display);letter-spacing:.04em}
+.mp-body{background:var(--ivory)}
+.mp-x{background:#fffaf0;border:1px solid #d9caa6;color:var(--inkg);border-radius:50%}
+.mp-tabs button{background:linear-gradient(180deg,#f6eedc,#e6d8b8);color:var(--brown);border-color:#cbb98f;font:700 12px/1 var(--f-body);letter-spacing:.02em}
+.mp-tabs button[aria-current="true"]{background:linear-gradient(180deg,#f8e3ad,var(--gold));color:var(--inkg);border-color:var(--gold2)}
+.mp-win .panel,.mp-sheet .panel{background:#fffaf0;color:var(--inkg);border:1px solid var(--seam);border-radius:10px}
+.mp-win .btn.ghost,.mp-sheet .btn.ghost{background:#fffaf0;color:var(--inkg);border:1px solid var(--seam)}
+.sheet{background:linear-gradient(170deg,#26315f,#141c38);border:1px solid #3a4777}
+.sheet:has(.mp-sheet){background:linear-gradient(180deg,#fbf5e8,var(--ivory));border:1px solid var(--gold)}
+.modal{background:#0b1024cc}
+/* league pages */
+.panel{background:linear-gradient(160deg,#27325acc,#1a2244e6);border:1px solid #ffffff1a}
+.bar{background:#121a33f2;border-top:1px solid #3a4777}
+.bnav{background:#121a33f7;border-top:1px solid #3a4777}
+.bnav button[aria-current="true"]{color:var(--goldlt)}
+/* the home: twilight bar, ivory level badge, gold Play */
+.cs-hud{background:linear-gradient(180deg,rgba(29,39,71,.97),rgba(18,26,51,.99));border-top:1px solid #3a4777;box-shadow:inset 0 1px 0 #ffffff14}
+.cs-lv{background:var(--ivory);border:1px solid var(--gold);border-radius:999px;box-shadow:inset 0 0 0 2px #fff8}
+.cs-lv b{color:var(--inkg);font:800 18px var(--f-display)}.cs-lv b small{color:var(--brown)}.cs-lv span{color:var(--brown)}
+.cs-xp{background:#0b1024;border:1px solid #3a4777;border-radius:999px}
+.cs-xp i{background:linear-gradient(90deg,var(--gold2),var(--goldlt));box-shadow:0 0 8px #f6dca088}
+.cs-xp span{font:700 10px var(--f-body);letter-spacing:.04em;color:#f6efe0}
+.cs-play{background:linear-gradient(180deg,#f8e3ad,var(--gold) 60%,#d4a04c);border:1px solid #fff3d0;color:var(--inkg);border-radius:14px;box-shadow:0 0 0 2px var(--gold2),0 6px 18px #e2b66055}
+.cs-play small{color:#4a4232}
+.cs-b{background:#ffffff0a;border:1px solid #3a4777;color:#c9d2ee;border-radius:12px}
+.cs-b.hot{border-color:var(--gold);color:var(--goldlt)}.cs-b em{color:var(--goldlt)}
+html.phone .cs-b{background:#121a33;border-color:#2a3460;border-radius:0}html.phone .cs-b em{background:var(--gold);color:var(--inkg)}
+html.phone .cc-team span{color:var(--goldlt)}html.phone .cc-drop{color:var(--goldlt)!important}
+.cs-plate{background:var(--ivory);border:1px solid var(--gold);box-shadow:inset 0 0 0 2px #fff9,0 4px 12px #0006;border-radius:10px;color:var(--inkg)}
+.cs-plate b{color:var(--inkg)}.cs-plate small{color:var(--brown)}.cs-plate .rec{color:var(--inkg)}
+/* pre-game and post-game: ivory cards */
+.pg-card{background:var(--ivory);color:var(--inkg);border:1px solid var(--gold);border-radius:14px;box-shadow:inset 0 0 0 3px #fff9,0 12px 30px #0009}
+.pg-card>small{color:var(--brown);font:700 11px var(--f-body);letter-spacing:.08em;text-transform:uppercase}
+.pg-card h3.w{color:var(--up)}.pg-card h3.l{color:var(--dn)}
+.pg-raid li{color:var(--dn)}.pg-easy{color:var(--up)}.pg-drop b,.pg-boss,.pg-up{color:var(--gold2)}.pg-money{color:var(--up)}
+.pg-card.gold{border-color:var(--gold);box-shadow:inset 0 0 0 3px #fff9,0 0 0 2px #e2b66077,0 0 26px #e2b66044}
+.pg-card.boss{background:linear-gradient(180deg,#fff0cc,var(--ivory) 45%);border-color:var(--gold2);box-shadow:inset 0 0 0 3px #fff9,0 0 0 3px #e2b660aa,0 0 40px #e2b66066}.pg-card.boss h3{color:#8a5a00}
+.pg-bar{background:#e8dcc0}.pg-bar i{background:linear-gradient(90deg,var(--gold2),var(--goldlt))}
+.pg-card .actions .btn.ghost{background:#fffaf0;color:var(--inkg);border:1px solid var(--seam)}
+/* the drop reveal: rarity glow */
+.rv{border:1px solid color-mix(in srgb,var(--rc) 60%,#fff);background:radial-gradient(90% 80% at 50% 20%,color-mix(in srgb,var(--rc) 55%,#fff) 0%,var(--rc) 38%,color-mix(in srgb,var(--rc) 40%,#0b1024) 100%);color:#fff;border-radius:14px;box-shadow:0 0 24px color-mix(in srgb,var(--rc) 55%,transparent),inset 0 0 0 3px #ffffff33}
+.rv .rv-r{color:#fff;text-shadow:0 1px 0 #0006}.rv-n,.rv-m,.rv-sub{text-shadow:0 1px 0 #0007}.rv-sub{background:#0b102433}
+.rv-s i{color:#ffffff40}.rv-s i.on{color:#fff3c4;text-shadow:0 0 6px #ffd166}
+.rv.rv-legendary{color:#2a2208}.rv.rv-legendary .rv-r,.rv.rv-legendary .rv-n,.rv.rv-legendary .rv-m,.rv.rv-legendary .rv-sub{color:#2a2208;text-shadow:0 1px 0 #fff6}.rv.rv-legendary .rv-s i.on{color:#8a5a00;text-shadow:none}.rv.rv-legendary .rv-sub{background:#ffffff40}
+/* the play-call card: twilight backdrop, ivory rows, gold odds */
+.lv-clutch.pm{background:linear-gradient(180deg,#141c3aee,#0b1024f2)}
+.pm-h b{color:var(--goldlt)}
+.pm-o{background:#fffaf0;border:1px solid var(--seam);color:var(--inkg);border-radius:12px}
+.pm-o:hover{background:#fff3d6;border-color:var(--gold)}
+.pm-o i{color:var(--goldlt);background:var(--ink);border-radius:50%;width:22px;height:22px;display:grid;place-items:center;font:800 12px var(--f-body)}
+.pm-o span b{color:var(--inkg)}.pm-o span small{color:var(--brown)}
+.pm-o em b{color:var(--gold2)}.pm-o em small{color:var(--brown)}
+.pm-o.perk{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold)}.pm-o.perk i{color:var(--inkg);background:var(--gold)}
+.pm-o.setup em b{color:var(--up)}
+.pm-o .pc{background:#f1e7d0}.pm-o .pc.up{color:var(--up)}.pm-o .pc.dn{color:var(--dn)}.pm-o .pc.b{color:var(--brown);opacity:1}
+.pm-auto{border-color:#ffffff33;color:#f6efe0;border-radius:999px}
+.pm-meter .zone{background:#4f8ff0cc}.pm-meter{background:#c8641c55}
+/* the arch / System cards */
+.arch-card p{border-left-color:var(--gold)}.arch-card small{color:var(--goldlt)}
+.arch-card.quiet{background:linear-gradient(180deg,#1d2747,#121a33);border:1px solid #3a4777;border-radius:12px}
+.g-nil{background:linear-gradient(180deg,#27325a,#1d2747);border:1px solid var(--gold);border-radius:10px}.g-nil b{color:var(--goldlt)}
+
+/* ---- main menu: the title screen, a night game in a full building ---- */
+#menu.eras{background:#0b1024}
+.tm{position:relative;min-height:100%;display:grid;place-items:center;overflow:hidden;padding-block:calc(24px + env(safe-area-inset-top,0px)) calc(24px + env(safe-area-inset-bottom,0px));padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  background:radial-gradient(900px 520px at 50% -10%,#33438a 0,transparent 65%),linear-gradient(180deg,#121a33,#0b1024 70%)}
+.tm-scene{position:absolute;inset:0;pointer-events:none}
+.tm-beam{position:absolute;top:-10%;width:42%;height:120%;background:linear-gradient(180deg,#fff3d033,transparent 70%);filter:blur(10px);transform-origin:50% 0}
+.tm-beam.a{left:12%;transform:rotate(14deg)}.tm-beam.b{right:12%;transform:rotate(-14deg)}
+@media (prefers-reduced-motion:no-preference){.tm-beam.a{animation:tmSway 9s ease-in-out infinite alternate}.tm-beam.b{animation:tmSway2 11s ease-in-out infinite alternate}.tm-ribbon span{animation:tmScroll 18s linear infinite}}
+@keyframes tmSway{to{transform:rotate(4deg)}}@keyframes tmSway2{to{transform:rotate(-4deg)}}@keyframes tmScroll{to{transform:translateX(-50%)}}
+.tm-board{position:absolute;left:50%;top:4%;transform:translateX(-50%);width:min(300px,62vw);aspect-ratio:3/1;background:#05070f;border:2px solid #2a3460;border-radius:8px;box-shadow:0 0 40px #4f8ff044;display:grid;place-items:center;align-content:center;gap:2px}
+.tm-board b{font:900 clamp(16px,3.4vw,24px) var(--f-display);color:#f6efe0;letter-spacing:.08em}.tm-board span{font:400 clamp(12px,2.4vw,16px) Silkscreen,var(--f-mono);color:#ff6b4a}
+.tm-bowl{position:absolute;left:0;right:0;top:28%;height:40%;background:radial-gradient(circle,#c9ccd855 0 1px,transparent 1.5px) 0 0/9px 7px,radial-gradient(circle,#e2b66044 0 1px,transparent 1.5px) 4px 3px/13px 9px,repeating-linear-gradient(180deg,#1a2244 0 6px,#161d3a 6px 12px);mask-image:linear-gradient(180deg,transparent,#000 25%,#000 85%,transparent)}
+.tm-ribbon{position:absolute;left:0;right:0;top:calc(4% + min(300px,62vw)/3 + 12px);height:18px;background:#05070f;border-block:1px solid #2a3460;overflow:hidden;white-space:nowrap}
+.tm-ribbon span{display:inline-block;font:400 11px/18px Silkscreen,var(--f-mono);color:var(--goldlt);padding-left:8px;width:max-content}
+.tm-floor{position:absolute;left:-20%;right:-20%;bottom:-6%;height:34%;background:repeating-linear-gradient(90deg,#d9ad70 0 26px,#e4bb80 26px 50px,#d4a466 50px 74px);transform:perspective(500px) rotateX(58deg);transform-origin:50% 100%;box-shadow:inset 0 30px 60px #0b1024}
+.tm-floor i{position:absolute;left:50%;top:40%;width:180px;height:180px;margin-left:-90px;border:4px solid #f6efe0cc;border-radius:50%}
+.tm-in{position:relative;z-index:1;width:min(460px,100%);display:grid;gap:16px;justify-items:center;text-align:center}
+.tm-logo{display:grid;gap:0;justify-items:center}
+.tm-logo small{font:600 12px var(--f-body);letter-spacing:.24em;text-transform:uppercase;color:#c3cbe6}
+.tm-logo b{font:900 clamp(72px,18vw,128px)/.85 var(--f-display);letter-spacing:.02em;text-transform:uppercase;background:linear-gradient(180deg,#fff7df 10%,#f0c870 55%,#b8893a);-webkit-background-clip:text;background-clip:text;color:transparent;filter:drop-shadow(0 4px 0 #0b1024) drop-shadow(0 0 22px #e2b66055)}
+.tm-logo span{font:800 clamp(16px,4vw,22px) var(--f-display);letter-spacing:.42em;text-transform:uppercase;color:#f6efe0;padding-left:.42em}
+.tm-card{width:100%;display:grid;gap:6px;justify-items:center;padding:16px;background:var(--ivory);color:var(--inkg);border:1px solid var(--gold);border-radius:16px;box-shadow:inset 0 0 0 3px #fff9,0 18px 40px #000a}
+.tm-card small{font:700 11px var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--brown)}
+.tm-card b{font:900 30px/1 var(--f-display);text-transform:uppercase;text-wrap:balance}
+.tm-card p{margin:0;color:var(--brown);font-size:15px;max-width:36ch}
+.tm-chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}.tm-chips span{font:700 12px var(--f-body);padding:3px 10px;border-radius:999px;background:#f1e7d0;border:1px solid var(--seam)}
+.tm-go{width:100%;margin-top:6px;font-size:22px;padding:13px;border-radius:999px}
+.tm-links{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}.tm-links .btn{flex:0 0 auto;font-size:13px;padding:8px 14px;border-radius:999px}
+.tm-foot{margin:0;color:#9aa6c4;font-size:12px}
 </style>
 </head>
 <body>
@@ -1568,7 +1673,7 @@ function newCareer(){C={v:1,pmV2:1,stage:"create",name:pick(FIRST)+" "+pick(LAST
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v53";
+const BUILD="v54";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -3649,7 +3754,7 @@ const GSLOTMAIN={feet:["accel"],hands:["handle"],head:["siq"],arm:["three","mid"
 /* substats: single moves */
 const GSUB=["cross","hesi","jab","pump","drive","screen","handoff","post","spin","dropstep","step","euro","drawfoul","three","mid","rim","dunk","cs3","floater","pass","callfor","cut","crash","hands","steal","block","charge","rotate","lane"];
 const GSUBN={cross:"Crossover",hesi:"Hesitation",jab:"Jab step",pump:"Pump fake",drive:"Drive",screen:"Screens",handoff:"Hand-off",post:"Post up",spin:"Spin",dropstep:"Drop step",step:"Step-through",euro:"Euro step",drawfoul:"Draw foul",three:"Threes",mid:"Jumpers",rim:"Layups",dunk:"Dunks",cs3:"Catch and shoot",floater:"Floater",pass:"Passes",callfor:"Call for it",cut:"Cuts",crash:"Crash the glass",hands:"Contest",steal:"Steal",block:"Block",charge:"Charge",rotate:"Rotate",lane:"Jump the lane"};
-const GRAR={common:["Common","#8a90a0",1],uncommon:["Uncommon","#2fa84a",2],rare:["Rare","#3b7ddd",3],epic:["Epic","#8a2be2",4],legendary:["Legendary","#f5a623",4]};
+const GRAR={common:["Common","#9ba1b0",1],uncommon:["Uncommon","#3fb6a4",2],rare:["Rare","#4f8ff0",3],epic:["Epic","#a07cf0",4],legendary:["Legendary","#f0c060",4]};
 const GRARS=["common","uncommon","rare","epic","legendary"];
 /* sets: 2-piece edge, 4-piece rule */
 const GSETS={
@@ -4807,23 +4912,18 @@ function hubCtx(){if(isPro()){const t=T(G.userTid),ms=t.roster.map(P).filter(p=>
 function hubMaps(){const X=hubCtx(),t={w:X.w,l:X.l,coach:null},hc=X.color,dk=mixc(hc,"#000000",.35),hour=new Date().getHours(),sky=hour>=20||hour<6?"night":hour>=17?"sunset":hour>=6&&hour<9?"sunset":"day";
   const tm=X.mate;
   const gym={id:"gym",name:X.pro?esc(X.short)+" Practice Facility":esc(C.school)+" Gym",w:1240,floorFrac:.76,sky,hc,dk,
-    props:[{k:"door",x:44,img:"props2/door.png",label:"To the equipment room",portal:"shop",spawn:520,sign:"GEAR"},
+    props:[{k:"door",x:44,img:"props2/door.png",label:"Your Locker",act:"inv",sign:"GEAR"},
       {k:"trophy",x:150,img:"props2/trophycase.png",label:"Trophy case",act:"goals"},
       {k:"pennant",x:230,img:"props2/pennant.png",wall:true,wy:86},
       {k:"board",x:700,label:"Scoreboard",act:"sched",wall:true,board:true},
       {k:"bulletin",x:900,img:"props2/bulletin.png",label:"Team bulletin",act:"news",wall:true,wy:90},
       ],
-    npcs:[{id:"coach",name:X.coach,x:560,look:{style:"A",tone:2,hairc:7,jersey:"#2b2f40",shorts:"#2b2f40",shoes:"#222222"},face:1,lines:[`${C.name.split(" ")[0]}, you're ${t.w}-${t.l}. ${t.w>=t.l?"Keep the standard.":"We fix it in practice."}`,X.pro?"Sixteen games decide the seed. The seed decides the road.":"Space plays the next game. The door goes to the equipment room.",X.pro?"The Finals are a different animal. Get your gear right first.":"Shooters shoot. Passers pass. Know which one you are tonight."]},
+    npcs:[{id:"coach",name:X.coach,x:560,look:{style:"A",tone:2,hairc:7,jersey:"#2b2f40",shorts:"#2b2f40",shoes:"#222222"},face:1,lines:[`${C.name.split(" ")[0]}, you're ${t.w}-${t.l}. ${t.w>=t.l?"Keep the standard.":"We fix it in practice."}`,X.pro?"Sixteen games decide the seed. The seed decides the road.":"Space plays the next game. The GEAR door is your Locker.",X.pro?"The Finals are a different animal. Get your gear right first.":"Shooters shoot. Passers pass. Know which one you are tonight."]},
       tm?{id:"tm",name:shortNm(tm),x:1000,look:charLook({style:hsh(tm.pid)%2?"B":"A",tone:5-clamp(+(tm.look.skin??lookFor(tm.pid).skin)||0,0,5),hairc:hsh(tm.pid+"h")%6,jersey:hc,shorts:hc}),anim:"drib",face:-1,lines:[`${tm.ovr} overall and I still can't guard you in practice.`,X.pro?"Your gear is getting loud. I like it.":"You see the Top 25? Check the Season window.","Run it back after film."]}:null].filter(Boolean),
     spawn:380};
-  const shop={id:"shop",name:"Equipment room",w:720,floorFrac:.76,sky:"day",hc:"#6b4f2c",dk:"#2a1e12",
-    props:[{k:"out",x:40,img:"props2/door.png",label:"Back to the gym",portal:"gym",spawn:120,sign:"GYM"},
-      {k:"counter",x:360,label:"Counter: power up, reappraise, merge",act:"inv",wall:true,wy:120,w:200,h:60,invisible:true},
-      {k:"shelf",x:560,img:"props2/trophycase.png",label:"Your Locker",act:"inv"}],
-    npcs:[{id:"clerk",name:"Sam",x:300,look:{style:"A",tone:3,hairc:1,jersey:"#3b5b3b",shorts:"#222222",shoes:"#ffffff"},face:1,lines:["NIL money powers gear up. That is all it is for.","Five pieces of one grade and I can make one better.","Every game drops something. Bring it here."]}],spawn:520};
-  return{gym,shop}}
+  return{gym}}
 function hubGo(id,spawn){const m=hubMaps()[id];if(!m)return;HUB.map=id;HUB.px=spawn??m.spawn;HUB.vx=0;HUB.vy=0;HUB.py=0;HUB.target=null;HUB.talk=null;HUB.bubble=null;HUB.cam=0;C.hubMap=id;C.hubX=HUB.px;HUB.flash=1}
-function hubEnsure(){if(!HUB.map||!hubMaps()[HUB.map]){hubGo(C.hubMap||"gym",C.hubX)}}
+function hubEnsure(){if(!HUB.map||!hubMaps()[HUB.map]){const ok=hubMaps()[C.hubMap];hubGo(ok?C.hubMap:"gym",ok?C.hubX:undefined)}}
 /* geometry helpers: all in scene px */
 function hubFloor(m,ih){if(m.bgFloor){return ih-(m.bgH-m.bgFloor)*(m.bgScale||1)-14}return Math.round(ih*m.floorFrac)}
 function hubGeom(cv){const W=cv.clientWidth||800,H=cv.clientHeight||400,m=HUB.map&&hubMaps()[HUB.map],ph=document.documentElement.classList.contains("phone"),sc=ph?2:m&&m.bgH?clamp(Math.round(H/(m.bgH+60)),1,4):clamp(Math.round(Math.min(W/700,H/380)),1,3);return{W,H,sc,iw:Math.ceil(W/sc),ih:Math.ceil(H/sc)}}
@@ -5047,14 +5147,20 @@ window.addEventListener("resize",()=>{if(LV)lvResize()});
 /* ---------- main menu ---------- */
 function openMenu(){
   const el=$("menu");el.hidden=false;document.body.style.overflow="hidden";
-  const inLeague=G&&G.userTid!=null,car=G?.career&&!G.career.retired&&P(G.career.pid);
+  const car=G?.career&&!G.career.retired&&P(G.career.pid);
   const col=C&&C.stage&&C.stage!=="done"&&C.stage!=="create";
-  el.innerHTML=`<div class="eras-in">${mcHead("A basketball anime with dice.").replace('<button class="eras-x" data-act="menu">← Main menu</button>',"")}
-    <div class="menu-grid">
-      <button class="menu-card" data-act="m-career" style="--e1:#ff8a3d;--e2:#ffd166;--e3:#16264a"><span class="ty">MC</span><small>MyCareer</small><b>${col?"Continue "+esc(C.name):car?"Continue "+esc(G.career.name):"Create a player"}</b>
-        <p>${col?`${esc(C.school||"Recruiting")} · ${C.stage==="college"?CLASSN[C.cls-1]:"between seasons"}`:car?`${esc(T(P(G.career.pid).tid)?.name||"Free agent")} · age ${P(G.career.pid).age}`:"Two roads. One letter or eleven. A sender with no number. College, the draft, the league, and whatever you make of it."}</p></button>
-      ${col||car?`<button class="menu-card" data-act="m-newcareer" style="--e1:#9aa6c0;--e2:#f4f1ea;--e3:#1c2440"><span class="ty">+</span><small>MyCareer</small><b>New player</b><p>Start a fresh career. Your current college career will be replaced.</p></button>`:""}
-    </div><div class="actions" style="margin-top:14px">${rpgS()?`<button class="eras-x" data-act="m-sheet">Character sheet · respec</button>`:""}<button class="eras-x" data-act="saves">Manage saves</button><button class="eras-x" data-act="credits">Credits</button></div><p class="note" style="color:#c9cfe0;margin-top:10px">${cloudLine()}</p></div>`;
+  const R0=(()=>{try{return rpgS()}catch(e){return null}})(),lv=R0?.lv||1,title=(()=>{try{return C?.miles?.wear||(typeof jobName==="function"&&jobName())||""}catch(e){return""}})();
+  let who=null;
+  if(col){const t=C.cl?.teams?.[C.school];who={k:"Continue",name:C.name,line:`${C.school||"Recruiting"} · ${C.stage==="college"?"College":"Draft night"}`,chips:[`Lv ${lv}`,t?`${t.w}-${t.l}`:null,title||null]}}
+  else if(car){const p=P(G.career.pid),t=T(p.tid);who={k:"Continue",name:G.career.name,line:`${t?`${t.city} ${t.name}`:"Free agent"} · Season ${(C&&C.seasonN)||1}`,chips:[`Lv ${lv}`,t?`${t.w}-${t.l}`:null,title||null]}}
+  el.innerHTML=`<div class="tm"><div class="tm-scene" aria-hidden="true"><i class="tm-beam a"></i><i class="tm-beam b"></i><div class="tm-board"><b>${who?esc((who.line.split(" · ")[0]||"").toUpperCase().slice(0,16)):"TIP-OFF"}</b><span>${who?esc(who.chips[1]||"0-0"):"0-0"}</span></div><div class="tm-bowl"></div><div class="tm-ribbon"><span>HOOPS · MYCAREER · HOOPS · MYCAREER · HOOPS · MYCAREER · </span></div><div class="tm-floor"><i></i></div></div>
+    <div class="tm-in">
+      <div class="tm-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops</b><span>MyCareer</span></div>
+      ${who?`<div class="tm-card"><small>${who.k}</small><b>${esc(who.name)}</b><p>${esc(who.line)}</p><div class="tm-chips">${who.chips.filter(Boolean).map(c=>`<span>${esc(c)}</span>`).join("")}</div><button class="btn tm-go" data-act="m-career">Play</button></div>`
+        :`<div class="tm-card"><small>New career</small><b>Create your player</b><p>College, the draft, the league. Every season ends in a raid, and every game drops gear.</p><button class="btn tm-go" data-act="m-career">Start</button></div>`}
+      <div class="tm-links">${col||car?`<button class="btn ghost" data-act="m-newcareer">New player</button>`:""}${R0?`<button class="btn ghost" data-act="m-sheet">Character</button>`:""}<button class="btn ghost" data-act="saves">Saves</button><button class="btn ghost" data-act="credits">Credits</button></div>
+      <p class="tm-foot">${cloudLine()}</p>
+    </div></div>`;
 }
 function closeMenu(){$("menu").hidden=true;document.body.style.overflow=""}
 
