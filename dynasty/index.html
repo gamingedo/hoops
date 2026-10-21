@@ -976,4 +976,9 @@ function watchGame(res,done){
 ACT.revealAll=()=>{if(SHEET)SHEET.el.querySelectorAll(".flip").forEach(f=>f.classList.add("open"))};
 boot();
 </script>
-<script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));</script></body></html>
+<script>const BUILD="15848d92ce";
+if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));
+/* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
+async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();if(j.v&&j.v!==BUILD){if(typeof SHEET!=="undefined"&&SHEET||document.querySelector(".lvs")){window._pendingUpdate=true;return}location.reload()}}catch(e){}}
+addEventListener("load",()=>setTimeout(checkUpdate,1500));document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdate()});setInterval(()=>{if(window._pendingUpdate&&!(typeof SHEET!=="undefined"&&SHEET)&&!document.querySelector(".lvs"))location.reload()},3000);
+</script></body></html>
