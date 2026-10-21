@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="c814fe9603";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="3928e769ee";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -470,13 +470,11 @@ th.srt[data-sort="asc"]::after{content:" ▲";opacity:1;color:var(--led)}th.srt[
 /* ===== game day ===== */
 .coach{display:grid;gap:8px}.lineup{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:6px}
 .lu{display:grid;grid-template-columns:minmax(0,1fr);text-align:left;gap:2px;padding:8px 10px;border-radius:10px;border:1px solid #ffffff1f;background:#ffffff0a;color:var(--paper);cursor:pointer}.lu small{color:#a9b1c7;font-size:11px}.lu.sel{border-color:var(--led);background:#ffd16622}.lu.bn{border-style:dashed}.lu:disabled{opacity:.45}
-.lv-rp{position:absolute;left:8px;top:8px;font:700 13px Silkscreen,var(--f-mono);color:#fff;background:#2a5bd7;border:2px solid #0b1430;padding:3px 8px;letter-spacing:.1em;pointer-events:none;animation:blink 1s steps(2) infinite}
+
 @keyframes blink{50%{opacity:.4}}
 .lv-clutch{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:6px;background:#05081299;cursor:pointer;text-align:center;padding:10px}
 .cl-h{font:700 22px Silkscreen,var(--f-display);color:var(--led);letter-spacing:.08em}.cl-n{font:700 14px var(--f-body);color:#fff}.cl-tap{font:700 13px Silkscreen,var(--f-mono);color:#fff;animation:blink 1s steps(2) infinite}
 .cl-bar2{position:relative;width:min(300px,70vw);height:22px;background:#1a2036;border:2px solid #000;box-shadow:0 0 0 2px #ffffff33}.cl-bar2 .zone{position:absolute;top:0;bottom:0;background:var(--led)}.cl-bar2 .ndl{position:absolute;top:-6px;bottom:-6px;width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 0 1px #000}
-.hlr{display:grid;gap:8px}.reel-b{display:flex;gap:12px;align-items:center;text-align:left;padding:10px 12px;border-radius:12px;border:1px solid #ffffff1f;background:#ffffff0a;color:var(--paper);cursor:pointer;font:600 14px var(--f-body)}
-.reel-b b{width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;background:var(--led);color:#14100a}.reel-b small{display:block;color:#a9b1c7;font-size:12px;margin-top:2px}
 .lv-court[data-era]::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0}
 .lv-court.era70 canvas{filter:sepia(.5) saturate(.8) contrast(1.08) brightness(.96)}.lv-court.era70::after{opacity:1;background:repeating-linear-gradient(0deg,rgba(0,0,0,.22) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 55%,rgba(0,0,0,.55))}
 .lv-court.era80 canvas{filter:saturate(1.3) contrast(1.06) blur(.3px) drop-shadow(1.5px 0 0 rgba(255,60,60,.28)) drop-shadow(-1.5px 0 0 rgba(60,200,255,.28))}.lv-court.era80::after{opacity:1;background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 1px,transparent 1px 3px),radial-gradient(ellipse at center,transparent 65%,rgba(0,0,0,.35))}
@@ -1565,12 +1563,12 @@ function mcReturnGo(){careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;rpgApply();C
 function mcDeclareGo(prep){if(!prep)careerGrow(C.a,C.peakA,C.age,C.focus);C.age++;rpgApply();const st=C.stock;let fin=st?Math.round(st+gauss()*(1.5+st/8)):null;if(fin!=null)fin=clamp(fin,1,60);
   if(!st&&R()<.25)fin=ri(45,60);if(C.legacy&&fin&&fin>nPicks())fin=null;C.grade??=draftGrade();fin=gradePick(C.grade.gr);C.final=fin;const row=fin?(DB.drafts[C.y+1]||[]).find(r=>r[2]===fin):null;
   const fe=row&&row[3]?franchiseEra(row[3],C.y+1):null;C.dteam=fe?`${fe[2]} ${fe[3]}`:"an NBA team";C.stage="draft";mcRender()}
-function newCareer(){C={v:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"SG",ht:77,wt:205,startY:START_Y,slots:{},cur:null,respins:2,hist:[],awards:[],focus:null};saveC()}
+function newCareer(){C={v:1,pmV2:1,stage:"create",name:pick(FIRST)+" "+pick(LAST),pos:"SG",ht:77,wt:205,startY:START_Y,slots:{},cur:null,respins:2,hist:[],awards:[],focus:null};saveC()}
 
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v51";
+const BUILD="v52";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -1675,7 +1673,7 @@ async function mcEnter(){
   p.peakA={...C.peakA};p.focus=C.focus;p.everUser=true;p.rookieYear=D;p.look={...(C.look||lookFor(C.name))};p.draft={y:D,pick:C.final,round:C.final?(C.final<=nTeams()?1:2):null,t:t.abbr};if(C.rpg){p.rpg=C.rpg;p.sk=C.sk}
   const n=C.final||61;p.contract=C.final?(n<=nTeams()?{amt:r1(Math.max(2,11-(n-1)*(9/nTeams()))),exp:D+2}:{amt:MINSAL,exp:D+1}):{amt:MINSAL,exp:D};
   t.roster.push(p.pid);if(t.roster.length>RMAX)toFA(best(t.roster.map(P).filter(x=>x!==p),x=>-value(x)));
-  G.career={pid:p.pid,name:C.name,college:{school:C.school,hist:C.hist,awards:C.awards},draft:{y:D,pick:C.final,team:`${t.city} ${t.name}`,fid:t.fid}};G.reel=[...(C.reel||[]),...(G.reel||[])].slice(0,60);
+  G.career={pid:p.pid,name:C.name,college:{school:C.school,hist:C.hist,awards:C.awards},draft:{y:D,pick:C.final,team:`${t.city} ${t.name}`,fid:t.fid}};
   news(C.final?`${C.name} goes #${C.final} to the ${t.name} in the ${D} draft.`:`${C.name} goes undrafted and signs with the ${t.name}.`,"draft");
   G.userTid=t.tid;G.phase="preseason";G.expWins=expectedWins(G.userTid);t.roster.forEach(x=>P(x).everUser=true);
   news(`You're the GM of the ${t.city} ${t.name}, the team that drafted ${C.name}. Where he goes, you go.`,"team");
@@ -1953,7 +1951,7 @@ function clNews(cl,t,k){cl.news.unshift({t,k:k||"",d:clWhen(cl)});cl.news=cl.new
 function clWhen(cl){return cl.phase==="reg"?`${sl(cl.y)} · Week ${Math.floor(cl.day/2)+1}`:cl.phase==="ct"?`${sl(cl.y)} · Championship Week`:cl.phase==="ncaa"?`${sl(cl.y)} · March Madness`:`${sl(cl.y)} · Offseason`}
 const tLbl=(cl,s)=>{const r=apRk(cl,s);return(r?`No. ${r} `:"")+s};
 function clSide(cl,s){const ps=cl.teams[s].roster.map(id=>cl.players[id]).filter(p=>p&&(frEligible(cl.y)||p.cls>1)&&!(p.pid==="me"&&C.susp>0)&&!p.inj).sort((a,b)=>cOvr(b)-cOvr(a)).slice(0,10),m=CMINS.slice(0,ps.length),sm=m.reduce((a,b)=>a+b,0)||1;
-  return{t:cl.teams[s],ps:ps.map(p=>{const a={};const src=p.pid==="me"?C.a:p.a;K.forEach(k=>a[k]=Math.min(99,src[k]+COLB));return{pid:p.pid,name:p.name,pos:p.pos,ht:p.ht,wt:p.wt,a,ovr:cOvr(p)+COLB,sk:p.pid==="me"&&C.sk?Object.fromEntries(Object.entries(C.sk).map(([k,v])=>[k,Math.min(99,v+COLB)])):undefined}}),m:m.map(x=>x*200/sm)}}
+  return{t:cl.teams[s],ps:ps.map(p=>{const a={};const src=p.pid==="me"?C.a:p.a;K.forEach(k=>a[k]=Math.min(99,src[k]+COLB));return{pid:p.pid,sid:p.pid==="me"?undefined:s,name:p.name,pos:p.pos,ht:p.ht,wt:p.wt,a,ovr:cOvr(p)+COLB,sk:p.pid==="me"&&C.sk?Object.fromEntries(Object.entries(C.sk).map(([k,v])=>[k,Math.min(99,v+COLB)])):undefined}}),m:m.map(x=>x*200/sm)}}
 function playCL(cl,h,a,o){
   const L=cl.pre&&cl.pre.h===h&&cl.pre.a===a?cl.pre.L:liveCore([clSide(cl,h),clSide(cl,a)],clOpt(cl,o));
   cl.ppp=clamp(.85*cl.ppp+.15*((L.sc[0]+L.sc[1])/Math.max(1,L.nposs)),.75,1.3);
@@ -2134,13 +2132,13 @@ function myNext(cl){
 function tchip(cl,s,link=true,nork){const t=cl.teams[s];if(!t)return esc(s);const r=nork?null:apRk(cl,s);return`<button class="tch" data-act="${link?"clteam":"noop"}" data-v="${esc(s)}"><i style="--tc:${t.color}">${esc(t.abbr)}</i>${r?`<small>${r}</small>`:""}<span>${esc(s)}</span></button>`}
 function mvHtml(cl,s,i){const p=cl.apPrev[s];if(!Object.keys(cl.apPrev).length)return"";if(!p)return`<span class="mv nw">NEW</span>`;const d=p-(i+1);return d>0?`<span class="mv up">▲${d}</span>`:d<0?`<span class="mv dn">▼${-d}</span>`:`<span class="mv eq">—</span>`}
 function clRecLine(t){return`${t.w}-${t.l}${t.cw+t.cl?` <span class="muted">(${t.cw}-${t.cl})</span>`:""}`}
-const CGROUPS=[["home","Home",["home"]],["team","Team",["roster","sched","prog"]],["poll","Rankings",["poll","stand","brk"]],["rec","Recruit",["rec"]],["more","More",["lead","news","reel","goals"]]];
-const CTABN={prog:"Program",home:"Home",roster:"Roster",sched:"Schedule",poll:"AP Top 25",stand:"Standings",brk:"Bracket",rec:"Recruiting",lead:"Leaders",news:"News",reel:"Highlights",goals:"Goals"};
+const CGROUPS=[["home","Home",["home"]],["team","Team",["roster","sched","prog"]],["poll","Rankings",["poll","stand","brk"]],["rec","Recruit",["rec"]],["more","More",["lead","news","goals"]]];
+const CTABN={prog:"Program",home:"Home",roster:"Roster",sched:"Schedule",poll:"AP Top 25",stand:"Standings",brk:"Bracket",rec:"Recruiting",lead:"Leaders",news:"News",goals:"Goals"};
 function clVis(){return CGROUPS.flatMap(g=>g[2]).filter(t=>t!=="brk"||C.cl?.ncaa)}
 function clSwipe(dir){const v=clVis(),i=v.indexOf(C.ctab||"home"),n=v[i+dir];if(!n)return;C.ctab=n;(C.clSub??={})[CGROUPS.find(g=>g[2].includes(n))[0]]=n;mcRender();$("mc").scrollTop=0}
 function mcCollegeOld(){
   const cl=C.cl;if(!cl||!cl.players.me){clJoin()}syncMe();const tab=clVis().includes(C.ctab)?C.ctab:"home",grp=CGROUPS.find(g=>g[2].includes(tab)),t=C.cl.teams[C.school],rk=apRk(C.cl,C.school);
-  const v={home:clHome,sched:clSched,poll:clPollV,stand:clStand,roster:()=>clRoster(C.school,true),rec:clRec,prog:clProgram,lead:clLead,brk:clBracket,news:clNewsV,reel:clReel,goals:viewGoals}[tab]||clHome;
+  const v={home:clHome,sched:clSched,poll:clPollV,stand:clStand,roster:()=>clRoster(C.school,true),rec:clRec,prog:clProgram,lead:clLead,brk:clBracket,news:clNewsV,goals:viewGoals}[tab]||clHome;
   const subs=grp[2].filter(x=>clVis().includes(x));
   const head=`<div class="topstick cl-top"><div class="hdr"><div class="who"><button class="menu-btn ico" data-act="menu" aria-label="Main menu">☰</button><span class="sw" style="background:${t.color}"></span><div style="min-width:0"><div class="sub">${CLASSN[C.cls-1]} · ${sl(C.y)} · ${esc(t.conf)}</div><h1>${rk?`#${rk} `:""}${esc(C.school)}</h1></div></div><div class="rec">${t.w}-${t.l}</div></div>${rpgBar()}
     ${subs.length>1?`<nav class="segs">${subs.map(k=>`<button data-act="cltab" data-v="${k}" aria-current="${tab===k}">${CTABN[k]}</button>`).join("")}</nav>`:""}</div>`;
@@ -2423,8 +2421,8 @@ function inboxRow(){if(!G||G.userTid==null)return"";const n=unread(),s=G.show&&G
 
 /* =====================================================================
    GAME DAY: the game you watch is played live, possession by possession,
-   so your coaching calls change it. Clutch shots, instant replays, a
-   highlight reel and era broadcast looks.
+   so your coaching calls change it. Clutch shots and
+   era broadcast looks.
    ===================================================================== */
 /* headless game. If your player is in it, his possessions walk the chain with the auto policy (PLAN.md §2.6),
    so simmed and played stat lines come from one engine. Everyone else uses the engine as before. */
@@ -2474,17 +2472,17 @@ function openLive(src){
   if(src.ps)Object.assign(ps,src.ps);
   else if(src.ctl?.st)src.ctl.st.R2.forEach((rows,k)=>rows.forEach(r=>{ps[r.p.pid]={p:P(r.p.pid)||r.p,k}}));
   LV={gameId:Date.now(),src,gen:src.gen||null,ctl:src.ctl||null,ev:src.ctl?.st?.ev||src.ev,i:0,sub:0,st:0,speed:(src.ctl&&src.ctl.mode&&src.ctl.mode!=="watch")?((typeof C!=="undefined"&&C?.lvSpeed)||4):2,playing:true,mine,ps,teams:[h,a],pos:{},tgt:{},ball:{x:47,y:25,z:0},bt:null,box:{},feedMine:false,last:performance.now(),done:false,genDone:!src.gen,
-    college:!!src.college,court:src.court||null,halves:!!src.halves,no3:!!src.no3,reel:!!src.reel,year:src.year,onDone:src.onDone||null,label:src.label||""};
+    college:!!src.college,court:src.court||null,halves:!!src.halves,no3:!!src.no3,year:src.year,onDone:src.onDone||null,label:src.label||""};
   Object.keys(ps).forEach(pid=>{LV.pos[pid]={x:47+(ps[pid].k?6:-6)+rnd(-8,8),y:rnd(8,42),ph:0};LV.tgt[pid]={...LV.pos[pid]}});
   const ec=eraClass(src.year||2025);
   el.innerHTML=`<div class="lv">
-    <div class="lv-top"><button class="eras-x" data-act="lvclose">← Back</button><div class="lv-ttl">${src.reel?`<span>Highlight</span> ${esc(src.label)}`:`${esc(a.city)} ${esc(a.name||"")} <span>at</span> ${esc(h.city)} ${esc(h.name||"")}`}</div></div>
-    <div class="lv-court ${eraLookOn()?ec:""}" data-era="${ec}"><canvas id="lv-c" aria-label="Game court"></canvas><div class="lv-sb" id="lv-sb"></div><div class="lv-pop" id="lv-pop" hidden></div><div class="lv-rp" id="lv-rp" hidden>REPLAY</div><div class="lv-clutch" id="lv-clutch" data-act="cltap" hidden></div><div class="lv-card" id="lv-card" hidden></div><div class="lv-ff" id="lv-ff" data-act="lvffoff" hidden><b>ON THE BENCH ▶▶</b><small>skipping ahead · tap to watch</small></div></div>
+    <div class="lv-top"><button class="eras-x" data-act="lvclose">← Back</button><div class="lv-ttl">${esc(a.city)} ${esc(a.name||"")} <span>at</span> ${esc(h.city)} ${esc(h.name||"")}</div></div>
+    <div class="lv-court ${eraLookOn()?ec:""}" data-era="${ec}"><canvas id="lv-c" aria-label="Game court"></canvas><div class="lv-sb" id="lv-sb"></div><div class="lv-pop" id="lv-pop" hidden></div><div class="lv-clutch" id="lv-clutch" data-act="cltap" hidden></div><div class="lv-card" id="lv-card" hidden></div><div class="lv-ff" id="lv-ff" data-act="lvffoff" hidden><b>ON THE BENCH ▶▶</b><small>skipping ahead · tap to watch</small></div></div>
     <div class="lv-me" id="lv-me" ${mine&&ps[mine]?"":"hidden"}></div>
-    ${src.reel?`<div class="lv-ctl"><button class="btn sm" data-act="lvagain">▶ Play again</button><button class="btn sm ghost" data-act="lvclose">Done</button></div><ul id="lv-feed" hidden></ul><div id="lv-box" hidden></div>`:`
+    
     <div class="lv-ctl"><button class="btn sm" data-act="lvplay" id="lv-play">Pause</button>${[1,2,4,8].map(s=>`<button class="btn sm ${s===2?"":"ghost"}" data-act="lvspeed" data-v="${s}">${s}×</button>`).join("")}<button class="btn sm ghost" data-act="lvq">${src.halves?"Next half":"Next quarter"}</button><button class="btn sm ghost" data-act="lvend">Skip to end</button>${ec?`<button class="btn sm ghost" data-act="lvera">${eraLookOn()?"Era look: on":"Era look: off"}</button>`:""}</div>
     <div class="lv-tabs">${src.ctl?(src.ctl.hero!=null&&mine!=null&&String(src.ctl.hero)===String(mine)?`<button class="btn xs" data-act="lvtab" data-v="coach" id="lvt-coach">Bench</button>`:`<button class="btn xs" data-act="lvtab" data-v="coach" id="lvt-coach">Coach</button>`):""}<button class="btn xs ${src.ctl?"ghost":""}" data-act="lvtab" data-v="feed" id="lvt-feed">Play-by-play</button><button class="btn xs ghost" data-act="lvtab" data-v="box" id="lvt-box">Box score</button>${mine&&ps[mine]?`<button class="btn xs ghost" data-act="lvmine" id="lv-minebtn">My player only</button>`:""}</div>
-    <div id="lv-coach" ${src.ctl?"":"hidden"}></div><ul class="news lv-feed" id="lv-feed" ${src.ctl?"hidden":""}></ul><div id="lv-box" hidden></div>`}</div>`;
+    <div id="lv-coach" ${src.ctl?"":"hidden"}></div><ul class="news lv-feed" id="lv-feed" ${src.ctl?"hidden":""}></ul><div id="lv-box" hidden></div></div>`;
   lvResize();lvScore();if(src.ctl)lvCoach();requestAnimationFrame(lvFrame);
 }
 function lvPull(auto){
@@ -2495,28 +2493,19 @@ function lvPull(auto){
     if(LV.ev.length>LV.i)return}
 }
 function lvFinish(){if(!LV)return;while(LV.gen&&!LV.genDone){LV.wait=null;lvPull(true)}}
-function closeLive(){if(!LV)return;const col=LV.college,reel=LV.reel;lvFinish();LV.playing=false;LV=null;$("live").hidden=true;
-  if(col||reel&&!$("mc").hidden){XW=null;mcRender();return}if(reel)XW=null;document.body.style.overflow="";render()}
-function hlOf(e){if(!LV||LV.reel)return false;const m=LV.mine;
-  if(e.clutch&&e.type==="make")return true;
-  if(m&&e.type==="make"&&String(e.sh)===String(m)&&(/throws it down/.test(e.txt)||(e.pts===3&&R()<.2)))return true;
-  if(m&&e.type==="blk"&&String(e.d)===String(m))return true;
-  if(!m&&e.type==="make"&&e.o===LV.ctl?.side&&/throws it down/.test(e.txt)&&R()<.35)return true;
-  return false}
-function snapPos(){return{pos:JSON.parse(JSON.stringify(LV.pos)),tgt:JSON.parse(JSON.stringify(LV.tgt)),ball:{...LV.ball},holder:LV.holder}}
+function closeLive(){if(!LV)return;const col=LV.college;lvFinish();LV.playing=false;LV=null;$("live").hidden=true;
+  if(col){XW=null;mcRender();return}document.body.style.overflow="";render()}
 function lvFrame(now){
   if(!LV)return;const c=$("lv-c");if(!c){LV=null;return}const ctx=c.getContext("2d");ctx.setTransform(1,0,0,1,0,0);
-  const dt=Math.min(.05,(now-LV.last)/1000)*(LV.playing?LV.speed:0)*(LV.replaying?.4:1);LV.last=now;
+  const dt=Math.min(.05,(now-LV.last)/1000)*(LV.playing?LV.speed:0);LV.last=now;
   if(LV.playing&&!LV.done&&!LV.wait&&lvBenchFF(now))return requestAnimationFrame(lvFrame);
   if(LV.playing&&!LV.done&&!LV.wait){
     if(!LV.steps){let e=LV.ev[LV.i];if(!e&&LV.gen&&!LV.genDone){lvPull(false);e=LV.ev[LV.i]}
-      if(!e){if(!LV.wait&&(LV.genDone||!LV.gen)){LV.done=true;lvScore();if(LV.reel)LV.playing=false;else{lvPop("FINAL",0);try{SFX.buzzer()}catch(x){}}}}
-      else{LV.flip=LV.halves?e.q===2:e.q>2&&e.q<=4;LV.hl=hlOf(e);if(LV.hl)LV.snap=snapPos();LV.steps=stepsFor(e);LV.sub=0;LV.st=0;LV.steps[0]?.go()}}
+      if(!e){if(!LV.wait&&(LV.genDone||!LV.gen)){LV.done=true;lvScore();lvPop("FINAL",0);try{SFX.buzzer()}catch(x){}}}
+      else{LV.flip=LV.halves?e.q===2:e.q>2&&e.q<=4;LV.steps=stepsFor(e);LV.sub=0;LV.st=0;LV.steps[0]?.go()}}
     if(LV.steps){LV.st+=dt;if(LV.st>=LV.steps[LV.sub].d){LV.sub++;LV.st=0;
       if(LV.sub>=LV.steps.length){const e=LV.ev[LV.i];
-        if(!LV.replaying){lvApply(e)}
-        if(LV.hl&&!LV.replaying){LV.replaying=true;saveReel(e);Object.assign(LV,{pos:LV.snap.pos,tgt:LV.snap.tgt,ball:LV.snap.ball,holder:LV.snap.holder,bt:null});$("lv-rp").hidden=false;LV.steps=stepsFor(e);LV.sub=0;LV.steps[0]?.go()}
-        else{if(LV.replaying){LV.replaying=false;$("lv-rp").hidden=true}LV.i++;LV.steps=null}}
+        lvApply(e);LV.i++;LV.steps=null}
       else LV.steps[LV.sub].go()}}
   }
   for(const pid in LV.pos){const p=LV.pos[pid],t=LV.tgt[pid];const dx=t.x-p.x,dy=t.y-p.y,dd=Math.hypot(dx,dy);
@@ -2539,11 +2528,11 @@ function lvFrame(now){
   requestAnimationFrame(lvFrame);
 }
 /* bench fast-forward: when it's my game and I'm not on the floor, burn through events at ~14/s until the sub that brings me back */
-function lvBenchFF(now){const ff=$("lv-ff");if(!LV.ctl||LV.mine==null||LV.ffOff||(typeof C!=="undefined"&&C&&C.benchFF===false)||LV.reel){if(ff&&!ff.hidden)ff.hidden=true;return false}
+function lvBenchFF(now){const ff=$("lv-ff");if(!LV.ctl||LV.mine==null||LV.ffOff||(typeof C!=="undefined"&&C&&C.benchFF===false)){if(ff&&!ff.hidden)ff.hidden=true;return false}
   const k=LV.ctl.side;let e=LV.ev[LV.i];if(!e&&LV.gen&&!LV.genDone){lvPull(false);e=LV.ev[LV.i]}
   const onFloor=x=>!x||!x.on||onHas(x.on[k],LV.mine);
   if(!e||onFloor(e)||e.type==="start"){if(ff&&!ff.hidden){ff.hidden=true;LV.steps=null;LV.holder=null;LV.bt=null}LV.ffAcc=0;return false}
-  if(LV.steps){LV.steps=null;LV.replaying=false;$("lv-rp")&&($("lv-rp").hidden=true)}
+  if(LV.steps){LV.steps=null}
   if(ff&&ff.hidden)ff.hidden=false;
   LV.ffAcc=(LV.ffAcc||0)+Math.min(.1,(now-(LV.ffLast||now))/1000)*14;LV.ffLast=now;
   let n=Math.floor(LV.ffAcc);LV.ffAcc-=n;
@@ -2551,7 +2540,7 @@ function lvBenchFF(now){const ff=$("lv-ff");if(!LV.ctl||LV.mine==null||LV.ffOff|
   lvScore();if(LV.i>=LV.ev.length&&(!LV.gen||LV.genDone)&&!LV.wait){LV.done=true;lvPop("FINAL",0);if(ff)ff.hidden=true}
   return true}
 function lvSkip(toQuarter){
-  if(!LV)return;LV.skipping=true;LV.replaying=false;$("lv-rp")&&($("lv-rp").hidden=true);if(LV.wait){LV.wait=null;$("lv-clutch").hidden=true}
+  if(!LV)return;LV.skipping=true;if(LV.wait){LV.wait=null;$("lv-clutch").hidden=true}
   const q0=(LV.ev[LV.i]||LV.ev[LV.ev.length-1])?.q;
   for(let guard=0;guard<5000;guard++){const e=LV.ev[LV.i];if(!e){if(LV.gen&&!LV.genDone){lvPull(true);continue}break}
     if(toQuarter&&e.type==="q"&&e.q!==q0)break;lvApply(e);LV.i++}
@@ -2603,20 +2592,6 @@ function openClutch(){const w=LV.wait,p=P(w.pid)||{name:"Your guy"},el=$("lv-clu
 function drawClutchMeter(){const n=$("cl-ndl");if(!n||!LV.cl)return;const t=(performance.now()-LV.cl.t0)/1000;LV.cl.x=.5+.5*Math.sin(t*LV.cl.sp);n.style.left=(LV.cl.x*100)+"%"}
 function clutchTap(auto){if(!LV?.wait)return;clearTimeout(LV.cl?.auto);const x=LV.cl?.x??0,d=Math.abs(x-.5),z=(LV.cl?.zone||.12)/2;
   const q=auto?.2:d<=z?1:Math.max(0,1-(d-z)/.32);LV.arg=q;LV.wait=null;$("lv-clutch").hidden=true;lvPop(q>=1?"PERFECT":q>=.6?"GOOD":q>=.3?"SLIGHTLY OFF":"BAD RELEASE",LV.ctl.side);LV.playing=true}
-/* ---------- highlight reel ---------- */
-function saveReel(e){if(LV.reel)return;const store=LV.college?(C.reel??=[]):(G.reel??=[]);const ids=[...e.on[0],...e.on[1]],ps={};
-  ids.forEach(pid=>{const x=LV.ps[pid];if(x){const p=x.p;ps[pid]={name:p.name,no:p.no??"",look:lookOf(p,pid),ht:p.ht||hgt(p),pos:p.pos,k:x.k}}});
-  store.unshift({y:LV.year,lab:LV.label,txt:e.txt,teams:LV.teams.map(t=>({abbr:t.abbr,city:t.city,name:t.name||"",color:t.color})),ps,e:JSON.parse(JSON.stringify(e)),court:LV.court,halves:LV.halves,mine:LV.mine,col:LV.college});
-  store.length=Math.min(store.length,40);if(LV.college)saveC();else save()}
-function openReel(store,i){const c=store[i];if(!c)return;const W={players:{},teams:{}},m=id=>"Q"+id;
-  ["R0","R1"].forEach((id,k)=>W.teams[id]={tid:id,...c.teams[k],roster:[]});
-  for(const pid in c.ps){const x=c.ps[pid];W.players[m(pid)]={pid:m(pid),name:x.name,no:x.no,look:x.look,ht:x.ht,pos:x.pos,a:{SHT:60},ovr:60}}
-  const e={...c.e};["sh","as","d","rb","h"].forEach(k=>{if(e[k]!=null)e[k]=m(e[k])});e.on=c.e.on.map(a=>a.map(m));e.clutch=false;
-  const ps={};for(const pid in c.ps)ps[m(pid)]={p:W.players[m(pid)],k:c.ps[pid].k};XW=W;
-  openLive({teams:["R0","R1"],ev:[e,{q:e.q,t:e.t,o:e.o,type:"final",txt:"",sc:e.sc,on:e.on}],ps,mine:c.mine!=null?m(c.mine):null,reel:true,label:`${c.lab||""} · ${sl(c.y)}`,court:c.court,halves:c.halves,year:c.y,store,idx:i})}
-function reelList(store,act){return store?.length?`<div class="hlr">${store.map((c,i)=>`<button class="reel-b" data-act="${act}" data-v="${i}"><b>▶</b><span>${esc(c.txt)}<small>${esc(c.teams[1].abbr)} at ${esc(c.teams[0].abbr)} · ${esc(c.lab||"")} · ${sl(c.y)}${c.col?" · College":""}</small></span></button>`).join("")}</div>`:'<p class="muted">Watch games to build your reel. Clutch makes, your player\'s dunks and blocks get an instant replay and are saved here.</p>'}
-function viewReel(){return`<section class="panel"><h2>Highlight reel</h2>${reelList(G.reel,"reel")}</section>`}
-function clReel(){return`<section class="panel"><h3>Highlight reel</h3>${reelList(C.reel,"creel")}</section>`}
 
 
 /* =====================================================================
@@ -2974,7 +2949,7 @@ function mcNbaPick(tid){const p=P(C.npPid),t=T(tid);if(!p||!t||!C.npOpts.include
   G.teams.forEach(o=>{if(o.tid!==tid)o.roster=o.roster.filter(x=>x!==p.pid)});if(!t.roster.includes(p.pid))t.roster.push(p.pid);p.tid=tid;p.rookieYear=D;
   const n=C.final;p.contract=n?(n<=nTeams()?{amt:r1(Math.max(2,11-(n-1)*(9/nTeams()))),exp:D+2}:{amt:MINSAL,exp:D+1}):{amt:MINSAL,exp:D+1};p.draft={y:D,pick:n||null,round:n?(n<=nTeams()?1:2):null,t:t.abbr};
   if(t.roster.length>RMAX)toFA(best(t.roster.map(P).filter(x=>x!==p),x=>-value(x)));
-  G.career={pid:p.pid,name:C.name,college:{school:C.school,hist:C.hist,awards:C.awards},draft:{y:D,pick:n,team:`${t.city} ${t.name}`,fid:t.fid,grade:gr}};G.reel=[...(C.reel||[]),...(G.reel||[])].slice(0,60);
+  G.career={pid:p.pid,name:C.name,college:{school:C.school,hist:C.hist,awards:C.awards},draft:{y:D,pick:n,team:`${t.city} ${t.name}`,fid:t.fid,grade:gr}};
   news(n?`${C.name} goes #${n} in the ${D} draft and signs with the ${t.name}.`:`${C.name} goes undrafted and signs with the ${t.name}.`,"draft");
   G.userTid=t.tid;t.roster.forEach(x=>P(x).everUser=true);news(`You run the ${t.city} ${t.name} now. Your team is your party.`,"team");
   C.seasonN=0;G.lgBoost=0;try{proRespec()}catch(e){console.error(e)}
@@ -4035,15 +4010,21 @@ function lgNormCalc(){if(typeof G==="undefined"||!G?.teams)return null;PROFRAW.o
 const REALROT={CLS:71,MID:70,THR:71,FT:67,SIQ:71,LAY:73,DNK:71,PST:57,DRW:68,HND:70,PAS:70,VIS:70,PER:76,INT:71,STL:67,BLK:56,ORB:64,DRB:70,SPD:72,ACC:72,VRT:72,STR:67,STA:76,CLU:71};
 const LGREF={CLS:66,MID:65,THR:66,FT:67,SIQ:68,LAY:68,DNK:66,PST:55,DRW:66,HND:69,PAS:69,VIS:69,PER:79,INT:74,STL:67,BLK:56,ORB:64,DRB:70,SPD:72,ACC:72,VRT:72,STR:67,STA:76,CLU:71};
 function prof(p){if(!p)return null;if(p.sk)return p.sk;if(p.pid==="me"&&typeof C!=="undefined"&&C?.sk)return C.sk;
-  const car=typeof G!=="undefined"&&G&&G.career&&!G.career.retired&&!p.cl,bossP=!!p.boss,lgb=(car&&G.lgBoost)||0,nrm=car&&!bossP&&G.lgNorm&&!PROFRAW.on?G.lgNorm:null,a=p.a||{},key=p.pid+"|"+(p.ovr||0)+"|"+lgb+"|"+(bossP?"B":"")+"|"+(nrm?nrm.v:0)+"|"+(PROFRAW.on?"r":"")+"|"+[a.SHT,a.FIN,a.PLY,a.DEF,a.REB,a.ATH].join(",");let s=PROFC.get(key);if(s)return s;
+  const car=typeof G!=="undefined"&&G&&G.career&&!G.career.retired&&!p.cl,bossP=!!p.boss,lgb=(car&&G.lgBoost)||0,nrm=car&&!bossP&&G.lgNorm&&!PROFRAW.on?G.lgNorm:null,a=p.a||{},key=p.pid+"|"+(p.sid!==undefined&&CLN.m?"c"+CLN.y:"")+"|"+(p.ovr||0)+"|"+lgb+"|"+(bossP?"B":"")+"|"+(nrm?nrm.v:0)+"|"+(PROFRAW.on?"r":"")+"|"+[a.SHT,a.FIN,a.PLY,a.DEF,a.REB,a.ATH].join(",");let s=PROFC.get(key);if(s)return s;
   const h=(hgt(p)-79),hs=hsh("pf"+p.pid),t=i=>(((hs>>>(i*2))&3)/3-.5),gi=GI[p.pos]??.5,IQ=a.IQ??(a.SHT*.4+a.PLY*.6),wt=p.wt||Math.round(hgt(p)*2.85-22);
   const r=x=>clamp(Math.round(x),20,99);
   s={THR:r(a.SHT+t(0)*16-h*1.2+(gi-.5)*8),MID:r(a.SHT+t(1)*8),CLS:r(.5*a.SHT+.5*a.FIN+h*1.5),FT:r(a.SHT*.75+14+t(2)*8-h*1.2),SIQ:r(IQ*.7+a.SHT*.3),
     LAY:r(a.FIN+t(3)*6-h*.5),DNK:r(a.FIN*.65+a.ATH*.35+h*3+t(4)*8),PST:r(a.FIN*.55+22+h*3+t(5)*10+(1-gi)*8-8),DRW:r(a.FIN*.5+a.ATH*.25+15+t(6)*10),
     HND:r(a.PLY-h*2+t(7)*6),PAS:r(a.PLY+t(8)*6),VIS:r(IQ*.6+a.PLY*.4),PER:r(a.DEF-h*1.5+a.ATH*.1-4),INT:r(a.DEF+h*2+(1-gi)*6-4),STL:r(a.DEF*.6+a.ATH*.3+t(9)*8+gi*4),BLK:r(a.DEF*.4+a.ATH*.3+h*3.5+t(10)*8+6),
     ORB:r(a.REB*.9+h+t(11)*8),DRB:r(a.REB+h),SPD:r(a.ATH-h*2),ACC:r(a.ATH-h*1.5+t(12)*6),VRT:r(a.ATH+t(13)*8),STR:r(40+(wt-210)/4+h*2+a.REB*.3),STA:r(55+a.ATH*.3+t(14)*10),CLU:r(IQ+t(15)*12)};
-  if(nrm)for(const k in s)s[k]=Math.round(s[k]+(nrm[k]||0));if(car&&bossP)for(const k in s)s[k]=Math.round(s[k]+(LGREF[k]??71)-(REALROT[k]??71));if(lgb&&!PROFRAW.on)for(const k in s)s[k]+=lgb;
+  if(nrm)for(const k in s)s[k]=Math.round(s[k]+(nrm[k]||0));
+  if(p.sid!==undefined&&!PROFRAW.on){const cn=clNorm();if(cn)for(const k in s)s[k]=Math.round(cn[k]+(s[k]-cn[k])*CL_SQ)}if(car&&bossP)for(const k in s)s[k]=Math.round(s[k]+(LGREF[k]??71)-(REALROT[k]??71));if(lgb&&!PROFRAW.on)for(const k in s)s[k]+=lgb;
   if(PROFC.size>3000)PROFC.clear();PROFC.set(key,s);return s}
+/* college talent is squeezed toward the national average: the best program still wins, but by a dozen, not forty */
+let CL_SQ=.55;const CLN={y:null,m:null};window.__setSQ=v=>{CL_SQ=v;PROFC.clear()};
+function clNorm(){const cl=typeof C!=="undefined"&&C?C.cl:null;if(!cl)return null;if(CLN.y===cl.y&&CLN.m)return CLN.m;const sum={};let c=0;PROFRAW.on=true;
+  try{for(const id in cl.players){const p=cl.players[id];if(!p||p.pid==="me"||p.sid===undefined)continue;const a={};for(const k in p.a)a[k]=Math.min(99,p.a[k]+(typeof COLB==="number"?COLB:0));const s=prof({pid:"cn"+id,pos:p.pos,ht:p.ht,wt:p.wt,a,ovr:p.ovr});c++;for(const k in s)sum[k]=(sum[k]||0)+s[k]}}finally{PROFRAW.on=false}
+  if(!c)return null;const m={};for(const k in sum)m[k]=sum[k]/c;CLN.y=cl.y;CLN.m=m;PROFC.clear();return m}
 const usageP=s=>Math.pow((s.THR*.2+s.MID*.2+s.LAY*.2+s.DNK*.1+s.PST*.1+s.HND*.1+s.SIQ*.1)/60,3.2);
 function enMax(r){const s=prof(r.p);const ge=(typeof LV!=="undefined"&&LV?.ctl?.hero!=null&&String(r.p.pid)===String(LV.ctl.hero))||r.p.pid==="me"?(typeof gearStat==="function"?gearStat("energy")*4:0):0;return Math.round(40+s.STA*.8+ge)}
 function fatigue(r){if(r.en==null)return 0;const m=enMax(r);return clamp(((m-r.en)/m-.22)*1.5,0,1)}
@@ -4139,8 +4120,8 @@ function possAuto(){const o=LV?.pm,w=LV?.wait;if(!o||!w||o.step!=="pick")return;
 function possKey(e){if(!LV?.pm)return false;const o=LV.pm;if(o.step==="pick"){const n=parseInt(e.key);if(n>=1&&n<=(LV.wait?.opts.length||0)){possPick(n-1);return true}if(e.key==="Escape"){possAuto();return true}}
   if(o.step==="tap"&&(e.key===" "||e.key==="Enter")){possTap(false);return true}return false}
 /* settings */
-const PLAYMODES=[["touches","My touches","You decide every possession that comes to you."],["every","Every possession","You run the offense: shoot or kick it out, each trip."],["clutch","Clutch only","Hands-off until the last two minutes of a close game."],["watch","Watch","Sit back and watch the pixel broadcast."],["sim","Sim","Instant result. Best for grinding a week."]];
-function playMode(){return C?.playMode||"touches"}
+const PLAYMODES=[["key","Big moments","About fifteen calls a game: your key touches, your key stops, and every possession of a close finish."],["touches","Every touch","You decide every possession that comes to you."],["every","Every possession","You run the offense: shoot or kick it out, each trip."],["clutch","Clutch only","Hands-off until the last two minutes of a close game."],["watch","Watch","Sit back and watch the pixel broadcast."],["sim","Sim","Instant result. Best for grinding a week."]];
+function playMode(){if(C&&!C.pmV2){C.pmV2=1;if(!C.playMode||C.playMode==="touches")C.playMode="key"}return C?.playMode||"key"}
 function settingsHtml(){const pm=playMode();return`<div class="mp-note">How you play your games.</div>
   <div class="st-col">${PLAYMODES.map(([k,n,d])=>`<button class="st-opt ${pm===k?"on":""}" data-act="pmset" data-v="mode:${k}"><b>${n}</b><small>${d}</small></button>`).join("")}</div>
   <div class="st-row"><span>Game speed</span>${[2,4,8].map(s=>`<button class="mp-btn sm ${(C.lvSpeed||4)===s?"on":""}" data-act="pmset" data-v="speed:${s}">${s}×</button>`).join("")}</div>
@@ -4390,6 +4371,19 @@ const chSum=m=>m.reduce((a,x)=>a+x[1],0);
 function chFin(o){if(o.rk3)(o.mods??=[]).push(["Rank 3",1]);o.mods=(o.mods||[]).filter(m=>m[1]!==0);o.mod=chSum(o.mods);o.pct=o.noroll?1:pMake(o.mod+1,o.dc);o.pts=o.pts??0;return o}
 function chSeenPen(E,k){const n=(E.seen&&E.seen.k===k?E.seen.n:0)+1-(typeof jobRule==="function"&&jobRule("seenHalved3")?1:0);let p=n>=4?-2:n>=3?-1:0;if(E.scout===k)p=Math.min(p,-1);return p}
 const CH_DEAL=["cross","hesi","jab","pump","screen","handoff"];
+/* the look the defense shows this trip. It changes which call is best. */
+const CH_LOOK={man:"Straight up, man to man",switch:"They are switching everything",drop:"Their big is in a drop",zone:"They are in a zone",trap:"They are sending two at you"};
+function chLook(meR,no3x){const hot=meR&&meR.b&&meR.b.pts>=16,w={man:.42,switch:.16,drop:.16,zone:no3x?.04:.12,trap:hot?.22:.06};let r=Math.random()*Object.values(w).reduce((a,b)=>a+b,0);for(const k in w){r-=w[k];if(r<=0)return k}return"man"}
+/* what each look does to a call: [label, edge] */
+function chLookMod(look,kind,k,type){if(!look||look==="man")return null;
+  if(look==="drop"){if(kind==="finish"&&(k==="pull3"||k==="pullmid"))return["Drop coverage: the pull-up is there",1];if(k==="drive")return["Drop coverage: the big waits at the rim",-1]}
+  if(look==="switch"){if(k==="drive")return["Switching: a slower man on you",.5];if(k==="post")return["Switching: small man on you",1]}
+  if(look==="zone"){if(k==="drive"||k==="post")return["Zone: the paint is packed",-1.5];if(kind==="finish"&&type==="three")return["Zone: gaps on the perimeter",.5];if(kind==="pass")return["Zone: swing it and someone is open",1];if(kind==="finish"&&type==="mid")return["Zone: soft spot at the elbow",.5]}
+  if(look==="trap"){if(kind==="pass")return["Two on the ball: a man is open",2];if(kind==="finish")return["Trapped",-2];if(k==="drive"||k==="cross"||k==="hesi")return["Trapped",-1]}
+  return null}
+/* the defense keys on a shot you keep taking */
+const chFKey=x=>x.k==="pull3"||x.k==="pullmid"?"pull":x.k;
+function chFinPen(E,k){const fk=k==="pull3"||k==="pullmid"?"pull":k;const n=E.seenF&&E.seenF.k===fk?E.seenF.n:0;return n>=4?-2:n>=2?-1:0}
 /* which setup gets dealt at the top this possession, weighted by the player's game */
 function chDeal(s){const w={cross:s.HND,hesi:(s.HND+s.SIQ)/2,jab:s.SIQ*.8,pump:(s.SIQ+s.THR)/2*.8,screen:62,handoff:s.PAS*.8};
   const ks=CH_DEAL,ws=ks.map(k=>Math.pow(w[k]/60,3));let r=Math.random()*ws.reduce((a,b)=>a+b,0);for(let i=0;i<ks.length;i++){r-=ws[i];if(r<=0)return ks[i]}return ks[0]}
@@ -4400,12 +4394,13 @@ const chHas=(E,m)=>{for(const x of E.perks)if(x.split("|")[0]===m)return x.split
 function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;const finOnly=P.n>=(E.cap||5)||P.clk<=4;
   const tail=(mods,k,setup)=>{if(E.ctx.fat>0)mods.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)mods.push(["Momentum",E.mom]);if(setup){const sp=chSeenPen(E,k);if(sp)mods.push(["They have seen it",sp])}return mods};
   const ddc=(base,stat,div)=>Math.round(base+((stat??65)-PV.ref)/(div||PV.skl));
-  const S=(k,lab,note,mods,dc,sec,en,x)=>{if(finOnly)return;out.push(chFin({k,kind:"setup",lab,note,mods:tail([...mods,...myEdges(k,E.ctx)],k,true),dc,sec,en,...(x||{})}))};
+  const LM=(kind,k,type)=>{const m=chLookMod(E.look,kind,k,type);return m?[m]:[]};
+  const S=(k,lab,note,mods,dc,sec,en,x)=>{if(finOnly)return;out.push(chFin({k,kind:"setup",lab,note,mods:tail([...mods,...myEdges(k,E.ctx),...LM("setup",k)],k,true),dc,sec,en,...(x||{})}))};
   const F=(k,lab,type,cx,extra,dcAdd,note,vs,x)=>{if(type==="three"&&E.no3x)return;const ctx={...E.ctx,...cx,me:true};const mods=shotMods(type,s,ctx).filter(m=>m[0]!=="Tired");
-    for(const m of [...(extra||[]),...myEdges(k,ctx,type)])mods.push(m);if(type==="three"&&E.ctx.hot2&&typeof jobRule==="function"&&jobRule("heatCheck"))mods.push([jobRuleName("heatCheck"),1.5]);if(E.mom)mods.push(["Momentum",E.mom]);const dp=vs==="help"?h:vs==="mm"?(E.mm||d):d;
+    for(const m of [...(extra||[]),...myEdges(k,ctx,type),...LM("finish",k,type)])mods.push(m);{const fp=chFinPen(E,k);if(fp)mods.push(["They are sitting on it",fp])}if(type==="three"&&E.ctx.hot2&&typeof jobRule==="function"&&jobRule("heatCheck"))mods.push([jobRuleName("heatCheck"),1.5]);if(E.mom)mods.push(["Momentum",E.mom]);const dp=vs==="help"?h:vs==="mm"?(E.mm||d):d;
     out.push(chFin({k,kind:"finish",type,lab,note,mods,dc:shotDC(type,dp,{...ctx,dh:vs==="help"?E.dhH:E.dh})+(dcAdd||0),pts:type==="three"?3:2,open:!!cx.open,contest:!!cx.contest,vs:vs||"man",...(x||{})}))};
   const K=(k,lab,openShot,dcAdd,bonus,pick,x)=>{const mates=(E.mates||[]).filter(m=>!pick||pick(m));if(!mates.length)return;
-    const swing=k==="kick"&&!openShot;const pm=[["Passing",chHalf(chSk(s.PAS)*(swing?.5:1))],["Court vision",chHalf((s.VIS-PV.ref)/25)]];for(const e of myEdges(k,E.ctx,"pass"))pm.push(e);if(E.ctx.fat>0)pm.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)pm.push(["Momentum",E.mom]);
+    const swing=k==="kick"&&!openShot;const pm=[["Passing",chHalf(chSk(s.PAS)*(swing?.5:1))],["Court vision",chHalf((s.VIS-PV.ref)/25)]];for(const e of myEdges(k,E.ctx,"pass"))pm.push(e);for(const e of LM("pass",k))pm.push(e);if(E.ctx.fat>0)pm.push(["Low energy",-chHalf(E.ctx.fat*2)]);if(E.mom)pm.push(["Momentum",E.mom]);
     const pdc=Math.round((swing?5:7)+(E.dSTL-PV.ref)/14+(dcAdd||0));const pp=pMake(chSum(pm)+1,pdc);
     let best=null;for(const m of mates){const type=x&&x.type?x.type:m.type;if(type==="three"&&E.no3x)continue;const c={open:openShot,contest:!openShot,home:E.ctx.home,fat:m.fat};const sm=shotMods(type,m.s,c).filter(z=>z[0]!=="Tired");
       for(const b of bonus||[])sm.push(b);if(typeof jobRule==="function"&&jobRule("teamOpenPlus1"))sm.push([jobRuleName("teamOpenPlus1"),1]);if(E.mom)sm.push(["Momentum",E.mom]);const sdc=shotDC(type,m.ds,{...c,dh:m.dh}),sp=pMake(chSum(sm)+1,sdc),ev=sp*(type==="three"?3:2);
@@ -4425,8 +4420,9 @@ function chainOpts(E){const P=E.P,s=E.s,d=E.d,h=E.h,out=[],sit=P.sit,fl=P.flags;
     else if(k==="pump")S("pump","Pump fake","Get him in the air.",[["Shot IQ",chSk(s.SIQ)],["Shooter's respect",chHalf((s.THR-PV.ref)/20)]],ddc(12,d.PER),1,0);
     else if(k==="screen"&&E.big){let cn="Their coverage decides: switch, hedge or drop.";if(typeof jobRule==="function"&&jobRule("seeCoverage")){P.cov??=1+Math.floor(Math.random()*20);const sw=jobRule("screenSwitchMore")?12:8;cn=`${jobRuleName("seeCoverage")}: they will ${P.cov<=sw?"switch":P.cov<=15?"hedge":"drop"}.`}S("screen",`Call for ${E.big.name}'s screen`,cn,[["Screener",chSk(E.big.s.STR)]],ddc(11,E.dPERavg),3,0.5);}
     else if(k==="handoff"&&E.big)S("handoff",`Hand-off with ${E.big.name}`,"Come off it with space.",[["Passing",chSk(s.PAS)]],ddc(10,d.PER),2,0.5)};
-  if(sit==="top"){drv();pull({contest:true},fl.pullPlus?[["Drop coverage",1]]:[["Set defender",-1.5]]);dealt(P.deal);if(s.PST>=56)S("post","Post up","Back him down. Seal, then hook, spin or drop step.",[["Post moves",chSk(s.PST)],["Strength",chHalf((s.STR-PV.ref)/20)]],ddc(12,d.INT)+Math.round((d.STR-PV.ref)/20),4,1.5);
-    else if(P.deal!=="screen")dealt("screen");K("kick","Swing it to {n}",false,0)}
+  if(sit==="top"){drv();pull({contest:true},fl.pullPlus?[["Drop coverage",1]]:[["Set defender",-1.5]]);
+    const postOK=s.PST>=56&&(E.look==="switch"||(P.deal==="jab"||P.deal==="pump"));if(postOK)S("post","Post up","Back him down. Seal, then hook, spin or drop step.",[["Post moves",chSk(s.PST)],["Strength",chHalf((s.STR-PV.ref)/20)]],ddc(12,d.INT)+Math.round((d.STR-PV.ref)/20),4,1.5);else{dealt(P.deal);if(!out.some(o=>o.k===P.deal)&&P.deal!=="screen")dealt("screen")}
+    K("kick","Swing it to {n}",false,0)}
   else if(sit==="space"){pull(fl.small?{}:{open:true},fl.small?[["A little space",1]]:null);drv([["Space",fl.small?.5:1]]);perkStep();K("kick","Kick to {n}",false,0)}
   else if(sit==="offbal"){drv([["Off balance",2]],"He is in the air. The lane is right there.");pull({open:true});S("drawfoul","Draw the foul","Go into him. Two free throws if it works.",[["Draw fouls",chSk(s.DRW)]],ddc(12,d.PER),1,0.5);K("kick","Kick to {n}",false,0)}
   else if(sit==="collapse"){F("layhelp","Layup through the help","rim",{contest:true},null,0,"Over the help.","help");F("floater","Floater over the help","mid",{},null,1,"Soft and high. Harder than a jumper, easier than going through him.","help");
@@ -4488,19 +4484,26 @@ function chainRoll(ctl,x){if(x.noroll)return{k:x.k,made:true,nat20:!!x.perfect,o
 window.__chain={chainOpts,chainAuto,chainRoll,CH_SIT};
 /* test harness (PLAN.md M2 acceptance): play n games where every card is answered by the auto policy through the same
    generator path a player uses, and n legacy games on the same matchups with no player control. */
-window.__chainBot=function(n=20,greed=.5){const cl=C.cl,ids=Object.keys(cl.teams).filter(x=>x!==C.school&&!cl.teams[x].juco);
-  const Z=()=>({fga:0,fgm:0,tpa:0,tpm:0,pts:0,tov:0,ast:0,fta:0,min:0,g:0}),A={bot:Z(),leg:Z(),sim:Z(),lgBot:{fga:0,fgm:0},lgLeg:{fga:0,fgm:0},cards:0,chain:0,maxChain:0,kinds:{},dunks:0,poss:0};
+window.__chainBot=function(n=20,greed=.5,mode="touches"){const cl=C.cl,ids=Object.keys(cl.teams).filter(x=>x!==C.school&&!cl.teams[x].juco);
+  const Z=()=>({fga:0,fgm:0,tpa:0,tpm:0,pts:0,tov:0,ast:0,fta:0,min:0,g:0}),A={bot:Z(),leg:Z(),sim:Z(),lgBot:{fga:0,fgm:0},lgLeg:{fga:0,fgm:0},defCards:0,offCards:0,share:0,reb:0,mg:[],mgc:[],cards:0,chain:0,maxChain:0,kinds:{},dunks:0,poss:0};
   const acc=(z,b)=>{for(const k of["fga","fgm","tpa","tpm","pts","tov","ast","fta","min"])z[k]+=b[k]||0;z.g++};
-  for(let i=0;i<n;i++){const opp=pick(ids);
-    {const SD=[clSide(cl,C.school),clSide(cl,opp)],ctl=mkCtl(0,"me");ctl.mode="touches";ctl.greed=greed;const g=liveGen(SD,{...clOpt(cl,{neutral:true}),quiet:false},ctl);
+  const confIds=ids.filter(x=>cl.teams[x].conf===cl.teams[C.school].conf);for(let i=0;i<n;i++){const opp=confIds.length&&Math.random()<.67?pick(confIds):pick(ids);
+    {const SD=[clSide(cl,C.school),clSide(cl,opp)],ctl=mkCtl(0,"me");ctl.mode=mode;ctl.greed=greed;const g=liveGen(SD,{...clOpt(cl,{neutral:true}),quiet:false},ctl);
       let r,arg,run=0;while(!(r=g.next(arg)).done){arg=undefined;const w=r.value&&r.value.poss;if(!w)continue;A.cards++;
+        if(w.def)A.defCards++;else if(w.offball)A.offCards++;
         let x;if(w.def)x=w.opts.find(o=>o.k==="hands"||o.k==="home")||w.opts[0];else if(w.offball)x=w.opts.find(o=>o.k==="callfor");else{x=chainAuto(w.opts,greed,w.meta.moves);A.chain++;run=w.meta.moves+1;A.maxChain=Math.max(A.maxChain,run)}
         A.kinds[x.k]=(A.kinds[x.k]||0)+1;arg=chainRoll(ctl,x)}
-      const R2=r.value.R2;R2.flat().forEach(z=>{if(z.p.pid==="me")acc(A.bot,z.b);else{A.lgBot.fga+=z.b.fga;A.lgBot.fgm+=z.b.fgm}});A.dunks+=r.value.ev.filter(e=>e.dunk).length}
+      const R2=r.value.R2;R2.flat().forEach(z=>{if(z.p.pid==="me")acc(A.bot,z.b);else{A.lgBot.fga+=z.b.fga;A.lgBot.fgm+=z.b.fgm}});
+      {const tf=R2[0].reduce((a,z)=>a+z.b.fga,0),me=R2[0].find(z=>z.p.pid==="me");A.share+=me?me.b.fga/Math.max(1,tf):0;A.reb+=me?me.b.reb:0;const L=r.value;const mg=Math.abs((L.sc?.[0]??0)-(L.sc?.[1]??0));A.mg.push(mg);if(cl.teams[opp].conf===cl.teams[C.school].conf)A.mgc.push(mg)}A.dunks+=r.value.ev.filter(e=>e.dunk).length}
     {const L=liveCore([clSide(cl,C.school),clSide(cl,opp)],{...clOpt(cl,{neutral:true}),noHero:true});L.R2.flat().forEach(z=>{if(z.p.pid==="me")acc(A.leg,z.b);else{A.lgLeg.fga+=z.b.fga;A.lgLeg.fgm+=z.b.fgm}})}
     {const L=liveCore([clSide(cl,C.school),clSide(cl,opp)],clOpt(cl,{neutral:true}));L.R2.flat().forEach(z=>{if(z.p.pid==="me")acc(A.sim,z.b)})}}
   const f=z=>({g:z.g,mpg:+(z.min/z.g).toFixed(1),ppg:+(z.pts/z.g).toFixed(1),fga:+(z.fga/z.g).toFixed(1),fg:+(z.fgm/Math.max(1,z.fga)*100).toFixed(1),tp:+(z.tpm/Math.max(1,z.tpa)*100).toFixed(1),tov:+(z.tov/z.g).toFixed(1),ast:+(z.ast/z.g).toFixed(1)});
-  return JSON.stringify({bot:f(A.bot),sim:f(A.sim),legacy:f(A.leg),leagueFG_bot:+(A.lgBot.fgm/A.lgBot.fga*100).toFixed(1),leagueFG_legacy:+(A.lgLeg.fgm/A.lgLeg.fga*100).toFixed(1),cardsPerGame:+(A.cards/n).toFixed(1),chainCardsPerGame:+(A.chain/n).toFixed(1),maxChain:A.maxChain,dunks:A.dunks,picks:A.kinds})};
+  return JSON.stringify({bot:f(A.bot),sim:f(A.sim),legacy:f(A.leg),leagueFG_bot:+(A.lgBot.fgm/A.lgBot.fga*100).toFixed(1),leagueFG_legacy:+(A.lgLeg.fgm/A.lgLeg.fga*100).toFixed(1),cardsPerGame:+(A.cards/n).toFixed(1),defCardsPerGame:+(A.defCards/n).toFixed(1),offballCardsPerGame:+(A.offCards/n).toFixed(1),fgaShare:+(A.share/n*100).toFixed(1),rebPg:+(A.reb/n).toFixed(1),marginConf:{n:A.mgc.length,avg:+(A.mgc.reduce((a,b)=>a+b,0)/Math.max(1,A.mgc.length)).toFixed(1),over20:A.mgc.filter(m=>m>=20).length},margin:{avg:+(A.mg.reduce((a,b)=>a+b,0)/n).toFixed(1),over20:A.mg.filter(m=>m>=20).length,over30:A.mg.filter(m=>m>=30).length},chainCardsPerGame:+(A.chain/n).toFixed(1),maxChain:A.maxChain,dunks:A.dunks,picks:A.kinds})};
+/* test harness: your team against its conference, with and without your player in the engine */
+window.__talent=function(n=24){const cl=C.cl,me=C.school,conf=cl.teams[me].conf,ids=Object.keys(cl.teams).filter(x=>x!==me&&cl.teams[x].conf===conf);
+  const ov=t=>{const r=(cl.teams[t].roster||[]).map(i=>cl.players[i]).filter(Boolean).sort((a,b)=>b.ovr-a.ovr).slice(0,7);return Math.round(r.reduce((a,p)=>a+p.ovr,0)/r.length)};let a=[],b=[];
+  for(let i=0;i<n;i++){const o=ids[i%ids.length];const L=liveCore([clSide(cl,me),clSide(cl,o)],{...clOpt(cl,{neutral:true}),noHero:true});a.push(L.sc[0]-L.sc[1]);const L2=liveCore([clSide(cl,me),clSide(cl,o)],clOpt(cl,{neutral:true}));b.push(L2.sc[0]-L2.sc[1])}
+  const av=x=>+(x.reduce((p,q)=>p+q,0)/x.length).toFixed(1);return JSON.stringify({me,ovMe:ov(me),confOv:ids.map(ov).sort((x,y)=>y-x),noHeroMargin:av(a),withHeroMargin:av(b),meOvr:cl.players.me.ovr})};
 
 /* ---------- RPG UI: MapleStory-style windows (Stat, Skills, Goals, Loadouts), creation flow, EXP bar ---------- */
 function rpgLook(){const p=rpgP();return p?(p.look||lookOf(p,p.pid)):(C.look??=lookFor(C.name))}
@@ -4572,10 +4575,10 @@ function rpgKeys(e){if(e.metaKey||e.ctrlKey||e.altKey)return;const tag=e.target?
   const k=e.key.toLowerCase();if(k==="c")openSheet("stat");else if(k==="k")openSheet("skills");else if(k==="j")openSheet("goals");else return;e.preventDefault()}
 
 /* ---------- MyCareer game shell: pixel gym scene + MapleStory HUD + windows ---------- */
-const CSWIN={season:["Season","S"],more:["More","W"],roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],reel:["Highlights","H"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"]};
-const SEASONTABS=[["sched","Schedule"],["stand","Standings"],["poll","Top 25"],["brk","Bracket"],["roster","Team"],["news","News"],["reel","Clips"],["case","Trophies"]];
+const CSWIN={season:["Season","S"],more:["More","W"],roster:["Roster","T"],sched:["Schedule","S"],poll:["AP Top 25","R"],stand:["Standings","D"],prog:["Program","P"],lead:["Leaders","L"],news:["News","N"],goals:["Trophies","G"],brk:["Bracket","B"],stat:["Character","C"],skills:["Skills","K"],quests:["Goals","J"],inv:["Locker","I"],log:["Game log","O"],keys:["Keybinds","Y"],style:["Style","V"],case:["Trophy case","G"],play:["Play settings","W"],attn:["Attention & sponsors","M"]};
+const SEASONTABS=[["sched","Schedule"],["stand","Standings"],["poll","Top 25"],["brk","Bracket"],["roster","Team"],["news","News"],["case","Trophies"]];
 function csView(k){const cl=C.cl;switch(k){case"season":{const st=C.seasonTab||(cl.ncaa?"brk":"sched");return`<nav class="mp-tabs ss-tabs">${SEASONTABS.filter(([x])=>x!=="brk"||cl.ncaa).map(([x,l])=>`<button data-act="sstab" data-v="${x}" aria-current="${x===st}">${l}</button>`).join("")}</nav>${csView(st)}`}
-  case"more":return`<div class="stack" style="gap:8px">${cl.phase==="reg"?`<button class="btn" data-act="clsim" data-v="week">Sim a week</button>`:""}${cl.phase!=="done"?`<button class="btn" data-act="clsim" data-v="end">Sim through the tournament</button>`:""}<button class="btn ghost" data-act="cswin" data-v="play">Play settings</button><button class="btn ghost" data-act="cswin" data-v="style">Look and style</button><button class="btn ghost" data-act="cswin" data-v="keys">Keybinds</button><button class="btn ghost" data-act="menu">Main menu</button></div>`;case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"reel":return clReel();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
+  case"more":return`<div class="stack" style="gap:8px">${cl.phase==="reg"?`<button class="btn" data-act="clsim" data-v="week">Sim a week</button>`:""}${cl.phase!=="done"?`<button class="btn" data-act="clsim" data-v="end">Sim through the tournament</button>`:""}<button class="btn ghost" data-act="cswin" data-v="play">Play settings</button><button class="btn ghost" data-act="cswin" data-v="style">Look and style</button><button class="btn ghost" data-act="cswin" data-v="keys">Keybinds</button><button class="btn ghost" data-act="menu">Main menu</button></div>`;case"roster":return clRoster(C.school,true);case"sched":return clSched();case"poll":return clPollV();case"stand":return clStand();case"prog":return clProgram();case"lead":return clLead();case"news":return clNewsV();case"goals":return viewGoals();case"brk":return cl.ncaa?clBracket():"<p class='mp-note'>The bracket appears on Selection Sunday.</p>";
   case"log":{const s=C.season,last=s.games.slice().reverse();return`<section class="panel"><h3>${sl(cl.y)} game log</h3>${last.length?`<div class="tw"><table><thead><tr><th class="l">Result</th><th class="l">Opponent</th><th>MIN</th><th>PTS</th><th>REB</th><th>AST</th><th>STL</th><th>BLK</th><th>FG</th></tr></thead><tbody>${last.map(g=>`<tr class="${g.w?"r-w":"r-l"}"><td class="l"><b class="${g.w?"wl-w":"wl-l"}">${g.w?"W":"L"}</b> ${g.us}-${g.them}</td><td class="l name">${g.home?"vs":"at"} ${esc(g.label||tLbl(cl,g.opp))}</td><td>${g.ln.min}</td><td class="hi">${g.ln.pts}</td><td>${g.ln.reb}</td><td>${g.ln.ast}</td><td>${g.ln.stl}</td><td>${g.ln.blk}</td><td>${g.ln.fgm??0}-${g.ln.fga??0}</td></tr>`).join("")}</tbody></table></div>`:"<p class='mp-note'>No games yet. Press Space to play.</p>"}</section>`}
   case"keys":return keybindsHtml();case"style":return styleHtml();case"case":return caseHtml();case"play":return settingsHtml();case"attn":return attnHtml();
   case"inv":return lockerHtml();
@@ -4857,17 +4860,28 @@ function setFormation(o,q,shPid,shotSpot){
 }
 function pass(pid,d){LV.holder=null;LV.bt={pid,d,hold:pid}}
 function toss(to,d,arc){LV.holder=null;LV.bt={to,d,arc}}
+/* was the last play a made basket? then this possession starts with an inbound under the other rim */
+function lvPrevMade(){for(let j=LV.i-1;j>=0;j--){const p=LV.ev[j];if(!p)return false;if(p.type==="make")return!(LV.ev[j+1]&&LV.ev[j+1].type==="foul");if(p.type==="ft")return!!(p.ft&&p.ft[0]===p.ft[1]);
+  if(["miss","blk","reb","stl","to","q","start","qend","foul"].includes(p.type))return false}return false}
+/* the inbound: a big takes it out behind the baseline, hits the guard, the guard brings it up */
+function lvInbound(S,e,o,q,bx){const ob=bx>47?5.25:88.75,dir=ob<47?1:-1,base=ob<47?-2.5:96.5,on=e.on[o],pg=on[0],ib=on[4]||on[on.length-1];if(!ib||!pg||ib===pg)return;
+  S.push({d:.6,go:()=>{toss({x:ob,y:25,z:0},.25);LV.tgt[ib]={x:base,y:25+rnd(-5,5)};LV.tgt[pg]={x:ob+dir*rnd(9,13),y:25+rnd(-10,10)};
+    on.forEach((pid,i)=>{if(pid!==ib&&pid!==pg)LV.tgt[pid]={x:ob+dir*rnd(20,38),y:[8,42,25][i%3]+rnd(-4,4)}});
+    e.on[1-o].forEach((pid,i)=>{LV.tgt[pid]={x:47+dir*rnd(-14,-4),y:[10,40,25,16,34][i%5]}})}});
+  S.push({d:.55,go:()=>pass(ib,.3)});
+  S.push({d:.6,go:()=>pass(pg,.4)})}
 function stepsFor(e){
-  const S=[],q=e.q,o=e.o,bx=lvBasket(o,q),trans=Math.abs(LV.ball.x-bx)>42?2.3:1.1;
+  const S=[],q=e.q,o=e.o,bx=lvBasket(o,q),inb=["make","miss","blk","foul","stl","to"].includes(e.type)&&lvPrevMade();if(inb)lvInbound(S,e,o,q,bx);const trans=inb?2.4:Math.abs(LV.ball.x-bx)>42?2.3:1.1;
   if(e.type==="make"||e.type==="miss"||e.type==="blk"||e.type==="foul"){
     const ss=spot(bx,e.dist||15,e.ang||0),pg=e.on[o][0];
     S.push({d:trans,go:()=>{setFormation(o,q,null,null);pass(pg,.45)}});
     if(e.as&&e.as!==pg)S.push({d:.55,go:()=>pass(e.as,.4)});
-    S.push({d:.75,go:()=>{LV.tgt[e.sh]={x:ss.x,y:ss.y};pass(e.sh,.4)}});
+    S.push({d:.75,go:()=>{LV.tgt[e.sh]={x:ss.x,y:ss.y};if(e.d&&LV.pos[e.d]){const dir=bx>47?1:-1,dd=Math.max(2.2,Math.min(4,(e.dist||8)*.25));LV.tgt[e.d]={x:ss.x+dir*dd*Math.cos((e.ang||0)*Math.PI/180),y:clamp(ss.y-dd*Math.sin((e.ang||0)*Math.PI/180)*.6,2,48)}}pass(e.sh,.4)}});
     S.push({d:.95,sh:e.sh,go:()=>{toss(e.type==="make"?{x:bx,y:25,z:9}:{x:bx+(R()-.5)*4,y:25+(R()-.5)*6,z:9.5},.8,e.shot==="3"?14:9);if(e.type==="blk"&&LV.pos[e.d])LV.pos[e.d].z=6}});
     S.push({d:.55,go:()=>{if(e.type==="make"){lvPop(`+${e.pts}`,o);toss({x:bx,y:25,z:0},.35)}else if(e.type==="blk")lvPop("BLOCK",1-o);else if(e.type==="foul")lvPop("FOUL",1-o);if(LV.pos[e.d])LV.pos[e.d].z=0}});
   }else if(e.type==="reb"){S.push({d:.7,go:()=>{if(LV.pos[e.rb]){LV.tgt[e.rb]={x:bx+(bx>47?-4:4),y:25+rnd(-5,5)};LV.pos[e.rb].z=3;pass(e.rb,.45)}}});}
-  else if(e.type==="ft"){const fl=spot(bx,15,0),n=e.ft?.[1]||2;S.push({d:Math.max(1,trans),go:()=>{setFormation(o,q,e.sh,fl);pass(e.sh,.5)}});
+  else if(e.type==="ft"){const fl=spot(bx,15,0),n=e.ft?.[1]||2;S.push({d:Math.max(1,trans),go:()=>{setFormation(o,q,e.sh,fl);const dir=bx>47?1:-1,lane=(d,sd)=>({x:bx-dir*(d-5.25),y:25+sd*9}),dl=[lane(7,-1),lane(7,1),lane(14,-1),spot(bx,24,-40),spot(bx,24,40)],ol=[lane(10.5,-1),lane(10.5,1),spot(bx,25,-65),spot(bx,25,65)];
+      e.on[1-o].forEach((pid,i)=>{if(dl[i])LV.tgt[pid]={...dl[i]}});e.on[o].filter(pid=>pid!==e.sh).forEach((pid,i)=>{if(ol[i])LV.tgt[pid]={...ol[i]}});pass(e.sh,.5)}});
     for(let i=0;i<n;i++){S.push({d:.8,sh:e.sh,go:()=>toss({x:bx,y:25,z:9},.6,8)});S.push({d:.45,go:()=>i<n-1?pass(e.sh,.35):toss({x:bx,y:25,z:0},.3)})}
     S.push({d:.3,go:()=>lvPop(`${e.ft?.[0]}/${e.ft?.[1]} FT`,o)});}
   else if(e.type==="stl"||e.type==="to"){S.push({d:trans,go:()=>{setFormation(o,q,null,null);if(e.h)pass(e.h,.45)}});
@@ -4949,7 +4963,7 @@ function* liveGen(SD,opt,ctl){
     for(const k of[0,1]){
       if(k===US&&ctl.want){if(elapsed<ctl.wantUntil){const w=ctl.want.map(pid=>R2[k].find(r=>String(r.p.pid)===String(pid))).filter(r=>r&&r.pf<FO&&!r.p.inj);if(w.length===5){const ins=w.filter(r=>!on[k].includes(r));on[k]=w;sortOn(k);ins.forEach(r=>r.stint=0);if(ins.length&&!force)push("sub",`${TM[k].abbr} sub: ${ins.map(r=>lname(r.p)).join(", ")} check in.`,{k});continue}}ctl.want=null}
       const all=R2[k].filter(r=>r.pf<FO&&!r.p.inj),lead=sc[k]-sc[1-k],crunch=q>=np&&t<300&&Math.abs(lead)<=10,frac=(elapsed+60)/tot,plen=q<=np?per[q-1]:300;
-      const need=r=>crunch?r.p.ovr*10-fatigue(r)*40:(r.tgt*frac-r.min)+(r.st&&(t>plen-60||(q>=np&&t<300))?4:0)+(on[k].includes(r)?1.5:0)-fatigue(r)*(fatigue(r)>.55?14:4);
+      const garb=q>np/2&&lead>=15&&!crunch;const need=r=>crunch?r.p.ovr*10-fatigue(r)*40:(r.tgt*frac-r.min)+(r.st&&(t>plen-60||(q>=np&&t<300))?4:0)+(on[k].includes(r)?1.5:0)-fatigue(r)*(fatigue(r)>.55?14:4)-(garb&&r.st?8:0);
       const want=[...all].sort((a,b)=>need(b)-need(a)).slice(0,5);if(want.length<5)continue;
       const ins=want.filter(r=>!on[k].includes(r)),outs=on[k].filter(r=>!want.includes(r));
       if(ins.length){on[k]=want;sortOn(k);ins.forEach(r=>r.stint=0);
@@ -4961,21 +4975,27 @@ function* liveGen(SD,opt,ctl){
   const mode=ctl?.mode||"watch";
   /* ===== the chain (PLAN.md §2): your team's possession, run by you ===== */
   const chMom=()=>ctl?(ctl.mom>=3?1:ctl.mom<=-3?-1:0):0;
+  /* Big moments: a budget of hand-played calls a game, spread over the game; close finishes are always yours */
+  const KB={off:7,def:6};if(ctl){ctl.kb??={off:KB.off,def:KB.def};ctl.kn??={off:0,def:0}}
+  const keyPick=(kind,clutch)=>{if(!ctl)return false;if(clutch)return true;const fr=Math.min(.98,elapsed/tot),seen=ctl.kn[kind]++,left=ctl.kb[kind];if(left<=0)return false;
+    const rate=fr<.12?(kind==="off"?16:12):seen/fr,rem=Math.max(1,rate*(1-fr)*.9),pk=R()<Math.min(1,left/rem);if(pk)ctl.kb[kind]--;return pk};
+  /* your share of the shots: a star takes about 30% while he is on the floor, a second option about 24% */
+  const heroShare=(meR,O)=>{const best=O.reduce((b,r)=>r.p.ovr>b.p.ovr?r:b,O[0]);return ctl&&ctl.useT?ctl.useT:best===meR?.4:.32};
   const chClk=()=>`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
   const chEnv=(meR,P,clutch)=>{const O=on[o],D=on[1-o],i=O.indexOf(meR),df=D[i]||D[0],s=prof(meR.p),d=prof(df.p);
     const others=D.filter(x=>x!==df);const helpR=others.reduce((b,x)=>{const a=prof(x.p),bb=prof(b.p);return a.INT+a.BLK>bb.INT+bb.BLK?x:b},others[0]||df);
     const mates=O.filter(r=>r!==meR).map(r=>{const j=O.indexOf(r),dr=D[j]||D[0],ms=prof(r.p),ds=prof(dr.p);return{r,dr,s:ms,ds,name:lname(r.p),type:no3x?"mid":ms.THR>=ms.LAY+4?"three":"rim",fat:fatigue(r),dh:hgt(r.p)-hgt(dr.p),inside:ms.LAY+ms.DNK>=ms.THR+ms.MID}});
     const big=mates.length?mates.reduce((b,m)=>(m.s.STR+m.s.PST)>(b.s.STR+b.s.PST)?m:b,mates[0]):null;
     const shooters=mates.length&&mates.reduce((a,m)=>a+m.s.THR,0)/mates.length>=66,PD=D.map(x=>prof(x.p));
-    return{P,s,d,h:prof(helpR.p),df,helpR,meR,mates,big,shooters,no3x,mom:chMom(),seen:ctl?ctl.seen:null,perks:chPerks(),dh:hgt(meR.p)-hgt(df.p),dhH:hgt(meR.p)-hgt(helpR.p),
+    return{P,s,d,h:prof(helpR.p),df,helpR,meR,mates,big,shooters,no3x,mom:chMom(),seen:ctl?ctl.seen:null,seenF:ctl?ctl.seenF:null,perks:chPerks(),dh:hgt(meR.p)-hgt(df.p),dhH:hgt(meR.p)-hgt(helpR.p),
       dSTL:PD.reduce((a,x)=>a+x.STL,0)/PD.length,dPERavg:PD.reduce((a,x)=>a+x.PER,0)/PD.length,mm:big?prof((D[O.indexOf(big.r)]||df).p):d,
-      cap:CLK<=24?4:5,q4:q>=np,scout:RAID>=3&&typeof C!=="undefined"&&C&&C.moveUse?Object.entries(C.moveUse).sort((a,b)=>b[1]-a[1])[0]?.[0]:null,ctx:{q4:q>=np,raid:RAID,starOn:STAR&&df===STAR.r?`Their star (${STAR.perks.join(", ")})`:null,home:o===0&&HOME>0,clutch,boss:!!opt.boss,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,hot2:meR.hot.length>=2&&meR.hot.slice(-2).every(x=>x),fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
+      cap:3,look:P.look,q4:q>=np,scout:RAID>=3&&typeof C!=="undefined"&&C&&C.moveUse?Object.entries(C.moveUse).sort((a,b)=>b[1]-a[1])[0]?.[0]:null,ctx:{q4:q>=np,raid:RAID,starOn:STAR&&df===STAR.r?`Their star (${STAR.perks.join(", ")})`:null,home:o===0&&HOME>0,clutch,boss:!!opt.boss,half2:typeof q!=='undefined'&&typeof np!=='undefined'?q>np/2:false,lastMade:meR.hot.length?meR.hot[meR.hot.length-1]:null,hot2:meR.hot.length>=2&&meR.hot.slice(-2).every(x=>x),fat:fatigue(meR),hot:meR.hot.length>=4&&meR.hot.slice(-3).every(x=>x)}}};
   const chCard=(E,P,lead,extra)=>({opts:null,chain:true,sit:P.sit,sitName:CH_SIT[P.sit]||"",chips:P.log.slice(-6),title:lead===0?"Tied":lead>0?`Up ${lead}`:`Down ${-lead}`,
     sub:`${chClk()} · shot clock ${Math.max(0,Math.round(P.clk))}${P.flags.hurry?" · Hurry":""}${P.late&&lead===-3&&t<=30?" · Down three: a two does not tie":""}`,meta:{en:Math.round(E.meR.en),em:enMax(E.meR),mom:ctl?ctl.mom||0:0,moves:P.n,cap:E.cap||5},dname:E.df.p.name,dnote:`PER ${E.d.PER} · INT ${E.d.INT} · STL ${E.d.STL}`,
     timing:false,skl:Math.max(E.s.THR,E.s.MID,E.s.LAY),...(extra||{})});
   const chNote=(P,meR)=>{const l=P.log.filter(x=>!x.info).map(x=>x.t);if(l.length>1)push("chain",l.join(" → ")+".",{sh:meR.p.pid,me:1})};
   const chainRun=function*(meR,inter,start,clutch,lead){if(ctl)ctl.touches=(ctl.touches||0)+1;
-    const P={sit:start==="putback"?"lane":start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"||start==="putback"?4:0),n:0,flags:start==="putback"?{under:true}:{},log:[],deal:chDeal(prof(meR.p)),lead,late:(q>=np||RAID>=5)&&t<=120};if(P.late&&lead<0){P.clk=Math.min(P.clk,12);P.flags.hurry=1}
+    const P={sit:start==="putback"?"lane":start,clk:CLK-(start==="lane"?6:start==="corner"?8:start==="runout"||start==="putback"?4:0),n:0,flags:start==="putback"?{under:true}:{},log:[],deal:chDeal(prof(meR.p)),lead,late:(q>=np||RAID>=5)&&t<=120,look:start==="top"?chLook(meR,no3x):"man"};if(P.look!=="man")P.log.push({t:CH_LOOK[P.look],info:true});if(P.look==="switch")P.deal="screen";if(P.late&&lead<0){P.clk=Math.min(P.clk,12);P.flags.hurry=1}
     for(let guard=0;guard<14;guard++){
       const E=chEnv(meR,P,clutch);let opts=chainOpts(E);if(!opts.length){P.n=9;opts=chainOpts(E)}
       let ans=null;
@@ -5014,7 +5034,7 @@ function* liveGen(SD,opt,ctl){
         const r2=tg.r,dr2=tg.dr,p2=r2.p,s2=prof(p2),mod=chSum(tg.smods)+1,roll=kroll(ctl,"t"+p2.pid),made=roll!==1&&(roll===20||roll+mod>=tg.sdc);ktrack(ctl,"t"+p2.pid,made);
         const fouled=!made&&R()<PV.foul[tg.type]*(1+(s2.DRW-PV.ref)/60);chNote(P,meR);
         return yield* finish(r2,dr2,p2,dr2.p,tg.type,made,fouled,{open:true,home:o===0&&HOME>0,clutch},{me:1,pass:1,assistTo:meR,lob:!!x.lob,dunk:tg.type==="dunk"})}
-      const type=x.type;P.log.push({t:x.lab,ok});
+      const type=x.type;P.log.push({t:x.lab,ok});if(ctl&&!x.perfect){const fk=chFKey(x);ctl.seenF=ctl.seenF&&ctl.seenF.k===fk?{k:fk,n:ctl.seenF.n+1}:{k:fk,n:1}}
       const fouled=ans.nat20||R()<PV.foul[type]*(1+(E.s.DRW-PV.ref)/60)*(ok?.5:1.3)*((type==="rim"||type==="dunk")&&(typeof jobRule==="function"&&jobRule("contactFouls"))?1.5:1)*(1+(typeof gearStat==="function"?gearStat("draw"):0)*.1);
       const dR=x.vs==="help"?E.helpR:df;chNote(P,meR);
       return yield* finish(meR,dR,meR.p,dR.p,type,ok,fouled,{...E.ctx,open:x.open,contest:x.contest},{me:1,dunk:type==="dunk"})}
@@ -5040,13 +5060,15 @@ function* liveGen(SD,opt,ctl){
     const meR=uo&&ctl&&ctl.hero!=null?O.find(r=>String(r.p.pid)===String(ctl.hero)):null;
     let tries=0;
     while(tries++<3){
-      let sh=wpick(O,(r,i)=>usageP(PO[i])*(r===isoR?3:1)*(1-fatigue(r)*.4)*(r.hot.length>=4&&r.hot.slice(-3).every(x=>x)?1.4:1));
+      const uw=O.map((r,i)=>usageP(PO[i])*(r===isoR?3:1)*(1-fatigue(r)*.4)*(r.hot.length>=4&&r.hot.slice(-3).every(x=>x)?1.4:1));
+      if(meR){const mi=O.indexOf(meR),oth=uw.reduce((a,w,i)=>i===mi?a:a+w,0),T=heroShare(meR,O);uw[mi]=oth*T/(1-T)}
+      let sh=wpick(O,(r,i)=>uw[i]);
       if(meR&&(tries===1||ctl.putback)){
-        const inter=!opt.quiet&&mode!=="watch"&&mode!=="sim"&&(mode==="touches"||mode==="every"||(mode==="clutch"&&clutch));
+        const inter=!opt.quiet&&mode!=="watch"&&mode!=="sim"&&(mode==="touches"||mode==="every"||(mode==="clutch"&&clutch)||(mode==="key"&&(sh===meR||ctl.putback||ctl.runout)&&keyPick("off",clutch)));
         if(ctl.putback){ctl.putback=false;push("chain",`${lname(meR.p)} has it under the rim.`,{sh:meR.p.pid,me:1});return yield* chainRun(meR,inter,"putback",clutch,lead)}
         if(ctl.runout){ctl.runout=false;return yield* chainRun(meR,inter,"runout",clutch,lead)}
         if(sh===meR)return yield* chainRun(meR,inter,"top",clutch,lead);
-        const offOK=CLK>24||clutch||(ctl.runOpp||0)>=8||Math.abs(ctl.mom||0)>=3||(typeof C!=="undefined"&&C&&C.offAll===true);
+        const offOK=mode==="key"?clutch&&keyPick("off",true):clutch||(ctl.runOpp||0)>=8||Math.abs(ctl.mom||0)>=3||(typeof C!=="undefined"&&C&&C.offAll===true);
         if(inter&&offOK){const Pq={sit:"off",clk:CLK,n:0,flags:{},log:[]},E=chEnv(meR,Pq,clutch);const mates=O.filter(r=>r!==meR),pg=mates.reduce((b,r)=>prof(r.p).VIS>prof(b.p).VIS?r:b,mates[0]);
           E.pgName=lname(pg.p);E.pgVIS=prof(pg.p).VIS;E.touches=ctl.touches||0;E.handlerName=lname(sh.p);E.spotP=clamp(.3+(E.s.THR-PV.ref)/80,.15,.6);
           const opts=chainOffball(E),card=chCard(E,Pq,lead,{offball:true,sitName:`${lname(sh.p)} has it. You are off the ball`});card.opts=opts;
@@ -5064,7 +5086,7 @@ function* liveGen(SD,opt,ctl){
       // defensive call: my matchup has the ball
       let forceBlk=false,forceFoul=false;
       const defOn=typeof C!=="undefined"&&C?(C.defCalls||"on"):"off";
-      if(ud&&ctl&&ctl.hero!=null&&String(dp.pid)===String(ctl.hero)&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&(defOn==="on"||(defOn==="clutch"&&clutch))){
+      if(ud&&ctl&&ctl.hero!=null&&String(dp.pid)===String(ctl.hero)&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&(defOn==="on"||(defOn==="clutch"&&clutch))&&(mode!=="key"||keyPick("def",clutch))){
         const opts=defOptions(s,d,ctx),clk=`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
         if(q>=np&&t<=120&&lead>0)opts.push({k:"foul",lab:"Foul to stop the clock",mods:[],mod:0,dc:0,pct:1,pts:0,def:true,noroll:true,note:"He shoots two. The clock stops."});
         const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Down ${lead}`:`Up ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}${STAR&&sh===STAR.r?` · Their star: ${STAR.perks.join(", ")}`:""}${TT(p)?` · Title: ${TITLES[TT(p)].n}`:""}`,timing:false,skl:Math.max(d.PER,d.STL,d.BLK)}};
@@ -5073,7 +5095,7 @@ function* liveGen(SD,opt,ctl){
         else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(!(typeof jobRule==="function"&&jobRule("noBlockFoul"))&&(da.nat1||R()<.35))forceFoul=true;else{ctx.open=true;ctx.contest=false}}
         else if(da&&da.k==="charge"){if(da.made){sh.b.tov=(sh.b.tov||0)+1;df.b.chg=(df.b.chg||0)+1;push("to",`${p.name} lowers the shoulder. ${dp.name} is set. Charge.`,{h:p.pid,d:dp.pid,me:1});o=1-o;return}df.pf++;tfoul[1-o]++;push("foul",`Blocking foul on ${dp.name}.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
         else if(da&&da.k==="hands"&&da.made){ctx.contest=true;ctx.open=false}}
-      else if(ud&&ctl&&ctl.hero!=null&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&defOn!=="off"&&(clutch||(ctl.runOpp||0)>=8)){const meD=D.find(r=>String(r.p.pid)===String(ctl.hero));
+      else if(ud&&ctl&&ctl.hero!=null&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&defOn!=="off"&&(mode==="key"?(clutch||R()<.22)&&keyPick("def",clutch):(clutch||(ctl.runOpp||0)>=8))){const meD=D.find(r=>String(r.p.pid)===String(ctl.hero));
         if(meD){const opts=chainHelp({me:prof(meD.p)}),clk=chClk();
           let ha=yield{poss:{opts,def:true,title:"Help defense · "+(lead===0?"Tied":lead>0?`They lead by ${lead}`:`You lead by ${-lead}`),sub:clk+((ctl.runOpp||0)>=8?` · they are on a ${ctl.runOpp}-0 run`:" · late and close"),dname:p.name,dnote:`THR ${s.THR} · MID ${s.MID} · HND ${s.HND}`,timing:false,skl:prof(meD.p).PER}};
           if(!ha||!ha.opt)ha=chainRoll(ctl,opts[2]);
@@ -5083,7 +5105,7 @@ function* liveGen(SD,opt,ctl){
       const w=shotWeights(s,d,ctx,{tf,no3x,co,cd});type=wpick(Object.keys(w),k=>w[k]);if(forceBlk&&type==="three")type=s.LAY>=s.MID?"rim":"mid";
       const mmv=ctl&&US>=0?(o===US?chMom():-chMom()):0,scr=ctl&&o===US&&ctl.screenB?1:0,tax=ctl&&o!==US&&ctl.dunkTax?1:0;if(scr)ctl.screenB=0;if(tax)ctl.dunkTax=false;
       const hero=ctl&&ctl.hero!=null?String(ctl.hero):null,gv=hero&&o===US&&meR&&sh!==meR&&(typeof jobRule==="function"&&jobRule("gravity"))?.5:0,tdp=hero&&ud&&D.some(r=>String(r.p.pid)===hero)&&(typeof jobRule==="function"&&jobRule("teamDefPlus"))?.5:0,shd=hero&&ud&&String(dp.pid)===hero&&(typeof jobRule==="function"&&jobRule("shadow"))?1:0;
-      const mod=modSum(shotMods(type,s,ctx))+1+hb*8+mmv+scr+gv-tdp-shd+(STAR&&sh===STAR.r?1:0)+(TT(p)==="goat"?1:TT(p)==="pantheon"&&q>=np?1:0),dc=shotDC(type,d,ctx)+tax,roll=(RAID>=5&&STAR&&sh===STAR.r&&starPerfQ!==q&&(clutch||R()<.3))?(starPerfQ=q,push("chain",`${p.name}: PERFECT. The title holder takes over.`,{sh:p.pid}),20):(TT(p)==="goat"&&ttUse[p.pid]!==q&&(clutch||R()<.25))?(ttUse[p.pid]=q,push("chain",`${p.name}, The GOAT: PERFECT.`,{sh:p.pid}),20):(TT(p)==="pantheon"&&!ttUse[p.pid]&&q>=np&&(clutch||R()<.3))?(ttUse[p.pid]=1,push("chain",`${p.name}, Pantheon: PERFECT.`,{sh:p.pid}),20):kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
+      const mod=modSum(shotMods(type,s,ctx))+1+hb*8+(lead<=-20?1.5:lead<=-12?1:lead>=20?-1.5:lead>=12?-1:0)+mmv+scr+gv-tdp-shd+(STAR&&sh===STAR.r?1:0)+(TT(p)==="goat"?1:TT(p)==="pantheon"&&q>=np?1:0),dc=shotDC(type,d,ctx)+tax,roll=(RAID>=5&&STAR&&sh===STAR.r&&starPerfQ!==q&&(clutch||R()<.3))?(starPerfQ=q,push("chain",`${p.name}: PERFECT. The title holder takes over.`,{sh:p.pid}),20):(TT(p)==="goat"&&ttUse[p.pid]!==q&&(clutch||R()<.25))?(ttUse[p.pid]=q,push("chain",`${p.name}, The GOAT: PERFECT.`,{sh:p.pid}),20):(TT(p)==="pantheon"&&!ttUse[p.pid]&&q>=np&&(clutch||R()<.3))?(ttUse[p.pid]=1,push("chain",`${p.name}, Pantheon: PERFECT.`,{sh:p.pid}),20):kroll(ctl,"c"+p.pid),total=roll+mod;made=forceBlk?false:roll!==1&&(roll===20||total>=dc);ktrack(ctl,"c"+p.pid,made);
       fouled=forceBlk?false:forceFoul?true:roll===20?true:R()<PV.foul[type]*(1+(s.DRW-PV.ref)/60)*(made?.5:1.3)*(co==="inside"?1.2:1);
       const cont=yield* finish(sh,df,p,dp,type,made,fouled,ctx,{forceBlk,me:forceBlk||forceFoul?1:0});if(!cont)return;
     }
@@ -5320,9 +5342,9 @@ function renderHeader(){
 }
 const ICO={home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',team:'<path d="M8 3l4 2 4-2 4 3-2 4-2-1v12H8V9L6 10 4 6z"/>',lg:'<path d="M7 4h10v4a5 5 0 0 1-10 0zM5 5H3v2a3 3 0 0 0 3 3M19 5h2v2a3 3 0 0 1-3 3M12 13v4M8 21h8M9 17h6v4H9z"/>',leg:'<path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.6 6.6 19.5l1.2-6L3.3 9.3l6.1-.7z"/>',more:'<circle cx="5" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="19" cy="12" r="1.6"/>',sched:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',poll:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',rec:'<circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3-6 7-6s7 2 7 6M19 8v6M16 11h6"/>'};
 const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICO[k]||""}</svg>`;
-const GROUPS=[["home","Home",["home"]],["team","Team",["me","roster","trade","fa"]],["lg","League",["standings","leaders","news"]],["leg","Legacy",["legacy","goals","trophy","reel","history"]],["more","More",["league"]]];
+const GROUPS=[["home","Home",["home"]],["team","Team",["me","roster","trade","fa"]],["lg","League",["standings","leaders","news"]],["leg","Legacy",["legacy","goals","trophy","history"]],["more","More",["league"]]];
 const CAREERON=()=>!!(G&&G.career&&!G.career.retired);
-const NGROUPS=[["play","Play",["me"]],["season","Season",["standings","home","roster","hof","news","trophy","reel","fa"]]];
+const NGROUPS=[["play","Play",["me"]],["season","Season",["standings","home","roster","hof","news","trophy","fa"]]];
 const grps=()=>CAREERON()?NGROUPS:GROUPS;
 const grpOf=t=>grps().find(g=>g[2].includes(t))||grps()[0];
 function visTabs(){return grps().flatMap(g=>g[2]).filter(t=>(t!=="me"||G.career)&&(t!=="fa"||!CAREERON()||!["season","playoffs"].includes(G.phase)))}
@@ -5330,13 +5352,13 @@ function swipeTab(dir){const v=visTabs(),i=v.indexOf(G.tab);const n=v[i+dir];if(
 function renderNav(){const n=$("bnav");if(G.userTid==null){n.hidden=true;return}n.hidden=false;const cur=grpOf(G.tab)[0];
   if(CAREERON()){const free=(()=>{try{return rpgFree(rpgS())}catch(e){return 0}})();n.innerHTML=`<button data-act="prohome" aria-current="${cur==="play"}">${icon("home")}<span>Play</span></button><button data-act="rsheet" data-v="inv">${icon("team")}<span>Locker</span></button><button data-act="rsheet" data-v="stat">${icon("leg")}<span>Character${free>0?" +"+free:""}</span></button><button data-act="tab" data-v="${G.lastSub?.season||"standings"}" aria-current="${cur==="season"}">${icon("lg")}<span>Season</span></button>`;return}
   n.innerHTML=GROUPS.map(([k,l,tabs])=>{const go=(G.lastSub?.[k]&&visTabs().includes(G.lastSub[k]))?G.lastSub[k]:tabs.find(t=>visTabs().includes(t));return`<button data-act="tab" data-v="${go}" aria-current="${cur===k}">${icon(k)}<span>${l}</span></button>`}).join("")}
-const TABS=[["hof","Hall of Fame"],["me","My Player"],["home","Home"],["news","News"],["roster","Roster"],["standings","Standings"],["leaders","Leaders"],["trade","Trade"],["fa","Free agents"],["legacy","Legacy"],["history","History"],["reel","Highlights"],["goals","Goals"],["trophy","Trophies"],["league","Settings"]];
+const TABS=[["hof","Hall of Fame"],["me","My Player"],["home","Home"],["news","News"],["roster","Roster"],["standings","Standings"],["leaders","Leaders"],["trade","Trade"],["fa","Free agents"],["legacy","Legacy"],["history","History"],["goals","Goals"],["trophy","Trophies"],["league","Settings"]];
 function renderTabs(){const g=grpOf(G.tab),sub=TABS.filter(t=>g[2].includes(t[0])&&visTabs().includes(t[0]));
   $("tabs").innerHTML=G.userTid==null||sub.length<2?"":sub.map(([k,l])=>`<button data-act="tab" data-v="${k}" aria-current="${G.tab===k}">${l}</button>`).join("");$("tabs").hidden=G.userTid==null||sub.length<2;renderNav()}
 function renderView(){
   const v=$("view");
   if(G.userTid==null){v.innerHTML=viewPick();return}
-  v.innerHTML=({hof:hofView,me:viewMe,home:viewHome,news:viewNews,roster:viewRoster,standings:viewStandings,leaders:viewLeaders,trade:viewTrade,fa:viewFA,history:viewHistory,legacy:viewLegacy,league:viewLeague,reel:viewReel,goals:viewGoals,trophy:viewTrophies}[G.tab]||viewHome)();
+  v.innerHTML=({hof:hofView,me:viewMe,home:viewHome,news:viewNews,roster:viewRoster,standings:viewStandings,leaders:viewLeaders,trade:viewTrade,fa:viewFA,history:viewHistory,legacy:viewLegacy,league:viewLeague,goals:viewGoals,trophy:viewTrophies}[G.tab]||viewHome)();
 }
 function renderBar(){
   const b=$("bar-in");let h="";
@@ -5859,9 +5881,6 @@ document.addEventListener("click",e=>{
     case"lvready":lvReady();return;
     case"cltap":if(LV?.pm?.step==="tap")possTap(false);else clutchTap(false);return;
     case"lvera":{const on=!eraLookOn();if(LV.college)C.eraLook=on;else G.settings.eraLook=on;const ct=document.querySelector(".lv-court");ct.className="lv-court "+(on?ct.dataset.era:"");b.textContent=on?"Era look: on":"Era look: off";return}
-    case"lvagain":{const s=LV.src;LV=null;openReel(s.store,s.idx);return}
-    case"reel":openReel(G.reel,+d.v);return;
-    case"creel":openReel(C.reel,+d.v);return;
     case"lvmine":LV.feedMine=!LV.feedMine;b.className="btn xs"+(LV.feedMine?"":" ghost");document.querySelectorAll("#lv-feed li").forEach(li=>li.hidden=LV.feedMine&&!li.dataset.mine);return;
     case"po":runPO(d.n==="1"?1:d.n);break;
     case"simdraft":simDraft();break;
