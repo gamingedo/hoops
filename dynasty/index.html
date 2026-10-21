@@ -1497,8 +1497,8 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
   }
   /* overtime: quick */
   let ot=0;while(score[0]===score[1]&&fmt!=="3v3"&&ot<3){ot++;for(let k=0;k<10;k++){const oi=k%2,t=T[oi];const pl=t.pl.slice(0,5);const s=wpick(pl,p=>Math.pow(Math.max(5,p.ovr-38),2.3));const p=clamp(.45+(s.ovr-T[1-oi].ovr)*.004,.3,.65);mk(s).fga++;if(rnd()<p){const pts=rnd()<.3?3:2;score[oi]+=pts;mk(s).pts+=pts;mk(s).fgm++;ev.push({type:"make",q:4,clock:300-k*30,o:oi,who:s.id,shot:pts===3?3:"rim",pts,s:[...score],txt:`OT: ${s.name} scores.`})}}
-    if(score[0]===score[1])score[rnd()<.5?0:1]+=1;ev.push({type:"q",q:4,s:[...score],txt:`End of overtime: ${score[0]}-${score[1]}`})}
-  if(fmt==="3v3"&&score[0]===score[1])score[rnd()<.5?0:1]+=2;
+    if(score[0]===score[1]&&ot>=3){const w=rnd()<.5?0:1,sh=T[w].pl[0];score[w]+=1;const b=mk(sh);b.pts++;b.ftm++;b.fta++}ev.push({type:"q",q:4,s:[...score],txt:`End of overtime: ${score[0]}-${score[1]}`})}
+  if(fmt==="3v3"&&score[0]===score[1]){const w=rnd()<.5?0:1,sh=T[w].pl[0];score[w]+=2;const b=mk(sh);b.pts+=2;b.fgm++;b.fga++}
   return{score,ev,box,perkLog,perkPts,stat,fmt}}
 
 /* gear.js: equipment works like Summoners War runes.
@@ -1697,7 +1697,12 @@ function tierUp(i){const nt=nextTier(i);if(!nt||!canTierUp(i)||S.coins<nt.cost)r
 function canEvolve(i){const o=S.own[i];return o.st<6&&o.lv>=maxLv(i)}
 function evolveFodder(i){return Object.keys(S.own).map(Number).filter(k=>k!==i&&!S.roster.includes(k)&&DB.c[k].k!=="L")}
 function evolve(i,fodder){const o=S.own[i];const ok=new Set(evolveFodder(i));fodder=fodder.filter(f=>ok.has(f));if(!canEvolve(i)||fodder.length<o.st)return false;for(const f of fodder.slice(0,o.st))removeCard(f);o.st++;save();return true}
-function removeCard(i){const o=S.own[i];if(!o)return;for(const g of o.gear)if(g&&S.gear[g])S.gear[g].on=null;delete S.own[i];S.roster=S.roster.filter(x=>x!==i)}
+/* taking a player off the roster: a starter's backup (same spot on the second unit) moves up into his place, so nobody
+   else shifts out of position */
+function dropFromRoster(i){const r=S.roster,k=r.indexOf(i);if(k<0)return;
+  /* the bench player who plays that spot best (no duplicate of a starter) */
+  if(k<5&&r.length>5){const st=new Set(r.slice(0,5).filter(x=>x!==i).map(x=>DB.c[x].p));let j=-1,bv=-1;for(let x=5;x<r.length;x++){if(st.has(DB.c[r[x]].p))continue;const v=slotOvr(r[x],k);if(v>bv){bv=v;j=x}}if(j<0)j=5;r[k]=r[j];r.splice(j,1)}else r.splice(k,1)}
+function removeCard(i){const o=S.own[i];if(!o)return;for(const g of o.gear)if(g&&S.gear[g])S.gear[g].on=null;delete S.own[i];dropFromRoster(i)}
 /* ---- using cards up (book, feeding, evolving): what makes a card worth keeping ---- */
 const inGymTeam=i=>Object.values(S.gl||{}).some(L=>Array.isArray(L)&&L.includes(i));
 function cardFlags(i){const o=S.own[i],c=DB.c[i];if(!o)return[];const f=[];const g=(o.gear||[]).filter(x=>x&&S.gear[x]).length;const st=Math.max(c.s,o.st);
@@ -2146,7 +2151,7 @@ function slideOut(el,slid,back){el.style.pointerEvents="none";el._drag=0;
   const done=()=>{el._dim=0;el.remove();if(back&&back._dimBy===el){back._dimBy=null;back.style.backgroundColor=""}};
   if(slid){done();return}
   el.classList.add("closing");dimTo(el,1,0,200,back,true,done)}
-function closeSheet(slid){if(!SHEET)return;const cur=SHEET;SHEET=null;cur.el.style.pointerEvents="none";if(cur.onClose)cur.onClose();render();
+function closeSheet(slid){if(!SHEET)return;const cur=SHEET;SHEET=null;cur.el.style.pointerEvents="none";try{if(cur.onClose)cur.onClose();render()}catch(e){slideOut(cur.el,true);throw e}
   /* closing it may have opened something new (a Legend pick, a gym page); otherwise go back one step */
   const back=SHEET?null:STACK.pop();
   if(back){back.el.classList.remove("under");back.el._dimBy=cur.el;SHEET=back;if(back.reopen)back.reopen()}
@@ -2611,7 +2616,8 @@ function revealItems(res,title,onDone,again){again=(again||[]).filter(Boolean);
   /* back to whatever was open underneath, redrawn with the new cards (a book page shows them at once) */
   const refresh=()=>{render();if(SHEET&&SHEET.reopen&&!SHEET.el.classList.contains("under"))SHEET.reopen()};
   $p("#pkDone").onclick=()=>{alive=false;ov.remove();refresh();if(onDone)onDone()};
-  ov.querySelectorAll("[data-again]").forEach(b=>b.onclick=()=>{alive=false;ov.remove();ACT.buy(b.dataset.again)});
+  const born=Date.now();/* a reveal that pops up right under a finger ignores taps on its buttons for a moment, so a double tap buys once */
+  ov.querySelectorAll("[data-again]").forEach(b=>b.onclick=()=>{if(ov._went||Date.now()-born<450)return;ov._went=1;ov.querySelectorAll("[data-again]").forEach(x=>x.disabled=true);alive=false;ov.remove();ACT.buy(b.dataset.again)});
   $p("#pkAlways").onchange=e=>{S.skipFlips=e.target.checked;save()};
   ov.querySelector(".pkg").addEventListener("click",e=>{const f=e.target.closest(".pf");if(!f)return;if(!f.classList.contains("open")){e.stopPropagation();return}
     const gt=f.querySelector("[data-gid]");if(gt){e.stopPropagation();openGear(gt.dataset.gid);return}
@@ -2796,7 +2802,7 @@ const ACT={
   /* one card per player: this version takes the other one's roster spot and his gear */
   useVer:a=>{a=+a;const j=S.roster.find(x=>DB.c[x].p===DB.c[a].p&&x!==a);if(j==null)return;S.roster[S.roster.indexOf(j)]=a;let n=0;
     for(let k=0;k<6;k++){const gid=S.own[j].gear[k];if(gid&&S.gear[gid]){unequip(j,k);equip(a,gid);n++}}save();openCard(a,true);toast(`Now playing his ${seasonLabel(DB.c[a].y)} card${n?`, with ${n} gear piece${n>1?"s":""} moved over`:""}`)},
-  rosterOut:a=>{if(S.roster.length<=8){toast("Keep at least 8 players");return}S.roster=S.roster.filter(x=>x!==+a);save();openCard(a,true)},
+  rosterOut:a=>{if(S.roster.length<=8){toast("Keep at least 8 players");return}dropFromRoster(+a);save();openCard(a,true)},
   startPick:a=>{VIEW="team";closeAll();openLineup()},
   evolvePick:a=>feedPicker(a,"evolve"),sellPick:()=>feedPicker(null,"sell"),
   lvUp:a=>{const[i,n]=a.split(":").map(Number);const k=levelUp(i,n);if(!k){toast("Not enough coins");return}toast(`${lastName(DB.p[DB.c[i].p][0])} is level ${S.own[i].lv}`);if(SHEET&&SHEET.reopen)SHEET.reopen();else render()},
@@ -2822,9 +2828,12 @@ const ACT={
   pgo:()=>{closeAll();runGame("prac","result",{ids:[...PRAC]})},
   export:async()=>{const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));try{await navigator.clipboard.writeText(code);toast("Save code copied")}catch(e){sheet(`<h2>Save code</h2><textarea style="width:100%;height:160px">${code}</textarea>`)}},
   import:()=>{sheet(`<h2>Load a save code</h2><textarea id="imp" style="width:100%;height:140px"></textarea><div class="row" style="margin-top:8px"><button class="btn go sp" data-act="importGo">Load</button></div>`)},
-  importGo:()=>{try{const t=document.getElementById("imp").value.trim();S=JSON.parse(decodeURIComponent(escape(atob(t))));save();closeSheet();toast("Save loaded")}catch(e){toast("That code didn't work")}},
+  importGo:()=>{let n=null;try{n=JSON.parse(decodeURIComponent(escape(atob(document.getElementById("imp").value.trim()))))}catch(e){}
+    /* only a real save replaces yours; then the app restarts so old saves get updated the same way they do at launch */
+    if(!n||typeof n!=="object"||!n.own||!Array.isArray(n.roster)||!n.season||typeof n.coins!=="number"){toast("That code isn't a save. Yours is untouched.");return}
+    clearInterval(GTIMER);try{localStorage.setItem(SAVEKEY,JSON.stringify(n))}catch(e){toast("Couldn't save on this device");return}location.reload()},
   reset:()=>{sheet(`<h2>Start over?</h2><p>This deletes your team, cards and gear on this device.</p><div class="row"><button class="btn sp" data-act="close">Keep playing</button><button class="btn sp" style="background:#5a2a10" data-act="resetGo">Delete and start over</button></div>`)},
-  resetGo:()=>{try{localStorage.removeItem(SAVEKEY)}catch(e){}S=null;closeSheet();renderTitle()}};
+  resetGo:()=>{clearInterval(GTIMER);try{localStorage.removeItem(SAVEKEY)}catch(e){}S=null;closeSheet();renderTitle()}};
 document.addEventListener("click",e=>{if(window._dragEnd&&Date.now()-window._dragEnd<700){e.preventDefault();e.stopPropagation();return}const b=e.target.closest("[data-act]");if(!b)return;const f=ACT[b.dataset.act];if(f){e.preventDefault();f(b.dataset.arg,b)}});
 /* ---------- boot ---------- */
 function boot(){buildPools();load();if(S&&(!S.v||!S.season))S=null;if(S){ledSeed();migrateBench();migrateTier();migrateEcon();dailyEnergy();const n=migrateIds();if(migrateGear())S.gearV2=Date.now();tickGrind();if(S.grind)GTIMER=setInterval(grindPulse,1000);save();if(n)setTimeout(()=>toast(n===1?"Fixed 1 card that showed the wrong player":`Fixed ${n} cards that showed the wrong player`),600)}render();if(S&&S.box&&S.box.cards)setTimeout(openStarterBox,400)}
@@ -3348,7 +3357,7 @@ function drawGrindLive(){const G=S.grind,el=document.getElementById("grLive");if
 function grindLiveHTML(){const G=S.grind;if(!G||G.done)return"";const L=grindLive(G);
   return`<div class="grsc"><span>${esc(L.A.abbr)}</span><b>${L.s[0]}</b><i>–</i><b>${L.s[1]}</b><span>${esc(L.B.abbr)}</span></div><div class="grbar"><b style="width:${Math.round(L.f*100)}%"></b></div><p class="grtx"><span>${esc(L.txt)}</span><em>${mmss(L.left)}</em></p>`}
 /* every second: finish runs that are due, redraw what's on screen */
-function grindPulse(){const G=S.grind;const open=SHEET&&SHEET.el.dataset.tag==="grind";if(!G){clearInterval(GTIMER);return}
+function grindPulse(){if(!S){clearInterval(GTIMER);return}const G=S.grind;const open=SHEET&&SHEET.el.dataset.tag==="grind";if(!G){clearInterval(GTIMER);return}
   if(tickGrind()){if(open)openGrind();else if(VIEW==="gyms"&&!SHEET)render();return}
   if(open)drawGrindLive();else if(!G.done&&!(SHEET&&SHEET.el.dataset.tag==="floor"))return}
 function grindHaul(){const G=S.grind;if(!G)return;const gym=GYMS.find(g=>g.id===G.gym);const items=G.log.flatMap(l=>l.d).map(x=>S.gear[x]).filter(Boolean).map(g=>({gear:g}));
@@ -4018,8 +4027,8 @@ function playGame(res0,side,done){
     el.classList.remove("in");void el.offsetWidth;el.classList.add("in");
     el.querySelectorAll(".pvb").forEach(b=>b.onclick=()=>pickOpt(+b.dataset.i));
     /* the calls fade in and only take a tap once they're there: no tapping through by accident */
-    setTimeout(()=>{if(CARD===c)BUSY=false},simAll?0:320);
-    if(coachTrip||simAll)setTimeout(()=>{BUSY=false;pickOpt(-1)},simAll?0:500/SPD)}
+    setTimeout(()=>{if(CARD===c){BUSY=false;if(coachTrip||simAll)pickOpt(-1)}},simAll?0:320);
+    if(coachTrip||simAll)setTimeout(()=>{if(CARD===c){BUSY=false;pickOpt(-1)}},simAll?0:500/SPD)}
   function pickOpt(i){if(!CARD||BUSY)return;BUSY=true;const c=CARD;CARD=null;
     if(i>=0){const b=$(`#pvCard .pvb[data-i="${i}"]`);if(b)b.classList.add("pick")}
     setTimeout(()=>step(i),simAll?0:160)}
@@ -4141,7 +4150,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="5273179883";
+<script>const APPV="d3ad38e536";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
