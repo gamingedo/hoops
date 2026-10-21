@@ -276,6 +276,11 @@ Never: logins, timers, energy gates, extra currencies, passes.
 - Animation: the defender runs to the shot (blocks and contests happen where the ball is); after a made basket or free throw a big takes it out behind the baseline, inbounds to the guard, and the guard brings it up; free throws line up on the lane spots.
 - Removed: replays, the highlight reel, Clips and Highlights tabs, and their code.
 
+**The card on the court (shipped v53).** Ship notes:
+- Every pick in the chain pushes a `move` event (call, worked or not, situation before and after, the defensive look, you, your man, the help, the screener, the pass target). Defense, help and off-ball picks push one too. The viewer plays the court up to the card before opening it (`LV.cardHold`), and move events never play faster than 2×.
+- court.js: about 40 choreographies (drive, crossover, hesitation, jab, pump fake, screen, hand-off, post-up, spin, drop step, step-through, Euro step, draw the foul, reset, milk; the set-up for each finish; kick, skip, dump-off, lob; hands up, steal, block, charge, rotate, jump the lane, foul; call for it, cut, spot up, screen, crash) and 12 situation layouts, reshaped by the look (a zone puts five in a 2-3, a drop sinks the big, a double team sends two at you, the help steps into the lane when it collapses). A worked move and a stopped one end differently (beaten, cut off, stripped, charge).
+- Shots you call rise from where the choreography left you. Every beat waits for the players to arrive (up to 1.6 s extra) so the ball never leaves before you get there.
+
 ## 7. Working rules for the executor
 
 - Edit module files, rebuild with ins.py + make_main.py, syntax-check, run the named tests, then build the PWA and push, then publish the artifact. Bump BUILD.

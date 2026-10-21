@@ -12,7 +12,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="icon" type="image/png" href="icons/icon-192.png">
-<script>window.HOOPS_APP=true;window.HOOPS_VER="3928e769ee";</script>
+<script>window.HOOPS_APP=true;window.HOOPS_VER="dd005b14b8";</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Barlow:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;600&family=Silkscreen:wght@400;700&display=swap">
 <style>
@@ -1568,7 +1568,7 @@ function newCareer(){C={v:1,pmV2:1,stage:"create",name:pick(FIRST)+" "+pick(LAST
 /* ---------- MyCareer screens ---------- */
 function mcOpen(){$("mc").hidden=false;document.body.style.overflow="hidden";if(!DB){$("mc").innerHTML='<div class="eras-in"><p style="padding:40px;text-align:center">Loading 80 years of players…</p></div>';loadDB().then(mcRender).catch(()=>toast("Couldn't load player data."))}else mcRender()}
 function mcClose(){$("mc").hidden=true;document.body.style.overflow=""}
-const BUILD="v52";
+const BUILD="v53";
 function mcHead(sub){return`<div class="eras-top"><div class="eras-logo"><small>DocMan2021 · ${BUILD}</small><b>Hoops Game</b><i>MyCareer</i></div><p>${esc(sub)}</p><button class="eras-x" data-act="menu">← Main menu</button></div>`}
 function mcRender(){
   const el=$("mc");if(!C)newCareer();
@@ -2489,21 +2489,22 @@ function lvPull(auto){
   if(!LV||!LV.gen||LV.genDone||LV.wait)return;let n=0;
   while(n++<400){const r=LV.gen.next(LV.arg);LV.arg=undefined;
     if(r.done){LV.genDone=true;LV.result=r.value;if(LV.onDone){const f=LV.onDone;LV.onDone=null;try{f(r.value)}catch(e){console.error(e)}}return}
-    if(r.value&&r.value.poss){if(auto){LV.arg=null;continue}LV.wait=r.value.poss;openPoss();return}
+    if(r.value&&r.value.poss){if(auto){LV.arg=null;continue}LV.wait=r.value.poss;if(LV.i>=LV.ev.length)openPoss();else LV.cardHold=true;return}
     if(LV.ev.length>LV.i)return}
 }
-function lvFinish(){if(!LV)return;while(LV.gen&&!LV.genDone){LV.wait=null;lvPull(true)}}
+function lvFinish(){if(!LV)return;while(LV.gen&&!LV.genDone){LV.wait=null;LV.cardHold=false;lvPull(true)}}
 function closeLive(){if(!LV)return;const col=LV.college;lvFinish();LV.playing=false;LV=null;$("live").hidden=true;
   if(col){XW=null;mcRender();return}document.body.style.overflow="";render()}
 function lvFrame(now){
   if(!LV)return;const c=$("lv-c");if(!c){LV=null;return}const ctx=c.getContext("2d");ctx.setTransform(1,0,0,1,0,0);
-  const dt=Math.min(.05,(now-LV.last)/1000)*(LV.playing?LV.speed:0);LV.last=now;
+  const dt=Math.min(.05,(now-LV.last)/1000)*(LV.playing?(LV.steps&&LV.ev[LV.i]&&LV.ev[LV.i].type==="move"?Math.min(LV.speed,2):LV.speed):0);LV.last=now;
   if(LV.playing&&!LV.done&&!LV.wait&&lvBenchFF(now))return requestAnimationFrame(lvFrame);
-  if(LV.playing&&!LV.done&&!LV.wait){
+  if(LV.playing&&!LV.done&&LV.wait&&LV.cardHold&&!LV.steps&&LV.i>=LV.ev.length){LV.cardHold=false;openPoss()}
+  if(LV.playing&&!LV.done&&(!LV.wait||LV.cardHold)){
     if(!LV.steps){let e=LV.ev[LV.i];if(!e&&LV.gen&&!LV.genDone){lvPull(false);e=LV.ev[LV.i]}
       if(!e){if(!LV.wait&&(LV.genDone||!LV.gen)){LV.done=true;lvScore();lvPop("FINAL",0);try{SFX.buzzer()}catch(x){}}}
       else{LV.flip=LV.halves?e.q===2:e.q>2&&e.q<=4;LV.steps=stepsFor(e);LV.sub=0;LV.st=0;LV.steps[0]?.go()}}
-    if(LV.steps){LV.st+=dt;if(LV.st>=LV.steps[LV.sub].d){LV.sub++;LV.st=0;
+    if(LV.steps){LV.st+=dt;const cs=LV.steps[LV.sub];if(LV.st>=cs.d&&!(cs.arrive&&LV.st<cs.d+1.6&&lvMoving())){LV.sub++;LV.st=0;
       if(LV.sub>=LV.steps.length){const e=LV.ev[LV.i];
         lvApply(e);LV.i++;LV.steps=null}
       else LV.steps[LV.sub].go()}}
@@ -2540,7 +2541,7 @@ function lvBenchFF(now){const ff=$("lv-ff");if(!LV.ctl||LV.mine==null||LV.ffOff|
   lvScore();if(LV.i>=LV.ev.length&&(!LV.gen||LV.genDone)&&!LV.wait){LV.done=true;lvPop("FINAL",0);if(ff)ff.hidden=true}
   return true}
 function lvSkip(toQuarter){
-  if(!LV)return;LV.skipping=true;if(LV.wait){LV.wait=null;$("lv-clutch").hidden=true}
+  if(!LV)return;LV.skipping=true;LV.cardHold=false;if(LV.wait){LV.wait=null;$("lv-clutch").hidden=true}
   const q0=(LV.ev[LV.i]||LV.ev[LV.ev.length-1])?.q;
   for(let guard=0;guard<5000;guard++){const e=LV.ev[LV.i];if(!e){if(LV.gen&&!LV.genDone){lvPull(true);continue}break}
     if(toQuarter&&e.type==="q"&&e.q!==q0)break;lvApply(e);LV.i++}
@@ -4505,6 +4506,117 @@ window.__talent=function(n=24){const cl=C.cl,me=C.school,conf=cl.teams[me].conf,
   for(let i=0;i<n;i++){const o=ids[i%ids.length];const L=liveCore([clSide(cl,me),clSide(cl,o)],{...clOpt(cl,{neutral:true}),noHero:true});a.push(L.sc[0]-L.sc[1]);const L2=liveCore([clSide(cl,me),clSide(cl,o)],clOpt(cl,{neutral:true}));b.push(L2.sc[0]-L2.sc[1])}
   const av=x=>+(x.reduce((p,q)=>p+q,0)/x.length).toFixed(1);return JSON.stringify({me,ovMe:ov(me),confOv:ids.map(ov).sort((x,y)=>y-x),noHeroMargin:av(a),withHeroMargin:av(b),meOvr:cl.players.me.ovr})};
 
+/* ---------- court.js: the card on the court. Every call you make is a choreography; every situation and defensive look is a layout.
+   A move event {k, kind, ok, from, to, look, n, sh, d, h, big, tgt} is pushed by the chain after each pick; the viewer plays it
+   before the next card opens (lvPull holds the card). Shot events tagged mv shoot from where you stand. ---------- */
+const CRT={gap:3,tight:1.5};
+/* offensive layouts by situation: [dist, angle] from the basket for me, then four spots for the others (the big gets the last one) */
+const CRT_LAY={
+  top:{me:[26,0],o:[[23,-50],[23,50],[22,85],[7,-65]]},
+  space:{me:[21,-12],o:[[23,-55],[23,50],[22,85],[7,65]]},
+  offbal:{me:[22,-4],o:[[23,-55],[23,50],[22,85],[7,65]]},
+  lane:{me:[9,-18],o:[[24,-60],[24,55],[22,88],[6,70]]},
+  collapse:{me:[7,0],o:[[22,-85],[22,85],[24,-45],[24,45]]},
+  mismatch:{me:[17,-30],o:[[24,15],[23,55],[22,88],[7,70]]},
+  seal:{me:[6,-45],o:[[24,-8],[23,50],[22,88],[18,70]]},
+  picked:null,
+  corner:{me:[22,-88],o:[[26,0],[23,50],[22,-45],[7,65]]},
+  wing:{me:[22,-48],o:[[26,5],[23,55],[22,88],[7,65]]},
+  runout:{me:[36,0],o:[[46,-30],[48,30],[55,-10],[58,15]]},
+  putback:{me:[3,-30],o:[[24,-60],[24,55],[22,88],[8,60]]},
+  off:{me:[23,-50],o:[[26,0],[23,50],[22,85],[7,-65]]}};
+/* 2-3 zone spots, from the basket */
+const CRT_ZONE=[[18,-25],[18,25],[6,-40],[6,40],[5,0]];
+function crtG(e){const o=e.o,q=e.q,bx=lvBasket(o,q),dir=bx>47?1:-1,rim={x:bx,y:25},on=e.on;
+  const P=pid=>LV.pos[pid],T=(pid,x,y)=>{if(LV.pos[pid])LV.tgt[pid]={x:clamp(x,1,93),y:clamp(y,2,48)}};
+  const at=(d,a)=>spot(bx,d,a),side=pid=>{const p=P(pid);return p&&p.y>25?1:-1};
+  const dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y);
+  const lerp=(a,b,f)=>({x:a.x+(b.x-a.x)*f,y:a.y+(b.y-a.y)*f});
+  const toRim=(pid,d)=>{const p=P(pid);if(!p)return rim;const L=dist(p,rim);return lerp(p,rim,Math.min(1,d/Math.max(1,L)))};
+  const guardPt=(man,gap)=>{const p=P(man);if(!p)return rim;const L=dist(p,rim);return lerp(p,rim,Math.min(.9,gap/Math.max(1,L)))};
+  const defOf=pid=>{const i=on[o].indexOf(pid);return i>=0?on[1-o][i]:null};
+  const guard=(def,man,gap)=>{const g=guardPt(man,gap??CRT.gap);T(def,g.x,g.y)};
+  const perp=(pid,ft)=>{const p=P(pid);return{x:p.x,y:p.y+ft}};
+  return{o,q,bx,dir,rim,on,P,T,at,side,dist,lerp,toRim,guardPt,defOf,guard,perp}}
+/* place everyone for a situation and a look; me holds the ball slot */
+function crtLayout(e,G,sit,look){const L=CRT_LAY[sit]||CRT_LAY.top,me=e.sh,s=e.sh&&G.P(e.sh)?G.side(e.sh):-1;
+  if(L){const m=G.at(L.me[0],L.me[1]*s);G.T(me,m.x,m.y);const others=G.on[G.o].filter(p=>p!==me),big=e.big&&others.includes(e.big)?e.big:others[others.length-1],rest=others.filter(p=>p!==big);
+    rest.forEach((pid,i)=>{const sp=L.o[i]||L.o[0];const q=G.at(sp[0],sp[1]*s);G.T(pid,q.x,q.y)});{const sp=L.o[3];const q=G.at(sp[0],sp[1]*s);G.T(big,q.x,q.y)}}
+  setTimeout(()=>{},0);
+  const D=G.on[1-G.o];
+  if(look==="zone"){D.forEach((pid,i)=>{const z=CRT_ZONE[i]||CRT_ZONE[0];const q=G.at(z[0],z[1]);G.T(pid,q.x,q.y)});return}
+  G.on[G.o].forEach(pid=>{const d=G.defOf(pid);if(!d)return;const gap=pid===me?(sit==="picked"?CRT.tight:CRT.gap):sit==="collapse"||sit==="lane"?CRT.gap*1.6:CRT.gap*1.3;
+    const g=G.guardPt(pid,gap);if(pid!==me&&(sit==="lane"||sit==="collapse")){const h=G.lerp(g,G.rim,.35);G.T(d,h.x,h.y)}else G.T(d,g.x,g.y)});
+  if(look==="drop"&&e.big){const bd=G.defOf(e.big);if(bd){const q=G.at(4,0);G.T(bd,q.x,q.y)}}
+  if(look==="trap"&&e.d){const others=D.filter(p=>p!==e.d);const near=others.sort((a,b)=>G.dist(G.P(a)||G.rim,G.P(me)||G.rim)-G.dist(G.P(b)||G.rim,G.P(me)||G.rim))[0];if(near){const g=G.guardPt(me,2.5);G.T(e.d,g.x,g.y-2.5);G.T(near,g.x,g.y+2.5)}}
+  if(sit==="collapse"&&e.h){const a=G.lerp(G.P(me)||G.rim,G.rim,.5);G.T(e.h,a.x,a.y-3);const D2=D.filter(p=>p!==e.h&&p!==e.d)[0];if(D2)G.T(D2,a.x,a.y+3)}
+  if(sit==="seal"&&e.d){const p=G.P(me);if(p){const g=G.lerp(p,G.rim,.3);G.T(e.d,g.x,g.y)}}}
+/* the ball to me, from whoever has it */
+function crtBallTo(pid,d){if(LV.holder===pid)return;pass(pid,d||.45)}
+/* the choreographies. Each returns steps [{d, go}] */
+function crtMove(e){const G=crtG(e),S=[],me=e.sh,d=e.d,h=e.h,big=e.big,ok=e.ok,k=e.k,s=G.P(me)?G.side(me):-1,dir=G.dir;
+  const step=(dur,go)=>S.push({d:dur,go,arrive:1});const move=(pid,pt)=>G.T(pid,pt.x,pt.y);const ahead=(pid,ft)=>G.toRim(pid,ft);
+  const beat=()=>{if(d)G.guard(d,me,CRT.gap+2)};const stop=()=>{if(d){const g=G.guardPt(me,CRT.tight);G.T(d,g.x,g.y)}};
+  const settle=sit=>crtLayout(e,G,sit,e.look);
+  /* the first beat of a possession or a card: everyone to the situation's spots, the ball to the handler */
+  if(e.def&&!e.help){step(.8,()=>{crtLayout(e,G,"top","man");crtBallTo(e.sh,.45)})}
+  else if(e.offball){step(.8,()=>{crtLayout({...e,sh:e.hd,d:G.defOf(e.hd)},G,"top","man");const w=G.at(23,-50*s);G.T(me,w.x,w.y);if(d)G.guard(d,me,CRT.gap*1.4);crtBallTo(e.hd,.45)})}
+  else if(e.n===0){if(lvPrevMade())lvInbound(S,e,G.o,G.q,G.bx);step(1.1,()=>{settle(e.from);crtBallTo(me,.5)})}
+  if(e.offball){
+    if(k==="callfor")step(.6,()=>{const p=G.P(me);if(p){move(me,{x:p.x-dir*2,y:p.y+(25-p.y)*.3});LV.pos[me].z=1.4}});
+    else if(k==="cut")step(.7,()=>{move(me,G.at(4,-10*s));if(d)G.guard(d,me,CRT.gap)});
+    else if(k==="spot")step(.6,()=>move(me,G.at(22,-88*s)));
+    else if(k==="screen")step(.7,()=>{const hd=e.hd,dd=G.defOf(hd);if(dd&&G.P(dd)){const q=G.P(dd);move(me,{x:q.x-dir*1.5,y:q.y+1})}});
+    else if(k==="crash")step(.6,()=>{move(me,G.at(5,35*s));if(d)G.guard(d,me,CRT.gap)});
+    return S}
+  if(e.def){const sh=e.sh,me=e.d;
+    if(k==="hands")step(.5,()=>{G.guard(me,sh,CRT.tight)});
+    else if(k==="steal")step(.45,()=>{const p=G.P(sh);if(p)move(me,{x:p.x-dir*.5,y:p.y-1.5});if(!ok){move(sh,ahead(sh,7))}});
+    else if(k==="block")step(.45,()=>{G.guard(me,sh,1.2)});
+    else if(k==="charge")step(.55,()=>{const g=G.guardPt(sh,3);G.T(me,g.x,g.y);move(sh,{x:g.x-dir*.8,y:g.y})});
+    else if(k==="rotate")step(.5,()=>G.guard(me,sh,2));
+    else if(k==="lane")step(.5,()=>{const p=G.P(sh),mates=G.on[1-G.o].filter(x=>x!==sh&&G.P(x));const m=mates[0];if(p&&m){const q=G.P(m);move(me,G.lerp(p,q,.5))}});
+    else if(k==="foul")step(.4,()=>{G.guard(me,sh,.8);lvPop("FOUL",G.o)});
+    return S}
+  switch(k){
+    case"drive":step(.45,()=>{const p=G.P(me);if(!p)return;const a=ahead(me,6);move(me,{x:a.x,y:a.y+3*s});if(d)G.guard(d,me,CRT.gap)});
+      step(.6,()=>{if(ok){settle(e.to);beat()}else if(e.why==="stripped"){stop()}else{move(me,ahead(me,2));stop()}});break;
+    case"cross":step(.35,()=>{move(me,G.perp(me,-3*s));if(d)G.guard(d,me,CRT.gap)});
+      step(.45,()=>{if(ok){settle("space");const g=G.guardPt(me,CRT.gap);G.T(d,g.x,g.y-4*s)}else{stop()}});break;
+    case"hesi":step(.4,()=>{move(me,ahead(me,1));if(ok&&d){const g=G.guardPt(me,CRT.gap+2.5);G.T(d,g.x,g.y)}});step(.35,()=>{if(ok)settle("offbal")});break;
+    case"jab":step(.3,()=>{move(me,ahead(me,1.5))});step(.4,()=>{const p=G.P(me);move(me,{x:p.x-dir*1.5,y:p.y});if(ok&&d){const g=G.guardPt(me,CRT.gap+2);G.T(d,g.x,g.y)}});break;
+    case"pump":step(.4,()=>{if(ok&&d&&LV.pos[d])LV.pos[d].z=4.5});step(.4,()=>{if(ok)settle("offbal")});break;
+    case"screen":step(.6,()=>{if(big&&d&&G.P(d)){const q=G.P(d);move(big,{x:q.x-dir*1.2,y:q.y-2.5*s})}});
+      step(.7,()=>{if(big&&G.P(big)){const b=G.P(big);move(me,{x:b.x+dir*2.5,y:b.y-2.5*s})}
+        if(e.to==="mismatch"){const bd=big?G.defOf(big):null;if(bd)G.guard(bd,me,CRT.gap);if(d&&big)move(d,G.guardPt(big,CRT.gap))}
+        else if(ok){settle(e.to);if(d&&big){const b=G.P(big);G.T(d,b.x-dir*1,b.y)}}else stop()});break;
+    case"handoff":step(.5,()=>{if(big){const p=G.P(me);move(big,{x:p.x-dir*1,y:p.y+3*s});pass(big,.35)}});
+      step(.55,()=>{if(big){const b=G.P(big);move(me,{x:b.x+dir*3,y:b.y+2*s});pass(me,.3);if(ok&&d)G.T(d,b.x-dir*1.5,b.y-1)}else stop()});break;
+    case"post":step(.6,()=>{move(me,ahead(me,3));if(d){const g=G.guardPt(me,1.5);G.T(d,g.x,g.y)}});step(.5,()=>{if(ok)settle("seal");else stop()});break;
+    case"spin":step(.45,()=>{const p=G.P(me);move(me,{x:p.x+dir*2,y:p.y-3*s})});step(.5,()=>{if(ok){move(me,G.at(4,-40*s));beat()}else stop()});break;
+    case"dropstep":step(.6,()=>{if(ok){move(me,G.at(3,-20*s));beat()}else{move(me,ahead(me,1));stop()}});break;
+    case"step":step(.4,()=>{move(me,G.perp(me,2*s))});step(.5,()=>{if(ok){move(me,G.at(6,0));beat()}else stop()});break;
+    case"euro":step(.4,()=>{move(me,G.perp(me,-3*s))});step(.5,()=>{if(ok){const a=ahead(me,5);move(me,{x:a.x,y:a.y+4*s});if(h)move(h,G.perp(h,-2*s))}else{if(h){const g=G.guardPt(me,2.5);G.T(h,g.x,g.y);move(me,{x:g.x-dir*.8,y:g.y})}}});break;
+    case"drawfoul":step(.55,()=>{if(d){const q=G.P(d);move(me,{x:q.x-dir*.8,y:q.y});if(ok)LV.pos[d].z=1.5}});break;
+    case"reset":step(.5,()=>{const pg=G.on[G.o].find(p=>p!==me);if(pg)pass(pg,.4)});step(.7,()=>{settle("top");crtBallTo(me,.45)});break;
+    case"milk":step(.7,()=>move(me,G.perp(me,1.5)));step(.7,()=>move(me,G.perp(me,-1.5)));break;
+    /* finishes: the set-up motion. The shot event that follows rises from where you stand. */
+    case"stepback":case"stepback3":step(.5,()=>{const p=G.P(me);move(me,{x:p.x-dir*4,y:p.y+1*s});if(d)G.guard(d,me,CRT.gap+3)});break;
+    case"fade":step(.45,()=>{const p=G.P(me);move(me,{x:p.x-dir*2,y:p.y});if(d)G.guard(d,me,CRT.tight)});break;
+    case"pull3":case"pullmid":case"forced":case"faceup":case"deep3":step(.35,()=>{if(d&&!ok)G.guard(d,me,CRT.tight+.5);else if(d)G.guard(d,me,CRT.gap)});break;
+    case"cs3":step(.35,()=>{if(d)G.guard(d,me,CRT.tight+.5)});break;
+    case"floater":step(.4,()=>{move(me,ahead(me,2));if(h)G.guard(h,me,2.5)});break;
+    case"hook":step(.4,()=>{move(me,G.perp(me,1.5*-s));if(d)G.guard(d,me,CRT.tight)});break;
+    case"layup":case"layhelp":case"rolay":step(.45,()=>{move(me,G.at(2.5,-25*s));if(k==="layhelp"&&h){G.guard(h,me,1.5);LV.pos[h].z=3.5}else if(d)G.guard(d,me,CRT.gap)});break;
+    case"dunk":case"rodunk":step(.4,()=>{move(me,G.at(2.5,0));if(d)G.guard(d,me,CRT.gap+1)});break;
+    /* passes: the receiver gets to his spot, then the ball goes */
+    case"kick":case"skip":case"dump":case"lob":{const tg=e.tgt;step(.35,()=>{if(!tg)return;if(k==="dump")move(tg,G.at(3,40*s));else if(k==="lob")move(tg,G.at(3,0));else if(k==="skip")move(tg,G.at(22,88*s));else if(e.ttype==="three"){const p=G.P(tg);if(p&&G.dist(p,G.rim)<20)move(tg,G.at(23,55*s))}});
+      step(.55,()=>{if(!tg)return;if(k==="lob"){toss({x:G.bx-dir*2,y:25,z:9},.5,10);if(LV.pos[tg])LV.pos[tg].z=5}else pass(tg,k==="skip"?.55:.4)});break}
+    default:step(.4,()=>{});
+  }
+  return S}
+window.__court={crtMove,crtLayout,CRT_LAY};
+
 /* ---------- RPG UI: MapleStory-style windows (Stat, Skills, Goals, Loadouts), creation flow, EXP bar ---------- */
 function rpgLook(){const p=rpgP();return p?(p.look||lookOf(p,p.pid)):(C.look??=lookFor(C.name))}
 function rpgJersey(){const p=rpgP();if(p&&p.tid>=0){const t=T(p.tid);return[t.color||"#2f6fd6","#f4f1ea"]}const t=C?.cl?.teams?.[C.school];return[t?.color||"#2f6fd6","#f4f1ea"]}
@@ -4870,8 +4982,18 @@ function lvInbound(S,e,o,q,bx){const ob=bx>47?5.25:88.75,dir=ob<47?1:-1,base=ob<
     e.on[1-o].forEach((pid,i)=>{LV.tgt[pid]={x:47+dir*rnd(-14,-4),y:[10,40,25,16,34][i%5]}})}});
   S.push({d:.55,go:()=>pass(ib,.3)});
   S.push({d:.6,go:()=>pass(pg,.4)})}
+/* is anybody still more than a step and a half from where the play sent him? */
+function lvMoving(){for(const pid in LV.tgt){const p=LV.pos[pid],t=LV.tgt[pid];if(p&&t&&Math.hypot(t.x-p.x,t.y-p.y)>1.5&&t.y<50)return true}return false}
 function stepsFor(e){
   const S=[],q=e.q,o=e.o,bx=lvBasket(o,q),inb=["make","miss","blk","foul","stl","to"].includes(e.type)&&lvPrevMade();if(inb)lvInbound(S,e,o,q,bx);const trans=inb?2.4:Math.abs(LV.ball.x-bx)>42?2.3:1.1;
+  if(e.type==="move"&&typeof crtMove==="function"&&!LV.skipping)return crtMove(e);
+  if(e.type==="move")return[{d:.01,go:()=>{}}];
+  if(e.mv&&(e.type==="make"||e.type==="miss"||e.type==="blk"||e.type==="foul")&&LV.pos[e.sh]){
+    /* a shot you called: it rises from where the choreography left you */
+    S.push({d:.15,arrive:1,go:()=>{if(LV.holder!==e.sh)pass(e.sh,.15)}});
+    S.push({d:.95,sh:e.sh,go:()=>{toss(e.type==="make"?{x:bx,y:25,z:9}:{x:bx+(R()-.5)*4,y:25+(R()-.5)*6,z:9.5},.8,e.shot==="3"?14:9);if(e.type==="blk"&&LV.pos[e.d]){const p=LV.pos[e.sh];LV.tgt[e.d]={x:p.x+(bx>47?1.2:-1.2),y:p.y};LV.pos[e.d].z=6}}});
+    S.push({d:.55,go:()=>{if(e.type==="make"){lvPop(`+${e.pts}`,o);toss({x:bx,y:25,z:0},.35)}else if(e.type==="blk")lvPop("BLOCK",1-o);else if(e.type==="foul")lvPop("FOUL",1-o);if(LV.pos[e.d])LV.pos[e.d].z=0}});
+    return S}
   if(e.type==="make"||e.type==="miss"||e.type==="blk"||e.type==="foul"){
     const ss=spot(bx,e.dist||15,e.ang||0),pg=e.on[o][0];
     S.push({d:trans,go:()=>{setFormation(o,q,null,null);pass(pg,.45)}});
@@ -4901,7 +5023,7 @@ function lvApply(e){LV.lastE=e;if(LV.ctl&&$("lv-coach")&&!$("lv-coach").hidden&&
   if(e.type==="make"){if(e.o===0)LV.cheer=.9;if(!LV.skipping){try{if(LV.mine!=null&&String(e.sh)===String(LV.mine))SFX.swish()}catch(x){}LV.celeb={pid:e.sh,t:1.1};(LV.net??={})[lvBasket(e.o,e.q)]=1}add(e.sh,"pts",e.pts);add(e.sh,"fgm");add(e.sh,"fga");if(e.shot==="3"){add(e.sh,"tpm");add(e.sh,"tpa")}add(e.as,"ast")}
   else if(e.type==="miss"||e.type==="blk"){try{if(!LV.skipping&&LV.mine!=null&&String(e.sh)===String(LV.mine))SFX.rim()}catch(x){}add(e.sh,"fga");if(e.shot==="3")add(e.sh,"tpa");if(e.type==="blk")add(e.d,"blk")}
   else if(e.type==="reb")add(e.rb,"reb");else if(e.type==="stl")add(e.d,"stl");else if(e.type==="ft")add(e.sh,"pts",e.ft[0]);
-  if(e.type!=="sub"||true){const li=document.createElement("li");const mineIn=LV.mine&&[e.sh,e.as,e.rb,e.d,e.h].includes(LV.mine);
+  if(e.type!=="move"){const li=document.createElement("li");const mineIn=LV.mine&&[e.sh,e.as,e.rb,e.d,e.h].includes(LV.mine);
     li.className=mineIn?"mine":"";li.dataset.mine=mineIn?"1":"";li.innerHTML=`<small>${LV.halves?(e.q>2?"OT":"H"+e.q):(e.q>4?"OT":"Q"+e.q)} ${Math.floor(e.t/60)}:${String(e.t%60).padStart(2,"0")} · ${LV.teams[0].abbr} ${e.sc[0]}-${e.sc[1]} ${LV.teams[1].abbr}</small>${esc(e.txt)}`;
     if(LV.feedMine&&!mineIn)li.hidden=true;$("lv-feed")?.prepend(li)}
   if(!LV.skipping&&e.type==="make"&&(String(e.sh)===String(LV.mine)||e.pts===3||e.clutch))lvCard(e.sh);
@@ -5004,9 +5126,10 @@ function* liveGen(SD,opt,ctl){
       const x=ans.opt,df=E.df,ok=ans.made,nat1=ans.nat1;
       if(x.job&&typeof jobMarkUsed==="function")jobMarkUsed(x.job);
       P.clk-=x.sec||2;if(x.en)enSpend(meR,x.en);
+      const mvFrom=P.sit,mvN=P.n;const MV=(extra)=>push("move",`${lname(meR.p)}: ${x.lab}.`,{k:x.k,kind:x.kind,ok,nat1,nat20:!!ans.nat20,from:mvFrom,to:P.sit,look:P.look,n:mvN,sh:meR.p.pid,d:df.p.pid,h:E.helpR.p.pid,big:E.big?E.big.r.p.pid:null,me:1,...(extra||{})});
       if(x.kind==="setup"){P.n++;if(typeof C!=="undefined"&&C&&x.k!=="reset"&&x.k!=="milk")(C.moveUse??={})[x.k]=(C.moveUse[x.k]||0)+1;if(ctl&&x.k!=="reset")ctl.seen=ctl.seen&&ctl.seen.k===x.k?{k:x.k,n:ctl.seen.n+1}:{k:x.k,n:1};
         P.log.push({t:x.lab,ok});
-        const TO=why=>{meR.b.tov=(meR.b.tov||0)+1;if(why==="stripped")df.b.stl++;chNote(P,meR);
+        const TO=why=>{MV({why});meR.b.tov=(meR.b.tov||0)+1;if(why==="stripped")df.b.stl++;chNote(P,meR);
           push(why==="stripped"?"stl":"to",why==="stripped"?`${df.p.name} strips ${lname(meR.p)}. Steal.`:why==="charge"?`Charge on ${meR.p.name}. ${E.helpR.p.name} was set.`:`Travel on ${meR.p.name}.`,{h:meR.p.pid,d:df.p.pid,me:1});o=1-o;return false};
         P.flags.small=false;
         switch(x.k){
@@ -5024,20 +5147,21 @@ function* liveGen(SD,opt,ctl){
           case"spin":P.sit=ok?"lane":"picked";P.flags.under=false;break;
           case"dropstep":if(ok){P.sit="lane";P.flags.under=true}else{P.flags.hookPen=1;P.sit="seal"}break;
           case"step":if(ok){P.sit="lane";P.flags.under=true}else if(nat1)return TO("travel");break;
-          case"drawfoul":if(ok){df.pf++;tfoul[1-o]++;chNote(P,meR);push("foul",`${df.p.name} fouls ${lname(meR.p)}. He went right into him.`,{sh:meR.p.pid,d:df.p.pid,me:1});shootFT(meR,2,df);o=1-o;return false}P.sit="picked";break;
+          case"drawfoul":if(ok){MV();df.pf++;tfoul[1-o]++;chNote(P,meR);push("foul",`${df.p.name} fouls ${lname(meR.p)}. He went right into him.`,{sh:meR.p.pid,d:df.p.pid,me:1});shootFT(meR,2,df);o=1-o;return false}P.sit="picked";break;
           case"reset":P.sit="top";P.flags={};break}
+        MV();
         if(P.sit==="space"&&!P.flags.sl&&(typeof jobRule==="function"&&jobRule("spaceLasts"))){P.flags.sl=1;P.n--;P.log.push({t:jobRuleName("spaceLasts")+": that move was free",ok:true,info:true})}
         continue}
-      if(x.kind==="pass"){const tg=x.tgt;P.log.push({t:x.lab,ok});
+      if(x.kind==="pass"){const tg=x.tgt;P.log.push({t:x.lab,ok});MV({tgt:tg.r.p.pid,ttype:tg.type});
         if(!ok&&!nat1&&R()<.75&&P.n<5){P.log.push({t:"Deflected. Still yours",ok:false,info:true});P.sit="picked";P.n++;P.clk-=3;continue}
         if(!ok){meR.b.tov=(meR.b.tov||0)+1;chNote(P,meR);const D=on[1-o];if(nat1||R()<.6){const st=wpick(D,r=>Math.pow(prof(r.p).STL/60,3));st.b.stl++;push("stl",`${st.p.name} jumps the lane. ${lname(meR.p)}'s pass is picked off.`,{h:meR.p.pid,d:st.p.pid,me:1})}else push("to",`${meR.p.name} throws it away.`,{h:meR.p.pid,me:1});o=1-o;return false}
         const r2=tg.r,dr2=tg.dr,p2=r2.p,s2=prof(p2),mod=chSum(tg.smods)+1,roll=kroll(ctl,"t"+p2.pid),made=roll!==1&&(roll===20||roll+mod>=tg.sdc);ktrack(ctl,"t"+p2.pid,made);
         const fouled=!made&&R()<PV.foul[tg.type]*(1+(s2.DRW-PV.ref)/60);chNote(P,meR);
-        return yield* finish(r2,dr2,p2,dr2.p,tg.type,made,fouled,{open:true,home:o===0&&HOME>0,clutch},{me:1,pass:1,assistTo:meR,lob:!!x.lob,dunk:tg.type==="dunk"})}
-      const type=x.type;P.log.push({t:x.lab,ok});if(ctl&&!x.perfect){const fk=chFKey(x);ctl.seenF=ctl.seenF&&ctl.seenF.k===fk?{k:fk,n:ctl.seenF.n+1}:{k:fk,n:1}}
+        return yield* finish(r2,dr2,p2,dr2.p,tg.type,made,fouled,{open:true,home:o===0&&HOME>0,clutch},{me:1,pass:1,assistTo:meR,lob:!!x.lob,dunk:tg.type==="dunk",mv:x.k})}
+      const type=x.type;P.log.push({t:x.lab,ok});MV({type});if(ctl&&!x.perfect){const fk=chFKey(x);ctl.seenF=ctl.seenF&&ctl.seenF.k===fk?{k:fk,n:ctl.seenF.n+1}:{k:fk,n:1}}
       const fouled=ans.nat20||R()<PV.foul[type]*(1+(E.s.DRW-PV.ref)/60)*(ok?.5:1.3)*((type==="rim"||type==="dunk")&&(typeof jobRule==="function"&&jobRule("contactFouls"))?1.5:1)*(1+(typeof gearStat==="function"?gearStat("draw"):0)*.1);
       const dR=x.vs==="help"?E.helpR:df;chNote(P,meR);
-      return yield* finish(meR,dR,meR.p,dR.p,type,ok,fouled,{...E.ctx,open:x.open,contest:x.contest},{me:1,dunk:type==="dunk"})}
+      return yield* finish(meR,dR,meR.p,dR.p,type,ok,fouled,{...E.ctx,open:x.open,contest:x.contest},{me:1,dunk:type==="dunk",mv:x.k})}
     return false};
   const play=function*(){
     const O=on[o],D=on[1-o];nposs++;const uo=o===US,ud=US>=0&&!uo,co=uo?ctl.off:"bal",cd=ud?ctl.def:"man";
@@ -5073,7 +5197,7 @@ function* liveGen(SD,opt,ctl){
           E.pgName=lname(pg.p);E.pgVIS=prof(pg.p).VIS;E.touches=ctl.touches||0;E.handlerName=lname(sh.p);E.spotP=clamp(.3+(E.s.THR-PV.ref)/80,.15,.6);
           const opts=chainOffball(E),card=chCard(E,Pq,lead,{offball:true,sitName:`${lname(sh.p)} has it. You are off the ball`});card.opts=opts;
           let ans=yield{poss:card};if(!ans||!ans.opt)ans=chainRoll(ctl,opts[0]);
-          const x=ans.opt;if(x.en)enSpend(meR,x.en);
+          const x=ans.opt;if(x.en)enSpend(meR,x.en);push("move",`${lname(meR.p)}: ${x.lab}.`,{k:x.k,offball:1,ok:!!ans.made,sh:meR.p.pid,hd:sh.p.pid,d:(D[O.indexOf(meR)]||D[0]).p.pid,me:1});
           if(x.k==="callfor"&&ans.made)return yield* chainRun(meR,inter,"top",clutch,lead);
           if(x.k==="cut"&&ans.made){push("chain",`${lname(meR.p)} cuts. ${lname(sh.p)} finds him.`,{sh:meR.p.pid,me:1});return yield* chainRun(meR,inter,"lane",clutch,lead)}
           if(x.k==="spot"&&R()<E.spotP){push("chain",`${lname(sh.p)} swings it to ${lname(meR.p)} in the corner.`,{sh:meR.p.pid,me:1});return yield* chainRun(meR,inter,"corner",clutch,lead)}
@@ -5090,6 +5214,7 @@ function* liveGen(SD,opt,ctl){
         const opts=defOptions(s,d,ctx),clk=`${q<=np?ORDN[q-1]+" "+PN:"OT"} · ${Math.floor(Math.max(0,t)/60)}:${String(Math.max(0,Math.round(t))%60).padStart(2,"0")}`;
         if(q>=np&&t<=120&&lead>0)opts.push({k:"foul",lab:"Foul to stop the clock",mods:[],mod:0,dc:0,pct:1,pts:0,def:true,noroll:true,note:"He shoots two. The clock stops."});
         const da=yield{poss:{opts,def:true,title:"On defense · "+(lead===0?"Tied":lead>0?`Down ${lead}`:`Up ${-lead}`),sub:clk+" · your man has it",dname:p.name,dnote:`HND ${s.HND} · LAY ${s.LAY} · THR ${s.THR}${STAR&&sh===STAR.r?` · Their star: ${STAR.perks.join(", ")}`:""}${TT(p)?` · Title: ${TITLES[TT(p)].n}`:""}`,timing:false,skl:Math.max(d.PER,d.STL,d.BLK)}};
+        if(da&&da.k)push("move",`${dp.name}: ${da.opt?da.opt.lab:da.k}.`,{k:da.k,def:1,ok:!!da.made,nat1:!!da.nat1,sh:p.pid,d:dp.pid,me:1});
         if(da&&da.k==="foul"){df.pf++;tfoul[1-o]++;push("foul",`${dp.name} fouls ${p.name} on purpose. The clock stops.`,{sh:p.pid,d:dp.pid,me:1});shootFT(sh,2,df);o=1-o;return}
         if(da&&da.k!=="hands"&&!(typeof jobRule==="function"&&jobRule("zeroDefEnergy")))enSpend(df,2);if(da&&da.k==="steal"){if(da.made){df.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${dp.name} ${da.nat20?"rips it clean and is gone":"pokes it loose and comes up with it"}. Steal.`,{h:p.pid,d:dp.pid,me:1});ctl.runout=true;o=1-o;return}if(!(typeof jobRule==="function"&&jobRule("noBite"))){ctx.open=true;ctx.contest=false;df.stint+=.6}}
         else if(da&&da.k==="block"){if(da.made)forceBlk=true;else if(!(typeof jobRule==="function"&&jobRule("noBlockFoul"))&&(da.nat1||R()<.35))forceFoul=true;else{ctx.open=true;ctx.contest=false}}
@@ -5098,7 +5223,7 @@ function* liveGen(SD,opt,ctl){
       else if(ud&&ctl&&ctl.hero!=null&&!opt.quiet&&tries===1&&mode!=="watch"&&mode!=="sim"&&defOn!=="off"&&(mode==="key"?(clutch||R()<.22)&&keyPick("def",clutch):(clutch||(ctl.runOpp||0)>=8))){const meD=D.find(r=>String(r.p.pid)===String(ctl.hero));
         if(meD){const opts=chainHelp({me:prof(meD.p)}),clk=chClk();
           let ha=yield{poss:{opts,def:true,title:"Help defense · "+(lead===0?"Tied":lead>0?`They lead by ${lead}`:`You lead by ${-lead}`),sub:clk+((ctl.runOpp||0)>=8?` · they are on a ${ctl.runOpp}-0 run`:" · late and close"),dname:p.name,dnote:`THR ${s.THR} · MID ${s.MID} · HND ${s.HND}`,timing:false,skl:prof(meD.p).PER}};
-          if(!ha||!ha.opt)ha=chainRoll(ctl,opts[2]);
+          if(!ha||!ha.opt)ha=chainRoll(ctl,opts[2]);if(ha.k!=="home")push("move",`${meD.p.name}: ${ha.opt?ha.opt.lab:ha.k}.`,{k:ha.k,def:1,help:1,ok:!!ha.made,sh:p.pid,d:meD.p.pid,me:1});
           if(ha.k==="rotate"){if(!(typeof jobRule==="function"&&jobRule("zeroDefEnergy")))enSpend(meD,1.5);if(ha.made){ctx.contest=true;ctx.open=false}}
           else if(ha.k==="lane"){if(!(typeof jobRule==="function"&&jobRule("zeroDefEnergy")))enSpend(meD,2);if(ha.made){meD.b.stl++;sh.b.tov=(sh.b.tov||0)+1;push("stl",`${meD.p.name} jumps the passing lane. Steal.`,{h:p.pid,d:meD.p.pid,me:1});ctl.runout=true;o=1-o;return}ctx.open=true;ctx.contest=false}}}
       // CPU resolution with the same dice
@@ -5125,12 +5250,12 @@ function* liveGen(SD,opt,ctl){
       const homeT=o===0&&HOME>0,big=!!(x.dunk||x.lob)&&type==="dunk";
       if(ctl&&US>=0){const k=o===US?1:-1;ctl.mom=clamp((ctl.mom||0)+k*(big?(homeT?3:2)+(o===US&&x.me&&C?.rpg?.origin==="blacktop"?1:0):1)+(o===US&&x.me&&type==="three"&&(typeof jobRule==="function"&&jobRule("momentumTeamPlus"))?1:0)+(o===US&&x.me&&big&&typeof gearRule==="function"&&gearRule("dunkMomPlus")?1:0),-5,5);if(o===US){ctl.runOpp=0;if(big&&x.me)ctl.dunkTax=true}else ctl.runOpp=(ctl.runOpp||0)+pts}
       const call=x.me&&big?(x.lob?` ${lname(x.assistTo.p)} lobs it and ${p.name} finishes it at the rim. ${homeT?"The building is on its feet.":"In their building."}`:` ${p.name} THROWS IT DOWN. ${homeT?"The crowd goes wild.":"You can hear their gym go quiet."}`):"";
-      push("make",call?`${cx.clutch?"CLUTCH! ":""}${call.trim()}`:`${cx.clutch?"CLUTCH! ":""}${p.name} ${verb}${ast?` (assist ${lname(ast.p)})`:""}.${heat}`,{sh:p.pid,as:ast?.p.pid,d:dp.pid,shot:stype,dist,ang,pts,...cx,...(big&&x.me?{dunk:1}:{})});
+      push("make",call?`${cx.clutch?"CLUTCH! ":""}${call.trim()}`:`${cx.clutch?"CLUTCH! ":""}${p.name} ${verb}${ast?` (assist ${lname(ast.p)})`:""}.${heat}`,{sh:p.pid,as:ast?.p.pid,d:dp.pid,shot:stype,dist,ang,pts,...cx,...(big&&x.me?{dunk:1}:{}),...(x.mv?{mv:x.mv}:{})});
       if(fouled){df.pf++;tfoul[1-o]++;push("foul",`And one! ${dp.name} fouls ${lname(p)}.`,{sh:p.pid,d:dp.pid});shootFT(sh,1,df)}
       o=1-o;return false}
-    if(fouled){df.pf++;tfoul[1-o]++;push("foul",`${dp.name} fouls ${lname(p)} on the ${TYPEN[type]}.`,{sh:p.pid,d:dp.pid,shot:stype,dist,ang});sh.b.fga--;if(type==="three")sh.b.tpa--;shootFT(sh,pts,df);o=1-o;return false}
+    if(fouled){df.pf++;tfoul[1-o]++;push("foul",`${dp.name} fouls ${lname(p)} on the ${TYPEN[type]}.`,{sh:p.pid,d:dp.pid,shot:stype,dist,ang,...(x.mv?{mv:x.mv}:{})});sh.b.fga--;if(type==="three")sh.b.tpa--;shootFT(sh,pts,df);o=1-o;return false}
     const D=on[1-o],O=on[o];let blk=null;if(x.forceBlk){blk=df;df.b.blk++}else if(type!=="three"&&R()<PV.blk*Math.pow(prof(dp).BLK/PV.ref,2.5)*Math.pow(hgt(dp)/79,3)*(type==="mid"?.4:1)){blk=df;df.b.blk++}
-    push(blk?"blk":"miss",blk?`${dp.name} swats ${lname(p)}'s shot!`:`${p.name} misses the ${TYPEN[type]}${ctx.contest?" over a hand":""}.`,{sh:p.pid,d:dp.pid,shot:stype,dist,ang,blk:!!blk,...cx});
+    push(blk?"blk":"miss",blk?`${dp.name} swats ${lname(p)}'s shot!`:`${p.name} misses the ${TYPEN[type]}${ctx.contest?" over a hand":""}.`,{sh:p.pid,d:dp.pid,shot:stype,dist,ang,blk:!!blk,...cx,...(x.mv?{mv:x.mv}:{})});
     const PO=O.map(r=>prof(r.p)),PD=D.map(r=>prof(r.p)),orbP=clamp(PV.orb+(PO.reduce((a,s)=>a+s.ORB,0)-PD.reduce((a,s)=>a+s.DRB,0))/5*.004+(O.reduce((a,r)=>a+hgt(r.p),0)-D.reduce((a,r)=>a+hgt(r.p),0))/5*.01,.12,.45);
     const crash=ctl&&o===US&&ctl.crash;if(ctl)ctl.crash=false;const meO=crash?O.find(r=>String(r.p.pid)===String(ctl.hero)):null;
     const offR=R()<orbP*(crash?1.6:1),rt=offR?O:D,rb=offR&&meO&&R()<.6?meO:wpick(rt,r=>{const s=prof(r.p);return Math.pow((offR?s.ORB:s.DRB)/PV.ref,USE.reb)*Math.pow(hgt(r.p)/79,2.5)*(1+(s.VRT-PV.ref)/150)});if(R()>.12)rb.b.reb++;
