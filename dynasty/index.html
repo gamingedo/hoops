@@ -2061,7 +2061,7 @@ function cardJersey(c,p,big){const[pri,trim]=colorsAt(c.t,c.y);const num=p[3]||"
 /* ui.js: screens */
 const $=s=>document.querySelector(s);
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-let GFSET="",GFSLOT="",VIEW="team",CARDTAB="cards",CFILTER="all",SWAP=null,CATT="all",CATS="all",CATN=60,CATQ="",CATTEAM="";
+let MYQ="";let GFSET="",GFSLOT="",VIEW="team",CARDTAB="cards",CFILTER="all",SWAP=null,CATT="all",CATS="all",CATN=60,CATQ="",CATTEAM="";
 const ICON={team:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg>',
   packs:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="3" width="13" height="17" rx="2"/><path d="M8 7l9 0M20 7v13a2 2 0 0 1-2 2H8"/></svg>',
   cards:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="8" height="11" rx="2"/><rect x="13" y="4" width="8" height="11" rx="2"/><path d="M3 19h18"/></svg>',
@@ -2445,9 +2445,12 @@ function viewCards(){if(CARDTAB==="all"||CARDTAB==="cards"&&false)CARDTAB="cards
   if(CARDTAB==="power")return h+powerHTML();
   if(CARDTAB==="book")return h+bookHTML();
   if(CARDTAB==="cards"){const fl=[["all","All"],["new","New"],["K","Rookies"],["5","5★"],["4","4★"],["3","3★"],["2","2★"],["1","1★"],["fr",TEAMNICK(S.fr)]];
+    h+=`<input id="myq" type="search" placeholder="Search your cards" value="${esc(MYQ)}" class="inp" style="width:100%;margin-top:10px" autocomplete="off">`;
     h+=`<div class="chips" style="margin:10px 0">${fl.map(([k,n])=>`<button class="chip ${CFILTER===k?"gold":""}" style="cursor:pointer" data-act="cfilter" data-arg="${k}">${esc(n)}</button>`).join("")}</div>`;
-    let ids=Object.keys(S.own).map(Number);if(CFILTER==="new")ids=ids.filter(i=>S.own[i].isNew);else if(CFILTER==="fr")ids=ids.filter(affil);else if(CFILTER==="K")ids=ids.filter(i=>DB.c[i].k==="K");else if(CFILTER!=="all")ids=ids.filter(i=>DB.c[i].s===+CFILTER);
-    ids.sort((a,b)=>cardOvr(b)-cardOvr(a));h+=`<div class="grid4">${ids.map(i=>mcHTML(i)).join("")||'<div class="empty" style="grid-column:1/-1">Nothing here yet.</div>'}</div>`}
+    let ids=Object.keys(S.own).map(Number);
+    /* search by name, accents ignored ("doncic" finds Dončić) */
+    const mq=MYQ.trim().toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"");if(mq)ids=ids.filter(i=>DB.p[DB.c[i].p][0].toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").includes(mq));if(CFILTER==="new")ids=ids.filter(i=>S.own[i].isNew);else if(CFILTER==="fr")ids=ids.filter(affil);else if(CFILTER==="K")ids=ids.filter(i=>DB.c[i].k==="K");else if(CFILTER!=="all")ids=ids.filter(i=>DB.c[i].s===+CFILTER);
+    ids.sort((a,b)=>cardOvr(b)-cardOvr(a));h+=`<div class="grid4">${ids.map(i=>mcHTML(i)).join("")||`<div class="empty" style="grid-column:1/-1">${mq?`No cards of yours match "${esc(MYQ.trim())}".`:"Nothing here yet."}</div>`}</div>`}
   else{const all=Object.values(S.gear);const cnt=k=>all.filter(g=>g.set===k).length;
     const gs=all.filter(g=>(!GFSET||g.set===GFSET)&&(GFSLOT===""||g.slot===+GFSLOT)&&gearFilt(g)).sort(GSORTS[GF.sort][1]);const nf=gfCount();
     h+=`${all.length?`<div class="autog" style="margin-top:10px"><button class="btn sm go" data-act="autoGearAll">Auto-equip roster</button><span>Starters pick first, by their top ratings</span></div>
@@ -2839,7 +2842,7 @@ document.addEventListener("click",e=>{if(window._dragEnd&&Date.now()-window._dra
 function boot(){buildPools();load();if(S&&(!S.v||!S.season))S=null;if(S){ledSeed();migrateBench();migrateTier();migrateEcon();dailyEnergy();const n=migrateIds();if(migrateGear())S.gearV2=Date.now();tickGrind();if(S.grind)GTIMER=setInterval(grindPulse,1000);save();if(n)setTimeout(()=>toast(n===1?"Fixed 1 card that showed the wrong player":`Fixed ${n} cards that showed the wrong player`),600)}render();if(S&&S.box&&S.box.cards)setTimeout(openStarterBox,400)}
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&S&&dailyEnergy()){save();if(!SHEET)render()}
   if(document.visibilityState==="visible"&&S&&S.grind){if(tickGrind()&&!SHEET)render();clearInterval(GTIMER);GTIMER=setInterval(grindPulse,1000)}});
-document.addEventListener("input",e=>{if(e.target.id==="catq"){CATQ=e.target.value;CATN=60;clearTimeout(window._cq);window._cq=setTimeout(()=>libRefresh(),250)}});
+document.addEventListener("input",e=>{if(e.target.id==="myq"){MYQ=e.target.value;clearTimeout(window._mq);window._mq=setTimeout(()=>render(),200);return}if(e.target.id==="catq"){CATQ=e.target.value;CATN=60;clearTimeout(window._cq);window._cq=setTimeout(()=>libRefresh(),250)}});
 document.addEventListener("change",e=>{if(e.target.id==="catteam"){CATTEAM=e.target.value;CATN=60;libRefresh()}
   if(e.target.id==="gfset"){GFSET=e.target.value;render()}if(e.target.id==="gfslot"){GFSLOT=e.target.value;render()}});
 /* any press that moved more than a few pixels is a drag, never a tap */
@@ -4150,7 +4153,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="d3ad38e536";
+<script>const APPV="466874016e";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
