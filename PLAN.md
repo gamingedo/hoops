@@ -155,34 +155,118 @@ Advancement scenes (System texts) exist for Lv 10/20 and the flat upgrades; add 
 
 Save migration: on load, if `C.job.path` exists (old 5-path), map scorer→scorer, playmaker→playmaker, wing→defense/stopper, big→scorer/post, glue→defense/glue; if the player is ≥ Lv 10 with no class, queue the Lv 10 scene once ("Level ten was a while ago. Pick.").
 
-## 4. Items, loot, shop
+## 4. Gear (locked 2026-10-20, replaces the Locker)
 
-- `ITEMS[k].mods` become edges: `{on:[moveKeys|shotTypes], val}` plus a few rules (`energyDrain:-0.2`, `seenDelay:1`, `rerollTrust:1`). Rewrite the 25 items' `mods` accordingly; keep backstories (DCC voice is allowed there; no contractions in narration).
-- `grantItem` is called only from advancements: `lootBox(tier)` picks a random item whose `cls` matches the player's class (or any, at Lv 5) with rarity floor by tier: 5/10 → uncommon+, 20/30 → rare+, 40/50 → epic+, 60 → legendary. Remove crate keys from goals and games; remove the "Open a crate" UI; keep the pity counters out.
-- Shop: `C.nil` is the balance (sponsor cash payouts and NIL value per season add to it; remove "Sent home" as a sink or make it a choice). `shopHtml()`: 6 items per season drawn by class, priced by rarity (uncommon 15k, rare 40k, epic 120k, legendary 400k), restocks at season start. Hub: the `shop` map's counter prop opens the shop window (`act:"shop"`). No timers.
-- Locker bugs: `.mp-win>.mp-body{min-height:0}` (scroll), and verify `equip`/`unequip` never leave an item in both `bag` and `eq`.
+Summoners War runes, mapped onto body parts. `gear.js` owns all of it; the old Locker (charm slot, 25 story items, crate keys, pity on crates) is deleted.
 
-## 5. The ladder, encounters and difficulty (replaces the story pass)
+- **Six slots.** Fixed main edge: feet = Acceleration (drive, cut, euro, spin, run-outs), hands = Handle (cross, hesi, handoff, step, steal), head = Shot IQ (jab, pump, charge, rotate, lane, callfor). Variable main edge rolled on drop: arm = Three | Mid | Passing | Block; legs = Energy (max energy) | Vertical (dunk, block, crash) | Strength (post, dropstep, screen, drawfoul) | Rebounding (crash, putback); jersey = Clutch (every roll in the last two minutes) | Draw fouls (drawfoul, and-one chance) | Perimeter D (hands, steal, rotate) | Interior D (block, charge, layhelp defense).
+- **Grade 1★–6★** sets edge size: main = 0.5 × grade; substat base 0.5. **Rarity** sets substat count: common 1, uncommon 2, rare 3, epic 4, legendary 4 + the set's 4-piece rule carried alone. Substats draw from the move list (no duplicates on one piece, never the main).
+- **Sets** named for sponsors; a piece's name is set + slot noun. 2-piece / 4-piece: Apex (+0.5 dunk / a made dunk swings momentum one more), CRISPY (+0.5 contests / your man shoots at −1 all game), Kinetic (+0.5 clutch / natural 1s rerolled in the last two minutes), TruForm (energy drain −10% / defensive cards cost no energy), Harbor (+0.5 passes / teammates +1 off your passes), Summit (+1 in playoff and tournament games / +2), Vantage (legendary only: +1 everything / natural 1s never happen).
+- **Drops** after every game, played or simmed: 70% a piece. Rarity roll common .55 uncommon .28 rare .12 epic .05, legendary only from the Finals in Season 1. Pity shown on the Locker: common within 4, rare within 12, epic within 40. Boss games (ranked opponent in college, conference and NCAA tournament, NBA playoffs) roll one rarity up; the Finals is a guaranteed legendary. Advancements (Lv 5/10/20/30/40/50/60) give a box one rarity above the drop. Grade: college 1–3★, NBA 2–4★, playoffs +1, Finals 5★; each season +1 cap.
+- **Perk shards:** 20% of advancement boxes drop a shard of a perk you own → rank up (max 3). Rank effects in v49 are numeric (edge +0.5 per rank; move perks: rank 2 a second use, rank 3 +1); bespoke rank effects wait for the perk-name review.
+- **Money (NIL) has one job.** In: sponsor deals pay weekly (tier 0 2k, tier 1 5k, tier 2 12k), program stipend weekly (college prestige × 40; NBA 0.07% of salary), playoff round bonuses, salvage (30% of spend + 300 × grade). Out: **power up** +1…+12 (cost = base[grade] × (1 + 0.35 × rank), base 400/900/2k/4.5k/10k/22k; at +3/+6/+9/+12 one random substat +0.5 or a new substat if open; never fails), **reappraise** (reroll one substat's stat, cost = last power-up), **merge** (five of one grade → one of the next, fee = base[grade]). No shop.
+- **Sponsors** are set-makers only: a running deal makes its set drop twice as often. No people, no clauses with stories, no reputation, no swagger, no social post. Attention still gates tiers and slots.
+- **Bag:** the Locker opens in the sheet (scrolls on phone), filters by slot and "fits my class", sorts by grade; a piece is never in both bag and a slot.
 
-- **Ladder:** a visible rank on the HUD with the next requirement shown: Walk-on → Rotation → Starter → Star → All-Conference → All-American → Lottery Pick → Starter (pro) → All-Star → All-NBA → MVP → Legend → Hall of Fame. Each rank has one requirement (a stat line over N games, an award, a win count) and a reward (a loot box of a set rarity, a title, a cosmetic). Window: `ladder` (key L).
-- **Titles:** earned from feats ("Forty Burger", "Triple-Double Machine", "Lockdown", "Giant Killer"). One equipped title shows on the HUD and grants a tiny named edge.
-- **Encounters with loot tables:** the opponent's best player is the matchup boss of a game (named on the pregame card with his rating). Beating a top-25 team, a rival school, a conference tournament, March Madness rounds and NBA playoff rounds each roll on a loot table whose rarity scales with the opponent's strength and the round. Losses drop nothing. Show the table on the pregame card.
-- **Records against the greats:** the existing records and GOAT data become chase goals with rewards.
-- **Difficulty:** a setting (Rookie / Pro / All-Star / Hall of Fame) that adds +0/+1/+2/+3 to the DCs of your rolls and to the opponent's modifiers, printed on every card as "Difficulty". Default Pro. Opponent quality also scales with your level via schedule (tougher non-conference games as Attention rises).
-- **Goals** become chain goals and ladder steps (EXP and loot, no timers).
-- **Sponsors** stay as loot sources with a clause as the cost; rewrite payouts in the four perk kinds; cash goes to NIL money. No characters.
+## 5. The season, the raids, the UI, the hooks (locked 2026-10-20, replaces the ladder section)
+
+**Shorter seasons.** College: 12 games, then the conference tournament is cut; the NCAA tournament is the raid (six rounds, single elimination, seed from the 12 games). NBA: 16 games, playoffs best of five, four rounds. Seed decides the road: 1 plays 8 with home court, 8 plays 1 on the road. The Finals opponent is the historical champion from the rotation (the raid boss). No transfer portal, no second college year; the stay/transfer screens are deleted.
+
+**The raid ramps by taking crutches, not by adding DC.** Each round is printed on the pre-game card.
+- Round 1: a normal opponent. Good gear dog-walks them; that is the payoff.
+- Round 2: they scheme. Their best defender on you every trip (printed ▼ Their best defender).
+- Round 3: scouting report. Your most-used setup move starts the game as "They have seen it."
+- Round 4: their star carries a class and two perks that fire against you, printed on the defense card.
+- The title game / Finals: the boss. Full strength, a held title perk (once a quarter one of their shots is PERFECT), and the last two minutes of every quarter play as late game.
+College uses the same five shapes over six rounds (rounds 1–2 normal, 3 scheme, 4 scouting, 5 perks, 6 boss).
+
+**Dice stay under the hood. The card shows odds, payoff and words.**
+- Option: label · percent · points. No DC, no modifier sums, no d20.
+- Under it, chips, one per factor, each a plain noun and a signed percentage of odds: ▲ Handle +5% · ▲ Momentum +3% · ▼ Their best defender −8% · ▼ Tired −5%. A d20 point is 5% of odds, so +0.5 prints as +3% (rounded), +1 as +5%, +1.5 as +8%, +2 as +10%. The chips sum to the option's percent. Blue up, orange down.
+- The roll is a meter that lands MADE or MISSED with the one reason that mattered. Natural 20 = PERFECT (longer beat, sound). Natural 1 = SLIP. "Just short" when a miss is within 1; "Clean" when a make clears by 5+.
+- Every edge everywhere (perks, gear, origins, body, sets) is printed the same way: the move or moves it touches and a signed percentage. "Downhill: drives +8%." "Harbor Sleeve: Three +10% · Crossover +3%." No tier words. Raw d20 modifiers appear only behind the "Show the math" setting (off by default).
+- Words are used only for outcomes: MADE, MISSED, PERFECT (a natural 20: it goes in regardless), SLIP (a natural 1: it goes wrong regardless), "Just short" (missed by one point), "Clean" (cleared by five or more).
+- Settings shrink to: card mode, speed, sound, show the math. Karmic dice stays on, timing tap is removed, off-ball rule stays automatic.
+- The GOAT title reads "once a quarter, a shot you pick is PERFECT."
+
+**UI cut.** One bottom bar: Play · Locker · Character · Season. Season holds Team, Schedule, Top 25/Standings, Bracket, News, Clips, Trophies. Character holds Stat, Skills, Class, Deals. The gym stays as the home screen; nothing requires walking (one tap opens everything; the sprite is decoration). Attention is hidden; the Deals tab shows deals. Goals/quest helper removed (level boxes and drops are the reward track). Practice becomes the weekly free reappraisal (one substat reroll per game week) or is cut if that is not ready.
+
+**Hooks (in build order).**
+1. The reveal: every drop and box opens as a card: rarity color, stars tick in, main stat, substats one by one; epic and legendary take longer and have a sound.
+2. Pity on the Play button: "Rare in 3" next to "Play next game."
+3. The pre-game card: opponent, their best player, the round's scheme, the drop tier; boss games framed gold.
+4. The post-game ladder: EXP bar filling, money counting, the drop reveal, pity, next opponent, as one animated sequence.
+5. Build goal: pick a target set + main stat + grade on the Locker; the game tracks progress and lights up drops that advance it.
+6. Milestone titles: cumulative, never reset (100 threes, 50 dunks, 10 game-winners, a 40-piece, a ring…); each pays a box and a wearable title under your name.
+7. Vantage meter: every salvage fills a hidden bar; full = one guaranteed epic in a slot you choose.
+8. Season patch notes from the System at rollover (cap +10, new grade, the next boss, new sets).
+9. Boss records: your fastest win, biggest margin, best line per boss, shown on the bracket.
+Never: logins, timers, energy gates, extra currencies, passes.
 
 ## 6. Milestones and acceptance
 
 **M1 — cleanup (shipped v45).** **M2 — the chain (shipped v46)**, plus the story cut.
 
-**M2.5 — creation and growth (v47):** §1b, the college baseline (PV.ref 62, no junior-college start), and a one-pass league restat to the new floor/ceiling scale. 300 SP for all, star floors and growth, the new cost curve relative to PV.ref, SP-per-level table computed from the cap, origins rewritten (Legacy: Name on the Back = start at 20 Attention, opponent's best defender guards you from game one, printed −1; Lv 5 pool Heat check / Captain; others likewise). Practice slots and the gym drill. Tests: a 3★ who spends every point reaches max-all at Lv 75 within 2%; creation screen shows floors; drills run as chains.
+**M2.5 — creation and growth (shipped v47).** Ship notes:
+- Grants: star growth bonus applies to college levels (2–20) only; pro levels grant the same to every tier. GR_K is solved so 500 + grants(2..70) for a 3★ = 24 × cost(65→99 at ref 65) = 6,816. `__growth.check()` ratio 1.0000.
+- EXP (measured, one season each, 3★): college played+practice → Lv 21, college sim → Lv 14–15 (draft lifts anyone below 20 to 20, crediting the skipped grants). NBA played+practice → Lv 70 near the Finals; NBA sim → Lv 54. Constants: XP_COL .85, XP_NBA 13.3, XP_PLAYED 2.0; goals pay a flat 25% of a level; level goals capped at 70.
+- Body and origin edges are live on every chain option (setup, finish, pass, off-ball, help, defense). Lv 5 origin perk choice fires once.
+- Practice: 2 drills per game week, DC 10/12/14, 3 rolls; HUD button (E) in college, rpgbar button in the NBA.
+- Clock: college chain budget is the full 30; last two minutes of the final period/OT: trailing → budget 12 and "Hurry", leading → "Milk the clock" (no roll, burns ~12 game seconds, fewer moves), defense trailing → "Foul to stop the clock". NBA chain cap is 4 moves; NBA off-ball cards only when it matters (late and close, a run, momentum ±3) unless the player sets "Every trip".
+- Deferred to M5: the league restat (the engine is ref-relative, so it waits for the draft respec), forced respec at the draft. Undrafted 1★ barely plays in the NBA (M5 free agency).
+- 1★ now recruits from the bottom 40 programs by prestige; JUCO start removed.
 
-**M3 — classes and perks (v48):** §3. **M4 — items, loot, shop (v49):** §4, plus playoff wing boxes and the ring.
+**M2.5 original spec:** §1b, the college baseline (PV.ref 62, no junior-college start), and a one-pass league restat to the new floor/ceiling scale. 300 SP for all, star floors and growth, the new cost curve relative to PV.ref, SP-per-level table computed from the cap, origins rewritten (Legacy: Name on the Back = start at 20 Attention, opponent's best defender guards you from game one, printed −1; Lv 5 pool Heat check / Captain; others likewise). Practice slots and the gym drill. Tests: a 3★ who spends every point reaches max-all at Lv 75 within 2%; creation screen shows floors; drills run as chains.
 
-**M5 — the season loop (v50):** §1a. Tutorial grade and draft choice; no aging/retirement; season rollover (cap +10, PV.ref +3, ceiling +3, league ratings track, stronger draft classes, new loot tier, partial ladder reset); playoffs as raid wings; Finals loot and ring; offseason party-building (free agency, trade request). Tests: three simulated seasons run back to back with league FG% within realistic bands each season; a champion receives exactly one ring and one guaranteed legendary; a first-round exit receives one rare box.
+**M3 — classes and perks (shipped v48).** Ship notes:
+- The verbatim perk table from the 2026-10-20 chat was lost in a context reset. The 65 perks were rebuilt from §3's spec names and rule keys; names and text live in `story.js` as `ST.perks`. The user reviews them in play.
+- Class (Lv 10): edge +0.5 on its domain and one move (Scorer: Step-back; Playmaker: lob from the help; Defense: Lock him up). Spec (Lv 20): +1 on its domain. Picks at 30/40/50/60 from the spec's five. Master 45: edges x1.5. Legend 65: +0.5 on everything, every move twice.
+- Slots: three in college, five in the NBA; the origin perk takes one. Extra perks can be equipped and unequipped from the Class panel on the Stat tab.
+- Rules implemented: spaceLasts, seenHalved3, noCallFor, resetCost3, teamOpenPlus1, screenSwitchMore, seeCoverage, timeoutFullReset, heatCheck, gravity, contactFouls, pushAfterReb (10%), momentumTeamPlus, noBite, zeroDefEnergy, shadow, noBlockFoul, teamDefPlus. Links: block→runout, teamSteal→runout (50%), oreb→putback.
+- Balance (college bot, 15 games, three picks each): no class 31–33 ppg; specs 26–44 ppg. Transition was 52 ppg until the run-out links were cut.
+- Save migration from the old five jobs, including old specialization names.
+- Origin pools stay as shipped in v47 (growth.js OPERKS), not the §3 list.
 
-**M6 — ladder and encounters (v51):** §5 without the difficulty setting (one mode; the playoff ramp is the difficulty). **M7 — aesthetics (v52+)**, including a different setting for the NBA hub.
+**M3 original spec:** §3. **M4 — gear (shipped v49).** Ship notes:
+- `gear.js` is the whole system; the old Locker, crate keys, the charm slot and the 25 story items are gone. Old saves: each old item became $2,000 NIL money; old "Sent home" cash moved into NIL.
+- Gear edges flow through `myEdges` like body, origin and class edges; set 4-piece rules share `jobRule` keys (shadow, teamOpenPlus1, zeroDefEnergy) plus dunkMomPlus, clutchReroll1, noNat1, bossPlus1. Energy main adds 4 max energy per point; TruForm 2-piece slows the hero's drain; Draw fouls raises the hero's foul chance.
+- Boss games: college tournament phases and ranked opponents (drop rarity +1); `opt.boss` feeds Summit. NBA playoff series wins pay $15k/$30k/$60k/$150k; the Finals pays a legendary to the champion and an epic-or-better to the loser.
+- Advancement boxes at Lv 5/10/20/30/40/50/60; 20% become a perk shard (rank 1–3: +0.5 per rank on edges; rank 2 a second move use; rank 3 +1 on the move).
+- Sponsors are 13 set-maker deals, no people. A running deal makes its set twice as likely. Weekly pay plus the program stipend (prestige × 40 in college, 0.07% of salary in the NBA).
+- The hub shop map is now the equipment room: the counter and shelf open the Locker.
+- Cut with it: daily events, rested EXP, traits (creation step and sheet row), crate keys in goals and games, social posts, reputation, swagger, bonds/rival/fate hooks in the engine, the hallway map, the Coach and rival lines on the offers and decide screens.
+- Tuning to watch: a full epic kit in college pushed the test bot to 52–57 ppg (normal 33). College is god mode on purpose; check the NBA with natural drops before the league scaling in M5.
+- Still in the code but unreachable: the prologue render functions in career.js and the legacy-generation path (needs retirement, which M5 removes).
+
+**M4 original:** §4, plus playoff wing boxes and the ring.
+
+**M5 — the season loop (shipped v50).** Ship notes:
+- College: 12 games (4 non-conference, 8 conference), no conference tournament; the field is the top 64 and your team is always in it (last spot if needed). One season only: the decide screen shows the draft grade and one button. Grade = production ×1.1 + win% ×20 + tournament depth (1/4/8/12/18/24/30) + awards ×2.5; S ≥92, A ≥75, B ≥58, C ≥42, else D. Grade sets the pick (S 1–3, A 4–10, B 11–20, C 31–45, D undrafted), the team choices (S: best record + two; A: three; B: two; C: the drafting team; D: any) and the starter box (legendary/epic/rare/uncommon/common).
+- The draft: everyone is lifted to Lv 20 (skipped grants paid), then the forced respec: floor 65, reference 65, 500 + every point the college levels paid (+ origin points and perfect-drill points). The skills sheet opens.
+- NBA: 16 games, no play-in, best of five, four rounds, seeds by record. Every career-league game runs the possession engine (gear, perks and raids apply to sims). The league is re-centred each season: rotation players (top 8 per team) are shifted to the real league's rotation shape, tuned so the league shoots 46% / 36% at ~101 possessions. The season boost is `G.lgBoost` (+3 a season) added to every CPU player and to the engine reference, so CPU vs CPU is unchanged and only you fall behind.
+- Raids: college rounds map 1,1,2,3,4,5; NBA rounds 1,2,4,5. 2 = their best defender on you (−5% on everything you create), 3 = your most-used setup move starts the game already seen, 4 = their best player carries two perks (+5% on his shots, −5% on yours when he guards you, printed on the defense card), 5 = the boss: once a quarter his shot is PERFECT and every quarter ends as late game. In the NBA Finals your opponent is swapped for a historical champion (rotation: 2017 GSW, 1996 CHI, 2001 LAL, 1986 BOS, 2014 SAS, 2013 MIA, 1987 LAL, 2008 BOS, 2016 CLE, 2023 DEN), mapped onto the league's scale, restored after the Finals.
+- Playoff rewards: losing a series gives one box (round 1 rare, later epic); the title gives one 5★ legendary and one ring (+5% on every roll in playoff and tournament games per ring). Series wins also pay NIL.
+- Seasons: the season counter ticks at each season start; Season n: level cap 70+10(n−1), skill ceiling 99+3(n−1), gear cap 3+n★, league +3(n−1), patch-notes card from the System. The player never retires; the GM is never fired in career.
+- The card: odds, points, and factor chips in signed percent (a d20 point = 5%), a base chip so the chips add up; the roll is a meter; outcomes MADE/MISSED, PERFECT/SLIP, "Just short", "Clean". "Show the math" setting brings the numbers back. Settings cut to mode, speed, sound, show the math (timing tap, karmic toggle, bench and defense toggles gone; defaults kept).
+- Every printed edge (perks, classes, origins, sets, gear, Legend/Master) is a signed percent.
+- UI: college bottom bar Play · Locker · Character · Season · ⋯ (sims, settings, style, keys, menu); Season holds Schedule, Standings, Top 25, Bracket, Team, News, Clips, Trophies. NBA career nav Play · Locker · Character · Season; trade and the GM tabs hidden (free agency shows in the offseason); "Decisions" became "Your party" (one trade request a season).
+- Hooks 1–4: the reveal card (drops after simmed games when rare or better; every box), pity on both Play buttons, the pre-game card (opponent, best player, raid round lines, drop tier, gold frame for boss games), the post-game ladder (result, EXP bar, money, the drop reveal, pity, next opponent).
+- Practice became one free substat reroll per game week. Goals were removed. EXP rescaled for the short seasons: XP_COL 2.9, XP_NBA 30 (measured, 3★: college played Lv 19 / simmed Lv 12; first NBA regular season played Lv 57 before the playoffs, a Finals run reaches 70; simmed Lv 45).
+- Fixed: the drafted player sat on two rosters (stats doubled).
+- Deferred to M6 with hooks 5–9: the Hall of Fame board and held titles, constrained free agency, college-only and NBA-only badges.
+
+**M5 original:** §5 as locked (short seasons, seeded best-of-five, the five-round raid, dice under the hood with the descriptor words, the UI cut to four tabs, hooks 1–4). Hooks 5–9 are M6. Plus: §1a. Tutorial grade and draft choice; no aging/retirement; season rollover (cap +10, PV.ref +3, ceiling +3, league ratings track, stronger draft classes, new loot tier, partial ladder reset); playoffs as raid wings; Finals loot and ring; offseason party-building (free agency, trade request). Tests: three simulated seasons run back to back with league FG% within realistic bands each season; a champion receives exactly one ring and one guaranteed legendary; a first-round exit receives one rare box.
+
+**M6 — ladder and encounters, and M7 — the NBA home and the phone layout (shipped together as v51).** Ship notes:
+- Hall of Fame board (hof.js): points = ring 10, MVP 12, Finals MVP 8, All-NBA 6/4/3, DPOY 5, All-Star 2, statistical title 3. Real greats who are not in the league are seeded (top 60, at least 40 points) with real rings and estimated MVP / All-NBA / All-Star counts taken from season ranks in the NBA.com data, since the bundled data has no award table. All time / This season views live under Season.
+- Held titles: the ten best **active** players hold them (#1 The GOAT: one PERFECT shot a game plus +5% on a natural 1 reroll; #2–5 Pantheon: +5% in the fourth quarter; #6–10 Legend: energy costs ×0.8). Retired greats sit on the board but hold nothing, so a title is always something you can take. Re-ranked after each regular season and after the Finals.
+- Badges: college (Freshman, Conference POY, Final Four, National title, Buzzer, Giant killer, Triple-double, 40 points) and NBA (All-Star, All-NBA, 50 points, Game 5, Closer, Ring bearer). Badges are equipped in perk slots, so they compete with class perks for space rather than stacking freely.
+- Milestones (hook 6) with wearable titles and boxes; the Vantage meter (hook 7: every salvage fills 12.5%, a full meter is one epic in a slot you choose); the build goal (hook 9: pick set + main + grade, drops that move you toward it are marked ▲); boss records (hook 5: the pre-game card names the boss and your record against it).
+- Hook 8 (patch notes each season) already existed from M5.
+- Free agency in career: CPU teams sign at most three real free agents a season (minimum-contract fill-ins do not count), so rosters stay recognisable.
+- M7, the NBA home: after draft night you land in the same scene and bar as college, with your team's colours, name and banners, a pro coach and your best teammate. Play opens the pre-game card; in the offseason the button starts the next season (draft, re-signing and free agency run on their own). Season opens the league pages; Play in their nav returns home. ⋯ holds sims, settings, style and the menu.
+- Phone layout (iPhone portrait, any width up to 600): its own arrangement, not a shrunk desktop. Thin level and EXP strip on top; the gym scene in the top ~44% zoomed 2× around the player; a next-game card (team record, opponent, raid round, their best player, the raid rule, drop odds, your season line); one big Play button; an icon tab bar (Locker, Character, Season, More) with home-bar padding. Locker / Character / Season open as full pages with a large close button. The play-call card wraps instead of running off the right edge. Desktop is unchanged. The layout is chosen from the screen size on load and on rotate (`fitDevice`, class `phone`; `compact` tightens screens 380 wide or less).
+- Tests: m6.py (board, titles, GOAT PERFECT events, badges, milestones, meter, goal), m7.py (pick → home → game → sims → playoffs → offseason → season 2, at 1300 and 440×956), plus the existing suite.
 
 ## 7. Working rules for the executor
 
