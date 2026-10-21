@@ -4095,9 +4095,15 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const BUILD="5b28855786";
-if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));
+<script>const APPV="5b28855786";
+/* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
+if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
-async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();if(j.v&&j.v!==BUILD){if(typeof SHEET!=="undefined"&&SHEET||document.querySelector(".lvs")){window._pendingUpdate=true;return}location.reload()}}catch(e){}}
-addEventListener("load",()=>setTimeout(checkUpdate,1500));document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdate()});setInterval(()=>{if(window._pendingUpdate&&!(typeof SHEET!=="undefined"&&SHEET)&&!document.querySelector(".lvs"))location.reload()},3000);
+async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();if(j.v&&j.v!==APPV){if(typeof SHEET!=="undefined"&&SHEET||document.querySelector(".lvs")){window._pendingUpdate=true;return}location.reload()}}catch(e){}}
+addEventListener("load",()=>setTimeout(checkUpdate,1500));
+/* for the road: once a day with signal, fetch every team logo and the photos of your own cards so they're saved for offline */
+addEventListener("load",()=>setTimeout(()=>{try{if(!navigator.onLine||typeof S==="undefined"||!S||!("caches" in window))return;const d=new Date().toDateString();if(localStorage.getItem("hd_warm")===d)return;
+  const urls=DB.t.map((t,i)=>logoURL(i));for(const i of Object.keys(S.own||{})){const pid=DB.p[DB.c[i].p][6];if(pid)urls.push(`https://cdn.nba.com/headshots/nba/latest/260x190/${pid}.png`)}
+  for(const i of S.roster||[]){const pid=DB.p[DB.c[i].p][6];if(pid)urls.push(`https://cdn.nba.com/headshots/nba/latest/1040x760/${pid}.png`)}
+  let k=0;const next=()=>{if(k>=urls.length){localStorage.setItem("hd_warm",d);return}const u=urls[k++];fetch(u,{mode:"no-cors"}).catch(()=>{}).finally(()=>setTimeout(next,60))};next()}catch(e){}},6000));document.addEventListener("visibilitychange",()=>{if(!document.hidden)checkUpdate()});setInterval(()=>{if(window._pendingUpdate&&!(typeof SHEET!=="undefined"&&SHEET)&&!document.querySelector(".lvs"))location.reload()},3000);
 </script></body></html>
