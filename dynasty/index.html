@@ -724,9 +724,9 @@ function attachDrag(root){let drag=null;
     el.addEventListener("pointermove",e=>{if(!drag||drag.el!==el)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
       if(!drag.on&&Math.hypot(dx,dy)>8){drag.on=true;const r=el.getBoundingClientRect();const g=el.cloneNode(true);g.className+=" ghost";g.style.width=r.width+"px";g.style.left=r.left+"px";g.style.top=r.top+"px";document.body.appendChild(g);drag.g=g;drag.r=r;el.classList.add("lifted")}
       if(drag.on){drag.g.style.transform=`translate(${dx}px,${dy}px) scale(1.06)`;const t=document.elementsFromPoint(e.clientX,e.clientY).find(x=>x.matches&&x.matches(".dz .mc")&&x!==el);root.querySelectorAll(".dz .mc.over").forEach(x=>x.classList.remove("over"));if(t)t.classList.add("over")}});
-    const end=e=>{if(!drag||drag.el!==el)return;const d=drag;drag=null;if(!d.on)return;e.preventDefault();d.g.remove();el.classList.remove("lifted");
+    const end=e=>{if(!drag||drag.el!==el)return;const d=drag;drag=null;if(!d.on)return;window._dragEnd=Date.now();e.preventDefault();d.g.remove();el.classList.remove("lifted");
       const t=document.elementsFromPoint(e.clientX,e.clientY).find(x=>x.matches&&x.matches(".dz .mc")&&x!==el);
-      el.dataset.dragged="1";setTimeout(()=>{delete el.dataset.dragged},50);
+      window._dragEnd=Date.now();
       if(t){const a=S.roster.indexOf(d.id),b=S.roster.indexOf(+t.dataset.rid);if(a>-1&&b>-1){[S.roster[a],S.roster[b]]=[S.roster[b],S.roster[a]];save();openLineup()}}else root.querySelectorAll(".dz .mc.over").forEach(x=>x.classList.remove("over"))};
     el.addEventListener("pointerup",end);el.addEventListener("pointercancel",end)})}
 function openTactic(){sheet(`<h2>Tactic</h2><div class="list">${[[null,"Balanced","No changes"],...Object.entries(TACTICS).map(([k,v])=>[k,v.n,{pace:"More possessions",slow:"Fewer possessions and turnovers",threes:"More threes",paint:"More drives to the rim",lock:"Tougher defense, slower game"}[k]])].map(([k,n,d])=>`<button class="li ${S.tactic===k?"sel":""}" data-act="tactic" data-arg="${k||""}"><span class="sp"><b>${n}</b><small>${d}</small></span>${S.tactic===k?"✓":""}</button>`).join("")}</div>`)}
@@ -924,7 +924,7 @@ const ACT={
   importGo:()=>{try{const t=document.getElementById("imp").value.trim();S=JSON.parse(decodeURIComponent(escape(atob(t))));save();closeSheet();toast("Save loaded")}catch(e){toast("That code didn't work")}},
   reset:()=>{sheet(`<h2>Start over?</h2><p>This deletes your team, cards and gear on this device.</p><div class="row"><button class="btn sp" data-act="close">Keep playing</button><button class="btn sp" style="background:#5a2a10" data-act="resetGo">Delete and start over</button></div>`)},
   resetGo:()=>{try{localStorage.removeItem(SAVEKEY)}catch(e){}S=null;closeSheet();renderTitle()}};
-document.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;if(b.dataset.dragged){e.preventDefault();return}const f=ACT[b.dataset.act];if(f){e.preventDefault();f(b.dataset.arg)}});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-act]");if(!b)return;if(window._dragEnd&&Date.now()-window._dragEnd<600){e.preventDefault();e.stopPropagation();return}const f=ACT[b.dataset.act];if(f){e.preventDefault();f(b.dataset.arg)}});
 /* ---------- boot ---------- */
 function boot(){buildPools();load();if(S&&(!S.v||!S.season))S=null;render()}
 document.addEventListener("input",e=>{if(e.target.id==="catq"){CATQ=e.target.value;CATN=60;clearTimeout(window._cq);window._cq=setTimeout(()=>{const pos=e.target.selectionStart;render();const el=document.getElementById("catq");if(el){el.focus();try{el.setSelectionRange(pos,pos)}catch(_){}}},250)}});
@@ -996,7 +996,7 @@ function watchGame(res,done){
 ACT.revealAll=()=>{if(SHEET)SHEET.el.querySelectorAll(".flip").forEach(f=>f.classList.add("open"))};
 boot();
 </script>
-<script>const BUILD="6e501a0989";
+<script>const BUILD="2f0e0a3479";
 if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{}));
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
 async function checkUpdate(){try{const r=await fetch("version.json?t="+Date.now(),{cache:"no-store"});if(!r.ok)return;const j=await r.json();if(j.v&&j.v!==BUILD){if(typeof SHEET!=="undefined"&&SHEET||document.querySelector(".lvs")){window._pendingUpdate=true;return}location.reload()}}catch(e){}}
