@@ -1336,12 +1336,13 @@ function shortName(n){const w=n.split(" ");return w.length>1?w[0][0]+". "+lastNa
 function ovrOf(R){const a=R.map(eff).sort((x,y)=>y-x),m=.55*(a[0]+a[1]+a[2]+a[3])/4+.45*a.reduce((s,v)=>s+v,0)/7;return Math.round(clamp(66+(m-66)*1.25,40,RCAP))}
 function legendSig(c){const r=c.r,i=[0,1,2,3,4].reduce((b,k)=>r[k]>r[b]?k:b,0);return i<=1?"Unstoppable":i===2?"Maestro":i===4?"Paint Patrol":"Clamps"}
 const PERKS={
-  P:{n:"Prime Time",d:"His shots in the 4th quarter +5%. In the last 2 minutes the ball goes to him more and he shoots +8%."},
-  D:{n:"Lockdown · Anchor · Pick-six",d:"He guards their best player, who shoots 15% worse in the last 2 minutes. Opponents finish 4% worse while he plays. His steals become run-out dunks."},
-  M:{n:"Takeover · Spotlight",d:"Once a game, trailing in the 4th, every possession runs through him for 3 minutes and your offense +6. He takes the last shot of every close game, at +10%."},
-  F:{n:"Big Stage",d:"In playoff and boss games his shots are +4%, and +10% in the last 2 minutes."},
+  P:{n:"Prime Time",d:"Second half: his shots are +5%."},
+  D:{n:"Lockdown",d:"He guards their best scorer all game: 10% worse against him, 15% worse in the last 2 minutes."},
+  M:{n:"Takeover",d:"Once a game, trailing in the second half: every possession runs through him for 2 minutes, he shoots +10% and the team gets +6."},
+  F:{n:"Big Stage",d:"Playoff and boss games: his shots are +6%."},
+  Y:{n:"Fearless",d:"He never goes cold: a miss streak costs him nothing."},
   X:{n:"Microwave",d:"Off the bench: for his first 3 minutes after checking in, each half, +8 on every rating."},
-  A:{n:"Showcase",d:"In the first half his shots are +4%."},
+  A:{n:"Showcase",d:"First half: his shots are +4%."},
   Unstoppable:{n:"Unstoppable",d:"His shots in the last 2 minutes can't be blocked, +12%."},
   Maestro:{n:"Maestro",d:"Teammates +3 shooting and IQ."},
   "Paint Patrol":{n:"Paint Patrol",d:"Opponents finish 5% worse; his rebounding +5."},
@@ -1484,16 +1485,14 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
     if(q>=nQ/2&&nQ>1){const lead=score[oi]-score[di];if(Math.abs(lead)>14)pm-=clamp((lead-Math.sign(lead)*14)*.005,-.07,.07)}
     if(fast[oi])pm+=.04+(OP.some(p=>p.bt.ATH===2)?.02:0)+(OP.some(p=>p.sets.Engine)?.06:0);
     const perkTags=[];
-    if(DP.some(p=>hk(p,"D"))&&type==="rim"){pm-=.04}
     if(DP.some(p=>p.sig==="Paint Patrol")&&type==="rim")pm-=.05;
     if(type==="rim"&&DP.some(p=>p.sets["Rim Protector"]))pm-=.08;
     const film=shooter.bt.IQ;
     if(def===stopper&&shooter===best&&def.sets.Lockdown){pm-=.07;if(late)pm-=.15}/* the Lockdown set works on anyone, film or not */
-    if(def===stopper&&shooter===best&&!film){pm-=def.sig==="Clamps"?.05:0;if(late){pm-=hk(def,"D")||def.sig==="Clamps"?.15*(def.pk||1):0;if(hk(def,"D")||def.sig==="Clamps"||def.sets.Lockdown)perkTags.push({t:di,txt:"LOCKDOWN: "+def.name})}}
-    if(q===nQ-1&&hk(shooter,"P")){pm+=.05*shooter.pk;if(late){pm+=.08*shooter.pk;perkTags.push({t:oi,txt:"PRIME TIME: "+shooter.name})}}
+    if(def===stopper&&shooter===best&&!film){if(def.sig==="Clamps")pm-=late?.12:.05;if(hk(def,"D")){pm-=(late?.15:.10)*(def.pk||1);perkTags.push({t:di,txt:"LOCKDOWN: "+def.name})}else if(late&&(def.sig==="Clamps"||def.sets.Lockdown))perkTags.push({t:di,txt:"LOCKDOWN: "+def.name})}
+    if(q>=nQ/2&&hk(shooter,"P")){pm+=.05*shooter.pk;if(late)perkTags.push({t:oi,txt:"PRIME TIME: "+shooter.name})}
     if(late&&close&&shooter.imm){pm+=.10;perkTags.push({t:oi,txt:"IMMORTAL: "+shooter.name})}
-    if(late&&close&&clock<=24&&hk(shooter,"M")){pm+=.10*shooter.pk;perkTags.push({t:oi,txt:"SPOTLIGHT: "+shooter.name})}
-    if(tkOn===shooter){pm+=.06*shooter.pk}
+    if(tkOn===shooter){pm+=.10*shooter.pk;perkTags.push({t:oi,txt:"TAKEOVER: "+shooter.name})}else if(tkOn)pm+=.03;/* the team rides it too (+6 on offense) */
     if(late&&shooter.sig==="Unstoppable"){pm+=.12*shooter.pk;perkTags.push({t:oi,txt:"UNSTOPPABLE: "+shooter.name})}
     if(late&&(shooter.sets.Closer))pm+=.15;
     if(type===3&&shooter.sets.Splash)pm+=.06*Math.min(3,heat[oi]);if(q===nQ-1&&shooter.sets.Closer)pm+=.08;
@@ -1503,10 +1502,10 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
     if(late&&OP.some(p=>p.bt.PLY===2&&p!==shooter))pm+=.04;if(OP.some(p=>p.bt.PLY&&p!==shooter))pm+=.02;if(q===nQ-1&&shooter.bt.ATH)pm+=.015;
     if(fmt!=="3v3"&&tO.home)pm+=.008;
     /* streaks and rest: cold after 4 straight misses, fresh legs for a few trips after sitting. Shown as reasons in Play */
-    const mods=[];if(shooter.cold){pm-=.08;mods.push(["Cold: missed 4 straight",-.08])}if(shooter.fresh>0){pm+=.05;mods.push(["Fresh legs",.05])}
-    /* Big Stage (Finals MVP, Double MVP): playoff and boss games, +4%, and +6% more late */
+    const mods=[];if(shooter.cold&&!hk(shooter,"Y")){pm-=.08;mods.push(["Cold: missed 4 straight",-.08])}if(shooter.fresh>0){pm+=.05;mods.push(["Fresh legs",.05])}
+    /* Big Stage (Finals MVP, Double MVP): playoff and boss games, +6% */
     if(hk(shooter,"A")&&q<nQ/2){pm+=.04;mods.push(["Showcase: All-Star",.04])}
-    if(tO.big&&(hk(shooter,"F")||shooter.fm)){const v=late?.10:.04;pm+=v;mods.push(["Big stage",v]);if(late)perkTags.push({t:oi,txt:"BIG STAGE: "+shooter.name})}
+    if(tO.big&&(hk(shooter,"F")||shooter.fm)){pm+=.06;mods.push(["Big stage",.06]);if(late)perkTags.push({t:oi,txt:"BIG STAGE: "+shooter.name})}
     if(inFT(def,q))mods.push([`${def.last} in foul trouble`,type==="rim"?.014:.022]);/* what his softer contest is worth (already in pm above) */
     return{pm:clamp(pm,.08,.9),perkTags,mods}}
   /* the shot itself: makes, misses, blocks, fouls, assists, rebounds. x.made forces the result (Play rolls it); x.ast names the passer. */
@@ -1554,9 +1553,9 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
       if(size===5&&(r.bt.REB===2||(r.sets.Engine&&rnd()<.5)||rnd()<({blk:.5,long:.3,reb:.15})[why]*run)){fast[di]=1;fastWhy[di]=why}}}
   /* a turnover. x.thief and x.stl force who and how (Play decides them); otherwise it rolls */
   function turnover(P,bh,x){x=x||{};const{DP,oi,di,q,clock,tD,e}=P;const thief=x.thief||wpick(DP,p=>Math.pow(eff(p.R[3])+eff(p.R[5])*.5,2)*(p.sets.Engine?1.4:1));const stl=x.stl!=null?x.stl:rnd()<.55;mk(bh).tov++;stat[oi].tov++;const out={to:true,stl:stl?thief:null,pts:0};
-    if(stl){mk(thief).stl++;const runout=hk(thief,"D")||thief.sets.Engine||tD.gimmick==="runout"&&!bh.bt.IQ;
-      if(runout&&rnd()<.6){score[di]+=2;mk(thief).pts+=2;mk(thief).fgm++;mk(thief).fga++;stat[di].fb+=2;out.runout=2;if(hk(thief,"D")){perkPts[di]+=2;perkLog.push({t:di,txt:"PICK-SIX: "+thief.name,q,clock})}
-        ev.push({...e,type:"runout",who:thief.id,vic:bh.id,pts:2,s:[...score],txt:`${thief.name} steals it from ${bh.last} and finishes the run-out.`,perk:hk(thief,"D")?"PICK-SIX":tD.gimmick==="runout"?"RUN-OUT":null});return out}
+    if(stl){mk(thief).stl++;const runout=thief.sets.Engine||tD.gimmick==="runout"&&!bh.bt.IQ;
+      if(runout&&rnd()<.6){score[di]+=2;mk(thief).pts+=2;mk(thief).fgm++;mk(thief).fga++;stat[di].fb+=2;out.runout=2;
+        ev.push({...e,type:"runout",who:thief.id,vic:bh.id,pts:2,s:[...score],txt:`${thief.name} steals it from ${bh.last} and finishes the run-out.`,perk:tD.gimmick==="runout"?"RUN-OUT":null});return out}
       ev.push({...e,type:"stl",who:thief.id,vic:bh.id,s:[...score],txt:x.txt||`${thief.name} steals it from ${bh.last}.`})}
     else ev.push({...e,type:"to",who:bh.id,s:[...score],txt:x.txt||`Turnover, ${bh.name}.`});
     /* a steal starts a fast break; a dead ball (out of bounds, a charge) only sometimes */
@@ -1606,7 +1605,7 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
       /* Lockdown / Clamps: who guards their best */
       const best=[...OP].sort((a,b)=>b.ovr-a.ovr)[0];const stopper=DP.find(p=>p.sets.Lockdown)||DP.find(p=>hk(p,"D")||p.sig==="Clamps");
       /* takeover */
-      const tk=takeover[oi];if(!tk.used&&q===nQ-1&&nQ===2&&margin<0&&margin>=-8&&clock<qLen*.7){const mvp=OP.find(p=>hk(p,"M"));if(mvp){tk.used=true;tk.left=7;tk.who=mvp;perkLog.push({t:oi,txt:"TAKEOVER: "+mvp.name,q,clock});ev.push({...e,type:"perk",txt:"TAKEOVER: "+mvp.name,who:mvp.id})}}
+      const tk=takeover[oi];if(!tk.used&&q===nQ-1&&nQ===2&&margin<0&&margin>=-8&&clock<qLen*.7){const mvp=OP.find(p=>hk(p,"M"));if(mvp){tk.used=true;tk.left=5;tk.who=mvp;perkLog.push({t:oi,txt:"TAKEOVER: "+mvp.name,q,clock});ev.push({...e,type:"perk",txt:"TAKEOVER: "+mvp.name,who:mvp.id})}}
       const tkOn=tk.left>0?tk.who:null;if(tk.left>0)tk.left--;
       const P={q,k,oi,di,clock,margin,late,close,OP,DP,oS,dS,matchOf,tO,tD,tacO,tacD,e,best,stopper,tkOn};
       if(size===5&&rnd()<.07)addFoul(P,wpick(DP,p=>Math.pow(prone(p,q),2)));
@@ -4674,7 +4673,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="33327d54e2";
+<script>const APPV="665d40f585";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
