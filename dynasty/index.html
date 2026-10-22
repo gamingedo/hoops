@@ -4523,7 +4523,8 @@ function playGame(res0,side,done){
   function breakFormation(P,brk){for(const k in ACTS)ACTS[k].vis=false;const off=P.oi;setOff(off);
     const bh=P.OP.find(p=>p.slot===0)||P.OP[0];const lay=brkLayout(P,brk||{lab:"3 on 2"},bh,[],null);
     for(const[p,v]of lay.me){const run=v.y>0;setA(key(p),{x:v.x,y:v.y,anim:"idle",fps:2,flip:false,vis:true,lab:lastName(p.name),me:off===0})}
-    for(const[p,v]of lay.them)setA(key(p),{x:v.x,y:v.y,anim:v.chase?"idleN":"slide",fps:2,flip:!v.chase,vis:true,lab:null})}
+    /* the men behind the play face the basket the break is going to: away from us on your break, toward us on theirs */
+    const D=ARENA.view==="D";for(const[p,v]of lay.them)setA(key(p),{x:v.x,y:v.y,anim:v.chase?(D?"idleS":"idleN"):"slide",fps:2,flip:!v.chase,vis:true,lab:null})}
   /* ---------- stage: before each of your calls, everyone walks to where the words say they are ----------
      The card says "Embiid is in the lane": Embiid is in the lane, his man is beaten behind him, the man you'd kick it to
      is spotted up outside. Spots are on this side-on court: x toward the basket (right), y toward you (down). */
@@ -4600,7 +4601,7 @@ function playGame(res0,side,done){
     /* walk there together, then the ball handler goes back to his dribble */
     const moves=[];for(const[m,t]of[[me,0],[them,1]])for(const[p,v]of m){const k=key(p),a=ACTS[k];if(!a)continue;const far=Math.hypot(a.x-v.x,a.y-v.y);
       a.flip=t===1?!v.chase:!!v.flip;if(far<2)continue;if(p!==bh){a.anim=t===1&&!v.chase?"slide":"run";a.fps=t===1&&!v.chase?6:10;a.pose=null;a.once=false}
-      moves.push(T(a,{x:v.x,y:v.y},Math.min(.75,.3+far/180)).then(()=>{if(p!==bh){a.anim=t===1&&!v.chase?"slide":v.chase?"idleN":"idle";a.fps=2}}))}
+      moves.push(T(a,{x:v.x,y:v.y},Math.min(.75,.3+far/180)).then(()=>{if(p!==bh){a.anim=t===1&&!v.chase?"slide":v.chase?(ARENA.view==="D"?"idleS":"idleN"):"idle";a.fps=2}}))}
     if(moves.length)await Promise.all(moves);window._pv.last={sit,bh:key(bh),dh:dh&&key(dh),me:[...me].map(([p,v])=>[key(p),Math.round(v.x),Math.round(v.y)]),them:[...them].map(([p,v])=>[key(p),Math.round(v.x),Math.round(v.y)])}}
   const pop=(t,cls)=>{const el=$("#pvBan");el.textContent=t;el.className="pvban on "+(cls||"");clearTimeout(pop.h);pop.h=setTimeout(()=>el.className="pvban",2200/SPD)};
   const cap=t=>{$("#pvCap").textContent=t||" "};
@@ -4700,6 +4701,8 @@ function playGame(res0,side,done){
     if(x.kind==="pass"){const k=kOf(x.to);if(ACTS[k]){const t=ACTS[k];if(x.next==="dump")await T(t,{x:238,y:132},.4);if(ball.who&&ACTS[ball.who]){once(ball.who,"pass",.4,false);await wait(.4*3/7)}
       once(k,"catch",.45,false);const h=handOf(k);await fly(h.x,h.y,14,.35);if(r.ok)give(k)}if(said)pop(said,tone);return}
     const k=kOf(x.actor||P.OP[0]);if(!ACTS[k])return;const a=ACTS[k];
+    /* a move by a man who doesn't have the ball yet (an entry pass into the post, a hand-off): the ball goes to him first */
+    if(ball.who!==k){if(ball.who&&ACTS[ball.who]){once(ball.who,"pass",.35,false);await wait(.15)}const h=handOf(k);await fly(h.x,h.y,12,.3);give(k)}
     if(x.k==="pnr"){/* the screener is the man the call names, never "some tall teammate" */const bigK=x.big&&ACTS[kOf(x.big)]?kOf(x.big):null;if(!bigK)fault("no-screener",{k});if(bigK){once(bigK,"screen",.6,false);await T(ACTS[bigK],{x:a.x+8,y:a.y+2},.45)}setA(k,{anim:"dribble",fps:9,flip:false,lab:a.lab,me:a.me,vis:true});await T(a,{x:a.x+(r.ok?34:10),y:a.y+(r.ok?10:0)},.5)}
     else if(x.k==="drive"||x.k==="mm_drive"||x.k==="drive2"||x.k==="split"){setA(k,{anim:"drive",fps:11,flip:false,lab:a.lab,me:a.me,vis:true});await T(a,{x:a.x+(r.ok?60:20),y:132},.55)}
     else if(x.k==="cross"||x.k==="jab"||x.k==="pump"){once(k,x.k==="cross"?"cross":x.k==="jab"?"jab":"pump",.6,false);await wait(.6)}
@@ -4801,7 +4804,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="9839f2ce13";
+<script>const APPV="d1e128cfe0";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
