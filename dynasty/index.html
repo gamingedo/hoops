@@ -3111,18 +3111,14 @@ function hoopIcon(){return`<rect x="-14" y="-19" width="28" height="17" rx="2.5"
   <ellipse cx="0" cy="0" rx="9.5" ry="2.6" fill="none" stroke="#ff7a2f" stroke-width="2.6"/><path d="M-8.5,1.5L-5.5,12M-3,2L-2,12M3,2L2,12M8.5,1.5L5.5,12M-6.8,7H6.8" fill="none" stroke="#fff" stroke-width="1.3" stroke-linecap="round"/>`}
 function gymMark(g){const[x,y]=GYMPOS[g.id];const st=gymStars(g.id),cl=S.gyms[g.id]||0;
   return`<g class="lm" data-act="gym" data-arg="${g.id}" transform="translate(${x},${y}) scale(1.14)" role="button" tabindex="0" aria-label="${esc(g.n)}, ${cl} of 10 floors">
-   <rect x="-60" y="-42" width="120" height="142" fill="transparent"/>
-   <circle r="35" cy="4" fill="#0008"/><circle r="33" fill="url(#mg-${g.id})" stroke="#fff3cf" stroke-width="3"/><circle r="27" fill="none" stroke="#0b102455" stroke-width="2"/>
-   ${hoopIcon()}
-   <g transform="translate(24,22)"><circle r="11" fill="#0b1024" stroke="#fff3cf" stroke-width="2"/><g fill="#fff3cf">${BADGE[g.id]}</g></g>
-   <text class="ml" y="58">${esc(g.n.toUpperCase())}</text>
-   <g transform="translate(0,74)">${[-18,0,18].map((sx,k)=>`<path d="${STAR}" transform="translate(${sx},0)" class="${k<st?"son":"soff"}"/>`).join("")}</g>
-   <g transform="translate(0,91)"><rect x="-22" y="-9" width="44" height="18" rx="9" fill="${S.grind&&S.grind.gym===g.id&&!S.grind.done?"#f0c060":"#0b1024cc"}"/><text class="mp ${S.grind&&S.grind.gym===g.id&&!S.grind.done?"dark":""}" y="4">${S.grind&&S.grind.gym===g.id&&!S.grind.done?`${S.grind.i+1}/10`:`${cl}/10`}</text></g></g>`}
+   <rect x="-60" y="-50" width="120" height="110" fill="transparent"/>
+   <!-- no hoop: the gym's place on the pixel map is the button; its name, stars and floors sit on it -->
+   <text class="ml" y="10">${esc(g.n.toUpperCase())}</text>
+   <g transform="translate(0,26)">${[-18,0,18].map((sx,k)=>`<path d="${STAR}" transform="translate(${sx},0)" class="${k<st?"son":"soff"}"/>`).join("")}</g>
+   <g transform="translate(0,43)"><rect x="-22" y="-9" width="44" height="18" rx="9" fill="${S.grind&&S.grind.gym===g.id&&!S.grind.done?"#f0c060":"#0b1024cc"}"/><text class="mp ${S.grind&&S.grind.gym===g.id&&!S.grind.done?"dark":""}" y="4">${S.grind&&S.grind.gym===g.id&&!S.grind.done?`${S.grind.i+1}/10`:`${cl}/10`}</text></g></g>`}
 function practiceMark(){return`<g class="lm" data-act="practice" transform="translate(80,318) scale(1.12)" role="button" tabindex="0" aria-label="Practice court">
    <rect x="-52" y="-34" width="104" height="112" fill="transparent"/>
-   <circle r="29" cy="4" fill="#0008"/><circle r="27" fill="url(#mg-prac)" stroke="#fff3cf" stroke-width="3"/>
-   <circle r="13" fill="#e8792f" stroke="#0b1024" stroke-width="1.6"/><path d="M-13,0H13M0,-13V13M-9,-9.5C-4,-5 -4,5 -9,9.5M9,-9.5C4,-5 4,5 9,9.5" fill="none" stroke="#0b1024" stroke-width="1.4"/>
-   <text class="ml" y="50">PRACTICE</text><text class="ms2" y="66">Scrimmage</text></g>`}
+   <text class="ml" y="6">PRACTICE</text><text class="ms2" y="22">Scrimmage</text></g>`}
 function arenaMark(){const s=S.season;const b=curBoss();const beaten=S.bossesBeaten.includes(s.n);const ready=s.phase==="done"&&!beaten&&!bossOver();
   return`<g class="lm arena ${ready?"ready":""}" data-act="arena" transform="translate(205,338) scale(1.06)" role="button" tabindex="0" aria-label="Boss Arena, ${esc(b.n)}">
    <rect x="-80" y="-56" width="160" height="150" fill="transparent"/>
@@ -4540,7 +4536,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="2ca024d81b";
+<script>const APPV="dd4dd8237d";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
