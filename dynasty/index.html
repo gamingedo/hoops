@@ -2045,7 +2045,7 @@ function applyGame(res,kind,meta){/* kind: reg, po, boss, gym, prac */
     o.stats.clA+=b.clutchA;o.stats.clM+=b.clutchM;for(const f of["pts","reb","ast","stl","blk"])if(b[f]>(o.stats.hi[f]||0))o.stats.hi[f]=b[f];
     if([b.pts,b.reb,b.ast,b.stl,b.blk].filter(v=>v>=10).length>=3)o.stats.td++;
     /* milestones */
-    const tot=careerTot(i);/* games are two 4-minute halves, so the point milestones are sized to that */const ms=[["g100",tot.gp>=100,"100 games"],["g250",tot.gp>=250,"250 games"],["p250",tot.pts>=250,"250 points"],["p600",tot.pts>=600,"600 points"],["p1200",tot.pts>=1200,"1,200 points"],["g15",(o.stats.hi.pts||0)>=15,"First 15-point game"]];
+    const tot=careerTot(i);/* games are two 4-minute halves, so the point milestones are sized to that */const ms=[["g100",tot.gp>=100,"100 games"],["g250",tot.gp>=250,"250 games"],["p250",tot.pts>=250,"250 points"],["p600",tot.pts>=600,"600 points"],["p1200",tot.pts>=1200,"1,200 points"],["g15",b.pts>=15,"First 15-point game"]/* this game, not his career high: an old high would pay it on any game */];
     for(const[id,ok,label]of ms)if(ok&&!o.stats.ms.includes(id)){o.stats.ms.push(id);S.coins+=80;out.milestones.push({i,label});out.coins+=80}}
   save();return out}
 /* higher tiers pay more for league, playoff and boss games and season rewards: +10% a tier */
@@ -4679,7 +4679,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="51c7f0c04d";
+<script>const APPV="37b70866eb";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
