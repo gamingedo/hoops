@@ -1489,7 +1489,7 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
   /* ---------- shared pieces ---------- */
   /* the chance a shot goes in. x: {bh (who had the ball), def (who guards the shooter)}. No side effects, so Play can show it before you choose. */
   function shotPM(P,shooter,type,x){const{OP,DP,oi,di,q,clock,late,close,tO,tD,tacD,stopper,best,tkOn}=P;const bh=x.bh||shooter,def=x.def||P.matchOf(shooter);
-    const sS=eff(shooter.R[0]),sF=eff(shooter.R[1]),dD=eff(def.R[3])-(inFT(def,q)?10:0);const mods99=[];
+    const sS=eff(shooter.R[0]),sF=eff(shooter.R[1]),dD=eff(def.R[3])-(inFT(def,q)?10:0);const mods99=[],perkTags=[];
     const rimProt=Math.max(...DP.map(p=>eff(p.R[3])*.6+eff(p.R[4])*.2+p.ht*.5-38));
     let pm;
     if(type===3)pm=.285+(sS-LV-70)*.0042-(dD-LV-62)*.0022+(shooter.bt.SHT?.03:0)+(shooter.bt.SHT===2?.02:0);
@@ -1506,7 +1506,6 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
     /* big leads shrink in the second half: the bench plays more and the trailing team presses */
     if(q>=nQ/2&&nQ>1){const lead=score[oi]-score[di];if(Math.abs(lead)>14)pm-=clamp((lead-Math.sign(lead)*14)*.005,-.07,.07)}
     if(fast[oi])pm+=.04+(OP.some(p=>p.bt.ATH===2)?.02:0);
-    const perkTags=[];
     if(DP.some(p=>p.sig==="Paint Patrol")&&type==="rim")pm-=.05;
     if(type==="rim"){const rp=DP.find(p=>p.sets["Rim Protector"]);if(rp){pm-=.08;perkTags.push({t:di,txt:"RIM PROTECTOR: "+rp.name})}}
     const film=shooter.bt.IQ;
@@ -4802,7 +4801,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="d9f8d467e7";
+<script>const APPV="9839f2ce13";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
