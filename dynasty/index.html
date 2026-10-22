@@ -1588,10 +1588,10 @@ const DROPS={
   gym1:{rar:[.75,.22,.03,0,0],st:[.60,.32,.08,0,0,0]},
   gym2:{rar:[.45,.35,.16,.035,.005],st:[0,.40,.38,.18,.04,0]},
   gym3:{rar:[0,.35,.45,.17,.03],st:[0,0,0,.60,.34,.06]},
-  pack:{rar:[.55,.30,.12,.03,0],st:[.35,.35,.22,.08,0,0]},
+  pack:{rar:[.62,.305,.06,.015,0],st:[.35,.35,.22,.08,0,0]},
   setbox:{rar:[.10,.40,.35,.13,.02],st:[0,.25,.40,.30,.05,0]},
   legbox:{rar:[0,0,.60,.32,.08],st:[0,0,.30,.45,.25,0]},
-  deal:{rar:[.15,.35,.32,.14,.04],st:[0,.2,.4,.3,.1,0]},
+  deal:{rar:[.25,.40,.27,.07,.01],st:[0,.2,.4,.3,.1,0]},
   champ:{rar:[0,.2,.45,.28,.07],st:[0,0,.2,.45,.3,.05]}};
 function rollRar(odds){let r=rnd(),a=0;for(let k=0;k<5;k++){a+=odds[k];if(r<a)return k}return 0}
 function rollStars(odds){let r=rnd(),a=0;for(let k=0;k<6;k++){a+=odds[k];if(r<a)return k+1}return 1}
@@ -1664,7 +1664,7 @@ function buildPools(){POOL={byStar:{1:[],2:[],3:[],4:[],5:[]},byTeam:{},bySeason
   DB.c.forEach((c,i)=>{if(c.k!=="L")POOL.byStar[c.s].push(i);if(c.k==="K")POOL.rookies.push(i);if(c.k==="L")POOL.legends.push(i);if(c.s===5&&c.k!=="L")POOL.fiveStar.push(i);for(const t of DB.p[c.p][4]){(POOL.byTeam[t]=POOL.byTeam[t]||[]).push(i)}})}
 function ties(i,ti){return DB.p[DB.c[i].p][4].includes(ti)}
 /* ---- new game ---- */
-function newGame(fr){S={v:1,rv:3,tier:1,nextBoss:0,fr,coins:1000,box:null,deal:null,own:{},roster:[],gear:{},season:null,gyms:{},banners:[],bossesBeaten:[],made:Date.now(),firstClears:{},log:[]};
+function newGame(fr){S={v:1,rv:3,tier:1,nextBoss:0,fr,coins:0,box:null,deal:null,own:{},roster:[],gear:{},season:null,gyms:{},banners:[],bossesBeaten:[],made:Date.now(),firstClears:{},log:[]};
   const pos=p=>/C/.test(p)&&!/^G/.test(p)?"C":/G/.test(p)&&!/^F/.test(p)?"G":"F";
   /* the starter roster: low cards from the franchise's own seasons, so the team bonus is there from day one */
   const own=POOL.bySeason[fr]||[];let cands=own.filter(i=>DB.c[i].k==="R"&&DB.c[i].s===1);
@@ -1673,8 +1673,23 @@ function newGame(fr){S={v:1,rv:3,tier:1,nextBoss:0,fr,coins:1000,box:null,deal:n
   for(const g of["C","G","F"])for(const i of cands){if(got.length>=12)break;const c=DB.c[i];if(usedP.has(c.p))continue;if(pos(DB.p[c.p][1])===g&&got.filter(x=>pos(DB.p[DB.c[x].p][1])===g).length<need[g]){got.push(i);usedP.add(c.p)}}
   for(const i of cands){if(got.length>=12)break;if(!usedP.has(DB.c[i].p)){got.push(i);usedP.add(DB.c[i].p)}}
   for(const i of got)addCard(i,true);
-  S.box=starterGift(usedP);
+  /* the start: no coins. A Legends pack and a Prime/MVP pack, each a pick of 3 of your franchise's players, then two common
+     gear boxes made for the two you picked. That's the one head start; the grind begins after it */
+  S.startPick=starterPicks(usedP);
   S.roster=bestRoster();S.base=myTeam().ovr+TBASE;newSeason();save()}
+function starterPicks(usedP){const fr=S.fr,book=bookRewards().team[fr],seen=new Set(usedP);
+  const three=(list,fill)=>{const out=[];for(const i of list.sort(()=>rnd()-.5)){if(out.length>=3)break;const p=DB.c[i].p;if(seen.has(p))continue;seen.add(p);out.push(i)}
+    for(const i of fill){if(out.length>=3)break;const p=DB.c[i].p;if(seen.has(p))continue;seen.add(p);out.push(i)}return out};
+  const team=POOL.bySeason[fr]||[];const byBest=(a,b)=>DB.c[b].s-DB.c[a].s||DB.c[b].o-DB.c[a].o;
+  /* Legends of this franchise (not its book reward); a team short of three gets its best award seasons */
+  const L=three(POOL.legends.filter(i=>DB.c[i].t===fr&&i!==book&&!BOOKONLY.has(DB.p[DB.c[i].p][0])),team.filter(i=>"MFD".includes(DB.c[i].k)&&i!==book).sort(byBest));
+  /* Prime and MVP seasons with this franchise; short of three, its next best cards */
+  const P=three(team.filter(i=>"PMF".includes(DB.c[i].k)&&i!==book),team.filter(i=>DB.c[i].k!=="L"&&DB.c[i].k!=="R"&&i!==book).sort(byBest));
+  return{L,P,got:[]}}
+/* the two common gear boxes: six pieces for each pick, one per slot, in the sets his position wants, mains on his best ratings */
+function starterGear(ids){const out=[];for(const id of ids){if(!S.own[id])continue;const[meta,stat]=suggestBuild(id);const w=statWeights(id);
+  for(let s=0;s<6;s++){const set=s<4?meta:stat;const ms=SLOTMAIN[s].slice().sort((a,b)=>w[b]-w[a])[0];const g=rollGear(0,set,2,s,ms);S.gear[g.id]=g;equip(id,g.id);out.push(g.id)}}
+  return out}
 /* Tier 1 sits level with the team you start with (after its welcome box): cheap levels in the first weeks put you on top of it */
 let TBASE=0;
 /* the opening gift: one of your franchise's Legends (not the one its book page gives, when it has more than one),
@@ -1917,7 +1932,7 @@ function ledSeed(){if(S.led)return;S.led={};for(const i in S.own){const o=S.own[
 function applyGame(res,kind,meta){/* kind: reg, po, boss, gym, prac */
   const won=res.score[0]>res.score[1];const out={won,coins:0,milestones:[]};
   /* coins are the only reward: they buy levels, gear power-ups and packs. League, playoff and boss games pay more at higher tiers. Practice pays nothing. */
-  const base=kind==="reg"?(won?50:25):kind==="po"?(won?80:40):kind==="boss"?(won?200:40):kind==="gym"?(won?30:8):0;
+  const base=kind==="reg"?(won?28:14):kind==="po"?(won?44:22):kind==="boss"?(won?110:22):kind==="gym"?(won?16:4):0;/* lowered about 45% (was 50/25, 80/40, 200/40, 30/8) */
   const coins=Math.round(base*(kind==="gym"?1:coinMult()));
   out.coins=coins;S.coins+=coins;
   /* played games pay more: up to double the coins, by the share of calls you made yourself */
@@ -1934,14 +1949,14 @@ function applyGame(res,kind,meta){/* kind: reg, po, boss, gym, prac */
     if([b.pts,b.reb,b.ast,b.stl,b.blk].filter(v=>v>=10).length>=3)o.stats.td++;
     /* milestones */
     const tot=careerTot(i);const ms=[["g100",tot.gp>=100,"100 games"],["g250",tot.gp>=250,"250 games"],["p1000",tot.pts>=1000,"1,000 points"],["p2500",tot.pts>=2500,"2,500 points"],["p5000",tot.pts>=5000,"5,000 points"],["td1",o.stats.td>=1,"First triple-double"]];
-    for(const[id,ok,label]of ms)if(ok&&!o.stats.ms.includes(id)){o.stats.ms.push(id);S.coins+=150;out.milestones.push({i,label});out.coins+=150}}
+    for(const[id,ok,label]of ms)if(ok&&!o.stats.ms.includes(id)){o.stats.ms.push(id);S.coins+=80;out.milestones.push({i,label});out.coins+=80}}
   save();return out}
 /* higher tiers pay more for league, playoff and boss games and season rewards: +10% a tier */
 const coinMult=()=>1+.1*((S&&S.tier||1)-1);
 function careerTot(i){const o=S.own[i];const t={gp:0,pts:0,reb:0,ast:0,stl:0,blk:0,fgm:0,fga:0,tpm:0,tpa:0,ftm:0,fta:0};for(const k in o.stats.s){const s=o.stats.s[k];for(const f in t)t[f]+=s[f]||0}return t}
 /* ---- packs ---- */
 /* pack odds: 4★ and 5★ are meant to hurt. No pity: every pull is its own roll */
-const ODDS=[[5,.001],[4,.009],[3,.07],[2,.30],[1,.62]];
+const ODDS=[[5,.0005],[4,.004],[3,.035],[2,.25],[1,.7105]];/* halved for the top three (was .001 .009 .07 .30 .62) */
 function dayIndex(){const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000)}
 function rollStar(){let r=rnd(),acc=0;for(const[s,o]of ODDS){acc+=o;if(r<acc)return s}return 1}
 /* a card of this star that passes the filter; if none, the nearest star that has one */
@@ -2553,7 +2568,7 @@ function catalogHTML(){const tl=DB.t.map((_,i)=>i).sort((a,b)=>TEAMNICK(a).local
 function faqHTML(){const q=(t,b,open)=>`<details class="panel faq"${open?" open":""}><summary>${t}</summary>${b}</details>`;
   return q("Card types",`<ul><li><b>Regular</b> (1–3★): real players from 2000 to now. Better seasons get more stars.</li><li><b>Rookie</b> (1★): this year's rookies. They start at 55 and gain +1 on every rating each level.</li><li><b>Prime</b> (4★): his best All-NBA season with a team; a player gets one Prime per team, plus a card for each award season. Boosted ratings, and better shots in the 4th quarter. A season that won two awards is one card with both perks (MVP · DPOY).</li><li><b>DPOY</b> (4★): a Defensive Player of the Year season. +15 defense. He guards their best player late.</li><li><b>MVP</b> (5★): an MVP season. +4 on everything. Takes over when you're behind.</li><li><b>Finals MVP</b> (5★): a Finals MVP season. +4 on everything, and Big Stage: his shots are better in playoff and boss games. A season that won both is a <b>Double MVP</b> card with both perks.</li><li><b>Rookie of the Year</b> (3★): that rookie season as it was. Grows half again as fast as other cards with levels (+15 by max level).</li><li><b>Sixth Man</b> (3★): a Sixth Man of the Year season. +6 shooting and finishing, and Spark: +6% on his shots when he comes in fresh.</li><li><b>All-Defensive</b> (4★): built like a DPOY card.</li><li><b>Legend</b> (5★): a Hall of Famer. His boost depends on where he ranks all time (ESPN's NBA 75th anniversary ranking): GOAT +8 on everything, top 10 +6, top 25 +5, top 50 +4, top 76 +3, other Hall of Famers +2. He also lifts his teammates. Legends don't come from packs: you start with one of your team's, from Tier 4 up each season boss gives up one the first time you beat it, and Collection Book pages give the rest.</li></ul>`)+
    q("Collection book",`<p>My Cards → Book has a page for every team. Each page has 4 slots: three 4★ and one 5★ card from that team's own seasons. Evolved stars count: a card you evolved to 4★ fits a 4★ slot.</p><p>Locking a card in takes it out of your collection for good, with its levels and Legacy.</p><ul><li>Fill a page: that team's Hall of Famer.</li><li>All 15 Western pages: Kobe Bryant.</li><li>All 15 Eastern pages: Bill Russell.</li><li>Both conferences: Michael Jordan, the GOAT.</li></ul><p>Jordan, Kobe and Russell only come from the book. Each page sells that team's pack.</p>`)+
-   q("Pack odds",`<table class="box"><tr><th>Stars</th><th>Chance a card</th></tr><tr><td>5★</td><td>0.1%</td></tr><tr><td>4★</td><td>0.9%</td></tr><tr><td>3★</td><td>7%</td></tr><tr><td>2★</td><td>30%</td></tr><tr><td>1★</td><td>62%</td></tr></table><p>Player packs and Team packs use these odds. A Team pack only has that team's own seasons; when a team has no card at the star you rolled, you get its nearest star. There are no guarantees: every card is its own roll.</p><p>Today's deal is ten pulls at 30% off, once a day. Holiday sales (Events tab) sell two bundles each; the Black Friday and Christmas card bundles include a guaranteed 4★.</p><p>Gear box (any set, meta sets too): Rare 60%, Epic 32%, Legendary 8%; 3★ 30%, 4★ 45%, 5★ 25%. Gym drops are in the Gyms section.</p>`)+
+   q("Pack odds",`<table class="box"><tr><th>Stars</th><th>Chance a card</th></tr><tr><td>5★</td><td>0.05%</td></tr><tr><td>4★</td><td>0.4%</td></tr><tr><td>3★</td><td>3.5%</td></tr><tr><td>2★</td><td>25%</td></tr><tr><td>1★</td><td>71%</td></tr></table><p>Player packs and Team packs use these odds. A Team pack only has that team's own seasons; when a team has no card at the star you rolled, you get its nearest star. There are no guarantees: every card is its own roll.</p><p>Today's deal is ten pulls at 30% off, once a day. Holiday sales (Events tab) sell two bundles each; the Black Friday and Christmas card bundles include a guaranteed 4★.</p><p>Gear box (any set, meta sets too): Rare 60%, Epic 32%, Legendary 8%; 3★ 30%, 4★ 45%, 5★ 25%. Gym drops are in the Gyms section.</p>`)+
    q("Coins",`<p>Coins are the only currency. You earn them from league, playoff and boss games (more at higher tiers, and up to double when you play the game yourself), playoff runs and titles, awards and milestones, gym wins, and selling spare cards and gear.</p><p>They buy everything: levels, gear power-ups, packs, card tiers (Ruby, Black, Immortal) and Position Change cards.</p>`)+
    q("Leveling and evolving",`<p>Every card plays his real season from level 1. Levels cost coins and add the same to everyone: +10 on every rating by his max level (1★ level 15, 2★ 20, 3★ 25, 4★ 30, 5★ 35). The more stars, the more each level costs: maxing a 1★ is about 400 coins, a 2★ 1,200, a 3★ 3,500, a 4★ 9,000, a 5★ or a Legend about 22,000.</p><p>At max level, evolve a card with spare cards: as many as his stars, any stars. Each new star adds +1 on every rating and 5 more levels to buy. Rookies are the exception: they gain +1 on every rating each level.</p><p>Spare cards also sell for coins. Duplicates add Legacy, Legacy I to V, then coins.</p>`)+
    q("Ratings over 99",`<p>Ratings can reach 140. At 100 and 110 a rating unlocks a new ability, shown on the card. Past 99, each point counts half, both in games and toward OVR.</p>`)+
@@ -2720,10 +2735,10 @@ function finishGame(res,quiet){const kind=res.kind,s=S.season,won=res.score[0]>r
     if(bs.w>=4){const bi=curBossIx();const first=!(S.bossLeg&&S.bossLeg[bi]);S.bossesBeaten.push(s.n);bossDone(true);
       /* each boss gives up one Legend, the first time you beat it from Tier 4 up. Before that, and after, it pays coins */
       if(first&&(s.tier||1)>=LEGTIER&&bossLegends(bi).length){S.bossLeg=S.bossLeg||{};S.bossLeg[bi]=1;S.legendPick={n:s.n,b:bi};out.bossWin=true;out.notes.push(`You beat the boss ${bs.w}-${bs.l}. Pick one of its Legends. Next season is Tier ${S.tier}.`)}
-      else{const c=Math.round(1500*coinMult());S.coins+=c;out.coins+=c;out.notes.push(`You beat the boss ${bs.w}-${bs.l}: +${c.toLocaleString()} coins.${first?` From Tier ${LEGTIER} up, beating it gives you one of its Legends.`:""} Next season is Tier ${S.tier}.`)}}
+      else{const c=Math.round(800*coinMult());S.coins+=c;out.coins+=c;out.notes.push(`You beat the boss ${bs.w}-${bs.l}: +${c.toLocaleString()} coins.${first?` From Tier ${LEGTIER} up, beating it gives you one of its Legends.`:""} Next season is Tier ${S.tier}.`)}}
     else if(bs.l>=4){bossDone(false);out.notes.push(`Lost the series ${bs.w}-${bs.l}. Next season you replay Tier ${S.tier} against a different boss.`)}
     else out.notes.push(`Boss series ${bs.w}-${bs.l}. First to 4 wins.`)}
-  else if(kind==="gym"&&won){const gym=GYMS.find(g=>g.id===res.ctx.gym);out.drops=gymDrops(gym,res.ctx.floor);const key=gym.id+res.ctx.floor;if(!S.firstClears[key]){S.firstClears[key]=1;S.coins+=60+res.ctx.floor*20;out.coins+=60+res.ctx.floor*20;out.notes.push("First clear bonus")}S.gyms[gym.id]=Math.max(S.gyms[gym.id]||0,res.ctx.floor)}
+  else if(kind==="gym"&&won){const gym=GYMS.find(g=>g.id===res.ctx.gym);out.drops=gymDrops(gym,res.ctx.floor);const key=gym.id+res.ctx.floor;if(!S.firstClears[key]){S.firstClears[key]=1;S.coins+=35+res.ctx.floor*10;out.coins+=60+res.ctx.floor*20;out.notes.push("First clear bonus")}S.gyms[gym.id]=Math.max(S.gyms[gym.id]||0,res.ctx.floor)}
   save();if(quiet)return out;report(res,out)}
 /* ---------- sim several games in a row, then one summary ---------- */
 let SIMLOG=null;
@@ -2753,15 +2768,15 @@ function simSummary(){const{kind,log}=SIMLOG;const w=log.filter(x=>x.out.won).le
   sheet(h,()=>{if(log.some(x=>x.out.bossWin))bossPick()},`${more}<button class="btn go" style="width:100%" data-act="close">Continue</button>`,"simsum",()=>simSummary())}
 function startPlayoffs(out){const s=S.season;const st=standings();const top=st.slice(0,8);
   if(!top.includes(S.fr)){s.phase="done";S.banners.push({n:s.n,w:s.stand[S.fr][0],l:s.stand[S.fr][1],po:false,champ:false});seasonAwards(false);out.notes.push("Missed the playoffs. Season boss unlocked.");return}
-  {const c=Math.round(150*coinMult());S.coins+=c;out.coins+=c;out.notes.push(`Made the playoffs: +${c} coins`)}
+  {const c=Math.round(80*coinMult());S.coins+=c;out.coins+=c;out.notes.push(`Made the playoffs: +${c} coins`)}
   const order=[0,7,3,4,1,6,2,5].map(k=>top[k]);s.po={br:order,round:0,w:0,l:0,out:false,champ:false,fin:{},hist:[],seed:top.indexOf(S.fr)+1};s.po.opp=poOpp();s.phase="po"}
 function poOpp(){const po=S.season.po;const k=po.br.indexOf(S.fr);return po.br[k^1]}
 function playoffGame(res,won,out){const s=S.season,po=s.po;if(won)po.w++;else po.l++;
   if(po.round===2)for(const k in res.box){const b=res.box[k];if(b.team===0)po.fin[b.id]=(po.fin[b.id]||0)+b.pts}
   const need=po.round===0?2:3;
-  if(po.w>=need||po.l>=need){(po.hist=po.hist||[]).push({r:po.round,opp:po.opp,w:po.w,l:po.l});if(po.w>=need){const sc=Math.round(100*coinMult());S.coins+=sc;out.coins+=sc;out.notes.push(`Series won: +${sc} coins`);
+  if(po.w>=need||po.l>=need){(po.hist=po.hist||[]).push({r:po.round,opp:po.opp,w:po.w,l:po.l});if(po.w>=need){const sc=Math.round(55*coinMult());S.coins+=sc;out.coins+=sc;out.notes.push(`Series won: +${sc} coins`);
       /* the rest of the bracket */const nb=[];for(let k=0;k<po.br.length;k+=2){const a=po.br[k],b=po.br[k+1];if(a===S.fr||b===S.fr)nb.push(S.fr);else{const p=1/(1+Math.exp(-(s.str[a]-s.str[b])/2));nb.push(rnd()<p?a:b)}}
-      po.br=nb;if(nb.length===1){po.champ=true;po.out=true;const cc=Math.round(300*coinMult());S.coins+=cc;out.coins+=cc;out.notes.push(`Champions: +${cc} coins and a 3★ or better ${TEAMNICK(S.fr)} card`);
+      po.br=nb;if(nb.length===1){po.champ=true;po.out=true;const cc=Math.round(165*coinMult());S.coins+=cc;out.coins+=cc;out.notes.push(`Champions: +${cc} coins and a 3★ or better ${TEAMNICK(S.fr)} card`);
         /* the title card comes from your franchise's own seasons (so it feeds the team bonus): 3★ mostly, 4★ 15%, 5★ 3% */
         const st=rnd()<.03?5:rnd()<.15?4:3;const own=(POOL.bySeason[S.fr]||[]).filter(i=>DB.c[i].k!=="L"&&DB.c[i].k!=="K");const pool=own.filter(i=>DB.c[i].s===st);
         const id=pool.length?pick(pool):pick(own.filter(i=>DB.c[i].s>=3).length?own.filter(i=>DB.c[i].s>=3):POOL.byStar[3]);addCard(id);out.titleCard=id;
@@ -2773,8 +2788,8 @@ function playoffGame(res,won,out){const s=S.season,po=s.po;if(won)po.w++;else po
   if(po.out){s.phase="done";S.banners.push({n:s.n,w:s.stand[S.fr][0],l:s.stand[S.fr][1],po:true,champ:po.champ,series:(po.hist||[]).map(x=>({...x}))});seasonAwards(po.champ)}}
 function seasonAwards(champ){const s=S.season;const key=String(s.n);let best=null,bv=-1;
   for(const i of S.roster){const o=S.own[i];const st=o&&o.stats.s[key];if(!st||st.gp<24)continue;const v=(st.pts+st.reb+st.ast)/st.gp;if(v>bv){bv=v;best=i}
-    if(st.pts/st.gp>=22||v>=35){o.stats.aw.push(`All-League S${s.n}`);S.coins+=Math.round(150*coinMult())}}
-  if(best!=null){const w=s.stand[S.fr][0];S.own[best].stats.aw.push(w>=34?`MVP S${s.n}`:`Team MVP S${s.n}`);S.coins+=Math.round((w>=34?300:120)*coinMult())}}
+    if(st.pts/st.gp>=22||v>=35){o.stats.aw.push(`All-League S${s.n}`);S.coins+=Math.round(80*coinMult())}}
+  if(best!=null){const w=s.stand[S.fr][0];S.own[best].stats.aw.push(w>=34?`MVP S${s.n}`:`Team MVP S${s.n}`);S.coins+=Math.round((w>=34?165:65)*coinMult())}}
 /* ---------- Play: pick a side ---------- */
 let PLAYCB=null;
 function choosePlay(cb){PLAYCB=cb;const last=S.playSide||0;
@@ -2819,14 +2834,20 @@ const LEGTIER=4;
 const bossLegends=bi=>BOSSES[bi].L.filter(n=>!BOOKONLY.has(n)).map(legendId).filter(x=>x!=null);
 function bossPick(){const lp=S.legendPick;const bi=lp&&lp.b!=null?lp.b:typeof lp==="number"?(lp-1)%BOSSES.length:curBossIx();const b=BOSSES[bi];const L=bossLegends(bi);
   sheet(`<span class="kick">${b.n} beaten</span><h2>Pick your Legend</h2><p class="mut">Tap one to see his card, his ratings and where he'd play for you. Then lock him in.${L.some(i=>S.own[i])?" One you already own moves up a Legacy level instead.":""}</p><div class="grid3">${L.map(i=>mcHTML(i,{act:"legPeek",noNew:true})).join("")}</div>${S.legendPick?`<p class="mut" style="font-size:13px;text-align:center">No rush: the pick waits on your Team page until you lock one in.</p>`:""}`,null,null,"bosspick",()=>bossPick())}
-function legPreview(id){id=+id;const c=DB.c[id];const R=ownedRatings(id,{lv:MAXLV[c.s],st:c.s,j:0,gear:[]},{}).R;const own=S.own[id];
+function legPreview(id,take){take=take||"bossTake";id=+id;const c=DB.c[id];const R=ownedRatings(id,{lv:MAXLV[c.s],st:c.s,j:0,gear:[]},{}).R;const own=S.own[id];
   const at=[0,1,2,3,4].map(k=>posOvr(R.map(v=>v-FITPEN[fitD(id,k)]),k));const best=at.indexOf(Math.max(...at));const cur=S.roster[best];
   const vs=cur!=null?`<p style="margin:0">Best at <b>${POSN[best]}</b>: <b>${at[best]}</b>, against <b>${esc(lastName(DB.p[DB.c[cur].p][0]))}</b> at <b>${slotOvr(cur,best)}</b> there now.</p>`:`<p style="margin:0">Best at <b>${POSN[best]}</b>: <b>${at[best]}</b>.</p>`;
   const pk=perksOf(id);
   sheet(`${bigCardHTML(id,{sim:true,ovrLab:"OVR at max level"})}<div class="panel">${vs}<div class="posrow">${POSN.map((n,k)=>`<span class="${k===best?"on":""}"><small>${n}</small><b>${at[k]}</b></span>`).join("")}</div></div>
    <div class="panel">${barsHTML(R)}</div>${pk.length?`<div class="panel">${pk.map(x=>`<p><b style="color:var(--goldlt)">${x.n}.</b> ${x.d}</p>`).join("")}</div>`:""}
    ${own?`<p class="mut" style="text-align:center">You already have him: he'd move up a Legacy level.</p>`:""}`,null,
-   `<div class="row"><button class="btn sp dk" data-act="close">Back</button><button class="btn go sp" data-act="bossTake" data-arg="${id}">Lock him in</button></div>`,"legprev",()=>legPreview(id))}
+   `<div class="row"><button class="btn sp dk" data-act="close">Back</button><button class="btn go sp" data-act="${take}" data-arg="${id}">Lock him in</button></div>`,"legprev",()=>legPreview(id,take))}
+/* the start: pick one of three from each pack (Legends, then Prime/MVP), then the two gear boxes for them */
+function openStartPick(){const sp=S&&S.startPick;if(!sp)return;const L=sp.got.length===0;const ids=L?sp.L:sp.P;
+  if(!ids.length){sp.got.push(null);save();if(sp.got.length<2)return openStartPick();return finishStart()}
+  sheet(`<span class="kick">${TEAMNICK(S.fr)} · ${L?"Legends pack":"Prime/MVP pack"}</span><h2>Pick one</h2><p class="mut">${L?"Three of your franchise's Legends. You keep one.":"Three Prime and MVP seasons from your franchise. You keep one."} Tap a card to see him, then lock him in.</p><div class="grid3">${ids.map(i=>mcHTML(i,{act:"startPeek",noNew:true})).join("")}</div>`,null,null,"startpick",()=>openStartPick())}
+function finishStart(){const sp=S.startPick;const got=sp.got.filter(i=>i!=null);S.startPick=null;S.roster=bestRoster();const gear=starterGear(got);S.base=myTeam().ovr+TBASE;save();closeAll();render();
+  revealItems(gear.map(g=>({gear:S.gear[g]})),"Two common gear boxes",()=>toast("No coins to start. Win games to earn them."))}
 /* ---------- gyms: see gym.js ---------- */
 /* ---------- practice ---------- */
 let PRAC=null;
@@ -2839,10 +2860,12 @@ const ACT={
   card:(a,el)=>{cardCtx(el);openCard(a)},peek:(a,el)=>{cardCtx(el);openCard(a)},cardStep:a=>stepCard(+a),autoGear:a=>{const n=autoGear(+a);openCard(+a,true);toast(n?`Put on ${n} piece${n>1?"s":""}`:"Already wearing his best gear")},autoGearAll:()=>{const n=autoGearRoster();render();toast(`Equipped ${n} pieces across your roster`)},ratView:a=>{const[id,k]=a.split(":");RVIEW=k;const y=SHEET.el.querySelector(".sbody").scrollTop;openCard(+id,true);SHEET.el.style.animation="none";SHEET.el.querySelector(".box").style.animation="none";SHEET.el.querySelector(".sbody").scrollTop=y},
   startNew:()=>renderTitle("pick"),
   pickfr:a=>{newGame(+a);VIEW="team";render();const gift=new Set((S.box&&S.box.cards)||[]);
-    revealCards(Object.keys(S.own).map(Number).filter(i=>!gift.has(i)).map(id=>({id,dup:false})),`Your ${TEAMNICK(+a)} role players`,()=>openStarterBox())},
+    revealCards(Object.keys(S.own).map(Number).filter(i=>!gift.has(i)).map(id=>({id,dup:false})),`Your ${TEAMNICK(+a)} role players`,()=>openStartPick())},
   play:a=>{if(lineupIssues().includes("Same player twice")){toast("The same player can't start twice");return}const k=S.season.phase==="po"?"po":"reg";if(a==="choose"){choosePlay(side=>runGame(k,"play",{side}));return}runGame(k,a)},
   boss:a=>{if(a==="choose"){choosePlay(side=>runGame("boss","play",{side}));return}runGame("boss",a)},
   playGo:a=>{const cb=PLAYCB;PLAYCB=null;S.playSide=+a;save();closeAll();if(cb)cb(+a)},
+  startPeek:a=>legPreview(a,"startTake"),
+  startTake:a=>{const sp=S.startPick;if(!sp)return;const r=addCard(+a);if(S.own[+a])S.own[+a].isNew=true;sp.got.push(+a);save();closeAll();toast(r.dup?"Legacy up":"Added to your team");if(sp.got.length<2)setTimeout(openStartPick,250);else setTimeout(finishStart,250)},
   bossTake:a=>{const r=addCard(+a);S.legendPick=null;save();closeAll();toast(r.dup?"Legacy up":"Legend added to your collection");cardCtx(null);openCard(+a)},
   legPeek:a=>legPreview(a),legendPick:()=>bossPick(),
   buildOpen:a=>{BUILD=null;openBuild(a)},buildPick:a=>{const[w,k]=a.split(":");if(BUILD){BUILD[w]=k==="null"?null:k;openBuild(BUILD.id)}},
@@ -2905,7 +2928,7 @@ const ACT={
   resetGo:()=>{clearInterval(GTIMER);try{localStorage.removeItem(SAVEKEY)}catch(e){}S=null;closeSheet();renderTitle()}};
 document.addEventListener("click",e=>{if(window._dragEnd&&Date.now()-window._dragEnd<700){e.preventDefault();e.stopPropagation();return}const b=e.target.closest("[data-act]");if(!b)return;const f=ACT[b.dataset.act];if(f){e.preventDefault();f(b.dataset.arg,b)}});
 /* ---------- boot ---------- */
-function boot(){buildPools();load();if(S&&(!S.v||!S.season))S=null;if(S){ledSeed();migrateBench();migrateTier();migrateEcon();dailyEnergy();const n=migrateIds();if(migrateGear())S.gearV2=Date.now();tickGrind();if(S.grind)GTIMER=setInterval(grindPulse,1000);save();if(n)setTimeout(()=>toast(n===1?"Fixed 1 card that showed the wrong player":`Fixed ${n} cards that showed the wrong player`),600)}render();if(S&&S.box&&S.box.cards)setTimeout(openStarterBox,400)}
+function boot(){buildPools();load();if(S&&(!S.v||!S.season))S=null;if(S){ledSeed();migrateBench();migrateTier();migrateEcon();dailyEnergy();const n=migrateIds();if(migrateGear())S.gearV2=Date.now();tickGrind();if(S.grind)GTIMER=setInterval(grindPulse,1000);save();if(n)setTimeout(()=>toast(n===1?"Fixed 1 card that showed the wrong player":`Fixed ${n} cards that showed the wrong player`),600)}render();if(S&&S.box&&S.box.cards)setTimeout(openStarterBox,400);if(S&&S.startPick)setTimeout(openStartPick,500)}
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&S&&dailyEnergy()){save();if(!SHEET)render()}
   if(document.visibilityState==="visible"&&S&&S.grind){if(tickGrind()&&!SHEET)render();clearInterval(GTIMER);GTIMER=setInterval(grindPulse,1000)}});
 document.addEventListener("input",e=>{if(e.target.id==="myq"){MYQ=e.target.value;clearTimeout(window._mq);window._mq=setTimeout(()=>render(),200);return}if(e.target.id==="catq"){CATQ=e.target.value;CATN=60;clearTimeout(window._cq);window._cq=setTimeout(()=>libRefresh(),250)}});
@@ -3145,7 +3168,7 @@ function viewPacks(){let h=topHTML("Shop","Paid with coins you earn");const ev=e
   h+=`<span class="kick sh">Card packs</span>`
     +shopRow("p-player",["#4f8ff0","ANY"],"Player pack","Any player, any season.",null,priceBtn("buy","player:1",COST.pull,"×1")+priceBtn("buy","player:10",COST.pull10,"×10"))
     +shopRow("p-team",teamArt(t),`${TEAMNICK(t)} pack`,t===S.fr?`Only ${TEAMNICK(t)} seasons, so they get your team bonus.`:`Only ${TEAMNICK(t)} seasons. Good for that team's book page.`,null,priceBtn("buy",`team:${t}:1`,COST.team,"×1")+priceBtn("buy",`team:${t}:10`,COST.team10,"×10"),`<button class="lnk" data-act="shopTeam">Change team</button>`);
-  h+=`<p class="mut odl">Odds per card: 1★ 62% · 2★ 30% · 3★ 7% · 4★ 0.9% · 5★ 0.1%</p>`;
+  h+=`<p class="mut odl">Odds per card: 1★ 71% · 2★ 25% · 3★ 3.5% · 4★ 0.4% · 5★ 0.05%</p>`;
   h+=`<span class="kick sh">Gear</span>`+shopRow("g-box",["#f0c060","GEAR"],"Gear box",GEARBOX.d,GEARBOX.lock(),priceBtn("buy","gbox",GEARBOX.price,""));
   h+=`<span class="kick sh">Players</span>`+shopRow("poscard",["#5a8fd6","POS"],"Position Change",`Teaches one player a new spot for good, with no out-of-position penalty there. Use it from his card, Ratings tab.${S.posCards?` You have ${S.posCards}.`:""}`,null,priceBtn("buy","poscard",POSCOST,""));
   h+=`<button class="li libbtn" data-act="library" style="margin-top:14px"><span class="sp"><b>Card library</b><small>Every card in the game, ${DB.c.length.toLocaleString()} in all</small></span><i class="chev">›</i></button>`;
@@ -3362,7 +3385,7 @@ function openFloor(id,f){f=+f;const gym=GYMS.find(g=>g.id===id);const tier=gymTi
    <div class="fvs"><div><b>${me.ovr}</b><small>Your ${tier===1?"three":"five"}</small></div><i>vs</i><div><b>${ot.ovr}</b><small>${esc(ot.name)}</small></div></div>
    <div class="fpl">${ot.pl.slice(0,n).map((p,k)=>`<button data-act="floorP" data-arg="${id}:${f}:${k}">${faceHTML(p.id,40)}<span><b>${esc(p.name)}</b><small>${esc(p.pos)}</small></span><em>${p.ovr}</em><i class="chev">›</i></button>`).join("")}</div>
    <div class="panel fdr"><p><b>Win:</b> ${DROPTXT[tier]}.${tier===3?" Closer pieces and, rarely, named 6★ pieces drop here too.":""}</p>
-    ${cleared?"":`<p><b>First clear:</b> +${60+f*20} coins and the next floor.</p>`}<p class="mut" style="margin:0">Every run costs ${cost} energy. Your ${gym.n} team plays it${tier===1?"; 3 on 3 uses its three best":""}.</p></div>`;
+    ${cleared?"":`<p><b>First clear:</b> +${35+f*10} coins and the next floor.</p>`}<p class="mut" style="margin:0">Every run costs ${cost} energy. Your ${gym.n} team plays it${tier===1?"; 3 on 3 uses its three best":""}.</p></div>`;
   const busy=G&&!G.done;
   const foot=`<div class="fen">${enHTML()}</div><div class="row"><button class="btn go sp" data-act="gplay" data-arg="${id}:${f}:choose">Play <i class="ec">${BOLT}${cost}</i></button><button class="btn sp dk" data-act="gplay" data-arg="${id}:${f}:result">Sim <i class="ec">${BOLT}${cost}</i></button></div>
    ${cleared?`<button class="btn sp dk grb" data-act="ggrind" data-arg="${id}:${f}" ${busy?"disabled":""}>${busy?"A grind is running":`Grind ×10 · ${mmss(RUNSEC[tier]*10)} · ${BOLT}${cost} a run`}</button>`:""}`;
@@ -3450,7 +3473,7 @@ Object.assign(ACT,{
 let GTAB="start",GPOS=0,GTIERS=null;
 const GSET=["Floor General","Splash","Lockdown","Engine","Rim Protector"];/* the meta set for each spot */
 const STATSET_OF=["Sharpshooter","Finisher","Vision","Stopper","Glass","Bounce","Smarts"];/* by rating */
-const WHERE=c=>c.s>=4?`Packs · ${c.s}★, ${c.s===5?"0.1%":"0.9%"} a card`:`Packs · ${c.s}★`;
+const WHERE=c=>c.s>=4?`Packs · ${c.s}★, ${c.s===5?"0.05%":"0.4%"} a card`:`Packs · ${c.s}★`;
 /* every card at its ceiling (6★, level 40, no gear) at every spot; perks and abilities count a little */
 function guideTiers(){if(GTIERS)return GTIERS;const PERKV={P:1.5,M:2.5,D:1.5,F:2.5,X:1};const rows=[];
   DB.c.forEach((c,i)=>{if(c.k==="L")return;const R=ownedRatings(i,{lv:40,st:6,j:0,gear:[]},{}).R;const b=R.filter(v=>v>=100).length+R.filter(v=>v>=110).length;
@@ -4329,7 +4352,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="0104cd3a33";
+<script>const APPV="de382e6977";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
