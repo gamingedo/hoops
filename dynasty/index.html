@@ -1322,7 +1322,7 @@ function wpick(arr,w){let t=0;for(const x of arr)t+=w(x);let r=rnd()*t;for(const
 const eff=v=>v<=99?v:99+(v-99)*.75;
 const RCAP=140;/* ratings and OVR stop at 140 */
 const MAXLV=[0,15,20,25,30,35,40];
-const TYPES={H:"Possessed",R:"Regular",P:"Prime",D:"DPOY",M:"MVP",L:"Legend",K:"Rookie",F:"Finals MVP",Y:"Rookie of the Year",X:"Sixth Man",A:"All-Star"};
+const TYPES={W:"Two-Way",H:"Possessed",R:"Regular",P:"Prime",D:"DPOY",M:"MVP",L:"Legend",K:"Rookie",F:"Finals MVP",Y:"Rookie of the Year",X:"Sixth Man",A:"All-Star"};
 /* the type a card shows: a season that won both MVPs is a Double MVP; an All-Defensive card is built like a DPOY card */
 /* a season with two awards is one card: aw lists the extra ones (Giannis 2019: MVP and DPOY) */
 const typeName=c=>(c.fm?"Double MVP":c.ad?"All-Defensive":TYPES[c.k])+(c.aw?c.aw.map(k=>" · "+TYPES[k]).join(""):"");
@@ -1363,7 +1363,7 @@ const BT={SHT:[["Limitless","No penalty for a well-defended shot."],["Logo range
 /* what levels add in all, spread over the levels: +10 for most cards, +15 for a Rookie of the Year, and for a Legend by GOAT tier
    (Jordan +18, top 10 +16, top 25 +14, top 50 +12, top 75 +11, Hall of Fame +10), so the great ones pull away as you invest */
 const LGROW=[18,16,14,12,11,10];
-const lvGain=c=>c.k==="K"?1:(c.k==="Y"?15:c.k==="L"?LGROW[c.gt==null?5:c.gt]:10)/(MAXLV[c.s]-1);
+const lvGain=c=>c.tw?0:c.k==="K"?1:(c.k==="Y"?15:c.k==="L"?LGROW[c.gt==null?5:c.gt]:10)/(MAXLV[c.s]-1);
 function ownedRatings(id,own,gearDB){const c=C(id),o=own||{lv:1,st:c.s,j:0,gear:[]};
   /* a card plays its real season from level 1; levels, stars, tiers, Legacy and gear go on top. The cap is 140. */
   let R=[...c.r];const lb=(o.lv-1)*lvGain(c);
@@ -1761,29 +1761,23 @@ function buildPools(){POOL={byStar:{1:[],2:[],3:[],4:[],5:[]},byTeam:{},bySeason
   DB.c.forEach((c,i)=>{if(c.k==="H"||c.x)return;if(c.k!=="L")POOL.byStar[c.s].push(i);if(c.k==="K")POOL.rookies.push(i);if(c.k==="L")POOL.legends.push(i);if(c.s===5&&c.k!=="L")POOL.fiveStar.push(i);for(const t of DB.p[c.p][4]){(POOL.byTeam[t]=POOL.byTeam[t]||[]).push(i)}})}
 function ties(i,ti){return DB.p[DB.c[i].p][4].includes(ti)}
 /* ---- new game ---- */
+/* Two-Way bodies: five 45-OVR players with no card art of their own, so a thin roster can always field a team. Made at boot,
+   never in packs, never in the library, can't be sold or leveled. Everyone starts with the five; real cards push them down the bench */
+function makeTwoWay(){if(DB.tw)return;DB.tw=[];const spec=[["Two-Way Guard","PG",75],["Two-Way Guard","SG",77],["Two-Way Wing","SF",79],["Two-Way Forward","PF",81],["Two-Way Center","C",83]];
+  for(const[n,pos,h]of spec){DB.p.push([n,pos,h,"",[],[],"",2026]);const r=[45,45,45,45,45,45,45];DB.c.push({k:"W",p:DB.p.length-1,y:2026,t:0,r,o:ovrOf(r),s:1,g:[0,0,0,0],x:1,tw:1});DB.tw.push(DB.c.length-1)}}
+/* the OP pack: one of your franchise's best cards at random. Its MVP and Finals MVP seasons (5★); a franchise with fewer than three
+   of those adds its best 4★ seasons to the draw. During an event, one draw in ten is the franchise's Possessed card instead */
+function opPull(fr){const team=(POOL.bySeason[fr]||[]).filter(i=>!DB.c[i].tw);let pool=team.filter(i=>"MF".includes(DB.c[i].k));
+  if(pool.length<3)pool=pool.concat(team.filter(i=>DB.c[i].s===4&&!"LK".includes(DB.c[i].k)).sort((a,b)=>DB.c[b].o-DB.c[a].o).slice(0,3-pool.length));
+  if(!pool.length)pool=team.slice().sort((a,b)=>DB.c[b].o-DB.c[a].o).slice(0,3);
+  const ev=typeof eventNow==="function"&&eventNow();const h=ev&&POOL.possessed.find(i=>DB.c[i].t===fr);
+  return h!=null&&rnd()<.1?h:pick(pool)}
 function newGame(fr){S={v:1,rv:3,tier:1,nextBoss:0,fr,coins:0,box:null,deal:null,own:{},roster:[],gear:{},season:null,gyms:{},banners:[],bossesBeaten:[],made:Date.now(),firstClears:{},log:[]};
-  const pos=p=>/C/.test(p)&&!/^G/.test(p)?"C":/G/.test(p)&&!/^F/.test(p)?"G":"F";
-  /* the starter roster: low cards from the franchise's own seasons, so the team bonus is there from day one */
-  const own=POOL.bySeason[fr]||[];let cands=own.filter(i=>DB.c[i].k==="R"&&DB.c[i].s===1);
-  if(cands.length<20)cands=cands.concat(own.filter(i=>DB.c[i].k==="R"&&DB.c[i].s===2).sort((a,b)=>DB.c[a].o-DB.c[b].o).slice(0,20));
-  cands=cands.sort(()=>rnd()-.5);const need={G:4,F:4,C:2},got=[],usedP=new Set();
-  for(const g of["C","G","F"])for(const i of cands){if(got.length>=12)break;const c=DB.c[i];if(usedP.has(c.p))continue;if(pos(DB.p[c.p][1])===g&&got.filter(x=>pos(DB.p[DB.c[x].p][1])===g).length<need[g]){got.push(i);usedP.add(c.p)}}
-  for(const i of cands){if(got.length>=12)break;if(!usedP.has(DB.c[i].p)){got.push(i);usedP.add(DB.c[i].p)}}
-  for(const i of got)addCard(i,true);
-  /* the start: no coins. One Prime/MVP pack, a pick of 3 of your franchise's players, then a common gear box made for the
-     one you picked. That's the one head start; Legends come later, from packs, bosses and the book */
-  S.startPick=starterPicks(usedP);
-  S.roster=bestRoster();S.base=myTeam().ovr+TBASE;newSeason();save()}
-function starterPicks(usedP){const fr=S.fr,book=bookRewards().team[fr],seen=new Set(usedP);
-  const three=(list,fill)=>{const out=[];for(const i of list.sort(()=>rnd()-.5)){if(out.length>=3)break;const p=DB.c[i].p;if(seen.has(p))continue;seen.add(p);out.push(i)}
-    for(const i of fill){if(out.length>=3)break;const p=DB.c[i].p;if(seen.has(p))continue;seen.add(p);out.push(i)}return out};
-  const team=POOL.bySeason[fr]||[];const byBest=(a,b)=>DB.c[b].s-DB.c[a].s||DB.c[b].o-DB.c[a].o;
-  /* Legends of this franchise (not its book reward); a team short of three gets its best award seasons */
-  /* no Legends at the start: they come from packs, bosses and the book */
-  const L=[];
-  /* Prime and MVP seasons with this franchise; short of three, its next best cards */
-  const P=three(team.filter(i=>"PMF".includes(DB.c[i].k)&&i!==book),[...team.filter(i=>!"LRK".includes(DB.c[i].k)&&i!==book).sort(byBest),...team.filter(i=>DB.c[i].k==="R"&&i!==book).sort(byBest)]);
-  return{L,P,got:[]}}
+  /* the start: no coins, no roster handed to you. One OP pack and ten packs; what you pull is your team, Two-Way bodies fill the rest.
+     Don't like it? Reroll: the same again from nothing. Legends come later, from packs, bosses, the book and the Legend Trial */
+  for(const i of DB.tw||[])addCard(i,true);
+  S.pity={v:2,p4:0,p5:0};const op=opPull(fr);addCard(op,true);const packs=[];for(let n=0;n<10;n++){const r=pullOne();packs.push(r.id)}
+  S.start={op,packs,t:Date.now()};S.roster=bestRoster();for(const g of starterGear([op]))S.gear[g].start=1;S.base=myTeam().ovr+TBASE;newSeason();save()}
 /* the common gear box: six pieces for the pick, one per slot, in the sets his position wants, mains on his best ratings */
 function starterGear(ids){const out=[];for(const id of ids){if(!S.own[id])continue;const[meta,stat]=suggestBuild(id);const w=statWeights(id);
   for(let s=0;s<6;s++){const set=s<4?meta:stat;const ms=SLOTMAIN[s].slice().sort((a,b)=>w[b]-w[a])[0];const g=rollGear(0,set,2,s,ms);S.gear[g.id]=g;equip(id,g.id);out.push(g.id)}}
@@ -1829,8 +1823,8 @@ function lvAfford(i,n){const o=S.own[i];let c=0,k=0;for(let l=o.lv;l<maxLv(i)&&k
 function levelUp(i,n){const o=S.own[i];if(!o)return 0;const{k,c}=lvAfford(i,n||1);if(!k)return 0;S.coins-=c;o.lv+=k;track("level",k);save();return k}
 /* spare cards sell for coins */
 const CARDSELL=[0,10,25,75,400,1500];
-const cardSellValue=i=>DB.c[i].k==="L"?0:CARDSELL[DB.c[i].s];
-function sellCards(list){let v=0;for(const i of list){if(!S.own[i]||S.roster.includes(i)||DB.c[i].k==="L")continue;v+=cardSellValue(i);removeCard(i)}S.coins+=v;save();return v}
+const cardSellValue=i=>DB.c[i].k==="L"||DB.c[i].tw?0:CARDSELL[DB.c[i].s];
+function sellCards(list){let v=0;for(const i of list){if(!S.own[i]||S.roster.includes(i)||DB.c[i].k==="L"||DB.c[i].tw)continue;v+=cardSellValue(i);removeCard(i)}S.coins+=v;save();return v}
 /* card tiers by OVR (with gear, without the team bonus). Each one adds +2 on every rating and a new frame. */
 const TIERS=[{n:"Ruby Diamond",ovr:120,cost:10000,k:"tR"},{n:"Black Diamond",ovr:130,cost:25000,k:"tB"},{n:"Immortal",ovr:140,cost:50000,k:"tI"}];
 const tierOf=i=>S.own[i]?S.own[i].tier||0:0;
@@ -2253,7 +2247,7 @@ const headURL=(p,big)=>`https://cdn.nba.com/headshots/nba/latest/${big?"1040x760
 function artHTML(c,p,big){const ok=eraOK(c,p);const src=ok&&p[6]?headURL(p,big):null;
   const img=src&&!IMGBAD.has(src)?`<img src="${src}" alt="" onerror="imgBad(this)">`:"";
   return`<span class="art${img?" ph":""}">${cardJersey(c,p,big)}${img}</span>`}
-const TAG={A:"All-Star",H:"Possessed",P:"Prime",D:"DPOY",M:"MVP",L:"HOF",K:"Rookie",F:"FMVP",Y:"ROY",X:"6MOY"};
+const TAG={W:"Two-Way",A:"All-Star",H:"Possessed",P:"Prime",D:"DPOY",M:"MVP",L:"HOF",K:"Rookie",F:"FMVP",Y:"ROY",X:"6MOY"};
 const tagOf=c=>{const t=c.fm?"2× MVP":c.ad?"All-Def":TAG[c.k];/* tight dot: the small card has room for "MVP·DPOY" but not "MVP · DPOY" */return t&&c.aw?t+c.aw.map(k=>"·"+TAG[k]).join(""):t};
 const GEARI='<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M10.3 2h3.4l.5 2.6 1.9.8 2.2-1.5 2.4 2.4-1.5 2.2.8 1.9 2.6.5v3.4l-2.6.5-.8 1.9 1.5 2.2-2.4 2.4-2.2-1.5-1.9.8-.5 2.6h-3.4l-.5-2.6-1.9-.8-2.2 1.5-2.4-2.4 1.5-2.2-.8-1.9L2 13.7v-3.4l2.6-.5.8-1.9-1.5-2.2 2.4-2.4 2.2 1.5 1.9-.8zM12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7z"/></svg>';
 /* small corner marks on a card you might use up: gear, powered up, playing for you */
@@ -2946,11 +2940,13 @@ function legPreview(id,take){take=take||"bossTake";id=+id;const c=DB.c[id];const
    ${own?`<p class="mut" style="text-align:center">You already have him: he'd move up a Legacy level.</p>`:""}`,null,
    `<div class="row"><button class="btn sp dk" data-act="close">Back</button><button class="btn go sp" data-act="${take}" data-arg="${id}">Lock him in</button></div>`,"legprev",()=>legPreview(id,take))}
 /* the start: pick one of three from each pack (Legends, then Prime/MVP), then the two gear boxes for them */
-function openStartPick(){const sp=S&&S.startPick;if(!sp)return;const L=sp.got.length===0;const ids=L?sp.L:sp.P;
-  if(!ids.length){sp.got.push(null);save();if(sp.got.length<2)return openStartPick();return finishStart()}
-  sheet(`<span class="kick">${TEAMNICK(S.fr)} · ${L?"Legends pack":"Prime/MVP pack"}</span><h2>Pick one</h2><p class="mut">${L?"Three of your franchise's Legends. You keep one.":"Three Prime and MVP seasons from your franchise. You keep one."} Tap a card to see him, then lock him in.</p><div class="grid3">${ids.map(i=>mcHTML(i,{act:"startPeek",noNew:true})).join("")}</div>`,null,null,"startpick",()=>openStartPick())}
-function finishStart(){const sp=S.startPick;const got=sp.got.filter(i=>i!=null);S.startPick=null;S.roster=bestRoster();const gear=starterGear(got);S.base=myTeam().ovr+TBASE;save();closeAll();render();
-  revealItems(gear.map(g=>({gear:S.gear[g]})),"Common gear box",()=>toast("No coins to start. Win games to earn them."))}
+/* the start: the OP pack opens first, then the ten packs, then one screen with everything you pulled and two buttons: keep it or reroll */
+function openStartReveal(){const st=S.start;if(!st)return;
+  revealItems([{id:st.op,dup:false}],`${TEAMNICK(S.fr)} · OP pack`,()=>revealItems(st.packs.map(id=>({id,dup:false})),"Ten packs",()=>openKeepOrReroll()))}
+function openKeepOrReroll(){const st=S.start;if(!st||st.kept)return;const ids=[st.op,...st.packs];const best=Math.max(...ids.map(i=>DB.c[i].o));
+  sheet(`<span class="kick">${TEAMNICK(S.fr)} · your start</span><h2>Keep it or reroll?</h2><p class="mut">This is your team: what you pulled, plus five Two-Way bodies to fill the floor. Reroll opens a fresh OP pack and ten new packs from nothing. You can reroll as often as you like before your first game.</p>
+    <div class="grid3">${ids.map(i=>mcHTML(i,{act:"peek",noNew:true})).join("")}</div>
+    <div class="row" style="margin-top:12px;gap:8px"><button class="btn" data-act="reroll">Reroll</button><span class="sp"></span><button class="btn gold" data-act="keepStart">Keep this team</button></div>`,null,null,"keeporreroll",()=>openKeepOrReroll())}
 /* ---------- gyms: see gym.js ---------- */
 /* ---------- practice ---------- */
 let PRAC=null;
@@ -2962,13 +2958,12 @@ const ACT={
   close:()=>closeSheet(),
   card:(a,el)=>{cardCtx(el);openCard(a)},peek:(a,el)=>{cardCtx(el);openCard(a)},cardStep:a=>stepCard(+a),autoGear:a=>{const n=autoGear(+a);openCard(+a,true);toast(n?`Put on ${n} piece${n>1?"s":""}`:"Already wearing his best gear")},autoGearAll:()=>{const n=autoGearRoster();render();toast(`Equipped ${n} pieces across your roster`)},ratView:a=>{const[id,k]=a.split(":");RVIEW=k;const y=SHEET.el.querySelector(".sbody").scrollTop;openCard(+id,true);SHEET.el.style.animation="none";SHEET.el.querySelector(".box").style.animation="none";SHEET.el.querySelector(".sbody").scrollTop=y},
   startNew:()=>renderTitle("pick"),
-  pickfr:a=>{newGame(+a);VIEW="team";render();const gift=new Set((S.box&&S.box.cards)||[]);
-    revealCards(Object.keys(S.own).map(Number).filter(i=>!gift.has(i)).map(id=>({id,dup:false})),`Your ${TEAMNICK(+a)} role players`,()=>openStartPick())},
-  play:a=>{if(lineupIssues().includes("Same player twice")){toast("The same player can't start twice");return}const k=S.season.phase==="po"?"po":"reg";if(a==="choose"){choosePlay(side=>runGame(k,"play",{side}));return}runGame(k,a)},
+  pickfr:a=>{newGame(+a);VIEW="team";render();openStartReveal()},
+  reroll:()=>{const fr=S.fr;closeAll();newGame(fr);render();openStartReveal()},
+  keepStart:()=>{S.start.kept=1;save();closeAll();render();toast("Your team. Win games to earn coins.")},
+  play:a=>{if(S.start&&!S.start.kept){openKeepOrReroll();return}if(lineupIssues().includes("Same player twice")){toast("The same player can't start twice");return}const k=S.season.phase==="po"?"po":"reg";if(a==="choose"){choosePlay(side=>runGame(k,"play",{side}));return}runGame(k,a)},
   boss:a=>{if(a==="choose"){choosePlay(side=>runGame("boss","play",{side}));return}runGame("boss",a)},
   playGo:a=>{const cb=PLAYCB;PLAYCB=null;S.playMode=a;save();closeAll();if(cb)cb(a)},
-  startPeek:a=>legPreview(a,"startTake"),
-  startTake:a=>{const sp=S.startPick;if(!sp)return;const r=addCard(+a);if(S.own[+a])S.own[+a].isNew=true;sp.got.push(+a);save();closeAll();toast(r.dup?"Legacy up":"Added to your team");if(sp.got.length<2)setTimeout(openStartPick,250);else setTimeout(finishStart,250)},
   bossTake:a=>{const r=addCard(+a);S.legendPick=null;save();closeAll();toast(r.dup?"Legacy up":"Legend added to your collection");cardCtx(null);openCard(+a)},
   legPeek:a=>legPreview(a),legendPick:()=>bossPick(),
   buildOpen:a=>{BUILD=null;openBuild(a)},buildPick:a=>{const[w,k]=a.split(":");if(BUILD){BUILD[w]=k==="null"?null:k;openBuild(BUILD.id)}},
@@ -3031,7 +3026,7 @@ const ACT={
   resetGo:()=>{clearInterval(GTIMER);try{localStorage.removeItem(SAVEKEY)}catch(e){}S=null;closeSheet();renderTitle()}};
 document.addEventListener("click",e=>{if(window._dragEnd&&Date.now()-window._dragEnd<700){e.preventDefault();e.stopPropagation();return}const b=e.target.closest("[data-act]");if(!b)return;const f=ACT[b.dataset.act];if(f){e.preventDefault();f(b.dataset.arg,b)}});
 /* ---------- boot ---------- */
-function boot(){retireOld();makePossessed();buildPools();load();if(S&&(!S.v||!S.season))S=null;if(S){ledSeed();migrateBench();migrateTier();migrateEcon();dailyEnergy();const n=migrateIds();if(migrateGear())S.gearV2=Date.now();tickGrind();if(S.grind)GTIMER=setInterval(grindPulse,1000);save();if(n)setTimeout(()=>toast(n===1?"Fixed 1 card that showed the wrong player":`Fixed ${n} cards that showed the wrong player`),600)}render();if(S&&S.box&&S.box.cards)setTimeout(openStarterBox,400);if(S&&S.startPick)setTimeout(openStartPick,500);if(S&&S.hwPick)setTimeout(openHwPick,500);if(S&&S.auto)setTimeout(autoCatchUp,700);if(S)showSplash()}
+function boot(){retireOld();makeTwoWay();makePossessed();buildPools();load();if(S&&(!S.v||!S.season))S=null;if(S){ledSeed();migrateBench();migrateTier();migrateEcon();dailyEnergy();const n=migrateIds();if(migrateGear())S.gearV2=Date.now();tickGrind();if(S.grind)GTIMER=setInterval(grindPulse,1000);save();if(n)setTimeout(()=>toast(n===1?"Fixed 1 card that showed the wrong player":`Fixed ${n} cards that showed the wrong player`),600)}render();if(S&&S.box&&S.box.cards)setTimeout(openStarterBox,400);if(S&&S.start&&!S.start.kept)setTimeout(openKeepOrReroll,500);if(S&&S.hwPick)setTimeout(openHwPick,500);if(S&&S.auto)setTimeout(autoCatchUp,700);if(S)showSplash()}
 document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible"&&S&&dailyEnergy()){save();if(!SHEET)render()}
   if(document.visibilityState==="visible"&&S&&S.grind){if(tickGrind()&&!SHEET)render();clearInterval(GTIMER);GTIMER=setInterval(grindPulse,1000)}});
 document.addEventListener("input",e=>{if(e.target.id==="myq"){MYQ=e.target.value;clearTimeout(window._mq);window._mq=setTimeout(()=>render(),200);return}if(e.target.id==="catq"){CATQ=e.target.value;CATN=60;clearTimeout(window._cq);window._cq=setTimeout(()=>libRefresh(),250)}});
@@ -4311,6 +4306,12 @@ function playGame(res0,side,done){
   function drawScene(){const D=!FINAL&&ARENA.view==="D";const im=FINAL?ARENA.full:D?ARENA.near:ARENA.half;if(im.complete&&im.naturalWidth)g.drawImage(im,0,FINAL||D?0:ARENA.M.dy);else{g.fillStyle="#0b0e1c";g.fillRect(0,0,CW,CH)}}
   /* ---------- actors ---------- */
   const looks={},ACTS={};let ball={mode:"hold",who:null,x:0,y:0};
+  /* one ball. give(k) hands it to one man; whoever had it before stops dribbling. Any other man found in a ball animation is
+     drawn standing (and counted as a scene fault, see VIOL), so two dribblers can never show, whatever the scene code does */
+  const BALLANIM=new Set(["dribble","drive","cross","jab","pump","post","spin"]);
+  const VIOL=[];const fault=(kind,info)=>{if(VIOL.length<200)VIOL.push({kind,...info,t:Math.round(performance.now())})};
+  function give(k){const prev=ball.who;ball={mode:"hold",who:k,x:ball.x,y:ball.y};if(prev&&prev!==k&&ACTS[prev]&&BALLANIM.has(ACTS[prev].anim)){ACTS[prev].anim="idle";ACTS[prev].fps=2;ACTS[prev].once=false}}
+  function drop(){ball={mode:"none",who:null,x:ball.x,y:ball.y}}
   const key=p=>p.id+"|"+p.team;const plOf=k=>{const[id,t]=k.split("|");return(t==="0"?A:B).pl.find(p=>String(p.id)===id)};
   function lookK(k){if(!looks[k]){const p=plOf(k),t=+k.split("|")[1];const lk=lookFor(p,t,t===0?A.color:B.color);looks[k]=ARENA.lookOf(lk,DB.p[DB.c[p.id].p][6])}return looks[k]}
   /* screen spots: feet, and the ball in his hands (in front of him, which from behind is just off his right hip) */
@@ -4348,6 +4349,7 @@ function playGame(res0,side,done){
     const ks=Object.keys(ACTS).filter(k=>ACTS[k].vis!==false);const P={};for(const k of ks){const a=ACTS[k],p=scr(a);if(a._px!=null){const dt=Math.max(1,now-(a._pt||now));a._vx=(a._vx||0)*.6+(p.x-a._px)/dt*.4;a._vy=(a._vy||0)*.6+(p.y-a._py)/dt*.4}a._px=p.x;a._py=p.y;a._pt=now;P[k]=p}
     ks.sort((a,b)=>P[a].y-P[b].y);
     const held=ball.mode==="hold"&&ball.who&&ACTS[ball.who]?ball.who:null;
+    for(const k of ks){const a=ACTS[k];if(k!==held&&!a.once&&BALLANIM.has(a.anim)){fault("second-ball",{k,anim:a.anim,held});a.anim="idle";a.fps=2}}
     for(const k of ks){const a=ACTS[k],p=P[k];const an=animName(k,a);const n=ARENA.count(an);let i;if(a.once){const u=clamp((now-a.t0)/a.dur,0,.999);i=a.f0+Math.floor(u*(a.f1-a.f0+1))}else i=Math.floor((now-a.t0)/1000*(a.fps||9)*SPD)%n;
       a._an=an;a._i=i;a._v=ARENA.viewOf(an,i);const flip=(an==="layup"||an==="dunk")&&p.x<ARENA.RIM.x;/* the back-view finishes go up to the left; mirrored on the right side */
       g.fillStyle="#00000044";g.beginPath();g.ellipse(p.x,p.y,11,3.5,0,0,7);g.fill();
@@ -4405,7 +4407,7 @@ function playGame(res0,side,done){
      is spotted up outside. Spots are on this side-on court: x toward the basket (right), y toward you (down). */
   const SP={top:FT(0,29),wn:FT(17,22),wf:FT(-17,22),cn:FT(21,5),cf:FT(-21,5),bn:FT(8,8),bf:FT(-8,8),el:FT(-8,19),lane:FT(3,11),rim:FT(0,7),slot:FT(-9,26)};
   const near=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]);
-  window._pv={ACTS,key,get ball(){return ball}};/* for tests: where everyone is */
+  window._pv={ACTS,key,get ball(){return ball},viol:VIOL};/* for tests: where everyone is */
   /* fast break spots, in feet on the real court (u across, v out from the far baseline; the rim is at v 5.25) */
   function brkLayout(P,brk,bh,runners,trailer){const n=+brk.lab[0],m=+brk.lab.slice(-1);const ft=(u,v,o)=>({...oldAt({u,v}),...(o||{})});
     const me=new Map(),them=new Map();
@@ -4486,11 +4488,15 @@ function playGame(res0,side,done){
   function momHTML(){const m=ctl.mom,el=$("#pvSub");const base=CARD&&CARD.side===1?"You run the defense":CARD&&CARD.side===0?"You run the offense":BASE;
     el.textContent=m&&Math.abs(m)>=3?`Momentum ${m>0?"+":"−"}${Math.abs(m)} · ${m>0?"+5%":"−5%"} on your calls`:base;el.className=m>=3?"up":m<=-3?"dn":""}
   /* the shot, drawn: shooter rises, ball to the rim, in or out */
-  async function drawShot(k,shot,made,blk,dunk){const a=ACTS[k];if(!a)return;
+  async function drawShot(k,shot,made,blk,dunk,blocker){const a=ACTS[k];if(!a)return;
     const R0=ARENA.RIM,under=ARENA.px(0,5.25);
-    if(shot==="rim"){once(k,dunk?"dunk":"layup",.7,false);await T(a,{x:Math.max(a.x,236),y:134},.35);await fly(R0.x,R0.y-3,dunk?6:22,dunk?.3:.5)}
-    else{once(k,"shot",.8,false);await wait(.8*8/13);/* the ball leaves his hands at the top of the jump */await fly(R0.x,R0.y-3,shot===3?70:52,shot===3?.85:.7)}
-    if(blk){pop("BLOCKED","bad");const t=scr({x:a.x-30,y:a.y});await fly(t.x,t.y-4,26,.45);ARENA.snd.play("bounce",.4);return}
+    /* a block happens at the shot: the blocker runs to the shooter's rim side first, then goes up with him */
+    const bk=blk&&blocker&&ACTS[blocker]&&blocker!==k?blocker:null;
+    if(bk){const b=ACTS[bk];const tx=(shot==="rim"?Math.max(a.x,236):a.x)+14,ty=(shot==="rim"?134:a.y)+3;b.anim="run";b.fps=10;b.once=false;b.vis=true;await T(b,{x:tx,y:ty},.3);b.anim="idle";b.fps=2}
+    const blockNow=()=>{if(!bk)return;once(bk,"block",.5,ACTS[bk].flip);const b=scr(ACTS[bk]),s=scr(a);if(Math.hypot(b.x-s.x,b.y-s.y)>48)fault("block-far",{bk,k,d:Math.round(Math.hypot(b.x-s.x,b.y-s.y))})};
+    if(shot==="rim"){once(k,dunk?"dunk":"layup",.7,false);await T(a,{x:Math.max(a.x,236),y:134},.35);blockNow();if(bk){await wait(.15);const t=scr({x:a.x-26,y:a.y+6});await fly(t.x,t.y-4,20,.4)}else await fly(R0.x,R0.y-3,dunk?6:22,dunk?.3:.5)}
+    else{once(k,"shot",.8,false);await wait(.8*8/13);/* the ball leaves his hands at the top of the jump */blockNow();if(bk){const t=scr({x:a.x-26,y:a.y+6});await fly(t.x,t.y-4,20,.4)}else await fly(R0.x,R0.y-3,shot===3?70:52,shot===3?.85:.7)}
+    if(blk){pop("BLOCKED","bad");if(bk){ARENA.snd.play("bounce",.4);return}const t=scr({x:a.x-30,y:a.y});await fly(t.x,t.y-4,26,.45);ARENA.snd.play("bounce",.4);return}
     if(made){ARENA.snd.play("swish",.7);await fly(under.x,under.y-6,0,.3);ARENA.snd.play("bounce",.3);setA(k,{anim:"cele",fps:7,flip:false,lab:a.lab,me:a.me,vis:true})}
     else{const t=scr({x:RIM.x-18,y:142});await fly(t.x,t.y-6,40,.5);ARENA.snd.play("bounce",.4)}}
   /* events since we last looked: score, caption, and a quick drawing of plays the engine ran on its own */
@@ -4502,7 +4508,7 @@ function playGame(res0,side,done){
         const P={oi:e.o,OP:(e.o===0?A:B).pl.filter(p=>e.on.includes(p.id)),DP:(e.o===0?B:A).pl.filter(p=>e.dn.includes(p.id)),matchOf:null};
         P.matchOf=p=>P.DP[P.OP.indexOf(p)]||P.DP[0];formation(P);const sk=e.who+"|"+e.o;
         if(e.type==="stl"||e.type==="to"||e.type==="runout"){board(e);if(e.txt)cap(e.txt);pop(e.type==="to"?"TURNOVER":"STEAL",e.o===0?"bad":"good");await wait(.9)}
-        else if(ACTS[sk]){ball={mode:"hold",who:sk};setA(sk,{anim:"dribble",fps:8,flip:false,lab:ACTS[sk].lab,me:e.o===0,vis:true});await wait(.35);await drawShot(sk,e.shot,e.type==="make",e.type==="blk",e.shot==="rim"&&/throws it down/.test(e.txt||""));
+        else if(ACTS[sk]){give(sk);setA(sk,{anim:"dribble",fps:8,flip:false,lab:ACTS[sk].lab,me:e.o===0,vis:true});await wait(.35);await drawShot(sk,e.shot,e.type==="make",e.type==="blk",e.shot==="rim"&&/throws it down/.test(e.txt||""),e.type==="blk"&&e.def!=null?e.def+"|"+(1-e.o):null);
           board(e);if(e.txt)cap(e.txt);if(e.type==="make")pop("+"+(e.pts||2),e.o===0?"good":"bad");await wait(.8)}
         else{board(e);if(e.txt)cap(e.txt)}}
       else if(!simAll&&e.type==="ft"&&e.on){await drawFT(e)}}}
@@ -4517,12 +4523,12 @@ function playGame(res0,side,done){
     lane.forEach((p,j)=>{if(!p)return;const s=oldAt(FTSPOTS.lane[j]);setA(key(p),{x:s.x,y:s.y,anim:"idleN",fps:2,vis:true,lab:null})});
     back.forEach((p,j)=>{if(!p)return;const s=oldAt(FTSPOTS.back[j]);setA(key(p),{x:s.x,y:s.y,anim:"idleN",fps:2,vis:true,lab:null})});
     cap(e.txt||"Free throws");const n=e.n||2,r=e.r||[...Array(n)].map((_,i)=>i<(e.pts||0));const R0=ARENA.RIM;await wait(.5);
-    for(let i=0;i<n;i++){ball={mode:"hold",who:sk};setA(sk,{anim:"idle",fps:2,lab:ACTS[sk].lab,me:ACTS[sk].me,vis:true});await wait(.45);
+    for(let i=0;i<n;i++){give(sk);setA(sk,{anim:"idle",fps:2,lab:ACTS[sk].lab,me:ACTS[sk].me,vis:true});await wait(.45);
       once(sk,"shot",.8,false);await wait(.8*8/13);await fly(R0.x,R0.y-3,34,.6);
       if(r[i]){ARENA.snd.play("swish",.6);const u=ARENA.px(0,5.25);await fly(u.x,u.y-6,0,.25);ARENA.snd.play("bounce",.25)}
       else{const m=scr({x:RIM.x-6,y:i%2?124:140});await fly(m.x,m.y-4,26,.4);ARENA.snd.play("bounce",.35)}
       if(i===n-1)board(e);await wait(.35)}
-    ball={mode:"none",who:null}}
+    drop()}
   /* ---------- the call card ---------- */
   let CARD=null,BUSY=false,KS0=[0,0];
   const chipH=c=>`<span class="pc ${c[1]>0?"up":"dn"}">${c[1]>0?"▲":"▼"} ${esc(c[0])} ${c[1]>0?"+":"−"}${Math.abs(c[1])}%</span>`;
@@ -4545,7 +4551,7 @@ function playGame(res0,side,done){
     el.querySelectorAll(".pvb").forEach(b=>b.onclick=()=>pickOpt(+b.dataset.i));
     /* the calls fade in and only take a tap once they're there: no tapping through by accident */
     setTimeout(()=>{if(CARD===c){BUSY=false;if(coachTrip||simAll)pickOpt(-1)}},simAll?0:320);
-    if(coachTrip||simAll)setTimeout(()=>{if(CARD===c){BUSY=false;pickOpt(-1)}},simAll?0:500/SPD)}
+    if(coachTrip||simAll||window._pvAuto)setTimeout(()=>{if(CARD===c){BUSY=false;pickOpt(-1)}},simAll?0:500/SPD)}
   function pickOpt(i){if(!CARD||BUSY)return;BUSY=true;const c=CARD;CARD=null;
     if(i>=0){const b=$(`#pvCard .pvb[data-i="${i}"]`);if(b)b.classList.add("pick")}
     setTimeout(()=>step(i),simAll?0:160)}
@@ -4565,14 +4571,14 @@ function playGame(res0,side,done){
     const o0=v.out;const said=o0?(o0.made?"+"+o0.pts:o0.blk?"BLOCKED":null):v.res&&/PICKED OFF|INTERCEPTED|STEAL|POCKET|STRIPPED|LOST|TURNOVER|CHARGE/.test(v.res.w)?(def?(v.res.w.includes("CHARGE")?"CHARGE":"STEAL"):x.kind==="pass"?"STEAL":"TURNOVER"):null;
     const tone=def?(o0&&o0.made?"bad":"good"):(o0?(o0.made?"good":"bad"):"bad");
     if(def){/* their trip plays out: the shot (or the steal), then what happened */const sk=v.shooter?kOf(v.shooter):null;
-      if(v.out&&sk&&ACTS[sk]){ball={mode:"hold",who:sk};setA(sk,{anim:"dribble",fps:8,flip:false,lab:ACTS[sk].lab,me:false,vis:true});await wait(.2);await drawShot(sk,v.out.type,v.out.made,!!v.out.blk,false)}
-      else{const d=x.okRes&&x.okRes.def||null;if(d&&ACTS[kOf(d)])once(kOf(d),"block",.5,true);await wait(.4)}
+      if(v.out&&sk&&ACTS[sk]){give(sk);setA(sk,{anim:"dribble",fps:8,flip:false,lab:ACTS[sk].lab,me:false,vis:true});await wait(.2);await drawShot(sk,v.out.type,v.out.made,!!v.out.blk,false,v.out.blk?kOf(v.out.blk):null)}
+      else{const d=x.okRes&&x.okRes.def||null;if(d&&ACTS[kOf(d)])once(kOf(d),"steal",.5,true);await wait(.4)}
       if(said)pop(said,tone);return}
-    if(x.kind==="finish"){const k=kOf(x.shooter);const o=v.out||{made:r.ok,pts:x.pts};if(ACTS[k]){ball={mode:"hold",who:k};await drawShot(k,x.type,o.made,!!o.blk,x.dunk)}if(said)pop(said,tone);return}
+    if(x.kind==="finish"){const k=kOf(x.shooter);const o=v.out||{made:r.ok,pts:x.pts};if(ACTS[k]){give(k);await drawShot(k,x.type,o.made,!!o.blk,x.dunk,o.blk?kOf(o.blk):null)}if(said)pop(said,tone);return}
     if(x.kind==="pass"){const k=kOf(x.to);if(ACTS[k]){const t=ACTS[k];if(x.next==="dump")await T(t,{x:238,y:132},.4);if(ball.who&&ACTS[ball.who]){once(ball.who,"pass",.4,false);await wait(.4*3/7)}
-      once(k,"catch",.45,false);const h=handOf(k);await fly(h.x,h.y,14,.35);if(r.ok)ball={mode:"hold",who:k}}if(said)pop(said,tone);return}
+      once(k,"catch",.45,false);const h=handOf(k);await fly(h.x,h.y,14,.35);if(r.ok)give(k)}if(said)pop(said,tone);return}
     const k=kOf(x.actor||P.OP[0]);if(!ACTS[k])return;const a=ACTS[k];
-    if(x.k==="pnr"){const bigK=Object.keys(ACTS).find(kk=>kk!==k&&ACTS[kk].vis&&kk.endsWith("|"+P.oi)&&(plOf(kk)||{}).ht>=(plOf(k)||{ht:0}).ht+3)||null;if(bigK){once(bigK,"screen",.6,false);await T(ACTS[bigK],{x:a.x+8,y:a.y+2},.45)}setA(k,{anim:"dribble",fps:9,flip:false,lab:a.lab,me:a.me,vis:true});await T(a,{x:a.x+(r.ok?34:10),y:a.y+(r.ok?10:0)},.5)}
+    if(x.k==="pnr"){/* the screener is the man the call names, never "some tall teammate" */const bigK=x.big&&ACTS[kOf(x.big)]?kOf(x.big):null;if(!bigK)fault("no-screener",{k});if(bigK){once(bigK,"screen",.6,false);await T(ACTS[bigK],{x:a.x+8,y:a.y+2},.45)}setA(k,{anim:"dribble",fps:9,flip:false,lab:a.lab,me:a.me,vis:true});await T(a,{x:a.x+(r.ok?34:10),y:a.y+(r.ok?10:0)},.5)}
     else if(x.k==="drive"||x.k==="mm_drive"||x.k==="drive2"||x.k==="split"){setA(k,{anim:"drive",fps:11,flip:false,lab:a.lab,me:a.me,vis:true});await T(a,{x:a.x+(r.ok?60:20),y:132},.55)}
     else if(x.k==="cross"||x.k==="jab"||x.k==="pump"){once(k,x.k==="cross"?"cross":x.k==="jab"?"jab":"pump",.6,false);await wait(.6)}
     else if(x.k==="post"||x.k==="mm_post"){setA(k,{anim:"post",fps:8,flip:false,lab:a.lab,me:a.me,vis:true});await T(a,{x:232,y:138},.5)}
@@ -4586,7 +4592,7 @@ function playGame(res0,side,done){
     if(v&&v.card){const P=v.card.P;const pk=P.q+":"+P.k;if(pk!==lastPossKey){await catchUp(true);lastPossKey=pk;
       /* key moments: what happened while the engine played, in one line, before your next call */
       if(ctl.pick&&!simAll){const sc=sink.score||[0,0],d0=sc[0]-KS0[0],d1=sc[1]-KS0[1];if(d0+d1>0||ctl.why){cap(`Since your last call: ${A.abbr} ${d0}, ${B.abbr} ${d1}`);if(ctl.why)pop(ctl.why.toUpperCase(),ctl.why.startsWith("You")?"good":"bad");await wait(1.1)}KS0=[...sc];ctl.why=null}
-      coachTrip=false;if(!simAll){if(v.card.brk){breakFormation(P,v.card.brk);pop("FAST BREAK",v.card.side===0?"good":"bad")}else formation(P);const bhP=v.card.side===0?v.card.bh:(P.OP.find(p=>p.slot===0)||P.OP[0]);if(bhP){const k=key(bhP);ball={mode:"hold",who:k};setA(k,{anim:"dribble",fps:8,flip:false,lab:ACTS[k].lab,me:ACTS[k].me,vis:true})}board(P.e&&{q:P.q,clock:P.clock})}}
+      coachTrip=false;if(!simAll){if(v.card.brk){breakFormation(P,v.card.brk);pop("FAST BREAK",v.card.side===0?"good":"bad")}else formation(P);const bhP=v.card.side===0?v.card.bh:(P.OP.find(p=>p.slot===0)||P.OP[0]);if(bhP){const k=key(bhP);give(k);setA(k,{anim:"dribble",fps:8,flip:false,lab:ACTS[k].lab,me:ACTS[k].me,vis:true})}board(P.e&&{q:P.q,clock:P.clock})}}
       else await catchUp(false);if(v.card.n===0)LAST=null;await stage(v.card);momHTML();if(!luP.hidden)drawLU();showCard(v.card);return}
     if(v&&v.roll){await catchUp(false,v.roll.ev0);await showRoll(v.roll);await catchUp(false);step();return}
     if(v&&v.quarter!=null){await catchUp(true);step();return}
@@ -4673,7 +4679,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="665d40f585";
+<script>const APPV="51c7f0c04d";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
