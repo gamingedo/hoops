@@ -1490,7 +1490,7 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
     const film=shooter.bt.IQ;
     if(def===stopper&&shooter===best&&def.sets.Lockdown){pm-=.07;if(late)pm-=.15}/* the Lockdown set works on anyone, film or not */
     if(def===stopper&&shooter===best&&!film){if(def.sig==="Clamps")pm-=late?.12:.05;if(hk(def,"D")){pm-=(late?.15:.10)*(def.pk||1);perkTags.push({t:di,txt:"LOCKDOWN: "+def.name})}else if(late&&(def.sig==="Clamps"||def.sets.Lockdown))perkTags.push({t:di,txt:"LOCKDOWN: "+def.name})}
-    if(q>=nQ/2&&hk(shooter,"P")){pm+=.05*shooter.pk;if(late)perkTags.push({t:oi,txt:"PRIME TIME: "+shooter.name})}
+    if(q>=nQ/2&&hk(shooter,"P")){pm+=.05*shooter.pk;if(late||tO.spot===shooter.id)perkTags.push({t:oi,txt:"PRIME TIME: "+shooter.name})}
     if(late&&close&&shooter.imm){pm+=.10;perkTags.push({t:oi,txt:"IMMORTAL: "+shooter.name})}
     if(tkOn===shooter){pm+=.10*shooter.pk;perkTags.push({t:oi,txt:"TAKEOVER: "+shooter.name})}else if(tkOn)pm+=.03;/* the team rides it too (+6 on offense) */
     if(late&&shooter.sig==="Unstoppable"){pm+=.12*shooter.pk;perkTags.push({t:oi,txt:"UNSTOPPABLE: "+shooter.name})}
@@ -1504,7 +1504,7 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
     /* streaks and rest: cold after 4 straight misses, fresh legs for a few trips after sitting. Shown as reasons in Play */
     const mods=[];if(shooter.cold&&!hk(shooter,"Y")){pm-=.08;mods.push(["Cold: missed 4 straight",-.08])}if(shooter.fresh>0){pm+=.05;mods.push(["Fresh legs",.05])}
     /* Big Stage (Finals MVP, Double MVP): playoff and boss games, +6% */
-    if(hk(shooter,"A")&&q<nQ/2){pm+=.04;mods.push(["Showcase: All-Star",.04])}
+    if(hk(shooter,"A")&&q<nQ/2){pm+=.04;mods.push(["Showcase: All-Star",.04]);if(tO.spot===shooter.id)perkTags.push({t:oi,txt:"SHOWCASE: "+shooter.name})}
     if(tO.big&&(hk(shooter,"F")||shooter.fm)){pm+=.06;mods.push(["Big stage",.06]);if(late)perkTags.push({t:oi,txt:"BIG STAGE: "+shooter.name})}
     if(inFT(def,q))mods.push([`${def.last} in foul trouble`,type==="rim"?.014:.022]);/* what his softer contest is worth (already in pm above) */
     return{pm:clamp(pm,.08,.9),perkTags,mods}}
@@ -2810,7 +2810,7 @@ function revealItems(res,title,onDone,again){again=(again||[]).filter(Boolean);
 /* game.js: playing games, recaps, reports, seasons, gyms, actions */
 /* ---------- run a game of any kind ---------- */
 function runGame(kind,mode,ctx){ctx=ctx||{};let A,B,fmt="full";const s=S.season;
-  if(kind==="reg"){const opp=s.sched[s.g];A=myTeam(null,{home:s.home[s.g]});B=oppTeam(opp,leagueLevel(tgt(s.n,s.g)));B.home=!s.home[s.g]}
+  if(kind==="reg"){const opp=s.sched[s.g];A=myTeam(null,{home:s.home[s.g]});B=oppTeam(opp,leagueLevel(tgt(s.n,s.g))-(ctx.first?3:0));B.home=!s.home[s.g];if(ctx.first&&S.start){A.spot=S.start.op;A.first=1}}
   else if(kind==="po"){A=myTeam(null,{home:s.po.w+s.po.l<2});B=oppTeam(s.po.opp,leagueLevel(tgt(s.n,48))+2+s.po.round)}
   else if(kind==="boss"){const k=curBossIx();const b=BOSSES[k];if(bossOver()||S.bossesBeaten.includes(s.n)){toast("The boss series is over. A new boss comes next season.");return}
     A=myTeam();B=bossTeam(b,bossOvr(s.n))}
@@ -2825,7 +2825,7 @@ function runGame(kind,mode,ctx){ctx=ctx||{};let A,B,fmt="full";const s=S.season;
   const res=simGame(A,B,{fmt});res.A=A;res.B=B;res.kind=kind;res.ctx=ctx;res.label=label;
   if(mode==="quiet")return{res,out:finishGame(res,true)};
   if(mode==="watch")watchGame(res,()=>finishGame(res));else finishGame(res)}
-function finishGame(res,quiet){const kind=res.kind,s=S.season,won=res.score[0]>res.score[1];const out=applyGame(res,kind==="gym"?"gym":kind,res.ctx);out.drops=[];out.notes=[];
+function finishGame(res,quiet){const kind=res.kind,s=S.season,won=res.score[0]>res.score[1];if(S.start&&S.start.first)S.start.first=0;const out=applyGame(res,kind==="gym"?"gym":kind,res.ctx);out.drops=[];out.notes=[];
   if(kind==="reg"||kind==="po"||kind==="boss")addEnergy(2);
   if(kind==="reg"){s.stand[S.fr][won?0:1]++;s.stand[s.sched[s.g]][won?1:0]++;leagueRound(s.sched[s.g]);s.games.push({o:s.sched[s.g],s:res.score});s.g++;if(s.g>=48)startPlayoffs(out)}
   else if(kind==="po")playoffGame(res,won,out);
@@ -2946,7 +2946,7 @@ function openStartReveal(){const st=S.start;if(!st)return;
 function openKeepOrReroll(){const st=S.start;if(!st||st.kept)return;const ids=[st.op,...st.packs];const best=Math.max(...ids.map(i=>DB.c[i].o));
   sheet(`<span class="kick">${TEAMNICK(S.fr)} · your start</span><h2>Keep it or reroll?</h2><p class="mut">This is your team: what you pulled, plus five Two-Way bodies to fill the floor. Reroll opens a fresh OP pack and ten new packs from nothing. You can reroll as often as you like before your first game.</p>
     <div class="grid3">${ids.map(i=>mcHTML(i,{act:"peek",noNew:true})).join("")}</div>
-    <div class="row" style="margin-top:12px;gap:8px"><button class="btn" data-act="reroll">Reroll</button><span class="sp"></span><button class="btn gold" data-act="keepStart">Keep this team</button></div>`,null,null,"keeporreroll",()=>openKeepOrReroll())}
+    <div class="row" style="margin-top:12px;gap:8px"><button class="btn" data-act="reroll">Reroll</button><span class="sp"></span><button class="btn gold" data-act="keepStart">Keep this team</button></div><p class="mut" style="text-align:center;margin:10px 0 0"><button class="lnk" data-act="keepStart" data-arg="skip">Keep it and skip the intro game</button></p>`,null,null,"keeporreroll",()=>openKeepOrReroll())}
 /* ---------- gyms: see gym.js ---------- */
 /* ---------- practice ---------- */
 let PRAC=null;
@@ -2960,7 +2960,8 @@ const ACT={
   startNew:()=>renderTitle("pick"),
   pickfr:a=>{newGame(+a);VIEW="team";render();openStartReveal()},
   reroll:()=>{const fr=S.fr;closeAll();newGame(fr);render();openStartReveal()},
-  keepStart:()=>{S.start.kept=1;save();closeAll();render();toast("Your team. Win games to earn coins.")},
+  /* keep it: the first game is played, not simmed, a little below your level, with your OP card in the spotlight */
+  keepStart:a=>{S.start.kept=1;S.start.first=a==="skip"?0:1;save();closeAll();render();if(a==="skip"){toast("Your team. Win games to earn coins.");return}setTimeout(()=>runGame("reg","play",{side:"full",first:1}),300)},
   play:a=>{if(S.start&&!S.start.kept){openKeepOrReroll();return}if(lineupIssues().includes("Same player twice")){toast("The same player can't start twice");return}const k=S.season.phase==="po"?"po":"reg";if(a==="choose"){choosePlay(side=>runGame(k,"play",{side}));return}runGame(k,a)},
   boss:a=>{if(a==="choose"){choosePlay(side=>runGame("boss","play",{side}));return}runGame("boss",a)},
   playGo:a=>{const cb=PLAYCB;PLAYCB=null;S.playMode=a;save();closeAll();if(cb)cb(a)},
@@ -3871,7 +3872,7 @@ function* offense(P,H){const C=this&&this.side!=null?this:CUR_CTL;const{OP,DP}=P
   const dOf=p=>(P.stopper&&p===P.best)?P.stopper:P.matchOf(p);
   /* everyone gets touches: usage like the sim's (scoring ability), cooled off for whoever had it lately */
   const touch=C.touch||(C.touch={});for(const k in touch)touch[k]*=.6;
-  const use=p=>Math.pow(Math.max(5,H.offR(p)-40),1.3)/(1+(touch[p.id]||0)*.8);
+  const use=p=>Math.pow(Math.max(5,H.offR(p)-40),1.3)/(1+(touch[p.id]||0)*.8)*(P.tO&&P.tO.spot===p.id?1.6:1);/* the spotlight man (your OP card in the first game) gets more touches */
   const isBig=p=>p.slot!=null?p.slot>=3:p.ht>=81;
   const bigs=OP.filter(p=>p!==pg&&isBig(p)),wings=OP.filter(p=>p!==pg&&!isBig(p));
   const screener=ex=>[...(bigs.length?bigs:OP)].filter(p=>p!==ex).sort((a,b)=>(nr(H,b,1)+nr(H,b,4)+b.ht*2)-(nr(H,a,1)+nr(H,a,4)+a.ht*2))[0]||OP.find(p=>p!==ex);
@@ -4220,6 +4221,8 @@ addEventListener("resize",noteRot);noteRot();
 function playGame(res0,side,done){
   const A=res0.A,B=res0.B,fmt=res0.fmt;PVTEAMS={A,B};const AUTO=res0.mode==="auto";const ctl=playCtl(side,AUTO?null:res0.mode);if(AUTO)ctl.auto=true;const sink={};const it=simIter(A,B,{fmt,ctl,sink});
   const BASE=AUTO?`Autoplay${res0.autoLeft>1?` · ${res0.autoLeft} games left`:""}`:"Every trip, both ends";
+  /* the first game of a new save: the OP card is in the spotlight. A line on the card, and his perk tags show whenever it works */
+  const STAR=A.first&&A.spot!=null?A.pl.find(p=>p.id===A.spot):null;
   const nQ=fmt==="3v3"?1:fmt==="half"?2:4;const CW=640,CH=360,RIM={x:256,y:70};/* RIM: where the basket is in Play's own side-on numbers; the picture's is ARENA.RIM */
   /* Play is a landscape screen: the court big on the left, your calls on the right. Three ways to show it:
      land: the screen is sideways already. side: an upright screen that can't turn (rotation lock on), so the box turns
@@ -4592,13 +4595,13 @@ function playGame(res0,side,done){
     if(v&&v.card){const P=v.card.P;const pk=P.q+":"+P.k;if(pk!==lastPossKey){await catchUp(true);lastPossKey=pk;
       /* key moments: what happened while the engine played, in one line, before your next call */
       if(ctl.pick&&!simAll){const sc=sink.score||[0,0],d0=sc[0]-KS0[0],d1=sc[1]-KS0[1];if(d0+d1>0||ctl.why){cap(`Since your last call: ${A.abbr} ${d0}, ${B.abbr} ${d1}`);if(ctl.why)pop(ctl.why.toUpperCase(),ctl.why.startsWith("You")?"good":"bad");await wait(1.1)}KS0=[...sc];ctl.why=null}
-      coachTrip=false;if(!simAll){if(v.card.brk){breakFormation(P,v.card.brk);pop("FAST BREAK",v.card.side===0?"good":"bad")}else formation(P);const bhP=v.card.side===0?v.card.bh:(P.OP.find(p=>p.slot===0)||P.OP[0]);if(bhP){const k=key(bhP);give(k);setA(k,{anim:"dribble",fps:8,flip:false,lab:ACTS[k].lab,me:ACTS[k].me,vis:true})}board(P.e&&{q:P.q,clock:P.clock})}}
+      coachTrip=false;if(!simAll){if(STAR&&!window._pvSpotShown){window._pvSpotShown=1;const pk=(perksOf(STAR.id)[0]||{}).n;pop("YOUR FIRST GAME","good");cap(`${STAR.name} is your star tonight${pk?`: watch for ${pk}`:""}.`);await wait(1.6)}if(v.card.brk){breakFormation(P,v.card.brk);pop("FAST BREAK",v.card.side===0?"good":"bad")}else formation(P);const bhP=v.card.side===0?v.card.bh:(P.OP.find(p=>p.slot===0)||P.OP[0]);if(bhP){const k=key(bhP);give(k);setA(k,{anim:"dribble",fps:8,flip:false,lab:ACTS[k].lab,me:ACTS[k].me,vis:true})}board(P.e&&{q:P.q,clock:P.clock})}}
       else await catchUp(false);if(v.card.n===0)LAST=null;await stage(v.card);momHTML();if(!luP.hidden)drawLU();showCard(v.card);return}
     if(v&&v.roll){await catchUp(false,v.roll.ev0);await showRoll(v.roll);await catchUp(false);step();return}
     if(v&&v.quarter!=null){await catchUp(true);step();return}
     if(r.done){await catchUp(!simAll);finish(r.value);return}
     step()}
-  const leave=()=>{ARENA.snd.stop();window._pvSimAll=null;if(mini){mini.remove();mini=null}try{if(wake)wake.release()}catch(e){}removeEventListener("resize",onRes);document.body.classList.remove("pvon");ov.remove()};
+  const leave=()=>{ARENA.snd.stop();window._pvSimAll=null;window._pvSpotShown=0;if(mini){mini.remove();mini=null}try{if(wake)wake.release()}catch(e){}removeEventListener("resize",onRes);document.body.classList.remove("pvon");ov.remove()};
   function finish(res){if(ended)return;ended=true;FINAL=true;ARENA.snd.stop();draw(performance.now());/* the whole arena at the final */if(!res){leave();done(null);return}
     $("#pvA").textContent=res.score[0];$("#pvB").textContent=res.score[1];$("#pvClk").textContent="FINAL";
     const won=res.score[0]>res.score[1];const el=$("#pvCard");
@@ -4679,7 +4682,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="37b70866eb";
+<script>const APPV="c53aaf5107";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
