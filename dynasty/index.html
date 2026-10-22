@@ -1587,7 +1587,8 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
       const tkOn=tk.left>0?tk.who:null;if(tk.left>0)tk.left--;
       const P={q,k,oi,di,clock,margin,late,close,OP,DP,oS,dS,matchOf,tO,tD,tacO,tacD,e,best,stopper,tkOn};
       if(size===5&&rnd()<.07)addFoul(P,wpick(DP,p=>Math.pow(prone(p,q),2)));
-      if(ctl&&ctl.side===oi){ctl.total=(ctl.total||0)+1;if(!ctl.auto){yield* ctl.run(P,H);continue}}
+      /* your trips: one side, or both. In key moments the controller's pick() says which trips you call; the engine plays the rest */
+      if(ctl&&(ctl.side==="both"||ctl.side===oi)&&(!ctl.pick||ctl.pick(P,H,score,nQ))){ctl.total=(ctl.total||0)+1;if(!ctl.auto){const run=ctl.side==="both"?(oi===0?ctl.off:ctl.def):ctl.run;yield* run.call(ctl,P,H);continue}}
       autoPoss(P)}
     ev.push({type:"q",q,s:[...score],txt:nQ===1?"":`End of ${nQ===2?"half "+(q+1):"Q"+(q+1)}: ${score[0]}-${score[1]}`});
     if(ctl&&ctl.onQuarter)yield{quarter:q}
@@ -2796,7 +2797,7 @@ function runGame(kind,mode,ctx){ctx=ctx||{};let A,B,fmt="full";const s=S.season;
   if(kind==="po"||kind==="boss"){A.big=true;B.big=true}
   const label=kind==="reg"?`Game ${s.g+1} of 48`:kind==="po"?`${["First round","Semifinals","Finals"][s.po.round]} · game ${s.po.w+s.po.l+1}`:kind==="boss"?`Boss series · game ${bossSeries().w+bossSeries().l+1}`:kind==="gym"?`${GYMS.find(g=>g.id===ctx.gym).n} · Floor ${ctx.floor}`:"Practice";
   /* Play: you call one side, the engine the other */
-  if(mode==="play"){const side=ctx.side!=null?+ctx.side:(S.playSide||0);playGame({A,B,fmt,kind,ctx,qmin:fmt==="3v3"?null:(S.playLen||5)},side,res=>{if(!res){render();return}res.A=A;res.B=B;res.kind=kind;res.ctx=ctx;res.label=label;finishGame(res)});return}
+  if(mode==="play"){const pm=ctx.side==="full"||ctx.side==="key"?ctx.side:(S.playMode||"key");playGame({A,B,fmt,kind,ctx,mode:pm},"both",res=>{if(!res){render();return}res.A=A;res.B=B;res.kind=kind;res.ctx=ctx;res.label=label;finishGame(res)});return}
   const res=simGame(A,B,{fmt});res.A=A;res.B=B;res.kind=kind;res.ctx=ctx;res.label=label;
   if(mode==="quiet")return{res,out:finishGame(res,true)};
   if(mode==="watch")watchGame(res,()=>finishGame(res));else finishGame(res)}
@@ -2865,13 +2866,10 @@ function seasonAwards(champ){const s=S.season;const key=String(s.n);let best=nul
   if(best!=null){const w=s.stand[S.fr][0];S.own[best].stats.aw.push(w>=34?`MVP S${s.n}`:`Team MVP S${s.n}`);S.coins+=Math.round((w>=34?165:65)*coinMult())}}
 /* ---------- Play: pick a side ---------- */
 let PLAYCB=null;
-function choosePlay(cb){PLAYCB=cb;const last=S.playSide||0;
-  sheet(`<span class="kick">Play</span><h2>Which side do you run?</h2><p class="mut" style="margin-top:0">You call every possession on that side, all game. The engine runs the other side. Played games pay more than sims.</p>
-   <span class="kick" style="display:block;margin-top:4px">Quarter length</span><div class="seg plen">${[[3,"3 min","About 25 of your trips"],[5,"5 min","About 40 trips"],[12,"Full game","About 100 trips"]].map(([m,n,t])=>`<button class="${(S.playLen||5)===m?"on":""}" data-act="playLen" data-arg="${m}"><b>${n}</b><small>${t}</small></button>`).join("")}</div>
-   <p class="mut" style="font-size:13px;margin:6px 0 12px">Shorter quarters mean fewer trips and lower scores. Wins and coins count the same.</p>
-   <div class="psel"><button class="${last===0?"on":""}" data-act="playGo" data-arg="0"><b>Offense</b><small>Run every trip: screens, drives, post-ups, passes and the shot. Read their defense and take the best odds.</small></button>
-   <button class="${last===1?"on":""}" data-act="playGo" data-arg="1"><b>Defense</b><small>See their play coming and pick the coverage: switch, hedge, double, help or gamble for the steal.</small></button></div>
-`,null,null,"psel",()=>choosePlay(cb))}
+function choosePlay(cb){PLAYCB=cb;const last=S.playMode||"key";
+  sheet(`<span class="kick">Play</span><h2>How much do you call?</h2><p class="mut" style="margin-top:0">You play both ends: your offense and your defense. Played games pay more than sims.</p>
+   <div class="psel"><button class="${last==="key"?"on":""}" data-act="playGo" data-arg="key"><b>Key moments</b><small>About 15 calls, 5 minutes. The engine plays the full game and hands you the openers, the runs, your fast breaks and a close finish.</small></button>
+   <button class="${last==="full"?"on":""}" data-act="playGo" data-arg="full"><b>Full game</b><small>Every trip, both ends. About 200 calls.</small></button></div>`,null,null,"psel")}
 /* ---------- recap ---------- */
 function gs(b){return b.pts+.4*b.fgm-.7*b.fga-.4*(b.fta-b.ftm)+.7*b.reb+.7*b.ast+b.stl+.7*b.blk-b.tov}
 function headline(res){const A=res.A,B=res.B,won=res.score[0]>res.score[1];const m=Math.abs(res.score[0]-res.score[1]);const the=n=>/^the /i.test(n)?n:"the "+n;
@@ -2939,8 +2937,7 @@ const ACT={
     revealCards(Object.keys(S.own).map(Number).filter(i=>!gift.has(i)).map(id=>({id,dup:false})),`Your ${TEAMNICK(+a)} role players`,()=>openStartPick())},
   play:a=>{if(lineupIssues().includes("Same player twice")){toast("The same player can't start twice");return}const k=S.season.phase==="po"?"po":"reg";if(a==="choose"){choosePlay(side=>runGame(k,"play",{side}));return}runGame(k,a)},
   boss:a=>{if(a==="choose"){choosePlay(side=>runGame("boss","play",{side}));return}runGame("boss",a)},
-  playLen:a=>{S.playLen=+a;save();choosePlay(PLAYCB)},
-  playGo:a=>{const cb=PLAYCB;PLAYCB=null;S.playSide=+a;save();closeAll();if(cb)cb(+a)},
+  playGo:a=>{const cb=PLAYCB;PLAYCB=null;S.playMode=a;save();closeAll();if(cb)cb(a)},
   startPeek:a=>legPreview(a,"startTake"),
   startTake:a=>{const sp=S.startPick;if(!sp)return;const r=addCard(+a);if(S.own[+a])S.own[+a].isNew=true;sp.got.push(+a);save();closeAll();toast(r.dup?"Legacy up":"Added to your team");if(sp.got.length<2)setTimeout(openStartPick,250);else setTimeout(finishStart,250)},
   bossTake:a=>{const r=addCard(+a);S.legendPick=null;save();closeAll();toast(r.dup?"Legacy up":"Legend added to your collection");cardCtx(null);openCard(+a)},
@@ -3799,8 +3796,19 @@ function defResult(res,r,out,n){let v;
 function wkey(w){let r=rnd()*Object.values(w).reduce((a,b)=>a+b,0);for(const k in w){r-=w[k];if(r<=0)return k}return Object.keys(w)[0]}
 
 /* a controller for one game. side 0: you run the offense, 1: the defense */
-function playCtl(side){const C={side,auto:false,mom:0,seen:[],calls:0,mine:0,myPoss:0,total:0,log:[],run:null};
-  C.run=side===0?offense:defense;return C}
+function playCtl(side,mode){const C={side,auto:false,mom:0,seen:[],calls:0,mine:0,myPoss:0,total:0,log:[],run:null,off:offense,def:defense};
+  C.run=side===0?offense:defense;if(mode==="key")C.pick=keyPick(C);return C}
+/* key moments: the engine plays the whole game (so every stat is real) and hands you the trips that matter, on both ends:
+   one opener a quarter (your offense in Q1 and Q3, your defense in Q2 and Q4), a run by either team (6+ point swing over
+   the last 8 trips, then a breather), your fast breaks, and every trip of a close finish (last 2 minutes, within 6) */
+function keyPick(C){const K={open:{},hist:[],cool:0,brk:0};
+  return(P,H,score,nQ)=>{const{q,oi,clock}=P;K.hist.push(score[0]-score[1]);if(K.cool>0)K.cool--;
+    if(H.size!==5)return true;
+    const end=q===nQ-1&&clock<=120&&Math.abs(score[0]-score[1])<=6;if(end)return true;
+    const want=(q%2===0)===(oi===0);if(!K.open[q]&&want){K.open[q]=1;return true}
+    if(oi===0&&H.fast[0]&&K.brk<2){K.brk++;return true}
+    if(K.cool===0&&K.hist.length>8){const sw=K.hist[K.hist.length-1]-K.hist[K.hist.length-9];if(Math.abs(sw)>=6){K.cool=10;C.why=sw>0?"You're on a run":"They're on a run";return true}}
+    return false}}
 
 /* ---------- the roll ---------- */
 /* u is uniform in [0,1): a hit when u < p. Natural 20 = the top 5% (always a hit), natural 1 = the bottom 5% (always a miss). */
@@ -4158,7 +4166,8 @@ const ROTKEY="hd_rotfree";let ROTFREE=(()=>{try{return localStorage.getItem(ROTK
 function noteRot(){if(typeof innerWidth!=="undefined"&&innerWidth>innerHeight&&!ROTFREE){ROTFREE=true;try{localStorage.setItem(ROTKEY,"1")}catch(e){}}}
 addEventListener("resize",noteRot);noteRot();
 function playGame(res0,side,done){
-  const A=res0.A,B=res0.B,fmt=res0.fmt;PVTEAMS={A,B};const ctl=playCtl(side);const sink={};const it=simIter(A,B,{fmt,qmin:res0.qmin,ctl,sink});
+  const A=res0.A,B=res0.B,fmt=res0.fmt;PVTEAMS={A,B};const ctl=playCtl(side,res0.mode);const sink={};const it=simIter(A,B,{fmt,ctl,sink});
+  const BASE=res0.mode==="key"?"Key moments":"Every trip, both ends";
   const nQ=fmt==="3v3"?1:fmt==="half"?2:4;const CW=640,CH=360,RIM={x:256,y:70};/* RIM: where the basket is in Play's own side-on numbers; the picture's is ARENA.RIM */
   /* Play is a landscape screen: the court big on the left, your calls on the right. Three ways to show it:
      land: the screen is sideways already. side: an upright screen that can't turn (rotation lock on), so the box turns
@@ -4167,7 +4176,7 @@ function playGame(res0,side,done){
   const ov=document.createElement("div");ov.className="pvs";
   const logo=(t,z)=>t.ti!=null?logoHTML(t.ti,z||30):`<span class="lgo" style="background:${t.color};width:${z||30}px;height:${z||30}px"><b style="color:${lumOf(t.color)>.6?"#1b2140":"#fff"}">${esc(t.abbr)}</b></span>`;
   ov.innerHTML=`<div class="pvl" id="pvL">
-   <div class="pvlc"><div class="pvbug" id="pvBug"><button class="tm" data-act="pvTeam" data-arg="A" aria-label="Your roster">${logo(A)}<span>${esc(A.abbr)}</span><b id="pvA">0</b></button><div class="mid"><b id="pvClk">${nQ===1?"FIRST TO 21":"Q1 12:00"}</b><small id="pvSub">${side===0?"You run the offense":"You run the defense"}</small></div><button class="tm r" data-act="pvTeam" data-arg="B" aria-label="Their roster"><b id="pvB">0</b><span>${esc(B.abbr)}</span>${logo(B)}</button></div>
+   <div class="pvlc"><div class="pvbug" id="pvBug"><button class="tm" data-act="pvTeam" data-arg="A" aria-label="Your roster">${logo(A)}<span>${esc(A.abbr)}</span><b id="pvA">0</b></button><div class="mid"><b id="pvClk">${nQ===1?"FIRST TO 21":"Q1 12:00"}</b><small id="pvSub">${BASE}</small></div><button class="tm r" data-act="pvTeam" data-arg="B" aria-label="Their roster"><b id="pvB">0</b><span>${esc(B.abbr)}</span>${logo(B)}</button></div>
     <div class="pvct" id="pvCt"><canvas id="pvC" width="${CW}" height="${CH}" aria-label="The court"></canvas><div class="pvban" id="pvBan"></div><p class="pvcap" id="pvCap">Tip-off</p><div class="pvtools"><button class="btn sm" id="pvLu">Lineup</button><button class="btn sm pvspd" id="pvSpd" aria-label="Game speed">1x</button><button class="btn sm pvsnd" id="pvSnd" aria-label="Sound">${ARENA.snd.on?"Sound on":"Sound off"}</button></div></div>
 </div>
    <div class="pvrc"><div class="pvcard" id="pvCard"></div>
@@ -4402,7 +4411,7 @@ function playGame(res0,side,done){
   const clk=c=>`${Math.floor(c/60)}:${String(c%60).padStart(2,"0")}`;
   function board(e){if(e&&e.s){$("#pvA").textContent=e.s[0];$("#pvB").textContent=e.s[1]}if(e&&e.clock!=null&&nQ>1)$("#pvClk").textContent=`${e.q>=nQ?"OT":nQ===2?"H"+(e.q+1):"Q"+(e.q+1)} ${clk(e.clock)}`}
   /* momentum: one short line under the clock (it used to sit on the court, over the crowd) */
-  function momHTML(){const m=ctl.mom,el=$("#pvSub");const base=side===0?"You run the offense":"You run the defense";
+  function momHTML(){const m=ctl.mom,el=$("#pvSub");const base=CARD&&CARD.side===1?"You run the defense":CARD&&CARD.side===0?"You run the offense":BASE;
     el.textContent=m&&Math.abs(m)>=3?`Momentum ${m>0?"+":"−"}${Math.abs(m)} · ${m>0?"+5%":"−5%"} on your calls`:base;el.className=m>=3?"up":m<=-3?"dn":""}
   /* the shot, drawn: shooter rises, ball to the rim, in or out */
   async function drawShot(k,shot,made,blk,dunk){const a=ACTS[k];if(!a)return;
@@ -4414,7 +4423,7 @@ function playGame(res0,side,done){
     else{const t=scr({x:RIM.x-18,y:142});await fly(t.x,t.y-6,40,.5);ARENA.snd.play("bounce",.4)}}
   /* events since we last looked: score, caption, and a quick drawing of plays the engine ran on its own */
   async function catchUp(animate,upTo){const ev=sink.ev||[];while(li<(upTo==null?ev.length:Math.min(upTo,ev.length))){const e=ev[li++];if(e.type==="q"){board(e);if(e.txt){cap(e.txt);ctl.mom=Math.round(ctl.mom*.5);momHTML();if(!simAll)await wait(.9)}continue}
-      const drawIt=animate&&!simAll&&e.on&&(e.type==="make"||e.type==="miss"||e.type==="blk"||e.type==="stl"||e.type==="to"||e.type==="runout")&&e.o!==side;
+      const drawIt=animate&&!simAll&&e.on&&!ctl.pick&&(e.type==="make"||e.type==="miss"||e.type==="blk"||e.type==="stl"||e.type==="to"||e.type==="runout")&&e.o!==side;
       if(!drawIt){board(e);if(e.txt)cap(e.txt)}
       if(drawIt){
         /* the engine's possession: set up, then the result */
@@ -4443,7 +4452,7 @@ function playGame(res0,side,done){
       if(i===n-1)board(e);await wait(.35)}
     ball={mode:"none",who:null}}
   /* ---------- the call card ---------- */
-  let CARD=null,BUSY=false;
+  let CARD=null,BUSY=false,KS0=[0,0];
   const chipH=c=>`<span class="pc ${c[1]>0?"up":"dn"}">${c[1]>0?"▲":"▼"} ${esc(c[0])} ${c[1]>0?"+":"−"}${Math.abs(c[1])}%</span>`;
   function sitTitle(c){if(c.side===1)return c.title;const bh=c.bh.last;return{top:`Top of the key · ${bh} has it`,lane:`${bh} is in the lane`,collapse:`The help came · ${bh} in traffic`,pnr_switch:"They switched the screen",pnr_hedge:"Their big jumped out",pnr_drop:"Their big dropped back",pnr_trap:"Two on the ball",stall:"They blew up the screen",iso:`${bh} one on one`,iso2:`${bh} still has it`,space:`${bh} has space`,space_small:`${bh} has a little room`,picked:`${bh} picked up his dribble`,post:`${bh} sealed on the block`,post_mm:`${bh} has a small man on him`,postfail:`${bh} got pushed off the block`,dump:`${bh} has it under the rim`,wing:`${bh} catches on the wing`,break:`Fast break · ${c.brk?c.brk.lab:""}`}[c.sit]||`${bh} has it`}
   /* the last result stays on top of the next call (same trip), so the words never just come and go */
@@ -4502,7 +4511,10 @@ function playGame(res0,side,done){
   async function step(input){let r;try{r=it.next(input)}catch(err){console.error(err);finish(null);return}
     const v=r.done?null:r.value;
     /* a new possession of yours: set the floor */
-    if(v&&v.card){const P=v.card.P;const pk=P.q+":"+P.k;if(pk!==lastPossKey){await catchUp(true);lastPossKey=pk;coachTrip=false;if(!simAll){if(v.card.brk){breakFormation(P,v.card.brk);pop("FAST BREAK",v.card.side===0?"good":"bad")}else formation(P);const bhP=v.card.side===0?v.card.bh:(P.OP.find(p=>p.slot===0)||P.OP[0]);if(bhP){const k=key(bhP);ball={mode:"hold",who:k};setA(k,{anim:"dribble",fps:8,flip:false,lab:ACTS[k].lab,me:ACTS[k].me,vis:true})}board(P.e&&{q:P.q,clock:P.clock})}}
+    if(v&&v.card){const P=v.card.P;const pk=P.q+":"+P.k;if(pk!==lastPossKey){await catchUp(true);lastPossKey=pk;
+      /* key moments: what happened while the engine played, in one line, before your next call */
+      if(ctl.pick&&!simAll){const sc=sink.score||[0,0],d0=sc[0]-KS0[0],d1=sc[1]-KS0[1];if(d0+d1>0||ctl.why){cap(`Since your last call: ${A.abbr} ${d0}, ${B.abbr} ${d1}`);if(ctl.why)pop(ctl.why.toUpperCase(),ctl.why.startsWith("You")?"good":"bad");await wait(1.1)}KS0=[...sc];ctl.why=null}
+      coachTrip=false;if(!simAll){if(v.card.brk){breakFormation(P,v.card.brk);pop("FAST BREAK",v.card.side===0?"good":"bad")}else formation(P);const bhP=v.card.side===0?v.card.bh:(P.OP.find(p=>p.slot===0)||P.OP[0]);if(bhP){const k=key(bhP);ball={mode:"hold",who:k};setA(k,{anim:"dribble",fps:8,flip:false,lab:ACTS[k].lab,me:ACTS[k].me,vis:true})}board(P.e&&{q:P.q,clock:P.clock})}}
       else await catchUp(false);if(v.card.n===0)LAST=null;await stage(v.card);momHTML();if(!luP.hidden)drawLU();showCard(v.card);return}
     if(v&&v.roll){await catchUp(false,v.roll.ev0);await showRoll(v.roll);await catchUp(false);step();return}
     if(v&&v.quarter!=null){await catchUp(true);step();return}
@@ -4512,7 +4524,7 @@ function playGame(res0,side,done){
   function finish(res){if(ended)return;ended=true;FINAL=true;ARENA.snd.stop();draw(performance.now());/* the whole arena at the final */if(!res){leave();done(null);return}
     $("#pvA").textContent=res.score[0];$("#pvB").textContent=res.score[1];$("#pvClk").textContent="FINAL";
     const won=res.score[0]>res.score[1];const el=$("#pvCard");
-    el.innerHTML=`<div class="pvres"><span class="pvcl">Final</span><p class="pvv on ${won?"ok":"no"}">${won?"You win":"You lose"}</p><p class="pvd">${res.score[0]}-${res.score[1]}. You called ${ctl.myPoss} of ${ctl.total} ${side===0?"trips":"defensive stands"}.</p></div>`;
+    el.innerHTML=`<div class="pvres"><span class="pvcl">Final</span><p class="pvv on ${won?"ok":"no"}">${won?"You win":"You lose"}</p><p class="pvd">${res.score[0]}-${res.score[1]}. You called ${ctl.myPoss} of ${ctl.total} trips.</p></div>`;
     $(".pvft").innerHTML=`<button class="btn go" id="pvDone" style="width:100%">See the recap</button>`;
     res.played={side,calls:ctl.total,mine:ctl.myPoss};closeLU();
     /* leaving: on a box that turned itself, it turns back upright; otherwise it just fades (the phone does any turning) */
@@ -4587,7 +4599,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="a89f3e9e7f";
+<script>const APPV="aaa1a69999";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
