@@ -3838,7 +3838,7 @@ Object.assign(ACT,{
    Cards play at their card ratings: no levels, no gear, no team set. Film by wins; a perfect 7-0 adds a Legends pack.
    One free run a day; more cost Chalk. Your best drafted teams are kept as ghosts: the last two games of a run are against them
    when you have any, and the Ladder ranks your runs. Everything stays on this phone. */
-const DRAFT={picks:12,games:7,chalk:300,film:[0,4,8,12,18,24,32,45]};
+const DRAFT={picks:12,games:7,cost:500,film:[0,4,8,12,18,24,32,45]};
 const LADDER=[["Rookie",0],["Bronze",2],["Silver",3],["Gold",4],["Platinum",5],["Diamond",6],["Legend",7]];
 function draftRank(w){let r=LADDER[0][0];for(const[n,k]of LADDER)if(w>=k)r=n;return r}
 function draftFreeToday(){return(S.draftDay||-1)!==dayIndex()}
@@ -3866,7 +3866,7 @@ function draftOpp(g){const d=S.draft;const me=draftTeam(d.ids).ovr;const target=
   if(g>=5&&gh.length){const x=gh[(g-5)%gh.length];const t=draftTeam(x.ids);t.name=`Ghost · ${x.w}-${x.l} run`;t.abbr="GHO";t.color="#9fb0d8";t.mine=false;return t}
   const ti=d.opp[g];return scaledTeam(teamRosterIds(ti,(d.seed+g*97)%100000),target,{name:TEAMNICK(ti),abbr:TEAMABBR(ti),color:DB.t[ti].c,ti,tier:Math.min(6,1+g)},true)}
 function draftStart(){if(S.draft&&!S.draft.over){VIEW="draft";render();return}
-  if(!draftFreeToday()){if((S.chalk||0)<DRAFT.chalk){toast(`Your free run is used today. Another costs ${DRAFT.chalk} Chalk.`);return}S.chalk-=DRAFT.chalk}else S.draftDay=dayIndex();
+  if(!draftFreeToday()){if((S.coins||0)<DRAFT.cost){toast(`Free run used. Another is ${DRAFT.cost} coins.`);return}S.coins-=DRAFT.cost}else S.draftDay=dayIndex();
   const opp=[];while(opp.length<DRAFT.games){const t=Math.floor(rnd()*DB.t.length);if(!opp.includes(t))opp.push(t)}
   S.draft={ids:[],opts:[],g:0,w:0,l:0,over:false,opp,seed:Math.floor(rnd()*99999)};S.draft.opts=draftOptions([]);save();VIEW="draft";render()}
 function draftPick(i){const d=S.draft;if(!d||d.ids.length>=DRAFT.picks||!d.opts.includes(i))return;d.ids.push(i);
@@ -3886,7 +3886,7 @@ function viewDraft(){const d=S.draft;let h=topHTML(`<button class="back" data-ac
   if(!d||d.over){
     if(d&&d.over)h+=`<div class="panel"><span class="kick">Last run</span><h2>${d.w}-${d.l} · ${draftRank(d.w)}</h2><p class="mut">+${DRAFT.film[d.w]} Film${d.w>=DRAFT.games?" and a Legends pack":""}.</p></div>`;
     h+=`<div class="panel"><p class="mut">12 picks, 7 games, one loss ends it. 7-0 wins a Legends pack.</p>
-      <button class="btn go" style="width:100%" data-act="draftGo">${draftFreeToday()?"Start today's free run":`New run · ${DRAFT.chalk} Chalk`}</button></div>`;
+      <button class="btn go" style="width:100%" data-act="draftGo">${draftFreeToday()?"Start today's free run":`New run · ${DRAFT.cost} coins`}</button></div>`;
     h+=draftLadderHTML();return h}
   if(d.ids.length<DRAFT.picks){const need=draftNeeds(d.ids);
     h+=`<div class="panel"><span class="kick">Pick one</span>${need.length?`<p class="mut dfneed">Still need: ${need.join(", ")}</p>`:""}<p class="mut dfhint">Tap a card to see him.</p><div class="dfbig">${d.opts.map(i=>`<div class="dfpick">${mcHTML(i,{act:"draftPeek",arg:i,noNew:true,sim:true})}${need.some(q=>String(DB.p[DB.c[i].p][1]).split("/").includes(q))?'<span class="dffill">Fills a need</span>':""}</div>`).join("")}</div></div>`}
@@ -3911,7 +3911,7 @@ function viewModes(){const s=S.season,rec=s.stand[S.fr],d=S.draft,live=d&&!d.ove
   let h=topHTML("Modes");
   h+=`<div class="gscroll">`+
     m("nav","franchise","franchise","Franchise",esc(TEAMNICK(S.fr)),`Season ${s.n} · ${rec[0]}-${rec[1]}`)+
-    m("draftOpen","","draft","Draft Run","12 picks, 7 wins",live?(d.ids.length<DRAFT.picks?`Pick ${d.ids.length+1} of ${DRAFT.picks}`:`${d.w}-${d.l}`):draftFreeToday()?"Free run today":`${DRAFT.chalk} Chalk a run`)+
+    m("draftOpen","","draft","Draft Run","12 picks, 7 wins",live?(d.ids.length<DRAFT.picks?`Pick ${d.ids.length+1} of ${DRAFT.picks}`:`${d.w}-${d.l}`):draftFreeToday()?"Free run today":`${DRAFT.cost} coins a run`)+
     m("nav","gyms","gyms","Gyms","The Circuit",`${cl}/50 floors`)+
     m("nav","book","book","Collection","The Book",`${pages}/30 pages`)+`</div>`;
   return h}
@@ -5315,7 +5315,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="df048ed3c9";
+<script>const APPV="36405d648f";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
