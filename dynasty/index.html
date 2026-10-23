@@ -2433,16 +2433,20 @@ function pixText(x,txt,box,ink,rim,edge,tall){const G=2,[x0,y0,x1,y1]=box,gw=Mat
     const d=tx.getImageData(0,0,gw,gh),v=d.data,[r,g,b]=hexRGB(col);for(let i=0;i<v.length;i+=4){const on=v[i+3]>110;v[i]=r;v[i+1]=g;v[i+2]=b;v[i+3]=on?255:0}tx.putImageData(d,0,0);return t};
   x.imageSmoothingEnabled=false;for(const L of[layer(edge,7),layer(rim,4),layer(ink,0)])x.drawImage(L,x0,y0,gw*G,gh*G)}
 const fontsReady=()=>typeof document==="undefined"||!document.fonts||document.fonts.check("900 20px 'Big Shoulders Display'");
-function jerseyKey(t,yr){if(typeof JART==="undefined")return null;const E=DB.t[t].eras,cur=E[E.length-1];const er=E.find(e=>yr>=e[0]&&yr<=e[1])||cur;
-  if(JART[t+":"+er[3]])return t+":"+er[3];return er[3]===cur[3]&&JART[t]?String(t):null}
+/* every card wears the franchise's current pixel jersey, whatever the era */
+function jerseyKey(t,yr){if(typeof JART==="undefined")return null;const E=DB.t[t].eras,cur=E[E.length-1];
+  if(JART[t+":"+cur[3]])return t+":"+cur[3];if(JART[t])return String(t);const k=Object.keys(JART).find(x=>x.split(":")[0]===String(t));return k||null}
 function jerseyArt(t,yr,num){if(typeof document==="undefined"||!document.createElement)return null;const k=jerseyKey(t,yr);if(k==null)return null;
   const n=String(num||""),key=k+"|"+n;if(JARTC[key])return JARTC[key];
   try{const J=JART[k],im=jImg(k,J.src);if(!im||!im.complete||!im.naturalWidth)return null;
     const c=document.createElement("canvas");c.width=J.w;c.height=J.h;const x=c.getContext("2d");x.drawImage(im,0,0);
     if(n)pixText(x,n,J.num,J.ink,J.rim,J.edge,n.length>1?1.02:1.08);
     const html=`<img class="jsy jart" src="${c.toDataURL()}" alt="">`;if(fontsReady())JARTC[key]=html;return html}catch(e){return null}}
-function cardJersey(c,p,big){const[pri,trim]=colorsAt(c.t,c.y);const num=p[3]||"";const art=jerseyArt(c.t,c.y,num);if(art)return art;
+function cardJersey(c,p,big){const[pri,trim]=colorsAt(c.t,c.y);const num=p[3]||"";const art=jerseyArt(c.t,c.y,num);if(art)return art;if(jerseyKey(c.t,c.y)!=null)return`<span class="jsy jart"></span>`;/* still loading: blank, never the old drawn jersey */
   const st=(c.y+c.t)%3===0&&c.y<2000?1:c.y>=2017&&c.t%2?2:0;return jerseySVG(pri,trim,num,teamAbbrAt(c.t,c.y),st,!big)}
+
+/* load every pixel jersey up front so no card is drawn before its jersey is ready */
+if(typeof JART!=="undefined"&&typeof Image!=="undefined")for(const k in JART)jImg(k,JART[k].src);
 
 /* ui.js: screens */
 const $=s=>document.querySelector(s);
@@ -5222,7 +5226,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="6edb7a1919";
+<script>const APPV="c112ee85c3";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
