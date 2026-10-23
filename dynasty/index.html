@@ -5850,7 +5850,7 @@ function playGame(res0,side,done){
   /* size the landscape box to the screen, turned or not, and fit the court (16:9) in the left column */
   function fit(){const w=innerWidth,h=innerHeight;ROT=h>w;MODE=!ROT?"land":ROTFREE?"ask":"side";const W=ROT?h:w,H=ROT?w:h;LB.style.width=W+"px";LB.style.height=H+"px";LB.classList.toggle("rot",ROT);
     const cs=getComputedStyle(LB),pl=parseFloat(cs.paddingLeft),pr=parseFloat(cs.paddingRight),pt=parseFloat(cs.paddingTop),pb=parseFloat(cs.paddingBottom);
-    const colR=AUTO?150:($(".pvrc").offsetWidth||250),gap=12,bugH=$("#pvBug").offsetHeight||44,rowH=0;/* the caption sits on the court and the buttons in the right column, so the court gets the height */
+    const colR=$(".pvrc").offsetWidth||220,/* one column width in both modes (style.css) */gap=12,bugH=$("#pvBug").offsetHeight||44,rowH=0;/* the caption sits on the court and the buttons in the right column, so the court gets the height */
     const cw=Math.floor(Math.min(W-pl-pr-colR-gap,(H-pt-pb-bugH-rowH-12)*16/9)),ch=Math.round(cw*9/16);$("#pvCt").style.width=cw+"px";$("#pvCt").style.height=ch+"px";$("#pvBug").style.width=cw+"px";
     /* draw at the screen's own resolution: pixel art stays sharp and the names are real text, not scaled-up pixels */
     const dpr=Math.min(4,window.devicePixelRatio||1);cv.width=Math.round(cw*dpr);cv.height=Math.round(ch*dpr);KS=cv.width/CW;DPR=dpr;g.imageSmoothingEnabled=false}
@@ -6313,7 +6313,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="94d6478109";
+<script>const APPV="34e32df0a5";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
