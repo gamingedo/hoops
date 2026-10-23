@@ -2604,7 +2604,7 @@ function mcHTML(id,opt){opt=opt||{};if(typeof cardsOn==="function"&&cardsOn())re
   return`<button class="${cls}" data-act="${opt.act||"card"}" data-arg="${opt.arg!=null?opt.arg:id}"${opt.rid!=null?` data-rid="${opt.rid}"`:""} style="--tc:${DB.t[c.t].c}" aria-label="${esc(p[0])}, ${ov} overall${bn?" with team bonuses":""}">
   ${o&&o.isNew&&!opt.noNew?'<span class="new">NEW</span>':""}${opt.flags&&o?flagBadges(id):""}<span class="in"><span class="hd"><span class="o${ov>99?" hi":""}${ov>=100?" d3":""}${bn?" bn":""}">${ov}</span>${artHTML(c,p,false)}</span>
   ${(()=>{/* special cards show what they are (their stars come with it: Legend and MVP 5, Prime and DPOY 4); regular cards show their stars */
-    const tag=c.k==="L"&&c.gt!=null?(GTIER[c.gt]==="Hall of Fame"?"HOF":GTIER[c.gt]):tagOf(c);return`<span class="st">${tag?`<b>${tag}</b>${st>c.s?`<i>${st}★</i>`:""}`:`<i>${starStr(c,o)}</i>`}</span>`})()}
+    const tag=c.k==="L"&&c.gt!=null?(GTIER[c.gt]==="Hall of Fame"?"HOF":GTIER[c.gt]):tagOf(c);return`<span class="st"><i>${starStr(c,o)}</i></span>`/* stars only on every card; the frame says what kind it is */})()}
   ${(()=>{/* the last name, as big as it fits: long names step down a size instead of being cut */const ln=lastName(p[0]);return`<span class="nm${ln.length>=13?" l4":ln.length>=10?" l3":ln.length>=8?" l2":""}"><span class="ln">${esc(ln)}</span></span>`})()}
   <span class="sb">${opt.sub!=null?opt.sub:`'${String(c.y+1).slice(2)} · ${esc(String(p[1]).split(/[\/-]/)[0])}`}</span></span></button>`}
 function bigCardHTML(id,x){x=x||{};
@@ -5529,7 +5529,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="4c8fa252f7";
+<script>const APPV="0537e66ca7";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
