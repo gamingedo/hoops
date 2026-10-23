@@ -1252,6 +1252,7 @@ body{background:radial-gradient(900px 600px at 70% -10%,#0d0e10 0,transparent 60
   -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 16%,#000 80%,transparent 100%);transition:transform .4s ease}
 .gsc:first-child .gsbg{-webkit-mask-image:linear-gradient(180deg,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,#000 80%,transparent 100%)}
 .gsc:active .gsbg{transform:scale(1.03)}
+.gsc .gsbg img{display:none}
 .gsc .gstx{position:absolute;left:16px;right:16px;bottom:22%;display:flex;flex-direction:column;gap:1px;text-shadow:0 2px 8px #000,0 0 2px #000}
 .gsc .gstx small{font:700 11px var(--f-c);letter-spacing:.16em;text-transform:uppercase;color:#d8d2c4}
 .gsc .gstx b{font:400 34px/1 var(--f-d);letter-spacing:.02em}
@@ -1488,7 +1489,8 @@ details.panel>summary,.guideb b{font:400 18px/1.15 var(--f-d)!important;letter-s
    The five tabs become a rail on the right, under the right thumb. The title bar slims down and stops following you.
    Views with two things to show put them side by side, the one you tap most on the right. Pop-ups are dialogs as big as
    what they hold, in the middle (the card screen fills the screen). Play has its own landscape layout. */
-.lnwrap,.lnl,.lnr,.hcol,.cs,.csl,.csr,.frw,.frl,.gyl,.gyr,.dfw,.dfr,.lvk{display:contents}
+.lnwrap,.lnl,.lnr,.hcol,.cs,.csl,.csr,.frw,.frl,.gyl,.gyr,.dfw,.dfr,.lvk,.ggl,.ggr,.dlA,.dlB,.dlC{display:contents}
+.dlh{align-items:flex-start;margin-right:44px}.dlh h2{margin-top:2px}
 .csst,.csa,.lsonly{display:none}
 .v-team .wkp{order:1}.v-team .ptrack{order:2}.v-team .dyp{order:3}.v-team .dms{order:4}.v-team .hw{order:5}
 @media (orientation:landscape) and (max-height:560px){
@@ -1500,9 +1502,9 @@ details.panel>summary,.guideb b{font:400 18px/1.15 var(--f-d)!important;letter-s
   /* the rail */
   .nav{top:0;left:auto;right:0;bottom:0;width:var(--rail);padding:0 env(safe-area-inset-right) env(safe-area-inset-bottom) 0;border-top:0;border-left:1px solid #1a1a22;display:flex;align-items:center}
   .nav div{max-width:none;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-evenly;padding:6px 8px}
-  .nav button{padding:9px 0 8px;gap:6px;font-size:15px;letter-spacing:.06em;border-radius:16px}
+  .nav button{padding:7px 0 6px;gap:5px;font-size:14px;letter-spacing:.06em;border-radius:14px}
   .nav button.on{background:#ffffff10}
-  .nav .navi{width:40px;height:40px}.nav button svg{width:32px;height:32px}
+  .nav .navi{width:34px;height:34px}.nav button svg{width:28px;height:28px}
   /* small floating things stay off the rail */
   .toast{top:auto;bottom:calc(16px + env(safe-area-inset-bottom));left:calc(50% - var(--rail) / 2);max-width:min(560px,calc(100vw - var(--rail) - 48px))}
   .totop{right:calc(var(--rail) + 12px);bottom:calc(14px + env(safe-area-inset-bottom))}
@@ -1518,6 +1520,10 @@ details.panel>summary,.guideb b{font:400 18px/1.15 var(--f-d)!important;letter-s
   .ptonly{display:none!important}.lsonly{display:block}
   /* pickers inside pop-ups: five across */
   .sheet .grid3,.sheet .grid4{grid-template-columns:repeat(5,minmax(0,1fr))}
+  .sheet[data-tag=gear]>.box{max-width:min(900px,100%)}
+  .sheet[data-tag=gear] .sbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:16px;align-items:start}
+  .sheet[data-tag=gear] .sbody>.x{position:absolute;top:12px;right:16px;z-index:3;margin:0}
+  .ggl,.ggr{display:block;min-width:0}.ggl .gbig{margin-top:0}.ggr>.kick.sh{margin-top:2px}
   /* header art in pop-ups: the whole picture at a set height, edges faded (never cropped) */
   .sbody .gscene img,.sbody .phead img{height:auto;max-height:100px;width:auto;max-width:100%}
   /* the card screen: fills the screen. The card on the left with its arrows and actions under it; his pages on the right */
@@ -1549,14 +1555,14 @@ details.panel>summary,.guideb b{font:400 18px/1.15 var(--f-d)!important;letter-s
   .csr.t-lvl>.ctabs{grid-column:1/-1}
   .csr.t-lvl>.lvk{display:flex;flex-direction:column;gap:8px;min-width:0}.csr.t-lvl .panel{padding:10px 12px;margin:0}
   /* Build: what it adds on the left, the six slots on the right */
-  .csr.t-gear{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.2fr);gap:8px 10px;align-content:start;grid-auto-flow:dense}
-  .csr.t-gear>.ctabs{grid-column:1/-1}
-  .csr.t-gear>.slots{grid-column:2;grid-row:2/span 5;gap:6px}
-  .csr.t-gear>:not(.ctabs):not(.slots){grid-column:1}
-  .csr.t-gear .slot{min-height:132px;padding:10px 6px;align-content:center}
-  .csr.t-gear .slot b{min-height:2.3em;display:flex;align-items:center;justify-content:center;line-height:1.1;font-size:14px;overflow-wrap:normal;word-break:normal}/* a slot name breaks between words, never inside one */
-  .csr.t-gear .slot .sli,.csr.t-gear .slot .gim{width:40px;height:40px}
-  .csr.t-gear .gbtn{flex-wrap:wrap}.csr.t-gear .gbtn .gbn{text-align:left}
+  .csr.t-gear{display:grid;grid-template-rows:auto auto minmax(0,1fr);gap:8px 10px}
+  .csr.t-gear>.slots{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:1fr 1fr;gap:8px;min-height:0}
+  .csr.t-gear .slot{min-height:0;padding:6px 6px;gap:2px;align-content:center}
+  .csr.t-gear .slot b{line-height:1.1;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  .csr.t-gear .slot b.mt{font-size:13px}
+  .csr.t-gear .slot small{font-size:13px}.csr.t-gear .slot em{font:700 11px var(--f-c);font-style:normal;color:var(--goldlt)}
+  .csr.t-gear .slot .ga{width:40px;height:40px}.csr.t-gear .slot .sli,.csr.t-gear .slot .gim{width:36px;height:36px}
+  .bsum2{flex-wrap:nowrap;align-items:flex-start}.bsum2 .chips{gap:5px;flex:1;min-width:0}.bsum2 .btn{flex:none}.bsum2 span.sp{display:none}
   /* Stats: one table, the career line and every season under it */
   .stw .sthl{margin:8px 0 0;font-size:13px}
   .stx{overflow:auto;-webkit-overflow-scrolling:touch}
@@ -1606,11 +1612,26 @@ details.panel>summary,.guideb b{font:400 18px/1.15 var(--f-d)!important;letter-s
   .scene img{width:auto;max-width:100%;height:112px;-webkit-mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent);mask-image:linear-gradient(90deg,transparent,#000 14%,#000 86%,transparent)}
   /* Modes: the four tiles fit one screen. Gyms: six tiles and Practice fit one screen */
   .gscroll{display:grid;gap:10px;margin:0;background:none}
-  .v-modes .gscroll{grid-template-columns:repeat(2,minmax(0,calc((100dvh - 118px - env(safe-area-inset-bottom)) / 2 * 400 / 256)));justify-content:center}
-  .v-gyms .gscroll{grid-template-columns:repeat(3,minmax(0,calc((100dvh - 178px - env(safe-area-inset-bottom)) / 2 * 400 / 256)));justify-content:center}
-  .gsc{margin:0;border-radius:14px}
+  .v-modes .gscroll{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .v-gyms .gscroll{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .gsc{margin:0;border-radius:14px;aspect-ratio:auto;background:#0b0b10}
+  .v-modes .gsc{height:calc((100dvh - 88px - env(safe-area-inset-bottom)) / 2)}
+  .v-gyms .gsc{height:calc((100dvh - 148px - env(safe-area-inset-bottom)) / 2)}
+  .gsc .gsbg{background:none!important;-webkit-mask-image:none!important;mask-image:none!important}
+  .gsc .gsbg img{display:block;position:absolute;right:0;top:0;height:100%;width:auto;max-width:100%;object-fit:contain;object-position:right center;image-rendering:pixelated;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 35%);mask-image:linear-gradient(90deg,transparent 0,#000 35%)}
+  .gsc .gstx{right:auto;bottom:auto;top:50%;transform:translateY(-50%);max-width:62%}
+  .gsc .gstx b{font-size:26px!important}
   .gscroll>.gsprac{grid-column:1/-1}
-  .v-gyms .gsc .gstx b{font-size:26px!important}
+  .v-gyms .gsc .gstx b{font-size:20px!important}
+  .v-gyms .gsc .gsbg img{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 45%);mask-image:linear-gradient(90deg,transparent 0,#000 45%)}
+  .v-gyms .gsc .gstx{max-width:60%}.v-gyms .gsc .gslg{width:28px;height:28px;right:8px;top:8px;bottom:auto;z-index:2}
+  .dlC .grid5{grid-template-columns:repeat(10,minmax(0,1fr))}
+  /* the draft lineup: starters on the left, the bench on the right, the rest under them */
+  .sheet[data-tag=dlineup]>.box{max-width:min(900px,100%)}
+  .sheet[data-tag=dlineup] .sbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:14px;align-items:start}
+  .sheet[data-tag=dlineup] .sbody>.x,.sheet[data-tag=dlineup] .sbody>.dlh{grid-column:1/-1}
+  .sheet[data-tag=dlineup] .sbody>.x{position:absolute;top:12px;right:16px;z-index:3;margin:0}
+  .dlA,.dlB{display:block;min-width:0}.dlC{display:block;grid-column:1/-1}.dlA>.kick.sh,.dlB>.kick.sh{margin-top:0}.dlC>.kick.sh{margin-top:4px}
   /* the gym pop-up: the gym and your team on the left, the floors on the right */
   .sheet[data-tag=gym]>.box{max-width:min(880px,100%)}
   .sheet[data-tag=gym] .sbody{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:16px;align-items:start}
@@ -1630,7 +1651,9 @@ details.panel>summary,.guideb b{font:400 18px/1.15 var(--f-d)!important;letter-s
   .evnow{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:12px}.evnow>:not(.srow){grid-column:1/-1}
   /* My Cards and the Codex: five across; Power and Gear lists two across */
   .v-cards .grid4,.v-draft .grid4{grid-template-columns:repeat(5,minmax(0,1fr))}
-  .v-cards .pwl,.v-cards .list{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:10px}
+  .v-cards .pwl{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:10px}
+  .v-cards .list{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:8px}
+  .v-cards .gflt,.v-cards .gflt2,.v-cards .autog{display:inline-flex;vertical-align:top;margin-right:8px}
   .bkgrid{grid-template-columns:repeat(5,minmax(0,1fr))}
   /* More: two columns */
   .app.v-more{columns:2;column-gap:14px}.v-more>.top{column-span:all}.v-more>*{break-inside:avoid}
@@ -1648,6 +1671,9 @@ details.panel>summary,.guideb b{font:400 18px/1.15 var(--f-d)!important;letter-s
 @keyframes sheetpop{from{transform:translateY(14px);opacity:0}}
 /* a small phone on its side (iPhone SE size): fewer things across, one column where two would cramp */
 @media (orientation:landscape) and (max-height:560px) and (max-width:760px){
+  .v-gyms .gsc .gstx{max-width:none;left:12px;right:12px}.v-gyms .gsc .gstx>*{white-space:nowrap}.v-gyms .gsc .gstx b{font-size:17px!important}.v-gyms .gsdy{letter-spacing:.08em;padding:1px 6px}
+  .sheet[data-tag=dlineup] .sbody{grid-template-columns:minmax(0,1fr)}.dlC .grid5{grid-template-columns:repeat(5,minmax(0,1fr))}.dlB>.kick.sh{margin-top:6px}
+  .csr.t-gear .slot b{font-size:13px}
   .v-cards .grid4,.v-draft .grid4,.sheet .grid3,.sheet .grid4,.bkgrid,.teamgrid{grid-template-columns:repeat(4,minmax(0,1fr))}
   .v-cards .pwl,.v-cards .list{grid-template-columns:minmax(0,1fr)}
   .frw{grid-template-columns:minmax(0,1fr)}.frw>.ng{grid-row:1;grid-column:1;position:static;margin-bottom:10px}.frl{grid-row:2}
@@ -2993,7 +3019,7 @@ function dimTo(d,from,to,ms,back,easeIn,done){const t0=performance.now();d._dim=
   setDim(d,from,back);requestAnimationFrame(step);if(done)setTimeout(end,ms+150)}
 /* names never cut off: any card name (or star row) wider than its card steps its font down until it fits */
 /* long names shrink to fit. Measured on the text itself: an ellipsis can hide less than a pixel that scrollWidth rounds away */
-function fitOver(e){if(e.scrollWidth>e.clientWidth+1)return true;const cs=getComputedStyle(e);const box=e.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);const r=document.createRange();r.selectNodeContents(e);return r.getBoundingClientRect().width>box+.05}
+function fitOver(e){if(e.scrollWidth>e.clientWidth+1)return true;const cs=getComputedStyle(e);const box=e.clientWidth-parseFloat(cs.paddingLeft)-parseFloat(cs.paddingRight);const r=document.createRange();r.selectNodeContents(e);/* a sheet still zooming in scales what we measure: undo it */const sc=e.offsetWidth?e.getBoundingClientRect().width/e.offsetWidth:1;return r.getBoundingClientRect().width/(sc||1)>box+.05}
 /* sideways, cards have room: every name in one grid gets the same size, the size the longest name in that grid needs
    (a card that still doesn't fit shrinks alone). Upright, each long name shrinks on its own */
 const LANDQ=typeof matchMedia==="function"?matchMedia("(orientation:landscape) and (max-height:560px)"):null;
@@ -3107,10 +3133,10 @@ function openCard(id,keepTab){id=+id;const c=DB.c[id],o=S.own[id];if(o&&o.isNew)
     const tot=[0,0,0,0,0,0,0];for(const gid of o.gear){const g=gid&&S.gear[gid];if(g){const st=gearStats(g);st.forEach((v,j)=>tot[j]+=v)}}
     const live=Object.keys(cnt).filter(k=>SETS[k]&&cnt[k]>=SETS[k].n);for(const k of live)if(SETS[k].st!=null)tot[SETS[k].st]+=SETS[k].v*Math.floor(cnt[k]/SETS[k].n);
     const parts=tot.map((v,j)=>v?`+${v} ${RKN[j]}`:null).filter(Boolean);const procs=live.filter(k=>SETS[k].meta);
-    body+=`<div class="panel bsum"><b>${parts.length?parts.join(", "):"Nothing on yet"}</b>${procs.length?`<span class="procs">${procs.map(k=>`<i>${setIcon(k,14)} ${esc(k)}</i>`).join("")}</span>`:""}</div>
-     <div class="row gbtn"><button class="btn sm sp" data-act="autoGear" data-arg="${id}">Best fit</button><span class="sp"></span><span class="mut gbn" style="margin:0">Suggested: <b>${setIcon(sug[0],14)} ${esc(sug[0])} ×4 + ${setIcon(sug[1],14)} ${esc(sug[1])} ×2</b></span></div>
-     <div class="slots">${SLOTORD.map(k=>[SLOTS[k],k]).map(([sl,k])=>{const g=o.gear[k]&&S.gear[o.gear[k]];return g?`<button class="slot f" style="--rc:${RARC[g.rar]}" data-act="slot" data-arg="${id}:${k}">${slotIcon(k)}<b>${esc(g.set)}</b><small>${sl} +${g.en} · ${gstar(g)}★</small><small>${RK[g.ms]} +${gearMain(g)}</small></button>`:`<button class="slot" data-act="slot" data-arg="${id}:${k}">${slotIcon(k)}<b class="mt">${sl}</b><small>Empty</small></button>`}).join("")}</div>
-     ${setTracker(cnt)}`}
+    /* the gear line: what the six pieces add (short), the sets that are live (gold), and how far an incomplete set is */
+    const partial=Object.keys(cnt).filter(k=>SETS[k]&&cnt[k]<SETS[k].n).map(k=>`<span class="chip">${esc(k)} ${cnt[k]}/${SETS[k].n}</span>`);
+    body+=`<div class="row bsum2"><div class="chips">${tot.map((v,j)=>v?`<span class="chip up">${RK[j]} +${v}</span>`:"").join("")}${live.map(k=>`<span class="chip gold">${setIcon(k,12)} ${esc(k)}</span>`).join("")}${partial.join("")}${parts.length||partial.length?"":`<span class="chip">No gear on</span>`}</div><span class="sp"></span><button class="btn sm" data-act="autoGear" data-arg="${id}">Best fit</button></div>
+     <div class="slots">${SLOTORD.map(k=>[SLOTS[k],k]).map(([sl,k])=>{const g=o.gear[k]&&S.gear[o.gear[k]];return g?`<button class="slot f" style="--rc:${RARC[g.rar]}" data-act="slot" data-arg="${id}:${k}">${gearArt(g,40)}<b>${esc(g.set)}${g.en?` +${g.en}`:""}</b><small>${RK[g.ms]} +${gearMain(g)}</small></button>`:`<button class="slot" data-act="slot" data-arg="${id}:${k}">${slotIcon(k)}<b class="mt">${sl}</b><small>Empty</small></button>`}).join("")}</div>`}
   else{const tot=careerTot(id);const pg=v=>tot.gp?(v/tot.gp).toFixed(1):"–";const pct=(m,a)=>a?(m/a*100).toFixed(1):"–";
     body+=`<div class="panel ptonly"><table class="box ctr"><tr><th>GP</th><th>PPG</th><th>RPG</th><th>APG</th><th>SPG</th><th>BPG</th></tr><tr><td>${tot.gp}</td><td>${pg(tot.pts)}</td><td>${pg(tot.reb)}</td><td>${pg(tot.ast)}</td><td>${pg(tot.stl)}</td><td>${pg(tot.blk)}</td></tr></table>
      <table class="box ctr" style="margin-top:6px"><tr><th>FG%</th><th>3P%</th><th>FT%</th><th>3PM</th></tr><tr><td>${pct(tot.fgm,tot.fga)}</td><td>${pct(tot.tpm,tot.tpa)}</td><td>${pct(tot.ftm,tot.fta)}</td><td>${tot.tpm}</td></tr></table>
@@ -3193,16 +3219,16 @@ function openGear(gid,ctx){const g=S.gear[gid];if(!g){if(ctx&&SHEET&&SHEET.tag==
   const nextMain=g.en<mx?`<small>+${atMax} at +${mx}</small>`:"";
   const ms=[3,6,9,12,15].filter(m=>m>g.en&&m<=mx);
   const ups=ms.length?`<div class="gup">${ms.map(m=>{const c=costTo(g,m);return`<button class="btn dk" data-act="gup" data-arg="${gid}:${m}" ${S.coins<c?"disabled":""}><b>${m===15?"Max":"+"+m}</b><span>${coinI}${c.toLocaleString()}</span></button>`}).join("")}</div>
-    <p class="mut gupn">Max +${mx}</p>`:`<p class="mut gupn">Fully powered up: a ${gstar(g)}★ piece goes to +${mx}.</p>`;
+    <p class="mut gupn">Max +${mx}</p>`:`<p class="mut gupn">Max +${mx} · fully powered</p>`;
   const got=pw?`<div class="panel gpw" data-fresh><span class="kick">+${pw.from} → +${pw.to} · ${pw.cost.toLocaleString()} coins</span>
     <p style="--d:0"><span>Main</span><b>${RKN[g.ms]} +${pw.main[0]} → +${pw.main[1]}</b></p>
     ${pw.rolls.map((r,i)=>`<p style="--d:${i+1}"><span>At +${r.lv}</span><b>${r.isNew?`New: ${RKN[r.s]} +${r.after}`:`${RKN[r.s]} +${r.before} → +${r.after}`}</b></p>`).join("")}</div>`:"";
-  const body=`<div class="gbig">${gearArt(g,104)}</div><span class="kick">${gstar(g)}★ ${RAR[g.rar]} · ${SLOTS[g.slot]}</span><h2 style="color:${RARC[g.rar]}">${esc(gearTitle(g))} +${g.en}</h2>
+  const body=`<div class="ggl"><div class="gbig">${gearArt(g,104)}</div><span class="kick">${gstar(g)}★ ${RAR[g.rar]} · ${SLOTS[g.slot]}</span><h2 style="color:${RARC[g.rar]}">${esc(gearTitle(g))} +${g.en}</h2>
   ${got}<div class="panel gdt"><div class="gm"><span>Main</span><b>${RKN[g.ms]} +${gearMain(g)}</b>${nextMain}</div>
    ${g.subs.map(x=>`<div class="gsb ${grew.has(x[0])?"grew":""}"><span>${RKN[x[0]]}</span><b>+${x[1]}</b></div>`).join("")||`<p class="mut" style="margin:4px 0 0">No substats yet</p>`}
-   ${g.subs.length&&g.subs.length<4?`<p class="mut" style="font-size:13px;margin:6px 0 0">${4-g.subs.length} more substat${4-g.subs.length>1?"s":""} will appear as you power it up.</p>`:""}</div>
-  <span class="kick sh">Power up</span>${ups}
-  <div class="panel"><p style="margin:0"><b>${esc(g.set)}</b>${st.meta?' <span class="meta">Meta set</span>':' <span class="chip">Stat set</span>'} · ×${st.n} · ${esc(st.s||st.d).replace(/\.$/,"")}</p>${on!=null?`<p style="color:var(--upd);margin:8px 0 0">Worn by ${esc(DB.p[DB.c[on].p][0])}</p>`:""}</div>`;
+   ${g.subs.length&&g.subs.length<4?`<p class="mut" style="font-size:13px;margin:6px 0 0">${4-g.subs.length} more substat${4-g.subs.length>1?"s":""} by +${mx}</p>`:""}</div></div>
+  <div class="ggr"><span class="kick sh">Power up</span>${ups}
+  <div class="panel"><p style="margin:0"><b>${esc(g.set)}</b>${st.meta?' <span class="meta">Meta set</span>':' <span class="chip">Stat set</span>'} · ×${st.n} · ${esc(st.s||st.d).replace(/\.$/,"")}</p>${on!=null?`<p style="color:var(--upd);margin:8px 0 0">Worn by ${esc(DB.p[DB.c[on].p][0])}</p>`:""}</div></div>`;
   const sellB=g.lock?`<button class="btn sp" data-act="glock" data-arg="${gid}">${LOCKI} Unlock</button>`:`<button class="btn sp" data-act="sell" data-arg="${gid}">Sell +${sellValue(g)}</button>`;
   const foot=ctx?`<div class="row">${sellB}<button class="btn sp" data-act="gtake" data-arg="${ctx.pid}:${ctx.k}">Take off</button><button class="btn go sp" data-act="slotpick" data-arg="${ctx.pid}:${ctx.k}">Swap</button></div>`
     :`<div class="row">${sellB}${g.lock?"":`<button class="btn sp" data-act="glock" data-arg="${gid}">${LOCKI} Lock</button>`}</div>`;
@@ -3372,7 +3398,7 @@ function attachDrag(root){let drag=null;
     const end=e=>{if(!drag||drag.el!==el)return;const d=drag;drag=null;if(!d.on)return;window._dragEnd=Date.now();e.preventDefault();d.g.remove();el.classList.remove("lifted");
       const t=document.elementsFromPoint(e.clientX,e.clientY).find(x=>x.matches&&x.matches(".dz .mc,.dz .cd")&&x!==el);
       window._dragEnd=Date.now();
-      if(t){const a=S.roster.indexOf(d.id),b=S.roster.indexOf(+t.dataset.rid);if(a>-1&&b>-1){[S.roster[a],S.roster[b]]=[S.roster[b],S.roster[a]];save();if(SHEET&&SHEET.tag==="lineup")openLineup();else render()}}else root.querySelectorAll(".dz .mc,.dz .cd.over").forEach(x=>x.classList.remove("over"))};
+      if(t){const dl=SHEET&&SHEET.tag==="dlineup";const L=dl?S.draft.order:S.roster;const a=L.indexOf(d.id),b=L.indexOf(+t.dataset.rid);if(a>-1&&b>-1){[L[a],L[b]]=[L[b],L[a]];save();if(dl)openDraftLineup();else if(SHEET&&SHEET.tag==="lineup")openLineup();else render()}}else root.querySelectorAll(".dz .mc,.dz .cd.over").forEach(x=>x.classList.remove("over"))};
     el.addEventListener("pointerup",end);el.addEventListener("pointercancel",end)})}
 function openStyle(){const me=myTeam();const z=styleZ(me.pl)||{};const on=me.tactic;
   const rows=Object.entries(TACTICS).map(([k,v])=>{const w=clamp(50+(z[k]||0)*18,4,100);return`<div class="sty1 ${on===k?"on":""}"><div><b>${esc(v.n)}</b><small>${esc(v.d)} · fits ${esc(v.from)}</small></div><i><b style="width:${w.toFixed(0)}%"></b></i></div>`}).join("");
@@ -4014,11 +4040,11 @@ function gymStarRow(n){return`<span class="gsst">${[0,1,2].map(k=>`<i class="${k
 function viewGyms(){const G=S.grind;const gb=G?`<button class="grban ${G.done?"done":""}" data-act="grind">${BOLT}<span><b>${G.done?"Grind done · open your haul":`Grinding ${esc(GYMS.find(g=>g.id===G.gym).n)} · floor ${G.floor}`}</b><small>${G.done?(n=>`${n} piece${n===1?"":"s"} waiting`)(G.log.reduce((a,l)=>a+l.d.length,0)):`Run ${G.i+1} of ${G.n}`}</small></span><i>›</i></button>`:"";
   const s=S.season,b=curBoss(),beaten=S.bossesBeaten.includes(s.n),ready=s.phase==="done"&&!beaten&&!bossOver();
   const GL=typeof ARTDATA!=="undefined"&&ARTDATA.glogo||{};
-  const sec=(cls,act,arg,img,inner)=>`<button class="gsc ${cls}" data-act="${act}"${arg?` data-arg="${arg}"`:""} style="${img?`--gsi:url(${img})`:""}"><span class="gsbg"></span><span class="gstx">${inner}</span></button>`;
+  const sec=(cls,act,arg,img,inner,lg="")=>`<button class="gsc ${cls}" data-act="${act}"${arg?` data-arg="${arg}"`:""} style="${img?`--gsi:url(${img})`:""}"><span class="gsbg">${img?`<img src="${img}" alt="">`:""}</span>${lg}<span class="gstx">${inner}</span></button>`;
   let h=sec(`arena${ready?" ready":""}`,"arena","",gymScene("arena"),`<small>Boss Arena</small><b>${esc(b.n)}</b><em class="${ready?"hot":""}">${beaten?"Beaten":ready?`Series ${bossSeries().w}-${bossSeries().l}`:s.phase==="done"?"Series lost":"After the playoffs"}</em>`);
   const dg=dGym();
   for(const g of GYMS){const cl=S.gyms[g.id]||0,gr=G&&G.gym===g.id&&!G.done;
-    h+=sec("",`gym`,g.id,gymScene(g.id),`${GL[g.id]?`<img class="gslg" src="${GL[g.id]}" alt="">`:""}${dg.id===g.id?`<i class="gsdy">${dg.kind==="double"?"Double drops":`All ${esc(g.meta)} gear`}</i>`:""}<small>${esc(g.style)}</small><b>${esc(g.n)}</b><span class="gsrow">${gymStarRow(gymStars(g.id))}<em class="${gr?"hot":""}">${gr?`Grinding ${G.i+1}/10`:`${cl}/10`}</em></span>`)}
+    h+=sec("",`gym`,g.id,gymScene(g.id),`${dg.id===g.id?`<i class="gsdy">${dg.kind==="double"?"Double drops":`All ${esc(g.meta)} gear`}</i>`:""}<small>${esc(g.style)}</small><b>${esc(g.n)}</b><span class="gsrow">${gymStarRow(gymStars(g.id))}<em class="${gr?"hot":""}">${gr?`Grinding ${G.i+1}/10`:`${cl}/10`}</em></span>`,GL[g.id]?`<img class="gslg" src="${GL[g.id]}" alt="">`:"")}
   h+=`<button class="gsprac" data-act="practice"><b>Practice</b><i>›</i></button>`;
   return topHTML(`<button class="back" data-act="nav" data-arg="modes" aria-label="Back">‹</button>Gyms`,`${enHTML()}`)+gb+`<div class="gscroll">${h}</div>`}
 function openArena(){const s=S.season;const k=curBossIx(),b=BOSSES[k];const beaten=S.bossesBeaten.includes(s.n);const bs=bossSeries(),over=bossOver();const ready=s.phase==="done"&&!beaten&&!over;
@@ -4335,7 +4361,7 @@ function draftNeeds(ids){const POS=["PG","SG","SF","PF","C"];const cnt={},flex=[
   const need={};for(const q of POS)need[q]=Math.max(0,2-(cnt[q]||0));for(const q of flex){const x=q.find(z=>need[z]>0);if(x)need[x]--}
   return POS.filter(q=>need[q]>0)}
 /* your drafted team: cards at their own ratings, best five by spot, then the second unit */
-function draftTeam(ids){const order=aiRoster(ids);
+function draftTeam(ids,ord){const order=ord&&ord.length===ids.length&&ord.every(i=>ids.includes(i))?ord:aiRoster(ids);
   const pl=order.map((i,k)=>{const sp=simPlayer(i,DB.c[i].r.slice(),{},0);if(k<10&&(k<5||order.length>=8)){const q=k%5;const pen=FITPEN[fitDB(i,q)];if(pen)sp.R=sp.R.map(v=>v-pen);sp.slot=q}return sp});
   pl.forEach(p=>p.ovr=pOvr(p));return teamFrom(pl,{name:"Your draft",abbr:"DRF",color:"#e2b660",mine:true,ti:S.fr})}
 /* game g's opponent: a random franchise's real roster, set a step harder each game; games 6 and 7 are your best ghosts if you have them */
@@ -4347,7 +4373,7 @@ function draftStart(){if(S.draft&&!S.draft.over){VIEW="draft";render();return}
   if(!draftFreeToday()&&typeof passRank==="function"&&passRank()>=25&&S.pass.dw!==weekIndex()){S.pass.dw=weekIndex();toast("Free weekly run (Season Pass)")}else if(!draftFreeToday()){if((S.coins||0)<DRAFT.cost){toast(`Not enough coins · ${DRAFT.cost} a run`);return}S.coins-=DRAFT.cost}else S.draftDay=dWin();
   const opp=[];while(opp.length<DRAFT.games){const t=Math.floor(rnd()*DB.t.length);if(!opp.includes(t))opp.push(t)}
   S.draft={ids:[],opts:[],g:0,w:0,l:0,over:false,opp,seed:Math.floor(rnd()*99999),rule:dDraftRule().id};S.draft.opts=draftOptions([]);save();VIEW="draft";render()}
-function draftPick(i){const d=S.draft;if(!d||d.ids.length>=DRAFT.picks||!d.opts.includes(i))return;d.ids.push(i);
+function draftPick(i){const d=S.draft;if(!d||d.ids.length>=DRAFT.picks||!d.opts.includes(i))return;d.ids.push(i);d.order=null;
   d.opts=d.ids.length<DRAFT.picks?draftOptions(d.ids):[];save();render()}
 /* a game ends: the run goes on with a win, ends with a loss or after game 7 */
 function draftFinish(res,quiet){const d=S.draft,won=res.score[0]>res.score[1];const out={won,coins:0,milestones:[],drops:[],notes:[]};
@@ -4369,16 +4395,22 @@ function viewDraft(){const d=S.draft;let h=topHTML(`<button class="back" data-ac
   if(d.ids.length<DRAFT.picks){const need=draftNeeds(d.ids);
     const rn=d.rule&&d.rule!=="none"?(DRULES.find(r=>r.id===d.rule)||{}).n:null;
     h+=`<div class="panel">${rn||need.length?`<p class="mut dfneed">${[rn,need.length?`Still need: ${need.join(", ")}`:""].filter(Boolean).map(esc).join(" · ")}</p>`:""}<div class="dfbig">${d.opts.map(i=>`<div class="dfpick">${mcHTML(i,{act:"draftPeek",arg:i,noNew:true,sim:true})}${need.some(q=>String(DB.p[DB.c[i].p][1]).split("/").includes(q))?'<span class="dffill">Fills a need</span>':""}</div>`).join("")}</div></div>`}
-  else{const me=draftTeam(d.ids),ot=draftOpp(d.g);
+  else{if(!d.order||d.order.length!==d.ids.length)d.order=aiRoster(d.ids);const me=draftTeam(d.ids,d.order),ot=draftOpp(d.g);
     h+=`<div class="panel iv ng">${d.g>=5&&(S.ghosts||[]).length?`<span class="kick">Ghost</span>`:""}<div class="vs"><div class="vst"><b>Your draft</b><small>OVR ${me.ovr}</small></div><i>VS</i><div class="vst"><b>${esc(ot.name)}</b><small>OVR ${ot.ovr}</small></div></div>
-      <button class="btn go ngplay" data-act="draftPlay" data-arg="play">Play</button><div class="row ngb"><button class="btn sp dk" data-act="draftPlay" data-arg="sim">Sim</button></div></div>`}
-  if(d.ids.length)h+=`<span class="kick sh">Your draft</span><div class="grid4">${aiRoster(d.ids).map(i=>`<div>${mcHTML(i,{act:"peek",arg:i,noNew:true,sim:true})}</div>`).join("")}</div>`;
+      <button class="btn go ngplay" data-act="draftPlay" data-arg="play">Play</button><div class="row ngb"><button class="btn sp dk" data-act="draftPlay" data-arg="sim">Sim</button><button class="btn sp dk" data-act="draftLineup">Lineup</button></div></div>`}
+  if(d.ids.length)h+=`<span class="kick sh">Your draft</span><div class="grid4">${(d.order&&d.order.length===d.ids.length?d.order:aiRoster(d.ids)).map(i=>`<div>${mcHTML(i,{act:"peek",arg:i,noNew:true,sim:true})}</div>`).join("")}</div>`;
   return h}
 function draftLadderHTML(){const gh=S.ghosts||[];if(!gh.length)return`<div class="panel"><span class="kick">Ladder</span><p class="mut">No runs yet</p></div>`;
   return`<div class="panel"><span class="kick">Ladder · your best runs</span>${gh.map((x,k)=>`<div class="dfl"><b>${k+1}</b><span>${x.w}-${x.l} · ${draftRank(x.w)}</span><small>${aiRoster(x.ids).slice(0,3).map(i=>esc(lastName(DB.p[DB.c[i].p][0]))).join(", ")}</small></div>`).join("")}</div>`}
+/* the draft's lineup: five starters PG to C, five backups, then the rest. Drag to swap; Best five puts the strongest order back */
+function openDraftLineup(){const d=S.draft;if(!d)return;if(!d.order||d.order.length!==d.ids.length)d.order=aiRoster(d.ids);const t=draftTeam(d.ids,d.order);
+  const bar=off=>`<div class="posbar">${POSN.map((n,k)=>{const i=d.order[off+k];if(i==null)return"<div></div>";const p=t.pl.find(x=>x.id===i);const q=posList(DB.p[DB.c[i].p][1]);const d2=q.length?Math.min(...q.map(x=>Math.abs(x-k))):0;return`<div class="${d2?"off":""}"><b>${n}</b><i>${p?Math.round(p.ovr):""}</i></div>`}).join("")}</div>`;
+  const g=(a,b)=>`<div class="grid5 dz" style="margin:4px 0 6px">${d.order.slice(a,b).map(i=>mcHTML(i,{noNew:true,rid:i,sim:true})).join("")}</div>`;
+  sheet(`<div class="row dlh"><span><span class="kick">Team OVR ${t.ovr}</span><h2>Draft lineup</h2></span><span class="sp"></span><button class="btn sm dk" data-act="draftBest">Best five</button></div>
+   <div class="dlA"><span class="kick sh">Starters</span>${bar(0)}${g(0,5)}</div>${d.order.length>5?`<div class="dlB"><span class="kick sh">Bench</span>${bar(5)}${g(5,10)}</div>`:""}${d.order.length>10?`<div class="dlC"><span class="kick sh">Reserves</span>${g(10,99)}</div>`:""}`,null,null,"dlineup",()=>openDraftLineup());attachDrag(SHEET.el)}
 function draftHomeHTML(){const d=S.draft;const live=d&&!d.over;
   return`<button class="panel guideb" data-act="draftOpen"><span><span class="kick">Draft Run${live?` · ${d.ids.length<DRAFT.picks?`pick ${d.ids.length+1} of ${DRAFT.picks}`:`${d.w}-${d.l}`}`:draftFreeToday()?" · free run":""}</span><b>12 picks, 7 wins</b></span><i>›</i></button>`}
-Object.assign(ACT,{draftOpen:()=>{VIEW="draft";render();window.scrollTo(0,0)},draftGo:()=>draftStart(),draftPick:a=>draftPick(+a),
+Object.assign(ACT,{draftLineup:()=>openDraftLineup(),draftBest:()=>{S.draft.order=aiRoster(S.draft.ids);save();openDraftLineup()},draftOpen:()=>{VIEW="draft";render();window.scrollTo(0,0)},draftGo:()=>draftStart(),draftPick:a=>draftPick(+a),
   draftPlay:a=>{const d=S.draft;if(!d||d.over||d.ids.length<DRAFT.picks)return;if(a==="play")runGame("draft","play",{side:"full"});else runGame("draft","sim")}});
 
 /* ---------- Modes: the ways to play. Franchise (your season and the league), Draft Run, Gyms, and the Book ---------- */
@@ -4386,7 +4418,7 @@ const modeArt=k=>typeof ARTDATA!=="undefined"&&ARTDATA.modes&&ARTDATA.modes[k]||
 const backTo=v=>`<button class="back" data-act="nav" data-arg="${v}" aria-label="Back">‹</button>`;
 function viewModes(){const s=S.season,rec=s.stand[S.fr],d=S.draft,live=d&&!d.over;const cl=GYMS.reduce((a,g)=>a+(S.gyms[g.id]||0),0);
   const pages=[...Array(30).keys()].filter(t=>pageDone(t)).length;
-  const m=(act,arg,k,kick,title,sub)=>`<button class="gsc mode" data-act="${act}"${arg?` data-arg="${arg}"`:""} style="--gsi:url(${modeArt(k)})"><span class="gsbg"></span><span class="gstx"><small>${kick}</small><b>${title}</b><em>${sub}</em></span></button>`;
+  const m=(act,arg,k,kick,title,sub)=>`<button class="gsc mode" data-act="${act}"${arg?` data-arg="${arg}"`:""} style="--gsi:url(${modeArt(k)})"><span class="gsbg"><img src="${modeArt(k)}" alt=""></span><span class="gstx"><small>${kick}</small><b>${title}</b><em>${sub}</em></span></button>`;
   let h=topHTML("Modes");
   h+=`<div class="gscroll">`+
     m("nav","franchise","franchise","Franchise",esc(TEAMNICK(S.fr)),`Season ${s.n} · ${rec[0]}-${rec[1]}`)+
@@ -6154,7 +6186,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="5397fd3f69";
+<script>const APPV="c0109ceecf";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
