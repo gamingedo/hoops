@@ -2535,12 +2535,12 @@ function bigCardHTML(id,x){x=x||{};
   /* the new card: front and back in a flip box; tap the art to turn it over */
   if(typeof cardsOn==="function"&&cardsOn()&&!x.sim){const ovl=x.ovr!=null?{ovr:x.ovr}:{};return`<div class="cflip" data-act="flip"><div class="cface ft">${cardHTML(id,{...ovl,big:true,full:true,noNew:true,act:"flip",arg:id})}</div><div class="cface bk">${cardBackHTML(id)}</div><span class="fliphint">Tap to turn over</span></div>`}const c=DB.c[id],p=DB.p[c.p],o=x.sim?null:S.own[id];const ov=x.ovr!=null?x.ovr:o?cardOvrB(id):c.o;const st=o?o.st:c.s;
   const gain=x.ovr==null&&o?ov-cardOvr(id):0;
-  const sub=c.k==="K"?`2026-27 ${esc(TEAMNICK(c.t))} · ${esc(p[1])} · ${Math.floor(p[2]/12)}'${p[2]%12}"`:`${seasonLabel(c.y)} ${esc(TEAMNICK(c.t))} · ${esc(p[1])} · ${Math.floor(p[2]/12)}'${p[2]%12}"`;
+  const sub=`${c.k==="K"?"2026-27":seasonLabel(c.y)} · ${esc(p[1])} · ${Math.floor(p[2]/12)}'${p[2]%12}"`;/* no team name: a season line can be from another team */
   const line=c.k==="K"?`<div class="bl"><span>No NBA games yet</span></div>`:`<div class="bl"><span><b>${c.g[1].toFixed(1)}</b>PPG</span><span><b>${c.g[2].toFixed(1)}</b>RPG</span><span><b>${c.g[3].toFixed(1)}</b>APG</span><span><b>${c.g[0]}</b>GP</span></div>`;
   const tr=o&&o.tier?TIERS[o.tier-1].k:"";
   /* tap the card to turn it over: the front is who he is, the back is his full season line. Only the card turns */
   const g=c.g||[],v=(q,d)=>q==null?"–":typeof q==="number"?q.toFixed(d==null?1:d):q;
-  const back=c.k==="K"?`<p class="bkn">No NBA games yet</p>`:`<span class="kick">${esc(seasonLabel(c.y))} · ${esc(TEAMNICK(c.t))} · ${g[0]||0} games</span><div class="bkg">${[["PPG",v(g[1])],["RPG",v(g[2])],["APG",v(g[3])],["SPG",v(g[4])],["BPG",v(g[5])],["TOV",v(g[9])],["FG%",v(g[6])],["3P%",v(g[7])],["FT%",v(g[8])]].map(([k,q])=>`<span><b>${q}</b><small>${k}</small></span>`).join("")}</div>`;
+  const back=c.k==="K"?`<p class="bkn">No NBA games yet</p>`:`<span class="kick">${esc(seasonLabel(c.y))} · ${g[0]||0} games</span><div class="bkg">${[["PPG",v(g[1])],["RPG",v(g[2])],["APG",v(g[3])],["SPG",v(g[4])],["BPG",v(g[5])],["TOV",v(g[9])],["FG%",v(g[6])],["3P%",v(g[7])],["FT%",v(g[8])]].map(([k,q])=>`<span><b>${q}</b><small>${k}</small></span>`).join("")}</div>`;
   return`<div class="bc bcf ${typeof frameOf==="function"&&FRAMES?"fr-"+frameOf(c,st):""} s${Math.min(st,6)} ${c.k==="L"?"kL":c.k==="M"||c.k==="F"?"kM":c.k==="H"?"kH":""} ${tr}" style="--tc:${DB.t[c.t].c}" data-act="bcflip" role="button" aria-label="Turn the card over"><div class="bcw"><div class="in bcfront">
   <div class="bt2"><div class="bo"><b class="${ov>99?"hi":""}${gain>0?" bn":""}">${ov}</b><span>${x.ovrLab||(o?`OVR · Level ${o.lv}`:"OVR at max level")}${gain>0?` <em class="dl" title="Team bonuses">+${gain}</em>`:""}</span></div>${artHTML(c,p,true)}</div>
   <div class="tg">${o&&o.tier?`<span class="tierb">${TIERS[o.tier-1].n}</span> `:""}${typeName(c)} <span class="stars">${starStr(c,o)}</span>${o&&o.st>c.s?' <span class="evo">evolved</span>':""}${c.k==="L"?` <span class="stamp">${c.gt!=null?GTIER[c.gt]:"Hall of Fame"}</span>`:""}${c.a&&c.k!=="K"?' <span class="now">2026-27 roster</span>':""}</div>
@@ -5281,7 +5281,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="0199218e24";
+<script>const APPV="584c6ef68e";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
