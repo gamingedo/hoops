@@ -2530,7 +2530,7 @@ function mcHTML(id,opt){opt=opt||{};if(typeof cardsOn==="function"&&cardsOn())re
   ${(()=>{/* special cards show what they are (their stars come with it: Legend and MVP 5, Prime and DPOY 4); regular cards show their stars */
     const tag=c.k==="L"&&c.gt!=null?(GTIER[c.gt]==="Hall of Fame"?"HOF":GTIER[c.gt]):tagOf(c);return`<span class="st">${tag?`<b>${tag}</b>${st>c.s?`<i>${st}★</i>`:""}`:`<i>${starStr(c,o)}</i>`}</span>`})()}
   ${(()=>{/* the last name, as big as it fits: long names step down a size instead of being cut */const ln=lastName(p[0]);return`<span class="nm${ln.length>=13?" l4":ln.length>=10?" l3":ln.length>=8?" l2":""}"><span class="ln">${esc(ln)}</span></span>`})()}
-  <span class="sb">${opt.sub!=null?opt.sub:`${teamAbbrAt(c.t,c.y)} '${String(c.y+1).slice(2)} · ${esc(String(p[1]).split(/[\/-]/)[0])}`}</span></span></button>`}
+  <span class="sb">${opt.sub!=null?opt.sub:`'${String(c.y+1).slice(2)} · ${esc(String(p[1]).split(/[\/-]/)[0])}`}</span></span></button>`}
 function bigCardHTML(id,x){x=x||{};
   /* the new card: front and back in a flip box; tap the art to turn it over */
   if(typeof cardsOn==="function"&&cardsOn()&&!x.sim){const ovl=x.ovr!=null?{ovr:x.ovr}:{};return`<div class="cflip" data-act="flip"><div class="cface ft">${cardHTML(id,{...ovl,big:true,full:true,noNew:true,act:"flip",arg:id})}</div><div class="cface bk">${cardBackHTML(id)}</div><span class="fliphint">Tap to turn over</span></div>`}const c=DB.c[id],p=DB.p[c.p],o=x.sim?null:S.own[id];const ov=x.ovr!=null?x.ovr:o?cardOvrB(id):c.o;const st=o?o.st:c.s;
@@ -4013,7 +4013,7 @@ function cardArt(c,p){if(c.k==="H"){const u=CARDART.bustURL(c);if(u)return`<img 
   const src=photoOf(p);return SIL_SVG+(src&&!IMGBAD.has(src)?`<img class="cphoto" src="${src}" alt="" onerror="imgBad(this)">`:"")}
 function cardHTML(id,opt){opt=opt||{};const c=DB.c[id],p=DB.p[c.p],o=opt.sim?null:S.own[id];const ov=opt.ovr!=null?opt.ovr:o?cardOvrB(id):c.o;const st=o?o.st:c.s;
   const bn=opt.ovr==null&&o&&ov>cardOvr(id);const fr=frameOf(c,st);const[pri,trim]=colorsAt(c.t,c.y);
-  const ln=lastName(p[0]);const sub=opt.sub!=null?opt.sub:`${teamAbbrAt(c.t,c.y)} '${String(c.y+1).slice(2)} · ${esc(String(p[1]).split(/[\/-]/)[0])}`;
+  const ln=lastName(p[0]);const sub=opt.sub!=null?opt.sub:`'${String(c.y+1).slice(2)} · ${esc(String(p[1]).split(/[\/-]/)[0])}`;
   const tier=o&&o.tier?TIERS[o.tier-1].k:"";
   return`<button class="cd fr-${fr} ${c.k==="H"?"kH":""} ${tier} ${opt.sel?"sel":""} ${opt.big?"big":""}" data-act="${opt.act||"card"}" data-arg="${opt.arg!=null?opt.arg:id}"${opt.rid!=null?` data-rid="${opt.rid}"`:""} style="--tc:${pri};--tt:${trim}" aria-label="${esc(p[0])}, ${ov} overall${bn?" with team bonuses":""}">
    ${o&&o.isNew&&!opt.noNew?'<span class="new">NEW</span>':""}${opt.flags&&o?flagBadges(id):""}
@@ -5281,7 +5281,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="584c6ef68e";
+<script>const APPV="4e6e428c38";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
