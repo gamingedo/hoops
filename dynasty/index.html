@@ -5903,6 +5903,279 @@ const ARENA=(()=>{
   return{get half(){return half},get full(){return full},get near(){return near},paint,ball,ready,at,feet,px,get RIM(){return VIEW==="D"?RIMD:RIMO},get view(){return VIEW},set view(v){VIEW=v},ballAt,release,FOOT,CW,CH,count,frame,hasBall,viewOf,lookOf,M,
     snd:{unlock,play,crowd,stop:stopAmb,start:startAmb,get on(){return on},set:setOn}}})();
 
+/* slstage.js: the sideline court (Hoop Land style) as a stage the game drives. The game's engine decides every possession;
+   the stage acts it out: who has the ball, the pass, the shot from the right distance, the make or miss, the rebound by the
+   man the engine named, steals, turnovers, free throws, the inbound after a basket, subs walking on and off.
+   Players are moving bodies (targets, acceleration, separation), so nobody teleports; there is always exactly one ball.
+   Keys are "id|team" like the rest of Play. Everything waits in stage time, so the speed setting scales it all, and when
+   the game skips ahead (sim to end, skip to half) every call returns at once. */
+function SLStage(o){
+  const A=o.A,B=o.B,TM=[A,B],W=480,H=270;const homeT=o.homeT||0;const skip=o.skip||(()=>false),speed=o.speed||(()=>1);
+  const g=o.ctx;
+  /* home team in white with its colour as trim, visitors in colour (dark alternate if the colour is close to the wood) */
+  const colOf=t=>TM[t].color||(t?"#1d428a":"#c8102e");
+  const woody=h=>{const n=parseInt(h.slice(1),16),r=(n>>16&255)/255,gg=(n>>8&255)/255,b=(n&255)/255,mx=Math.max(r,gg,b),mn=Math.min(r,gg,b);if(mx-mn<.2)return false;
+    let hu=mx===r?((gg-b)/(mx-mn))*60:mx===gg?(2+(b-r)/(mx-mn))*60:(4+(r-gg)/(mx-mn))*60;hu=(hu+360)%360;return hu>12&&hu<50&&mx>.45};
+  const kitCol=t=>t===homeT?colOf(t):woody(colOf(t))?"#1b2140":colOf(t);
+  const FILL=o.fill==null?.8:o.fill;
+  /* ---- projection: X along the court 0..94 ft, Y across 0 (far sideline) .. 50 (near sideline), Z up ---- */
+  const PX=10,PY=3.75,PZ=6.3,TOP=78;let camX=47;
+  const sx=X=>(X-camX)*PX+W/2,sy=(Y,Z)=>TOP+Y*PY-(Z||0)*PZ;
+  const RIMS=[{X:5.25,Y:25},{X:88.75,Y:25}],RIMZ=10;
+  /* team 0 attacks the right basket in the first half, then they switch */
+  let flipHalf=false;const rimOf=t=>o.oneBasket?RIMS[1]:RIMS[(t===0)!==flipHalf?1:0];
+  /* ---- the floor ---- */
+  const FW=94*PX+W,floor=document.createElement("canvas");floor.width=FW;floor.height=H;
+  {const f=floor.getContext("2d");f.imageSmoothingEnabled=false;const fx=X=>X*PX+W/2,fy=Y=>TOP+Y*PY;let seed=7;const r=()=>(seed=(seed*16807)%2147483647)/2147483647;
+    f.fillStyle="#090b13";f.fillRect(0,0,FW,H);
+    const[tc1,tc2]=o.floorCols||[colOf(homeT),"#ffffff"];
+    f.fillStyle=tc1;f.fillRect(0,fy(-3),FW,fy(53)-fy(-3));
+    for(let y=0;y<50*PY;y+=2){const sh=(Math.floor(y/2)%3);f.fillStyle=["#c98d4e","#c48748","#cf9455"][sh];f.fillRect(fx(0),TOP+y,94*PX,2)}
+    for(let i=0;i<300;i++){f.fillStyle="#b97c40";f.fillRect(fx(r()*94),TOP+Math.floor(r()*50*PY/2)*2,6+r()*20,1)}
+    f.fillStyle=tc1;f.globalAlpha=.85;f.fillRect(fx(0),fy(17),19*PX,16*PY);f.fillRect(fx(75),fy(17),19*PX,16*PY);f.globalAlpha=1;
+    f.strokeStyle="#f4efe4";f.lineWidth=2;const L=(x1,y1,x2,y2)=>{f.beginPath();f.moveTo(Math.round(fx(x1)),Math.round(fy(y1)));f.lineTo(Math.round(fx(x2)),Math.round(fy(y2)));f.stroke()};
+    L(0,0,94,0);L(0,50,94,50);L(0,0,0,50);L(94,0,94,50);L(47,0,47,50);
+    const E=(X,Y,rx,a0,a1)=>{f.beginPath();f.ellipse(Math.round(fx(X)),Math.round(fy(Y)),rx*PX,rx*PY,0,a0,a1);f.stroke()};
+    E(47,25,6,0,7);
+    for(const side of[0,1]){const bx=side?94:0,dir=side?-1:1;L(bx,17,bx+dir*19,17);L(bx,33,bx+dir*19,33);L(bx+dir*19,17,bx+dir*19,33);E(bx+dir*19,25,6,side?Math.PI/2:-Math.PI/2,side?Math.PI*1.5:Math.PI/2);
+      L(bx,3,bx+dir*14,3);L(bx,47,bx+dir*14,47);const rx=side?88.75:5.25;const a=Math.acos(22/23.75);
+      f.beginPath();if(side)f.ellipse(fx(rx),fy(25),23.75*PX,23.75*PY,0,Math.PI/2+a,Math.PI*1.5-a);else f.ellipse(fx(rx),fy(25),23.75*PX,23.75*PY,0,-Math.PI/2+a,Math.PI/2-a);f.stroke()}
+    f.fillStyle=tc2;f.globalAlpha=.25;f.beginPath();f.ellipse(fx(47),fy(25),5*PX,5*PY,0,0,7);f.fill();f.globalAlpha=1}
+  /* ---- PixelLab art ---- */
+  let net=[0,0];
+  const ART=(()=>{const D=typeof ARTDATA!=="undefined"&&ARTDATA.side||{};const im=s=>{const i=new Image();if(s)i.src=s;return i};const a={hoop:im(D.hoop),fans:im(D.fans),ann:im(D.ann)};
+    a.hoopR=document.createElement("canvas");const mir=()=>{if(!a.hoop.naturalWidth)return setTimeout(mir,50);a.hoopR.width=a.hoop.width;a.hoopR.height=a.hoop.height;const c=a.hoopR.getContext("2d");c.translate(a.hoop.width,0);c.scale(-1,1);c.drawImage(a.hoop,0,0)};mir();return a})();
+  function drawHoop(i,front){const R=RIMS[i],x=Math.round(sx(R.X)),y0=sy(R.Y);
+    if(!front){g.fillStyle="#00000038";g.beginPath();g.ellipse(x,y0,10,3,0,0,7);g.fill();return}
+    {const im=i?ART.hoopR:ART.hoop;if(im.width){const rx=i?im.width-1-86:86;g.drawImage(im,x-rx,Math.round(y0)-109)}}
+    const ry=Math.round(sy(R.Y,RIMZ)),k=net[i]>0?net[i]:0,st=Math.sin(Math.min(1,k)*Math.PI)*6;
+    g.lineWidth=1;for(let j=0;j<=5;j++){const a=x-9+j*3.6,b=x-5+j*2+(j-2.5)*st*.15;g.strokeStyle=j%2?"#d9dde6":"#ffffff";g.beginPath();g.moveTo(a+.5,ry+1);g.lineTo(b+.5,ry+12+st);g.stroke()}
+    g.strokeStyle="#ffffffaa";for(const f of[.45,.8]){const yy=ry+1+(11+st)*f,w=9-4*f;g.beginPath();g.moveTo(x-w,Math.round(yy)+.5);g.lineTo(x+w,Math.round(yy)+.5);g.stroke()}
+    const sh=rimShake>0?Math.sin(rimShake*40)*1.5*rimShake:0;
+    g.strokeStyle="#2a0d02";g.lineWidth=4;g.beginPath();g.ellipse(x+(i===rimShakeI?sh:0),ry,10,3,0,0,7);g.stroke();g.strokeStyle="#ff6a1a";g.lineWidth=2;g.beginPath();g.ellipse(x+(i===rimShakeI?sh:0),ry,10,3,0,0,7);g.stroke()}
+  let rimShake=0,rimShakeI=0;
+  /* ---- the crowd: PixelLab fans in three rows, in the home colour (a block of visitors, some neutrals). They react to
+     who scored, and the home crowd bounces to DE-FENSE when the visitors have it in the half court ---- */
+  const CROWD=(()=>{const FM=(typeof ARTDATA!=="undefined"&&ARTDATA.side&&ARTDATA.side.fansMeta)||{};let ev={t:-9,team:0,big:false};
+    const sheets={};function sheet(col){if(sheets[col])return sheets[col];const F=ART.fans;if(!F.naturalWidth)return null;const c=document.createElement("canvas");c.width=F.width;c.height=F.height;const x=c.getContext("2d");x.drawImage(F,0,0);
+      const d=x.getImageData(0,0,c.width,c.height),a=d.data,n=parseInt(col.slice(1),16),R=n>>16&255,G=n>>8&255,Bc=n&255,dim=.84;
+      for(let i=0;i<a.length;i+=4){if(!a[i+3])continue;const r=a[i],gg=a[i+1],b=a[i+2];if(gg>r*1.25&&gg>b*1.25&&gg-Math.min(r,b)>50){const v=Math.min(1.15,gg/225);a[i]=R*v;a[i+1]=G*v;a[i+2]=Bc*v}a[i]*=dim;a[i+1]*=dim;a[i+2]*=dim}
+      x.putImageData(d,0,0);return sheets[col]=c}
+    const SP=25,N=40,SW=SP*N;let sd=31;const r=()=>(sd=(sd*16807)%2147483647)/2147483647;const pick=a=>a[Math.floor(r()*a.length)];
+    const ROWY=[6,18,30],TEAMSETS=["g0","g1","g2","g3"].filter(k=>FM[k]),NEU=["n0","n1"].filter(k=>FM[k]);
+    const rows=ROWY.map((y,row)=>Array.from({length:N},(_,k)=>{const on=r()<FILL+(row===2?.06:row===0?-.08:0);const sec=k%20;const side=sec>=13&&sec<17&&r()<.85?1-homeT:r()<.14?-1:homeT;
+      const set=side<0?pick(NEU):pick(TEAMSETS),m=FM[set]||{calm:[0]};const calm=[pick(m.calm),pick(m.calm)];
+      return{x:k*SP+(row%2?SP/2:0),on,side,calm,ci:0,cheer:m.cheer&&m.cheer.length?pick(m.cheer):null,upset:m.upset&&m.upset.length?pick(m.upset):null,ph:r()*6,chant:r()<.7,nf:r()*8}}));
+    const seat=(x,y)=>{g.fillStyle="#141a3a";g.fillRect(x+7,y+19,18,11);g.fillStyle="#222c5e";g.fillRect(x+7,y+19,18,2)};
+    function led(hot){const y=TOP-14;g.fillStyle="#07080e";g.fillRect(0,y,W,13);const n=parseInt(colOf(homeT).slice(1),16),R=n>>16&255,G=n>>8&255,Bc=n&255;
+      const k=hot?1:.55;g.fillStyle=`rgb(${R*k|0},${G*k|0},${Bc*k|0})`;g.fillRect(0,y+2,W,8);g.fillStyle=hot?"#ffffffcc":"#ffffff40";const sh=Math.floor(now*(hot?40:14)-camX*PX)%12;for(let x=sh-12;x<W;x+=12)g.fillRect(x,y+5,6,2)}
+    return{cheer(team,big){ev={t:now,team,big:!!big};if(o.onCrowd)o.onCrowd(team===homeT?"roar":"groan",big)},
+      hot(){return now-ev.t<(ev.big?2.4:1.8)},draw(){const F=ART.fans;g.fillStyle="#090b13";g.fillRect(0,0,W,TOP);
+      const e=now-ev.t,hot=e<(ev.big?2.4:1.8),chant=!hot&&GUARD&&offT!==homeT&&ball.who;
+      if(F.naturalWidth){for(let row=0;row<3;row++){const yy=ROWY[row],off=Math.round(-(camX*PX*(.5+row*.06)))%SW;
+        for(const s of rows[row])for(const base of[off-SW,off,off+SW]){const x=base+s.x;if(x<-32||x>W)continue;if(!s.on){seat(x,yy);continue}
+          if(now>s.nf){s.ci^=1;s.nf=now+4+Math.random()*7}
+          let ci=s.calm[s.ci],dy=0;
+          if(hot&&s.side>=0){if(s.side===ev.team){ci=s.cheer!=null?s.cheer:ci;dy=-Math.round(Math.abs(Math.sin(e*9+s.ph))*3)-1}else{if(s.upset!=null)ci=s.upset;else dy=1}}
+          else if(hot&&s.side<0&&ev.big)dy=-Math.round(Math.abs(Math.sin(e*8+s.ph)));
+          else if(chant&&s.side===homeT&&s.chant)dy=(Math.floor(now*2.4+(s.ph>3?.5:0))%2)?-2:0;
+          const sh=sheet(s.side<0?"#808080":colOf(s.side));if(sh)g.drawImage(sh,ci*32,0,32,32,x,yy+dy,32,32)}
+        if(row<2){g.fillStyle="#090b1338";g.fillRect(0,0,W,ROWY[row]+30)}}}
+      led(hot&&ev.team===homeT);
+      {const a=ART.ann;if(a.naturalWidth){const fi=Math.floor(now*(hot?7:4.5))%8,cx=Math.round(sx(47));g.drawImage(a,fi*128,0,128,64,cx-64,TOP-63,128,64)}}
+      return chant}}})();
+  /* ---- players ---- */
+  const D8=["east","south-east","south","south-west","west","north-west","north","north-east"];
+  const dirOf=(dx,dy)=>D8[(Math.round(Math.atan2(dy*PY,dx*PX)/(Math.PI/4))+8)%8];
+  const idleOf=d=>d==="north"?"idleN":d==="south"?"idleS":"idle_"+d;
+  const ACT={};/* key -> body */
+  const plOf=k=>{const[id,t]=k.split("|");return TM[+t].pl.find(p=>String(p.id)===id)};
+  function body(k){if(ACT[k])return ACT[k];const p=plOf(k);if(!p)return null;const ti=+k.split("|")[1];
+    const lk=ARENA.lookOf(lookFor(p,ti===homeT?1:0,kitCol(ti)),DB.p[DB.c[p.id].p][6]);
+    /* someone new comes on from the scorer's table */
+    return ACT[k]={k,p,ti,look:lk,X:47+(ti?3:-3),Y:-1.5,vx:0,vy:0,tx:null,ty:null,max:17,face:"south",act:null,man:null,on:false,name:lastName(p.name),slot:p.slot!=null?p.slot:0}}
+  let ON=[[],[]];/* bodies on the floor, per team */
+  const all=()=>[...ON[0],...ON[1],...Object.values(ACT).filter(b=>b.leaving)];
+  const ball={who:null,air:null,X:47,Y:25,Z:4};let offT=0,GUARD=false,HELP=null,SCREEN=null,started=false;
+  function goTo(b,X,Y,max,oob){if(!b)return;b.tx=oob?Math.max(-3,Math.min(97,X)):Math.max(1,Math.min(93,X));b.ty=Math.max(oob?-2:1,Math.min(49,Y));b.max=max||17}
+  function act(b,an,dur,frames,face){b.act={an,dur,t0:now,frames,face}}
+  let now=0;
+  function step(dt){const L=all();for(const p of L){let ax=0,ay=0;
+      if(p.tx!=null){const dx=p.tx-p.X,dy=p.ty-p.Y,d=Math.hypot(dx,dy);const want=Math.min(p.max,d*2.8);ax=(dx/(d||1))*want-p.vx;ay=(dy/(d||1))*want-p.vy}
+      else{ax=-p.vx;ay=-p.vy}
+      if(!p.leaving)for(const q of L)if(q!==p&&!q.leaving){const dx=p.X-q.X,dy=p.Y-q.Y,d=Math.hypot(dx,dy*1.3);if(d<2.6&&d>0){ax+=dx/d*(2.6-d)*14;ay+=dy/d*(2.6-d)*14}}
+      const a=Math.hypot(ax,ay),amax=38*dt;if(a>amax){ax*=amax/a;ay*=amax/a}p.vx+=ax;p.vy+=ay;p.X+=p.vx*dt;p.Y+=p.vy*dt;
+      if(p.leaving&&Math.hypot(p.X-p.tx,p.Y-p.ty)<1){p.leaving=false;p.gone=true}}
+    if(ball.air){const b=ball.air,u=Math.min(1,(now-b.t0)/b.dur);ball.X=b.X0+(b.X1-b.X0)*u;ball.Y=b.Y0+(b.Y1-b.Y0)*u;ball.Z=b.Z0+(b.Z1-b.Z0)*u+b.h*4*u*(1-u);if(u>=1){const f=b.done;ball.air=null;f&&f()}}
+    const bx=ball.who?ball.who.X:ball.X;const goal=Math.max(W/2/PX-4,Math.min(98-W/2/PX,bx+(rimOf(offT).X>47?6:-6)));camX+=(goal-camX)*Math.min(1,dt*2.2);
+    net=net.map(v=>v>0?v-dt*1.6:0);if(rimShake>0)rimShake=Math.max(0,rimShake-dt*2.5);
+    if(GUARD||HELP||SCREEN)defend()}
+  /* ---- which drawing ---- */
+  const has=a=>!!(ARENA.M&&ARENA.M.anims[a]);
+  function pose(p){const sp=Math.hypot(p.vx,p.vy);
+    if(p.act){const F=p.act.frames,n=F?F.length:ARENA.count(p.act.an),u=(now-p.act.t0)/p.act.dur;if(u<1){const k=Math.min(n-1,Math.floor(u*n));return[p.act.an,F?F[k]:k]}p.act=null}
+    const hold=ball.who===p;
+    if(p.ti!==offT&&GUARD&&sp>.6&&sp<11&&has("dslide_south")&&!p.leaving){const w=want(p);p.face=dirOf(w.dx,w.dy);const an="dslide_"+p.face;return[an,Math.floor(now*(6+sp*.5))%ARENA.count(an)]}
+    if(sp>2.2){const d=dirOf(p.vx,p.vy);p.face=d;const an=(hold&&!p.carry?"rdrib_":"run_")+d;const n=ARENA.count(an);return[an,Math.floor(now*(hold?8:7+sp*.35))%n]}
+    const w=want(p);if(Math.hypot(w.dx,w.dy)>.5)p.face=dirOf(w.dx,w.dy);
+    if(hold&&!p.carry&&has("sdrib_"+p.face)){const an="sdrib_"+p.face;return[an,Math.floor(now*8)%ARENA.count(an)]}
+    const an=idleOf(p.face);return[an,Math.floor(now*3)%ARENA.count(an)]}
+  /* THE rule: where is he looking? Acting: his act's target. Screening: his man. Guarding: his man. Moving: where he goes.
+     Ball: the rim. Offense: the ball. Defense: his man. The audit checks every frame against this */
+  function want(p){const sp=Math.hypot(p.vx,p.vy),rim=rimOf(offT);
+    if(p.act&&p.act.face)return{dx:p.act.face.X-p.X,dy:p.act.face.Y-p.Y,why:"act"};
+    if(SCREEN&&SCREEN.by===p&&SCREEN.set&&sp<2.2)return{dx:SCREEN.on.X-p.X,dy:SCREEN.on.Y-p.Y,why:"screen"};
+    if(p.lookAt&&sp<2.2)return{dx:p.lookAt.X-p.X,dy:p.lookAt.Y-p.Y,why:"look"};
+    if(p.ti!==offT&&GUARD&&sp>.6&&sp<11&&has("dslide_south")&&p.man)return{dx:p.man.X-p.X,dy:p.man.Y-p.Y,why:"defense"};
+    if(sp>2.2&&!p.act)return{dx:p.vx,dy:p.vy,why:"moving"};
+    if(ball.who===p)return{dx:rim.X-p.X,dy:rim.Y-p.Y,why:"ball"};
+    if(p.ti===offT||!p.man){const h=ball.who||ball;return{dx:h.X-p.X,dy:h.Y-p.Y,why:"offense"}}
+    return{dx:p.man.X-p.X,dy:p.man.Y-p.Y,why:"defense"}}
+  const ANG={east:0,"south-east":45,south:90,"south-west":135,west:180,"north-west":225,north:270,"north-east":315};
+  function animFace(an){if(an==="idleN")return"north";if(an==="idleS")return"south";const m=an.match(/_(north-east|north-west|south-east|south-west|east|west|north|south)$/);if(m)return m[1];return/N$/.test(an)?"north":"south"}
+  function faceErr(p,an){const w=want(p);if(Math.hypot(w.dx,w.dy)<.5)return 0;const a=Math.atan2(w.dy*PY,w.dx*PX)*180/Math.PI;return Math.abs(((a-ANG[animFace(an)])%360+540)%360-180)}
+  function hand(p){const d=p.face;const e=d.includes("east")?1:d.includes("west")?-1:0;return{X:p.X+e*1.0,Y:p.Y+(d.includes("south")?.4:-.4),Z:3.2}}
+  /* ---- draw ---- */
+  let lastBounce=0;
+  function draw(){g.drawImage(floor,Math.round(camX*PX),0,W,H,0,0,W,H);const chant=CROWD.draw();drawHoop(0,false);drawHoop(1,false);
+    const L=all().filter(p=>!p.gone);const list=[...L.map(p=>({p,y:p.Y})),{hoop:0,y:RIMS[0].Y+.01},{hoop:1,y:RIMS[1].Y+.01}].sort((a,b)=>a.y-b.y);let ballDrawn=false;
+    const drawBallAt=(X,Y,Z)=>{const b=ARENA.ball;if(!b.complete)return;g.fillStyle="#00000055";g.beginPath();g.ellipse(sx(X),sy(Y),3,1.2,0,0,7);g.fill();g.drawImage(b,Math.round(sx(X)-b.width/2),Math.round(sy(Y,Z)-b.height/2))};
+    for(const it of list){if(it.hoop!=null){drawHoop(it.hoop,true);continue}const p=it.p;const[an,i]=pose(p);p._an=an;p._i=i;const x=sx(p.X),y=sy(p.Y);
+      if(x<-60||x>W+60)continue;
+      g.fillStyle="#00000040";g.beginPath();g.ellipse(x,y,8,2.5,0,0,7);g.fill();
+      const c=ARENA.frame(p.look,an,i);if(c)g.drawImage(c,Math.round(x)-ARENA.FOOT[0],Math.round(y)-ARENA.FOOT[1]);
+      if(AUD){AUD.pf++;const e=faceErr(p,an);if(ball.who===p&&!p.act&&!p.carry&&/^idle/.test(an))AUD.nodrib++;if(e>50){AUD.bad++;const k=want(p).why+" "+an.replace(/_.*/,"");AUD.by[k]=(AUD.by[k]||0)+1}}
+      if(ball.who===p&&!ARENA.hasBall(an,i)){const h=hand(p);let z=h.Z;if(Math.hypot(p.vx,p.vy)<=2.2&&!p.act&&!p.carry){const u=(now*2.4)%1;z=.4+(h.Z-.4)*Math.abs(Math.cos(u*Math.PI));if(u<.5&&lastBounce>=.5&&o.onBounce)o.onBounce();lastBounce=u}drawBallAt(h.X,h.Y,z);ballDrawn=true}
+      else if(ball.who===p)ballDrawn=true}
+    if(ball.air||!ball.who){drawBallAt(ball.X,ball.Y,ball.Z);ballDrawn=true}
+    /* the ball handler's name, small, under his feet */
+    if(ball.who&&o.labels!==false){const p=ball.who,x=Math.round(sx(p.X)),y=Math.round(sy(p.Y))+4;g.font="700 7px Barlow,system-ui,sans-serif";g.textAlign="center";g.textBaseline="top";const w=Math.ceil(g.measureText(p.name).width)+6;
+      g.fillStyle="#0b1024cc";g.fillRect(x-w/2,y,w,9);g.fillStyle=p.ti===0?"#f6dca0":"#f6efe0";g.fillText(p.name,x,y+1)}
+    if(AUD){AUD.frames++;if(!ballDrawn)AUD.noball++}
+    return chant}
+  const AUD=window._slAudit?Object.assign(window._slAudit,{frames:0,pf:0,bad:0,nodrib:0,noball:0,by:{}}):null;
+  function tick(dt){dt=Math.min(.05,dt)*speed();now+=dt;step(dt)}
+  /* ---- waiting in stage time ---- */
+  let dead=false;
+  const wait=s=>new Promise(r=>{if(skip())return r();const end=now+s;const f=()=>{if(dead||skip()||now>=end)return r();setTimeout(f,16)};f()});
+  const until=(fn,max)=>new Promise(r=>{if(skip())return r();const end=now+(max||6);const f=()=>{if(dead||skip()||fn()||now>=end)return r();setTimeout(f,16)};f()});
+  const near=(p,d)=>p.tx==null||Math.hypot(p.tx-p.X,p.ty-p.Y)<(d||1.5);
+  const snap=()=>{for(const p of all()){if(p.tx!=null){p.X=p.tx;p.Y=p.ty}p.vx=p.vy=0;if(p.leaving){p.leaving=false;p.gone=true}}ball.air=null};
+  /* ---- spots in the half court, as distance from the attacked baseline and across ---- */
+  const SPOTS=[[30,25],[21,8],[21,42],[3,46],[7,18]];
+  const spotAt=(slot,t,jit)=>{const[d,y]=SPOTS[slot%5],R=rimOf(t),dirR=R.X>47;return{X:dirR?94-d+(jit?jit[0]:0):d-(jit?jit[0]:0),Y:y+(jit?jit[1]:0)}};
+  function defend(){const rim=rimOf(offT);for(const d of ON[1-offT]){const m=d.man;if(!m)continue;
+      if(HELP===d&&ball.who){const b=ball.who;goTo(d,b.X+(rim.X-b.X)*.45,b.Y+(rim.Y-b.Y)*.45,19);continue}
+      if(SCREEN&&SCREEN.on===d){const b=ball.who||m;goTo(d,b.X+(rim.X-b.X)*.2,b.Y+(rim.Y-b.Y)*.2,8);continue}
+      if(!GUARD){goTo(d,rim.X+(m.X-rim.X)*.5,rim.Y+(m.Y-rim.Y)*.5,19);continue}
+      const dx=rim.X-m.X,dy=rim.Y-m.Y,L=Math.hypot(dx,dy)||1;const k=m===ball.who?3.2:4.5;goTo(d,m.X+dx/L*k,m.Y+dy/L*k,18)}}
+  const diagTo=(p,rim)=>{const fd=dirOf(rim.X-p.X,rim.Y-p.Y);return fd.includes("-")?fd:fd==="east"?(rim.Y>p.Y?"south-east":"north-east"):fd==="west"?(rim.Y>p.Y?"south-west":"north-west"):(rim.X>p.X?(fd==="north"?"north-east":"south-east"):(fd==="north"?"north-west":"south-west"))};
+  function passBall(from,to){return new Promise(res=>{if(!from||!to){if(to)ball.who=to;return res()}const h=hand(from);ball.who=null;ball.X=h.X;ball.Y=h.Y;ball.Z=h.Z;const d=Math.hypot(to.X-h.X,to.Y-h.Y);
+    if(skip()){ball.who=to;return res()}
+    ball.air={X0:h.X,Y0:h.Y,Z0:h.Z,X1:to.X,Y1:to.Y,Z1:3.2,h:Math.min(3,d*.08),t0:now,dur:Math.max(.3,d/42),done:()=>{ball.who=to;res()}}})}
+  const flyBall=(X1,Y1,Z1,h,dur)=>new Promise(r=>{if(skip()){ball.X=X1;ball.Y=Y1;ball.Z=Z1;ball.air=null;return r()}ball.air={X0:ball.X,Y0:ball.Y,Z0:ball.Z,X1,Y1,Z1,h,t0:now,dur,done:r}});
+  /* ---- who is on the floor ---- */
+  function setOn(t,keys){const want=keys.map(body).filter(Boolean);for(const b of ON[t])if(!want.includes(b)){b.leaving=true;b.on=false;goTo(b,47+(t?4:-4),-1.6,12,true);if(ball.who===b)ball.who=null}
+    for(const b of want)if(!b.on){b.on=true;b.gone=false;b.leaving=false;if(b.X==null||b.Y<0){b.X=47+(t?3:-3);b.Y=-1}}
+    /* each man's spot: his position slot, or by order when slots repeat (3 on 3) */
+    const ss=want.map(b=>b.p.slot);const uniq=ss.every((v,i)=>v!=null&&ss.indexOf(v)===i);want.forEach((b,i)=>{b.slot=uniq?b.p.slot:[0,1,2,4,3][i]});
+    ON[t]=want}
+  function match(){/* each defender takes the offensive man at his own spot (slot), the rest by order */const O=ON[offT],D=ON[1-offT];const used=new Set();
+    for(const d of D){let m=O.find(p=>p.slot===d.slot&&!used.has(p));if(!m)m=O.find(p=>!used.has(p));if(m){used.add(m);d.man=m;m.man=d}}}
+  /* ---- the plays ---- */
+  const S={
+    get now(){return now},get off(){return offT},get ball(){return ball},bodies:ACT,
+    tick,draw,audit:AUD,
+    destroy(){dead=true},
+    half(){flipHalf=!flipHalf},
+    /* a new possession for team t with these five (keys) against those five: they go to their spots, the defense picks up */
+    async setup(t,oKeys,dKeys,opt){opt=opt||{};const prevOff=offT;offT=t;setOn(t,oKeys);setOn(1-t,dKeys);HELP=null;SCREEN=null;
+      const O=ON[t];match();const pg=O.find(p=>p.slot===0)||O[0];const first=!started;started=true;if(first){ball.who=pg;ball.air=null}
+      if(!ball.who||ball.who.ti!==t){if(ball.who&&ball.who.ti!==t)ball.who=null;if(!ball.who){if(skip()){ball.who=pg}else{const h=O.slice().sort((a,b)=>Math.hypot(a.X-ball.X,a.Y-ball.Y)-Math.hypot(b.X-ball.X,b.Y-ball.Y))[0];goTo(h,ball.X,ball.Y,16);await until(()=>Math.hypot(h.X-ball.X,h.Y-ball.Y)<1.5,2.5);ball.who=h;ball.air=null}}}
+      GUARD=false;for(const p of O){const s=spotAt(p.slot,t,opt.brk&&p!==ball.who?[-6,0]:null);goTo(p,s.X,s.Y,p===ball.who?15:18)}
+      defend();if(skip()||first){snap();GUARD=true;if(first)await wait(.5);return}
+      await until(()=>O.filter(p=>near(p,2.5)).length>=4,opt.brk?1.6:3.2);GUARD=true;await wait(.15)},
+    give(k){const b=ACT[k];if(b){ball.who=b;ball.air=null}},
+    holder(){return ball.who?ball.who.k:null},
+    async pass(fromK,toK){const f=ACT[fromK]||ball.who,t=ACT[toK];if(!t)return;if(f===t){ball.who=t;return}
+      /* everyone else drifts to a fresh spot so the floor stays alive */
+      for(const p of ON[offT])if(p!==f&&p!==t){const s=spotAt(p.slot,offT,[(Math.random()-.5)*4,(Math.random()-.5)*5]);goTo(p,s.X,s.Y,10)}
+      t.tx=t.X;t.ty=t.Y;await passBall(f,t)},
+    /* pick and roll: the big stands next to the handler's man, the handler comes off it, the big rolls */
+    async pnr(hK,bigK,ok){const h=ACT[hK]||ball.who,big=ACT[bigK];if(!h||!big||skip())return;const d0=h.man,rim=rimOf(offT),dirR=rim.X>47;const side=h.Y<25?1:-1;
+      if(d0){SCREEN={by:big,on:d0,set:false};goTo(big,d0.X,d0.Y+side*2.4,16);await until(()=>near(big),2.2);SCREEN.set=true;big.tx=big.X;big.ty=big.Y;await wait(.3)}
+      goTo(h,(big.X+(dirR?4:-4)),big.Y+side*(ok?3:1.5),ok?15:10);await wait(.6);if(SCREEN)SCREEN.set=false;goTo(big,rim.X+(dirR?-5:5),rim.Y+side*3,17);await wait(.4);SCREEN=null},
+    /* a drive: he attacks the rim; the nearest helper steps over (that's why the kick-out is open) */
+    async drive(hK,ok){const h=ACT[hK]||ball.who;if(!h||skip())return;const rim=rimOf(offT),dirR=rim.X>47;
+      const helper=ON[1-offT].filter(d=>d.man!==h).sort((a,b)=>Math.hypot(a.X-rim.X,a.Y-rim.Y)-Math.hypot(b.X-rim.X,b.Y-rim.Y))[0];
+      goTo(h,rim.X+(dirR?-(ok?5:9):(ok?5:9)),rim.Y+(h.Y<25?-3:3),16);await wait(.35);HELP=helper||null;await until(()=>near(h,2),1.4);HELP=null},
+    async post(k){const p=ACT[k]||ball.who;if(!p||skip())return;const rim=rimOf(offT),dirR=rim.X>47;goTo(p,rim.X+(dirR?-7:7),p.Y<25?19:31,9);await until(()=>near(p),1.6)},
+    async move(k){const p=ACT[k]||ball.who;if(!p||skip())return;/* a jab, a crossover, a pump: a quick shift on his spot */const dx=(Math.random()<.5?-1:1)*2.5;goTo(p,p.X+dx,p.Y+(Math.random()-.5)*2,12);await wait(.45)},
+    async reset(k){const p=ACT[k]||ball.who;if(!p||skip())return;const s=spotAt(0,offT);goTo(p,s.X,s.Y,12);await until(()=>near(p),1.6)},
+    /* the shot: he gets to the right distance (a drive for a layup, a step into a jumper, out behind the line for a three),
+       rises, and the ball goes where the engine says. A miss comes off to the man who got the rebound */
+    async shot(k,type,made,x){x=x||{};const sh=ACT[k];if(!sh)return;const rim=rimOf(offT),dirR=rim.X>47;
+      if(ball.who!==sh){await passBall(ball.who,sh)}
+      if(!skip()){const dx=sh.X-rim.X,dy=sh.Y-rim.Y,d=Math.hypot(dx,dy)||1;let want=null;
+        if(type==="rim"){if(d>5){want={X:rim.X+(dirR?-3.5:3.5),Y:rim.Y+(sh.Y<25?-2.5:2.5)}}}
+        else if(type===3||type==="3"){if(d<24.3||(Math.abs(dy)>21&&Math.abs(dx)>13)){const corner=Math.abs(dy)>16&&Math.abs(dx)<14;want=corner?{X:dirR?92:2,Y:sh.Y<25?3.2:46.8}:{X:rim.X+dx/d*25,Y:rim.Y+dy/d*25}}}
+        else if(d<10||d>21){want={X:rim.X+dx/d*15,Y:rim.Y+dy/d*15}}
+        if(want){goTo(sh,want.X,want.Y,type==="rim"?17:12);await until(()=>near(sh,1.2),1.6)}}
+      sh.tx=null;sh.vx*=.15;sh.vy*=.15;const dist=Math.hypot(rim.X-sh.X,rim.Y-sh.Y),close=dist<9;const diag=diagTo(sh,rim);sh.face=diag;const an="shot_"+diag,n=ARENA.count(an);let lastB=0;for(let i=0;i<n;i++)if(ARENA.hasBall(an,i))lastB=i;const dur=close?.65:.9;
+      if(x.blk&&ACT[x.blk]&&!skip()){const bl=ACT[x.blk];goTo(bl,sh.X+(rim.X-sh.X)/(dist||1)*2,sh.Y+(rim.Y-sh.Y)/(dist||1)*2,19)}
+      if(!skip()){act(sh,an,dur,null,{X:rim.X,Y:rim.Y});await wait(dur*(lastB+1)/n)}
+      const three=type===3||type==="3";ball.who=null;ball.X=sh.X;ball.Y=sh.Y;ball.Z=6.5;
+      if(x.blk){/* swatted: the ball pops out, the rebound decides who has it */const bl=ACT[x.blk];if(bl&&!skip()){bl.lookAt=sh;setTimeout(()=>{bl.lookAt=null},900)}
+        if(o.onBlock)o.onBlock();await flyBall(sh.X+(dirR?-6:6),sh.Y+(Math.random()-.5)*10,.5,4,.55)}
+      else{await flyBall(rim.X,rim.Y,RIMZ+.3,close?2.5:three?8:6,close?.55:three?1.05:.85);
+        if(made){net[dirR?1:0]=1;if(o.onSwish)o.onSwish();await flyBall(rim.X,rim.Y,.4,0,.35);CROWD.cheer(offT,three||(x.pts||0)>=3);GUARD=false;return}
+        rimShake=1;rimShakeI=dirR?1:0;if(o.onRim)o.onRim();await flyBall(rim.X+(dirR?-1:1)*(4+Math.random()*6),rim.Y+(Math.random()-.5)*16,7,3,.6)}
+      /* the rebound: the man the engine named goes and gets it */
+      const rb=x.reb&&ACT[x.reb]?ACT[x.reb]:null;GUARD=false;
+      if(rb){if(!skip()){goTo(rb,ball.X,ball.Y,19);await until(()=>Math.hypot(rb.X-ball.X,rb.Y-ball.Y)<1.6,1.2);rb.X+=(ball.X-rb.X)*.5;rb.Y+=(ball.Y-rb.Y)*.5;
+          const d2=diagTo(rb,rim),a2="shot_"+d2,n2=ARENA.count(a2);let lb=0;for(let i=0;i<n2;i++)if(ARENA.hasBall(a2,i))lb=i;const fr=[];for(let i=lb;i>=0;i--)fr.push(i);rb.face=d2;rb.tx=null;ball.who=rb;ball.air=null;act(rb,a2,.5,fr,{X:rim.X,Y:rim.Y});await wait(.55)}
+        else ball.who=rb}
+      else{if(!skip())await flyBall(ball.X,ball.Y,.4,1,.3)}},
+    /* after a basket: the other team's big takes it out behind the baseline and inbounds to the point guard */
+    async inbound(){const scorer=offT,rim=rimOf(scorer),dirR=rim.X>47;const N=ON[1-scorer];if(!N.length)return;offT=1-scorer;GUARD=false;
+      if(o.oneBasket){/* half court: the ball is checked at the top */const pg=N.find(p=>p.slot===0)||N[0];ball.who=null;ball.X=rim.X+(dirR?-1:1);ball.Y=rim.Y+1;ball.Z=.4;if(skip()){ball.who=pg;return}const s=spotAt(0,offT);goTo(pg,s.X,s.Y,14);await wait(.4);ball.X=s.X;ball.Y=s.Y;await passBall(null,pg);return}
+      const ib=N.find(p=>p.slot===4)||N[N.length-1],pg=N.find(p=>p.slot===0&&p!==ib)||N.find(p=>p!==ib)||ib,bx=dirR?95.6:-1.6;
+      ball.who=null;ball.X=rim.X+(dirR?-.6:.6);ball.Y=rim.Y+.8;ball.Z=.4;
+      if(skip()){ball.who=pg;return}
+      N.forEach(p=>{if(p!==ib&&p!==pg){const s=spotAt(p.slot,offT);goTo(p,47+(s.X-47)*.35,s.Y,15)}});ON[scorer].forEach(p=>{const s=spotAt(p.slot,offT);goTo(p,(47+s.X)/2,s.Y,13)});
+      goTo(pg,rim.X+(dirR?-10:10),rim.Y+(rim.Y>pg.Y?-7:7),13);
+      goTo(ib,ball.X,ball.Y,15);await until(()=>Math.hypot(ib.X-ball.X,ib.Y-ball.Y)<1.4,2.4);ib.carry=true;ball.who=ib;
+      goTo(ib,bx,rim.Y+3,9,true);await until(()=>Math.abs(ib.X-bx)<.8,2.4);ib.tx=null;await wait(.25);
+      if(pg!==ib)await passBall(ib,pg);ib.carry=false;goTo(ib,rim.X+(dirR?-7:7),rim.Y+4,15)},
+    /* a steal: the thief closes on the handler, pokes it away and takes it; a runout finishes at the other end */
+    async steal(vK,tK,runout){const v=ACT[vK]||ball.who,t=ACT[tK];if(!t)return;if(v&&ball.who!==v)ball.who=v;
+      if(!skip()&&v){goTo(t,v.X+(v.X>t.X?-1.6:1.6),v.Y+.6,19);await until(()=>Math.hypot(t.X-v.X,t.Y-v.Y)<2.4,1);if(o.onSteal)o.onSteal()}
+      ball.who=t;GUARD=false;offT=t.ti;
+      if(runout){const rim=rimOf(t.ti);if(!skip()){goTo(t,rim.X+(rim.X>47?-3:3),rim.Y+2,19);await until(()=>near(t,1.5),3.5)}await S.shot(tK,"rim",true,{})}},
+    /* a turnover: the ball squirts out of bounds; the other team will take it from there */
+    async turnover(k){const p=ACT[k]||ball.who;GUARD=false;if(!p){return}ball.who=null;ball.X=p.X;ball.Y=p.Y;ball.Z=3;if(o.onBounce)o.onBounce();await flyBall(p.X+(Math.random()-.5)*6,p.Y<25?-1.5:51.5,1,2,.5)},
+    /* free throws: the shooter at the line, two of theirs and one of his on each side of the lane, the rest back */
+    async ft(k,res,oKeys,dKeys){const sh=body(k);if(!sh)return;const t=sh.ti;offT=t;setOn(t,oKeys);setOn(1-t,dKeys);const rim=rimOf(t),dirR=rim.X>47,toward=dirR?-1:1;GUARD=false;HELP=null;SCREEN=null;
+      const lineX=rim.X+toward*13.75;const O=ON[t].filter(p=>p!==sh),D=ON[1-t];
+      const lane=[[7,17],[7,33],[10.5,17],[10.5,33],[14,17],[14,33]].map(([d,y])=>({X:rim.X+toward*(d-5.25+1),Y:y<25?y-1.4:y+1.4}));
+      const order=[D[0],D[1],O[0],O[1],D[2],D[3]];order.forEach((p,j)=>{if(p){goTo(p,lane[j].X,lane[j].Y,12);p.lookAt=rim}});
+      [O[2],D[4]].forEach((p,j)=>{if(p){goTo(p,lineX+toward*9,j?18:32,12);p.lookAt=rim}});
+      goTo(sh,lineX,25,12);ball.who=sh;sh.carry=true;
+      if(skip()){snap();for(const p of all())p.lookAt=null;sh.carry=false;return}
+      await until(()=>all().every(p=>p.leaving||near(p,1.5)),3);await wait(.4);
+      for(let i=0;i<res.length;i++){sh.carry=false;ball.who=sh;await wait(.7);sh.tx=null;const diag=diagTo(sh,rim),an="shot_"+diag,n=ARENA.count(an);let lastB=0;for(let j=0;j<n;j++)if(ARENA.hasBall(an,j))lastB=j;
+        act(sh,an,.85,null,{X:rim.X,Y:rim.Y});await wait(.85*(lastB+1)/n);ball.who=null;ball.X=sh.X;ball.Y=sh.Y;ball.Z=6.5;
+        await flyBall(rim.X,rim.Y,RIMZ+.3,5,.75);
+        if(res[i]){net[dirR?1:0]=1;if(o.onSwish)o.onSwish();await flyBall(rim.X,rim.Y,.4,0,.35);CROWD.cheer(t,false)}
+        else{rimShake=1;rimShakeI=dirR?1:0;if(o.onRim)o.onRim();await flyBall(rim.X+toward*3,rim.Y+(i%2?6:-6),.4,3,.45)}
+        if(i<res.length-1){ball.X=rim.X;ball.Y=rim.Y;await passBall(null,sh);ball.who=sh}}
+      for(const p of all())p.lookAt=null;sh.carry=false},
+    cheer(t,big){CROWD.cheer(t,big)},
+    /* the end: everyone stops where they are */
+    stop(){for(const p of all()){p.tx=null}ball.who=null}
+  };
+  return S}
+
 /* the screen stays on while a game is on screen or autoplay is running (the phone would dim and lock otherwise).
    The browser drops the lock whenever the app goes to the background, so it is asked for again on the way back */
 let AUTOMIN=false,AUTOPS=false,WAKE=null,WAKEON=false;
@@ -5959,6 +6232,7 @@ function playGame(res0,side,done){
    <div class="pvask" id="pvAsk" hidden><div class="pvlm">${logo(A,54)}<b>VS</b>${logo(B,54)}</div><p>${esc(A.name)} vs ${esc(B.name)}</p><i class="pvphone" aria-hidden="true"></i><b>Turn your phone sideways</b><button class="btn sm" id="pvAskSide">Rotation lock on? Play it sideways</button></div>`;
   raise(ov);document.body.appendChild(ov);ov.addEventListener("pointerdown",()=>ARENA.snd.unlock(),{once:true});document.body.classList.add("pvon");
   const $=s=>ov.querySelector(s);const cv=$("#pvC"),g=cv.getContext("2d");g.imageSmoothingEnabled=false;let KS=1,DPR=1,FADE0=0;let SPD=AUTO?2:(()=>{try{const v=+localStorage.getItem("hd_spd");return[1,1.5,2].includes(v)?v:1.5}catch(e){return 1.5}})(),MIN=false,PSAVE=false,ended=false,coachTrip=false,simAll=false,li=0,lastPossKey=null;
+  let SL=null;
   const LB=$("#pvL");let ROT=false,MODE="land",loadT=0;if(AUTO)LB.classList.add("auto");/* autoplay is for watching: the court takes the whole screen */
   /* size the landscape box to the screen, turned or not, and fit the court (16:9) in the left column */
   function fit(){const w=innerWidth,h=innerHeight;ROT=h>w;MODE=!ROT?"land":ROTFREE?"ask":"side";const W=ROT?h:w,H=ROT?w:h;LB.style.width=W+"px";LB.style.height=H+"px";LB.classList.toggle("rot",ROT);
@@ -6048,7 +6322,7 @@ function playGame(res0,side,done){
      drawn standing (and counted as a scene fault, see VIOL), so two dribblers can never show, whatever the scene code does */
   const BALLANIM=new Set(["dribble","drive","cross","jab","pump","post","spin"]);
   const VIOL=[];const fault=(kind,info)=>{if(VIOL.length<200)VIOL.push({kind,...info,t:Math.round(performance.now())})};
-  function give(k){const prev=ball.who;ball={mode:"hold",who:k,x:ball.x,y:ball.y};if(prev&&prev!==k&&ACTS[prev]&&BALLANIM.has(ACTS[prev].anim)){ACTS[prev].anim="idle";ACTS[prev].fps=2;ACTS[prev].once=false}}
+  function give(k){if(SL)SL.give(k);const prev=ball.who;ball={mode:"hold",who:k,x:ball.x,y:ball.y};if(prev&&prev!==k&&ACTS[prev]&&BALLANIM.has(ACTS[prev].anim)){ACTS[prev].anim="idle";ACTS[prev].fps=2;ACTS[prev].once=false}}
   function drop(){ball={mode:"none",who:null,x:ball.x,y:ball.y}}
   const key=p=>p.id+"|"+p.team;const plOf=k=>{const[id,t]=k.split("|");return(t==="0"?A:B).pl.find(p=>String(p.id)===id)};
   function lookK(k){if(!looks[k]){const p=plOf(k),t=+k.split("|")[1];const lk=lookFor(p,t,t===0?A.color:B.color);looks[k]=ARENA.lookOf(lk,DB.p[DB.c[p.id].p][6])}return looks[k]}
@@ -6112,7 +6386,7 @@ function playGame(res0,side,done){
     if(a._fd===d)return an;if(now-(a._ft||0)<55)return idleOf(a._fd);
     const i=D8.indexOf(a._fd),j=D8.indexOf(d);const s=((j-i+8)%8)<=4?1:-1;a._fd=D8[(i+s+8)%8];a._ft=now;return idleOf(a._fd)}
   const BOUNCE={"rdrib_south":[4],"rdrib_south-east":[3],"rdrib_east":[0],"rdrib_north-east":[5],"rdrib_north":[5],"rdrib_north-west":[5],"rdrib_west":[4],"rdrib_south-west":[0],postN:[1,4],dribN:[2,6],drive:[2,6],crossN:[1,3,6,8],post:[2,6],dribS:[0,5],driveS:[0,4]};
-  function draw(now){g.globalAlpha=1;g.setTransform(1,0,0,1,0,0);g.fillStyle="#0b0e1c";g.fillRect(0,0,cv.width,cv.height);const M=KS;g.setTransform(M,0,0,M,0,0);g.imageSmoothingEnabled=false;drawScene();drawHoop(now);const labs=[];
+  function draw(now){if(SL){g.setTransform(cv.width/480,0,0,cv.height/270,0,0);g.imageSmoothingEnabled=false;SL.draw();return}g.globalAlpha=1;g.setTransform(1,0,0,1,0,0);g.fillStyle="#0b0e1c";g.fillRect(0,0,cv.width,cv.height);const M=KS;g.setTransform(M,0,0,M,0,0);g.imageSmoothingEnabled=false;drawScene();drawHoop(now);const labs=[];
     if(FINAL)return;
     const ks=Object.keys(ACTS).filter(k=>ACTS[k].vis!==false);const P={};for(const k of ks){const a=ACTS[k],p=scr(a);if(a._px!=null){const dt=Math.max(1,now-(a._pt||now));a._vx=(a._vx||0)*.6+(p.x-a._px)/dt*.4;a._vy=(a._vy||0)*.6+(p.y-a._py)/dt*.4}if(a._px!=null&&!simAll&&Math.hypot(p.x-a._px,p.y-a._py)>14&&now-SWAPT>500)imm("teleport",k+" "+Math.round(Math.hypot(p.x-a._px,p.y-a._py))+"px "+a.anim+" in "+(IMM&&IMM.op));a._px=p.x;a._py=p.y;a._pt=now;P[k]=p}
     ks.sort((a,b)=>P[a].y-P[b].y);
@@ -6146,7 +6420,7 @@ function playGame(res0,side,done){
       g.fillStyle="#0b1024cc";g.beginPath();if(g.roundRect)g.roundRect(x-w/2,y-hh/2,w,hh,hh/2);else g.rect(x-w/2,y-hh/2,w,hh);g.fill();
       g.fillStyle=a.me?"#f6dca0":"#f6efe0";g.fillText(a.lab,x,y+Math.round(DPR*.5))}}
   function drawBall(x,y){const b=ARENA.ball;if(b.complete&&b.naturalWidth)g.drawImage(b,Math.round(x-b.width/2),Math.round(y-b.height/2))}
-  function tick(now){if(ended)return;tw=tw.filter(t=>{const u=simAll?1:clamp((now-t.t0)/t.dur,0,1),e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;for(const k in t.props)t.o[k]=t.from[k]+(t.props[k]-t.from[k])*e;if(u>=1){t.res();return false}return true});
+  function tick(now){if(SL){const dt=(now-(tick._t||now))/1000;tick._t=now;SL.tick(dt)}if(ended&&!SL)return;if(ended){if(!MIN&&!PSAVE)draw(now);requestAnimationFrame(tick);return}tw=tw.filter(t=>{const u=simAll?1:clamp((now-t.t0)/t.dur,0,1),e=u<.5?2*u*u:1-Math.pow(-2*u+2,2)/2;for(const k in t.props)t.o[k]=t.from[k]+(t.props[k]-t.from[k])*e;if(u>=1){t.res();return false}return true});
     if(ball.arc){const b=ball.arc,u=simAll?1:clamp((now-b.t0)/b.dur,0,1);ball.x=b.x0+(b.x1-b.x0)*u;ball.y=b.y0+(b.y1-b.y0)*u-Math.sin(u*Math.PI)*b.h;if(u>=1){ball.arc=null;b.res()}}
     if(!MIN&&!PSAVE)draw(now);/* minimized or power saving: no drawing, just the game moving on */requestAnimationFrame(tick)}
   /* the team with the ball attacks the basket on the right. Spots by spot (PG at the top, wings, bigs low) */
@@ -6186,13 +6460,13 @@ function playGame(res0,side,done){
       if(Math.hypot(tx-sx,ty-sy)<3)continue;const an=a.anim,fps=a.fps;a.x=sx;a.y=sy;a.anim="run";a.fps=walk?7:10;a.once=false;
       moves.push(T(a,{x:tx,y:ty},runDur(Math.hypot(tx-sx,ty-sy))*(walk?1.3:1)).then(()=>{a.anim=an;a.fps=fps}))}
     SETTLE=Promise.all(moves).then(()=>spread())}
-  function formation(P){if(IMM)IMM.op="formation";const prev={};for(const k in ACTS)if(ACTS[k].vis!==false)prev[k]={x:ACTS[k].x,y:ACTS[k].y};const v0=ARENA.view;
+  function formation(P){if(SL){SETTLE=SL.setup(P.oi,P.OP.map(key),P.DP.map(key));return}if(IMM)IMM.op="formation";const prev={};for(const k in ACTS)if(ACTS[k].vis!==false)prev[k]={x:ACTS[k].x,y:ACTS[k].y};const v0=ARENA.view;
     const off=P.oi;setOff(off);const swapped=ARENA.view!==v0;if(swapped)FADE0=performance.now();for(const k in ACTS)ACTS[k].vis=false;const three=P.OP.length<=3;
     P.OP.forEach((p,j)=>{const s=three?SPOT3[j]:SPOT[p.slot!=null?p.slot:j]||SPOT[j];setA(key(p),{x:s[0],y:s[1],anim:"idle",flip:false,vis:true,lab:lastName(p.name),me:off===0,fps:2})});
     P.DP.forEach(p=>{const m=P.OP.find(o=>P.matchOf(o)===p)||P.OP[0];const a=ACTS[key(m)];const u=(a.y-132)*.66,v=(284-a.x)*.22,d=Math.hypot(u,v-5.25)||1,k=Math.max(Math.min(.4,4/d),Math.min(.6,3/d));const q=FT(u-u*k,v-(v-5.25)*k);setA(key(p),{x:q[0],y:q[1],anim:"slide",flip:true,vis:true,lab:null,fps:2})});
     declutter(Object.values(ACTS).filter(a=>a.vis!==false));arrive(prev,swapped);
     if(!ball.who||!ACTS[ball.who]||ACTS[ball.who].vis===false){const pg=P.OP.find(p=>p.slot===0)||P.OP[0];if(pg&&ACTS[key(pg)])give(key(pg))}}
-  function breakFormation(P,brk){if(IMM)IMM.op="breakFormation";const prev={};for(const k in ACTS)if(ACTS[k].vis!==false)prev[k]={x:ACTS[k].x,y:ACTS[k].y};const v0=ARENA.view;for(const k in ACTS)ACTS[k].vis=false;const off=P.oi;setOff(off);const swapped=ARENA.view!==v0;if(swapped)FADE0=performance.now();
+  function breakFormation(P,brk){if(SL){SETTLE=SL.setup(P.oi,P.OP.map(key),P.DP.map(key),{brk:true});return}if(IMM)IMM.op="breakFormation";const prev={};for(const k in ACTS)if(ACTS[k].vis!==false)prev[k]={x:ACTS[k].x,y:ACTS[k].y};const v0=ARENA.view;for(const k in ACTS)ACTS[k].vis=false;const off=P.oi;setOff(off);const swapped=ARENA.view!==v0;if(swapped)FADE0=performance.now();
     const bh=P.OP.find(p=>p.slot===0)||P.OP[0];const lay=brkLayout(P,brk||{lab:"3 on 2"},bh,[],null);
     for(const[p,v]of lay.me){const run=v.y>0;setA(key(p),{x:v.x,y:v.y,anim:"idle",fps:2,flip:false,vis:true,lab:lastName(p.name),me:off===0})}
     /* the men behind the play face the basket the break is going to: away from us on your break, toward us on theirs */
@@ -6217,7 +6491,7 @@ function playGame(res0,side,done){
     const BACK=m===1?[[0,11]]:m===2?[[-5,11],[6,13]]:[[-6,10],[6,10],[0,15]];back.slice(0,m).forEach((d,j)=>them.set(d,ft(...BACK[j],{flip:true})));
     const CH=[[-4,44],[12,46],[-16,46],[3,47]];P.DP.filter(d=>!them.has(d)).forEach((d,j)=>them.set(d,ft(...CH[j%4],{chase:true})));
     return{me,them}}
-  async function stage(c){if(IMM)IMM.op="stage";await SETTLE;if(simAll||c.side!==0)return;const P=c.P,bh=c.bh;if(!bh||!ACTS[key(bh)])return;
+  async function stage(c){if(IMM)IMM.op="stage";await SETTLE;if(SL)return;if(simAll||c.side!==0)return;const P=c.P,bh=c.bh;if(!bh||!ACTS[key(bh)])return;
     const dOf=p=>P.matchOf(p),me=new Map(),them=new Map();const put=(m,p,x,y,o)=>{if(p)m.set(p,{x,y,...(o||{})})};
     /* who the calls name: pass targets, the man who'd finish, the screener */
     const tgt=[];for(const o of c.opts){const t=o.kind==="pass"?o.to:o.kind==="passfin"?o.shooter:null;if(t&&t!==bh&&!tgt.includes(t))tgt.push(t)}
@@ -6300,7 +6574,7 @@ function playGame(res0,side,done){
      ball ends, so it never blinks out or shows twice */
   function relFrac(k,which){const a=ACTS[k];const an=animName(k,a,which||"shot");const n=ARENA.count(an);if(!n)return 8/13;let last=-1;for(let i=0;i<n;i++)if(ARENA.hasBall(an,i))last=i;
     return last<0||last>=n-1?8/13:Math.min(.97,(last+1)/n+.03)}
-  async function drawShot(k,shot,made,blk,dunk,blocker,reb){if(IMM)IMM.op="drawShot";const a=ACTS[k];if(!a)return;
+  async function drawShot(k,shot,made,blk,dunk,blocker,reb){if(SL){await SL.shot(k,shot,made,{blk:blk?blocker:null,reb,dunk});if(made&&!blk)await SL.inbound();return}if(IMM)IMM.op="drawShot";const a=ACTS[k];if(!a)return;
     {const q=uvOf(a),to=shotSpot(q,shot);window._shotAudit.push({shot,d:+rimD(q).toFixed(1),three:isThreeSpot(q),moved:!!to});
       if(to&&!simAll){const tgt=FT(to.u,to.v);const an=a.anim;a.anim="run";a.fps=10;a.once=false;await T(a,{x:tgt[0],y:tgt[1]},runDur(Math.hypot(tgt[0]-a.x,tgt[1]-a.y)));a.anim=an==="run"?"idle":an}
       else if(to){const tgt=FT(to.u,to.v);a.x=tgt[0];a.y=tgt[1]}}
@@ -6324,14 +6598,16 @@ function playGame(res0,side,done){
         give(rk);ARENA.snd.play("bounce",.2);await wait(.3);const c=ACTS[rk];c.once=false;c.anim="idle";c.fps=2}
       else{const t=scr({x:RIM.x-18,y:142});await fly(t.x,t.y-6,40,.5);ARENA.snd.play("bounce",.4)}}}
   /* events since we last looked: score, caption, and a quick drawing of plays the engine ran on its own */
-  async function catchUp(animate,upTo){if(IMM)IMM.op="catchUp";const ev=sink.ev||[];while(li<(upTo==null?ev.length:Math.min(upTo,ev.length))){const e=ev[li++];if(e.q!=null)CURQ=Math.max(CURQ,e.q);if(SKIPQ!=null&&CURQ>=SKIPQ){SKIPQ=null;simAll=false}if(e.type==="q"){board(e);if(e.txt){cap(e.txt);ctl.mom=Math.round(ctl.mom*.5);momHTML();if(!simAll)await waitC(.9)}continue}
+  async function catchUp(animate,upTo){if(IMM)IMM.op="catchUp";const ev=sink.ev||[];while(li<(upTo==null?ev.length:Math.min(upTo,ev.length))){const e=ev[li++];if(e.q!=null)CURQ=Math.max(CURQ,e.q);if(SKIPQ!=null&&CURQ>=SKIPQ){SKIPQ=null;simAll=false}if(e.type==="q"){board(e);if(SL&&nQ===2&&e.q===0)SL.half();if(e.txt){cap(e.txt);ctl.mom=Math.round(ctl.mom*.5);momHTML();if(!simAll)await waitC(.9)}continue}
       const drawIt=animate&&!simAll&&e.on&&!ctl.pick&&(e.type==="make"||e.type==="miss"||e.type==="blk"||e.type==="stl"||e.type==="to"||e.type==="runout")&&e.o!==side;
       if(!drawIt){board(e);if(e.txt)cap(e.txt)}
       if(drawIt){
         /* the engine's possession: set up, then the result */
         const P={oi:e.o,OP:(e.o===0?A:B).pl.filter(p=>e.on.includes(p.id)),DP:(e.o===0?B:A).pl.filter(p=>e.dn.includes(p.id)),matchOf:null};
         P.matchOf=p=>P.DP[P.OP.indexOf(p)]||P.DP[0];formation(P);const sk=e.who+"|"+e.o;
-        if(e.type==="stl"||e.type==="runout"){await SETTLE;const vk=e.vic+"|"+e.o,tk=e.who+"|"+(1-e.o);
+        if(SL&&(e.type==="stl"||e.type==="runout")){await SETTLE;const vk=e.vic+"|"+e.o,tk=e.who+"|"+(1-e.o);SL.give(vk);await SL.steal(vk,tk,e.type==="runout");board(e);if(e.txt)cap(e.txt);pop("STEAL",e.o===0?"bad":"good");if(e.type==="runout")await SL.inbound();await waitC(.5)}
+        else if(SL&&e.type==="to"){await SETTLE;board(e);if(e.txt)cap(e.txt);pop("TURNOVER",e.o===0?"bad":"good");await SL.turnover(SL.holder()||e.who+"|"+e.o);await waitC(.5)}
+        else if(e.type==="stl"||e.type==="runout"){await SETTLE;const vk=e.vic+"|"+e.o,tk=e.who+"|"+(1-e.o);
           if(ACTS[vk]&&ACTS[tk]){give(vk);setA(vk,{anim:"dribble",fps:8,flip:false,lab:ACTS[vk].lab,me:e.o===0,vis:true});
             /* the steal: the defender closes on him and pokes it away; the ball changes hands inside the drawing */
             const V=ACTS[vk],Tt=ACTS[tk];const tx=V.x+(V.x>Tt.x?-7:7),ty=V.y+2,d=Math.hypot(tx-Tt.x,ty-Tt.y);if(d>3){Tt.anim="slide";Tt.fps=8;Tt.once=false;await T(Tt,{x:tx,y:ty},Math.max(.25,runDur(d)*.8))}
@@ -6341,6 +6617,8 @@ function playGame(res0,side,done){
           if(e.type==="runout"&&ACTS[tk]){await waitC(.3);await drawShot(tk,"rim",true,false,false,null,null)}else await waitC(.6)}
         else if(e.type==="to"){board(e);if(e.txt)cap(e.txt);pop("TURNOVER",e.o===0?"bad":"good");
           /* a loose ball: it squirts out of bounds */if(ball.who&&ACTS[ball.who]){const a=ACTS[ball.who];const t=scr({x:a.x+20,y:a.y>132?172:92});await fly(t.x,t.y,10,.45);ARENA.snd.play("bounce",.3);drop()}await waitC(.6)}
+        else if(SL){await SETTLE;SL.give(sk);await waitC(.2);await drawShot(sk,e.shot,e.type==="make",e.type==="blk",e.shot==="rim"&&/throws it down/.test(e.txt||""),e.type==="blk"&&e.def!=null?e.def+"|"+(1-e.o):null,e.reb?e.reb.id+"|"+e.reb.o:null);
+          board(e);if(e.txt)cap(e.txt);if(e.type==="make"){pop("+"+(e.pts||2),e.o===0?"good":"bad");scoreCard(e)}await waitC(.5)}
         else if(ACTS[sk]){await SETTLE;give(sk);setA(sk,{anim:"dribble",fps:8,flip:false,lab:ACTS[sk].lab,me:e.o===0,vis:true});await waitC(.35);await drawShot(sk,e.shot,e.type==="make",e.type==="blk",e.shot==="rim"&&/throws it down/.test(e.txt||""),e.type==="blk"&&e.def!=null?e.def+"|"+(1-e.o):null,e.reb?e.reb.id+"|"+e.reb.o:null);
           board(e);if(e.txt)cap(e.txt);if(e.type==="make"){pop("+"+(e.pts||2),e.o===0?"good":"bad");scoreCard(e)}await waitC(.8)}
         else{board(e);if(e.txt)cap(e.txt)}}
@@ -6350,6 +6628,7 @@ function playGame(res0,side,done){
   const FTSPOTS={line:{u:0,v:19},lane:[{u:-9,v:7},{u:9,v:7},{u:-9,v:10.5},{u:9,v:10.5},{u:-9,v:14},{u:9,v:14}],back:[{u:-7,v:29},{u:7,v:29}]};
   const oldAt=f=>({x:284-f.v/.22,y:132+f.u/.66});
   async function drawFT(e){if(IMM)IMM.op="drawFT";const O=(e.o===0?A:B).pl.filter(p=>e.on.includes(p.id)),D=(e.o===0?B:A).pl.filter(p=>e.dn.includes(p.id));const sh=O.find(p=>p.id===e.who);if(!sh)return;
+    if(SL){cap(e.txt||"Free throws");const n=e.n||2,r=e.r||[...Array(n)].map((_,i)=>i<(e.pts||0));await SL.ft(key(sh),r,O.map(key),D.map(key));board(e);if(r[r.length-1])await SL.inbound();return}
     const prev={};for(const k in ACTS)if(ACTS[k].vis!==false)prev[k]={x:ACTS[k].x,y:ACTS[k].y};const v0=ARENA.view;
     for(const k in ACTS)ACTS[k].vis=false;setOff(e.o);const swapped=ARENA.view!==v0;if(swapped)FADE0=performance.now();const sk=key(sh);const L=oldAt(FTSPOTS.line);
     setA(sk,{x:L.x,y:L.y,anim:"idle",fps:2,flip:false,vis:true,lab:lastName(sh.name),me:e.o===0});
@@ -6377,7 +6656,7 @@ function playGame(res0,side,done){
   /* while you decide, the floor stays alive: a man nobody's call is about relocates a few feet (a flare, a lift, a drift
      to the corner) and his defender slides with him; then he settles. Nobody the options name moves */
   let LIFE=0;
-  function lifeLoop(c){if(IMM)IMM.op="lifeLoop";clearTimeout(LIFE);if(simAll||AUTO||MIN||PSAVE)return;const named=new Set();const P=c.P;if(!P)return;
+  function lifeLoop(c){if(SL)return;if(IMM)IMM.op="lifeLoop";clearTimeout(LIFE);if(simAll||AUTO||MIN||PSAVE)return;const named=new Set();const P=c.P;if(!P)return;
     if(c.bh)named.add(key(c.bh));for(const o of c.opts||[])for(const f of["actor","big","shooter","to","def"])if(o[f])named.add(key(o[f]));
     const step=()=>{if(CARD!==c||simAll)return;const cand=P.OP.map(p=>key(p)).filter(k=>ACTS[k]&&ACTS[k].vis!==false&&!named.has(k)&&k!==ball.who&&!ACTS[k]._life);
       if(cand.length){const k=cand[Math.floor(Math.random()*cand.length)],a=ACTS[k];const q=uvOf(a);const ang=Math.atan2(q.v-5.25,q.u)+(Math.random()<.5?-1:1)*(.12+Math.random()*.12);
@@ -6421,7 +6700,7 @@ function playGame(res0,side,done){
     if(res.w.toUpperCase()===String(x.lab).toUpperCase())el.querySelector(".pvcl").hidden=true;/* "DROP STEP" once, not twice */
     LAST={w:res.w,d:res.d,good:res.good};
     await hold(lead&&res.good?1.1:res.big?2.6:2.1)}
-  async function animateCall(x,r,P,def,v){if(IMM)IMM.op="animateCall";const kOf=p=>p?key(p):null;
+  async function animateCall(x,r,P,def,v){if(SL)return slCall(x,r,P,def,v);if(IMM)IMM.op="animateCall";const kOf=p=>p?key(p):null;
     /* the court shows only the score change or the big swing (+3, BLOCKED, STEAL); the card says the rest in words */
     const o0=v.out;const said=o0?(o0.made?"+"+o0.pts:o0.blk?"BLOCKED":null):v.res&&/PICKED OFF|INTERCEPTED|STEAL|POCKET|STRIPPED|LOST|TURNOVER|CHARGE/.test(v.res.w)?(def?(v.res.w.includes("CHARGE")?"CHARGE":"STEAL"):x.kind==="pass"?"STEAL":"TURNOVER"):null;
     const tone=def?(o0&&o0.made?"bad":"good"):(o0?(o0.made?"good":"bad"):"bad");
@@ -6445,6 +6724,21 @@ function playGame(res0,side,done){
     else if(x.k==="dropstep"){once(k,"spin",.6,false);await T(a,{x:244,y:134},Math.max(.5,runDur(Math.hypot(244-a.x,134-a.y))*.8))}
     else if(x.k==="reset"){setA(k,{anim:"dribble",fps:8,flip:false,lab:a.lab,me:a.me,vis:true});await T(a,{x:150,y:122},Math.max(.5,runDur(Math.hypot(150-a.x,122-a.y))))}
     if(said)pop(said,tone)}
+  /* ---------- the sideline court acting out your calls ---------- */
+  async function slCall(x,r,P,def,v){const kOf=p=>p?key(p):null;
+    const o0=v.out;const said=o0?(o0.made?"+"+o0.pts:o0.blk?"BLOCKED":null):v.res&&/PICKED OFF|INTERCEPTED|STEAL|POCKET|STRIPPED|LOST|TURNOVER|CHARGE/.test(v.res.w)?(def?(v.res.w.includes("CHARGE")?"CHARGE":"STEAL"):x.kind==="pass"?"STEAL":"TURNOVER"):null;
+    const tone=def?(o0&&o0.made?"bad":"good"):(o0?(o0.made?"good":"bad"):"bad");
+    const shotOf=(sk,out,dunk)=>SL.shot(sk,out.type,out.made,{blk:out.blk?kOf(out.blk):null,dunk,reb:!out.fouled&&(out.orb||out.dreb)?kOf(out.orb||out.dreb):null}).then(()=>out.made&&!out.blk?SL.inbound():null);
+    if(def){const sk=v.shooter?kOf(v.shooter):null;if(v.out&&sk)await shotOf(sk,v.out,false);else{const d=x.okRes&&x.okRes.def||null;if(d)await SL.steal(SL.holder(),kOf(d),false);else await wait(.3)}if(said)pop(said,tone);return}
+    if(x.kind==="finish"){const k=kOf(x.shooter);const out=v.out||{made:r.ok,pts:x.pts,type:x.type};if(out.type==null)out.type=x.type;await shotOf(k,out,x.dunk);if(said)pop(said,tone);return}
+    if(x.kind==="pass"){const k=kOf(x.to);if(r.ok)await SL.pass(SL.holder(),k);else if(said==="STEAL"){const d=x.okRes&&x.okRes.def;if(d)await SL.steal(SL.holder(),kOf(d),false);else await SL.turnover(SL.holder())}else await SL.turnover(SL.holder());if(said)pop(said,tone);return}
+    const k=kOf(x.actor||P.OP[0]);if(SL.holder()!==k)await SL.pass(SL.holder(),k);
+    if(x.k==="pnr")await SL.pnr(k,kOf(x.big),r.ok);
+    else if(x.k==="drive"||x.k==="mm_drive"||x.k==="drive2"||x.k==="split"||x.k==="dropstep")await SL.drive(k,r.ok);
+    else if(x.k==="cross"||x.k==="jab"||x.k==="pump")await SL.move(k);
+    else if(x.k==="post"||x.k==="mm_post")await SL.post(k);
+    else if(x.k==="reset")await SL.reset(k);
+    if(said)pop(said,tone)}
   /* ---------- driving the engine ---------- */
   async function step(input){let r;try{r=it.next(input)}catch(err){console.error(err);finish(null);return}
     const v=r.done?null:r.value;
@@ -6452,7 +6746,7 @@ function playGame(res0,side,done){
     if(v&&v.card){const P=v.card.P;const pk=P.q+":"+P.k;if(pk!==lastPossKey){await catchUp(true);lastPossKey=pk;
       /* key moments: what happened while the engine played, in one line, before your next call */
       if(ctl.pick&&!simAll){const sc=sink.score||[0,0],d0=sc[0]-KS0[0],d1=sc[1]-KS0[1];if(d0+d1>0||ctl.why){cap(`Since your last call: ${A.abbr} ${d0}, ${B.abbr} ${d1}`);if(ctl.why)pop(ctl.why.toUpperCase(),ctl.why.startsWith("You")?"good":"bad");await wait(1.1)}KS0=[...sc];ctl.why=null}
-      coachTrip=false;if(!simAll){if(STAR&&!window._pvSpotShown){window._pvSpotShown=1;const pk=(perksOf(STAR.id)[0]||{}).n;pop("YOUR FIRST GAME","good");cap(`${STAR.name} is your star tonight${pk?`: watch for ${pk}`:""}.`);await wait(1.6)}if(v.card.brk){breakFormation(P,v.card.brk);pop("FAST BREAK",v.card.side===0?"good":"bad")}else formation(P);const bhP=v.card.side===0?v.card.bh:(P.OP.find(p=>p.slot===0)||P.OP[0]);if(bhP){const k=key(bhP);give(k);setA(k,{anim:"dribble",fps:8,flip:false,lab:ACTS[k].lab,me:ACTS[k].me,vis:true})}board(P.e&&{q:P.q,clock:P.clock})}}
+      coachTrip=false;if(!simAll){if(STAR&&!window._pvSpotShown){window._pvSpotShown=1;const pk=(perksOf(STAR.id)[0]||{}).n;pop("YOUR FIRST GAME","good");cap(`${STAR.name} is your star tonight${pk?`: watch for ${pk}`:""}.`);await wait(1.6)}if(v.card.brk){breakFormation(P,v.card.brk);pop("FAST BREAK",v.card.side===0?"good":"bad")}else formation(P);const bhP=v.card.side===0?v.card.bh:(P.OP.find(p=>p.slot===0)||P.OP[0]);if(bhP&&SL)give(key(bhP));else if(bhP){const k=key(bhP);give(k);setA(k,{anim:"dribble",fps:8,flip:false,lab:ACTS[k].lab,me:ACTS[k].me,vis:true})}board(P.e&&{q:P.q,clock:P.clock})}}
       else await catchUp(false);if(v.card.n===0)LAST=null;await stage(v.card);momHTML();if(!luP.hidden)drawLU();showCard(v.card);return}
     if(v&&v.roll){await catchUp(false,v.roll.ev0);await showRoll(v.roll);await catchUp(false);step();return}
     if(v&&v.quarter!=null){await catchUp(true);step();return}
@@ -6474,6 +6768,13 @@ function playGame(res0,side,done){
   /* skin tones from photos for everyone in this game (only if the browser allows it), then tip-off */
   (async()=>{const pids=new Set();for(const t of[A,B])for(const p of t.pl){const pid=DB.p[DB.c[p.id].p][6];if(pid&&toneOf(pid)==null)pids.add(pid)}
     if(pids.size)await Promise.race([Promise.all([...pids].map(sampleTone)),new Promise(r=>setTimeout(r,1500))]);for(const k in looks)delete looks[k];
+    {const hT=B.home&&!A.home?1:0;const mine=S&&S.fr!=null&&(hT===0?A.ti===S.fr:B.ti===S.fr);const s=S.season||{};
+      const wins=(s.games||[]).filter(x=>x&&x.s&&x.s[0]>x.s[1]).length,played=(s.games||[]).filter(Boolean).length;
+      const fill=mine?Math.max(.45,Math.min(.97,.5+(played?wins/played:.5)*.42+(s.n||1)*.015+(s.phase==="po"?.2:0))):res0.kind==="gym"||res0.kind==="prac"?.35:.88;
+      const fc=mine&&typeof colorsAt==="function"?colorsAt(S.fr,2025):null;
+      SL=SLStage({ctx:g,A,B,homeT:hT,oneBasket:fmt==="3v3"||fmt==="half",fill,floorCols:fc,skip:()=>simAll,speed:()=>SPD,
+        onSwish:()=>ARENA.snd.play("swish",.6),onRim:()=>ARENA.snd.play("rim",.5),onBounce:()=>ARENA.snd.play("bounce",.16),
+        onCrowd:(k,big)=>ARENA.snd.play("swell",k==="roar"?(big?.75:.55):.22)})}window._sl=SL;
     requestAnimationFrame(tick);step()})()}
 
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
@@ -6829,7 +7130,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="6e16550485";
+<script>const APPV="12b0b673a2";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
