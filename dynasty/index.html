@@ -2907,7 +2907,7 @@ function addRing(i){const o=S.own[i];if(!o||!(o.sp>0)||(o.j||0)>=5)return false;
    A card banks the minutes he was on the floor while you were calling the game (scaled to NBA minutes, so a starter in a
    full game banks about 30). Close games pay 1.5x, blowouts 0.7x. A roster card who sat the whole game banks 4.
    Each level costs more minutes than the last, and more stars cost more: a 1★ maxes in about 10 games, a 5★ in a season. */
-const LVM=[0,6,8,10,13,16,20,30];
+const LVM=[0,40,40,45,57,69,74,78];/* Oct 25: about 4.5x slower; a 4★ maxes in ~8 Daily windows, a 5★ in ~12, at the daily reps cap */
 const lvNeed=(st,l)=>Math.round(LVM[Math.min(7,st)]*(1+.06*l));
 function lvCost(i){const o=S.own[i];return o.lv>=maxLv(i)?0:lvNeed(o.st,o.lv)}
 /* bank minutes and take every level they pay for; returns the levels gained */
@@ -3937,7 +3937,7 @@ function catalogHTML(){const tl=DB.t.map((_,i)=>i).sort((a,b)=>TEAMNICK(a).local
    ${ids.length>CATN?`<div class="row" style="margin-top:10px"><button class="btn sp" data-act="catMore">Show more</button></div>`:""}`;
   return h}
 function faqHTML(){const q=(t,rows,open)=>`<details class="panel faq"${open?" open":""}><summary>${t}</summary><div class="fqs">${rows.map(([k,v])=>`<div class="fq"><b>${k}</b><span>${v}</span></div>`).join("")}</div></details>`;const TN=esc(TEAMNICK(S.fr));
-  return q("Frames",[["1★–5★","Iron · Steel · Bronze · Silver · Gold"],["6★","Evolve a 5★"],["Special","MVP · Prime · Rookie · Legend · Zombie"]])+
+  const all=q("Frames",[["1★–5★","Iron · Steel · Bronze · Silver · Gold"],["6★","Evolve a 5★"],["Special","MVP · Prime · Rookie · Legend · Zombie"]])+
    q("Card types",[["Regular","Current rosters, fan favorites"],["All-Star · Prime","His best season with that team"],["MVP","Takes over when behind"],["Finals MVP","Better in playoffs and bosses"],["DPOY","Guards their best player late"],["ROY","Levels faster"],["Sixth Man","+6% off the bench"],["Rookie","This year's picks; top picks grow most"],["Legend","99 Hall of Famers, no team"],["Zombie","Halloween only"]])+
    q("Stars",[["5★","90+"],["4★","82–89"],["3★","75–81"],["2★","65–74"],["1★","Under 65"]])+
    q("Team set",[["Goal",`${TEAMSET} different ${TN} players`],["Reward",`+3 all ratings on ${TN} cards`],["Doesn't count","Legends, Zombies"]])+
@@ -3959,7 +3959,7 @@ function faqHTML(){const q=(t,rows,open)=>`<details class="panel faq"${open?" op
    q("Rivalries",[["When","Events (Halloween)"],["Series","Best of 3 against that team's event lineup"],["Their OVR",`Yours ${RIVUP.map(v=>(v>0?"+":"−")+Math.abs(v)).join(", then ")} as you win`],["Win the series","Their event card"],["Lose it","Back next window"],["Pay",`${RIVPAY.win} coins a win · ${RIVPAY.loss} a loss`]])+
    q("Draft Run",[["Format","12 picks, 7 games"],["Loss","Ends the run"],["Ratings","Card ratings only"],["Pay",`Banners by wins, up to ${DRAFT.bnr[7]}; 7-0 adds a Legends pack`],["Cost","One free run every 18 h, then 500 coins"],["Rule","Set by The Daily when the run starts"]])+
    q("The Daily",[["Resets","Every 18 hours"],["Missions","3 at a time · all three: a free pull"],["Challenge",`4:00 left · one try · win: ${CHALPAY.coins} coins + ${CHALPAY.bnr} Banners`],["Gym","Double drops or all its meta set"],["League night","Both teams · league, playoff and boss games"],["Sims",`${SIMCAP} a window · league, playoffs, boss · Play and Autoplay unlimited`],["Same clock","Legend Trial, deal, free Draft Run"]])+
-   q("Season Pass",[["Ranks","100 a month, 100 points each"],["Daily cap","300 points"],["No cap","Playoff series, titles, bosses, Rivalry Weekend"],["Perks","Ranks 1, 25, 50, 75"],["Rank 100","That month's Legendary coach"]])}
+   q("Season Pass",[["Ranks","100 a month, 100 points each"],["Daily cap","300 points"],["No cap","Playoff series, titles, bosses, Rivalry Weekend"],["Perks","Ranks 1, 25, 50, 75"],["Rank 100","That month's Legendary coach"]]);/* A to Z by title */const tt=s=>(s.match(/<summary>([^<]*)/)||[,""])[1];return all.split(/(?=<details)/).sort((x,y)=>tt(x).localeCompare(tt(y))).join("")}
 /* ---------- the game is sideways only. iPhone web apps can't lock rotation, so a phone held upright gets a card
    asking to turn it (Play has its own). The tests keep the menus upright with hd_orient=any, which nothing in the game sets ---------- */
 function orApply(){let test=false;try{test=localStorage.getItem("hd_orient")==="any"}catch(e){}document.documentElement.dataset.or=test?"any":"landscape";
@@ -7639,7 +7639,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="24aa042ad1";
+<script>const APPV="61bc7a08bb";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
