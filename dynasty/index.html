@@ -3048,7 +3048,7 @@ const frCount=ids=>(ids||S.roster).slice(0,5).filter(i=>S.own[i]&&affil(i)).leng
 const affCount=ids=>frCount(ids);
 const AFFB=()=>0;
 function affBonus(){return 0}
-/* his ratings as he plays for your league team: his card plus the team bonus (bon), a reunion and teammates' auras, the same
+/* his ratings as he plays for your league team: his card plus the franchise bonus and teammates' auras, the same
    as myTeam adds them (out-of-position costs aside). up: what all that adds to each rating. Cards show this and its OVR */
 function cardRB(i){const r=cardR(i);const b=affBonus(i);if(!S.roster.includes(i))return{...r,bon:0,up:null};
   const pl=S.roster.filter(x=>S.own[x]).map(x=>{const c=DB.c[x];return{id:x,k:c.k,sig:c.k==="L"?legendSig(c):null,sets:x===i?r.sets:cardR(x).sets}});
@@ -3201,7 +3201,7 @@ function ledSeed(){if(S.led)return;S.led={};for(const i in S.own){const o=S.own[
 function applyGame(res,kind,meta){/* kind: reg, po, boss, gym, prac */
   const won=res.score[0]>res.score[1];const out={won,coins:0,milestones:[]};
   /* Oct 23: pay raised 2.5x. Play and Autoplay pay in full; an instant Sim pays half. Every way of finishing a game levels
-     the cards. What Play adds is the edge: +6% on every call you make yourself (play.js). Practice pays nothing. */
+     the cards. Practice pays nothing. (Play-calling is gone: Play is watching, and pays the same as Autoplay.) */
   /* Oct 23 (2): a played win buys a pack and then some. Play 1.2x, Autoplay 1x, Sim 0.75x; wins in a row add +10 each, up to +50 */
   const base=kind==="reg"?(won?100:35):kind==="po"?(won?150:55):kind==="boss"?(won?350:70):kind==="gym"?(won?40:10):kind==="trial"?(won?100:25):kind==="riv"?(won?RIVPAY.win:RIVPAY.loss):kind==="arena"?(won?ARNPAY.win:ARNPAY.loss):0;
   const pl=res.played,how=res.how||(pl?(pl.side==="auto"||!pl.mine?"auto":"play"):res.ctx&&res.ctx.auto?"auto":"sim");out.how=how;
@@ -3610,7 +3610,7 @@ function openCard(id,keepTab){id=+id;const c=DB.c[id],o=S.own[id];if(o&&o.isNew)
     body+=`<div class="panel rvp">${c.s<6?`<div class="row rv"><div class="seg sm"><button class="${six?"":"on"}" data-act="ratView" data-arg="${id}:now">Max Lv</button><button class="${six?"on":""}" data-act="ratView" data-arg="${id}:six">6★ Lv 40</button></div><span class="sp"></span><span class="rvo">${six?`<b>${c.o}</b> → <b class="up">${ovrOf(six.R)}</b>`:`OVR <b>${c.o}</b>`}</span></div>`:""}${barsHTML(six?six.R:c.r,six?c.r:null)}${perkChips(pk)}</div>`;
     sheet(cardSheet(id,big,body,`<span class="chip">Not owned</span>`,"","unowned"),null,`<p class="mut" style="margin:0;text-align:center">Not owned</p>`,"card",()=>openCard(id,true));SHEET.el.dataset.cid=id;return}
   const r=cardR(id),rb=cardRB(id);const inRoster=S.roster.includes(id),isStarter=S.roster.indexOf(id)>-1&&S.roster.indexOf(id)<5;const ml=maxLv(id);
-  /* what lifts his Now ratings: the team set, a reunion, teammates' auras (one chip each) */
+  /* what lifts his Now ratings: the franchise bonus and teammates' auras (one chip each) */
   const srcs=[...(rb.up?bonuses().out.map(x=>srcChip(x.n,x.v)):[]),...(rb.up&&rb.au.some(v=>v>0)?[srcChip("Auras",null,"up")]:[])];
   const nowChips=srcs.length?`<div class="chips src">${srcs.join("")}</div>`:affil(id)?`<div class="chips src"><span class="chip">${esc(TEAMNICK(S.fr))} card · +1 to the team as a starter</span></div>`:"";
   const tabs=[["rat","Ratings"],["lvl","Level"],["ring","Rings"],["gear","Build"],["stats","Stats"]];
@@ -4008,22 +4008,22 @@ function catalogHTML(){const tl=DB.t.map((_,i)=>i).sort((a,b)=>TEAMNICK(a).local
   return h}
 function faqHTML(){const q=(t,rows,open)=>`<details class="panel faq"${open?" open":""}><summary>${t}</summary><div class="fqs">${rows.map(([k,v])=>`<div class="fq"><b>${k}</b><span>${v}</span></div>`).join("")}</div></details>`;const TN=esc(TEAMNICK(S.fr));
   const all=q("Frames",[["1★–5★","Iron · Steel · Bronze · Silver · Gold"],["6★","Evolve a 5★"],["Special","MVP · Prime · Rookie · Legend · Zombie"]])+
-   q("Card types",[["Regular","Current rosters, fan favorites"],["All-Star · Prime","His best season with that team"],["MVP","Takes over when behind"],["Finals MVP","Better in playoffs and bosses"],["DPOY","Guards their best player late"],["ROY","Levels faster"],["Sixth Man","+6% off the bench"],["Rookie","This year's picks; top picks grow most"],["Legend","99 Hall of Famers, no team"],["Zombie","Halloween only"]])+
+   q("Card types",[["Regular","Current rosters, fan favorites"],["All-Star · Prime","His best season with that team"],["MVP","Takes over when behind"],["Finals MVP","Better in playoffs and bosses"],["DPOY","Guards their best player late"],["ROY","Levels faster"],["Sixth Man","+6% off the bench"],["Rookie","This year's picks; top picks grow most"],["Legend","Hall of Famers at their best season · count for that team"],["Zombie","Halloween only"]])+
    q("Stars",[["5★","90+"],["4★","82–89"],["3★","75–81"],["2★","65–74"],["1★","Under 65"]])+
    q("Franchise bonus",[["Who counts",`A card from a ${TN} season (the team on the card) · Legends and Zombies too`],["Reward","+1 all ratings for the whole team per franchise starter · +5 with five"],["Where","Every game: league, bosses, gyms, Ascension, Arena"]])+
    q("Lineup",[["Team OVR","Starters 70% · bench 20% · reserves 10%"],["Spot OVR","His card rated for that spot · + coach, franchise bonus"],["Change","Spot OVR minus card OVR"],["Out of position",`−${FITPEN[1]} one spot away · −${FITPEN[2]} two away`],["Fix a spot","Tap a red off-spot tile"]])+
    q("Collection book",[["Page","Three 4★ + one 5★ of that team"],["Locked cards","Recorded · you keep them"],["Full page","That team's Hall of Famer"],["All West","Kobe Bryant"],["All East","Bill Russell"],["Both","Michael Jordan"]])+
    q("Odds",[["Card packs","5★ 0.05% · 4★ 0.4% · 3★ 3.5% · 2★ 25% · 1★ 71%"],["Gear box","Rare 60% · Epic 32% · Legendary 8%"],["Coach pack","Common 60% · Rare 30% · Epic 10%"],["Coach pity","Every 5th is Rare or better"],["Legends pack","HOF 55% · Top 75 25% · Top 50 12% · Top 25 6% · Top 10 2%"],["Pity",`4★ within ${PITY4} pulls · 5★ within ${PITY5}`]])+
    q("Shops",[["Deal","10 pulls at 30% off · every 18 h"],["Vault","One item off · one buy"],["Spotlight","1 in 10 is him · else a Player pack card"],["Front Office","Your team + 3 more · new every Monday"],["Event shop","5 daily missions · 300 coins each"],["Event cards","Rivalries · or pick 1 of 5 for 1,500"]])+
-   q("Coins and Banners",[["Coins","Games → packs, gear, power-ups"],["Game pay","Win 100 · Played +20% · Sim −25%"],["Win streak","+10 a win in a row, up to +50"],["Daily pay",`Full for ${PAYDAY} league games a day · then ${Math.round(PAYLATE*100)}%`],["Banners","Discards, dupes, Legend Trial, Challenge, Draft Run, Arena, rivalries"],["Spend on","Front Office · Legend Forge · Film Room"],["Per discard",`1★ ${CARDSELL[1]} · 2★ ${CARDSELL[2]} · 3★ ${CARDSELL[3]} · 4★ ${CARDSELL[4]} · 5★ ${CARDSELL[5]}`],["Old saves",`1 Chalk = ${BANRATE.chalk} · 1 Film = ${BANRATE.film} · 1 Shard = ${BANRATE.shards}`]])+
-   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 12, then a huge jump and every level costs more than the last, up to level 200 · higher stars cost more · about 120 hours of autoplay to Ruby Diamond (50), 1,500 to Black (100)"],["Past the star cap","Levels past each star's old cap still add ratings, a quarter as much"],["Card tiers","Ruby Diamond at Lv 50, Black Diamond at Lv 100, Immortal at Lv 200 · +2 all ratings and a new frame each · Ruby opens Ascension and the Arena top 20, Black is what rank 1 takes · Immortal: +10% late in close games, one sure make in Play"],["No limit","No daily cap: autoplay always counts and a sim never does"],["Train",`${TRAIN.min.toLocaleString()} minutes for ${TRAIN.bnr.toLocaleString()} Banners on one card. Banners cannot be farmed by simming`],["Star cap","Full +5 all ratings at the cap (15 to 50 by star)"],["Evolve","Automatic: at the star cap, a card uses the spare copies he needs (cheapest first, never a roster card) and goes up a star, +1 all ratings. 6★ to 7★ is by hand"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
+   q("Coins and Banners",[["Coins","Games → packs, gear, power-ups"],["Game pay","Win 100 · Play and Autoplay full · Sim −25%"],["Win streak","+10 a win in a row, up to +50"],["Daily pay",`Full for ${PAYDAY} league games a day · then ${Math.round(PAYLATE*100)}%`],["Banners","Discards, dupes, Legend Trial, Challenge, Draft Run, Arena, rivalries"],["Spend on","Front Office · Legend Forge · Film Room"],["Per discard",`1★ ${CARDSELL[1]} · 2★ ${CARDSELL[2]} · 3★ ${CARDSELL[3]} · 4★ ${CARDSELL[4]} · 5★ ${CARDSELL[5]}`],["Old saves",`1 Chalk = ${BANRATE.chalk} · 1 Film = ${BANRATE.film} · 1 Shard = ${BANRATE.shards}`]])+
+   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 12, then a huge jump and every level costs more than the last, up to level 200 · higher stars cost more · about 120 hours of autoplay to Ruby Diamond (50), 1,500 to Black (100)"],["Past the star cap","Levels past each star's old cap still add ratings, a quarter as much"],["Card tiers","Ruby Diamond at Lv 50, Black Diamond at Lv 100, Immortal at Lv 200 · +2 all ratings and a new frame each · Ruby opens Ascension and the Arena top 20, Black is what rank 1 takes · Immortal: +10% late in close games, one sure make in Play"],["No limit","No daily cap: autoplay always counts and a sim never does"],["Train",`${TRAIN.min.toLocaleString()} minutes for ${TRAIN.bnr.toLocaleString()} Banners on one card. Banners cannot be farmed by simming`],["Star cap","Full +5 all ratings at the cap (15 to 50 by star)"],["Evolve","Automatic: at the star cap, a card uses the spare copies he needs (cheapest first, never a roster card) and goes up a star, +1 all ratings. 6★ to 7★ is by hand"],["Duplicates","Kept as spare copies"],["Spare copy","A Ring or Banners · evolving uses them by itself"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
    q("Ratings over 99",[["Cap","140"],["Breakthroughs","At 100 and 110 · tap the name on a card"],["Past 99","Each point counts half"]])+
    q("Gear",[["Slots","6"],["Substats","Common 0 · Rare 2 · Epic 3 · Legendary 4"],["Power-up cap","1★ +3 · 2★ +6 · 3★ +9 · 4★ +12 · 5★ +15"],["New substat","+3, +6, +9, +12"],["Stat set","2 pieces: +4 one rating"],["Meta set","4 pieces; gym drops only"]])+
    q("Gyms",[["Floors","10; floor 10 is five Legends"],["Ascension","Five Ruby Diamond cards (level 50) in your gym team. Clear floor 10 to open A1 to A5: the Legends again at 130, 134, 138, 141, 145. Each level drops more 6★ and Legendary pieces, a bigger chance at the named pieces (up to 6%), and pays a first-clear bonus in Banners"],["3 on 3","Floors 1–5"],["Drops","Floors 1–5 50% · 6–9 65% · 10 85%"],["Grind",`10 runs · a big win is over sooner, a close one or a loss takes the full time`],["Chase","Each gym's Legend floor drops its own named 6★ pieces"],["Your clear","Each floor shows your win rate, run time and pieces an hour"]])+
    q("Seasons",[["Regular season","48 games"],["Playoffs","Top 8"],["Boss","Best of 7"],["Win","Next tier"],["League level",`Tier 1 ${tierLevel(1)} → Tier ${MAXTIER} ${tierLevel(MAXTIER)}`],["Pay","+10% a tier"],["Boss Legends",`Tier ${LEGTIER}+: first win over a boss → pick one of its Legends`]])+
    q("Game plan",[["Set","Before the game · games play themselves"],["Offense","Auto · Through your star · Pick-and-roll · Pace and space · Inside-out"],["Defense","Man · Switch · Zone · Press"],["Tempo","Slow · Normal · Fast"],["They answer","Threes → Switch · Rim → Zone · Star → Switch · Pick-and-roll → Press"],["When","Playoffs after a loss · bosses from game 2 · rivalries and Arena from the first game"]])+
    q("Play",[["Foul trouble","3 in the 1st half, 4 in the 2nd; 6 is out"],["Cold","4 misses in a row: −8%"],["Fresh legs","4 trips on the bench: +5%"],["Autoplay","2x speed · same pay as Play"]])+
-   q("Coaches",[["Common","+1 all ratings"],["Rare","+2"],["Epic","+3 + perk"],["Legendary","+4 + stronger perk + Timeout"],["Applies to","League starters"],["Style","His; your five's fit sets the strength"],["No coach","Balanced"],["Packs","Tier 2 and up; Legendary from the Season Pass"]])+
+   q("Coaches",[["Common","+1 all ratings"],["Rare","+2"],["Epic","+3 + perk"],["Legendary","+4 + stronger perk + Timeout"],["Applies to","Your starters in every game"],["Style","His; your five's fit sets the strength"],["No coach","Balanced"],["Packs","Tier 2 and up; Legendary from the Season Pass"]])+
    q("Arena",[["Board","50 AI managers + you · new every Monday"],["Top 20","Whales at a set strength that does not move with your team: 15 Ruby Diamond teams at 131-139, 5 Black Diamond elite at 140-143. A team with no tiers tops out near 138, so the top 20 takes Ruby Diamond starters and rank 1 takes Black Diamond"],["Season","Six weeks. The same whales all season, then they are rebuilt with new styles"],["Rank 1","The week's biggest prize and the Champion frame; the board shows weeks at #1 and your best run"],["Attacks",`${ARN.att} a day · real games`],["Win",`+${ARN.up} stronger · +${ARN.even} even · +${ARN.down} a little weaker · +10 or +4 far weaker`],["Defense","Your league lineup and game plan"],["Hold",`+${ARN.hold}`],["AI fights","Every day, from OVR"],["Rewards",ARNREW.map(r=>`${r[3]} ${r[1].toLocaleString()} Banners + ${r[2].toLocaleString()} coins`).join(" · ")],["Pay",`${ARNPAY.win} coins a win · ${ARNPAY.loss} a loss`]])+
    q("Rivalries",[["When","Events (Halloween)"],["Series","Best of 3 against that team's event lineup"],["Their OVR",`Yours ${RIVUP.map(v=>(v>0?"+":"−")+Math.abs(v)).join(", then ")} as you win`],["Win the series","Their event card"],["Lose it","Back next window"],["Pay",`${RIVPAY.win} coins a win · ${RIVPAY.loss} a loss`]])+
    q("Draft Run",[["Format","12 picks, 7 games"],["Loss","Ends the run"],["Ratings","Card ratings only"],["Pay",`Banners by wins, up to ${DRAFT.bnr[7]}; 7-0 adds a Legends pack`],["Cost","One free run every 18 h, then 500 coins"],["Rule","Set by The Daily when the run starts"]])+
@@ -4365,7 +4365,7 @@ function legPreview(id,take){take=take||"bossTake";id=+id;const c=DB.c[id];const
   const pk=perksOf(id);
   sheet(`${bigCardHTML(id,{sim:true,ovrLab:"OVR at max level"})}<div class="panel">${vs}<div class="posrow">${POSN.map((n,k)=>`<span class="${k===best?"on":""}"><small>${n}</small><b>${at[k]}</b></span>`).join("")}</div></div>
    <div class="panel">${barsHTML(R)}${perkChips(pk)}</div>
-   ${own?`<p class="mut" style="text-align:center">You already have him: he'd be a spare copy (a Ring, evolve fodder or Banners: your call).</p>`:""}`,null,
+   ${own?`<p class="mut" style="text-align:center">You already have him: he'd be a spare copy (a Ring, Banners, or used when he evolves).</p>`:""}`,null,
    `<div class="row"><button class="btn sp dk" data-act="close">Back</button><button class="btn go sp" data-act="${take}" data-arg="${id}">Lock him in</button></div>`,"legprev",()=>legPreview(id,take))}
 /* the start: pick one of three from each pack (Legends, then Prime/MVP), then the two gear boxes for them */
 /* the start: the OP pack opens first, then the ten packs, then one screen with everything you pulled and two buttons: keep it or reroll */
@@ -4869,7 +4869,7 @@ function pityHTML(){const{l4,l5}=pityLeft();return`<div class="pity"><div><small
 function hwRun(){const r=typeof eventNow==="function"?eventNow():null;return r&&r.e.id==="hw"?r:null}
 function hwState(r){S.ev=S.ev||{};return S.ev[r.key]||(S.ev[r.key]={n:{},got:{}})}
 /* the event's daily missions: five a day, 300 coins each (1,500 a day), new ones when the Daily resets */
-const EVDM=[["win","Win {N} games",3],["play","Finish {N} games",5],["calls","Make {N} calls in Play",30],["threes","Hit {N} threes",20],["stl","Get {N} steals",10],["blk","Block {N} shots",8],["ast","Hand out {N} assists",50],["reb","Grab {N} rebounds",80],["pts","Score {N} points",200],["auto","Autoplay {N} games",4]];
+const EVDM=[["win","Win {N} games",3],["play","Finish {N} games",5],["gym","Win {N} gym runs",6],["threes","Hit {N} threes",20],["stl","Get {N} steals",10],["blk","Block {N} shots",8],["ast","Hand out {N} assists",50],["reb","Grab {N} rebounds",80],["pts","Score {N} points",200],["auto","Autoplay {N} games",4]];
 const EVDC=300;
 function evDay(st){const w=dWin();if(!st.d||st.d.w!==w){const ids=[];for(let q=0;ids.length<5&&q<40;q++){const x=dHash(w,q*13+7)%EVDM.length;if(!ids.includes(x))ids.push(x)}st.d={w,ids,n:{},got:{}}}return st.d}
 function hwHTML(){const r=hwRun();if(!r)return"";const st=hwState(r),d=evDay(st);const left=Math.round((r.end-dayStart(new Date()))/864e5)+1;const got=Object.keys(d.got).length;
@@ -5222,7 +5222,7 @@ function passAdd(n,free){if(!S||!n)return 0;const p=passState();const r0=passRan
   p.pts=Math.min(PASS.pts*PASS.ranks,p.pts+n);if(n&&typeof track==="function")track("passpts",n);const r1=passRank(p);passSync();
   if(r1>r0&&typeof toast==="function")setTimeout(()=>toast(`Pass rank ${r1}${PASSPERK[r1]?`: ${PASSPERK[r1].n}`:""}`),400);
   return n}
-const PASSPERK={1:{n:"Faster energy",d:"Gym energy refills 25% faster"},25:{n:"Deeper bench",d:"+10 energy cap · free weekly Draft Run"},50:{n:"Big stage",d:"Games you play pay +15% coins"},75:{n:"Hot hand",d:"20% of gym drops roll twice; best kept"}};
+const PASSPERK={1:{n:"Quick grind",d:"Gym runs take 20% less time"},25:{n:"Weekly draft",d:"A free Draft Run every week"},50:{n:"Big stage",d:"League, playoff and boss games pay +15% coins (not sims)"},75:{n:"Hot hand",d:"20% of gym drops roll twice; best kept"}};
 /* what each rank pays */
 function passReward(r){const M={10:["team",1,"Team pack"],20:["player",3,"Player pack ×3"],30:["cpack",1,"Coach pack"],40:["four",1,"Guaranteed 4★"],50:["coins",3000,"3,000 coins"],
     60:["legends",1,"Legends pack"],70:["ban",400,"400 Banners"],80:["gbox",2,"Gear box ×2"],90:["g5",1,"5★ Gear box"],100:["coach",1,coachName(passWin().coach)]};
@@ -5272,7 +5272,7 @@ function openPass(){const p=passState(),r=passRank(p),w=passWin();const co=cPars
   const rows=[...Array(PASS.ranks)].map((_,k)=>{const n=k+1,[kind,,lab]=passReward(n);const got=p.got.includes(n),on=n<=r,big=n%10===0||PASSPERK[n];
     return`<div class="prow ${got?"got":on?"on":""} ${big?"big":""} ${n===r+1?"next":""}"${n===Math.max(1,r)?' id="pcur"':""}><b>${n}</b>${passIcon(kind)}<span>${esc(lab)}${PASSPERK[n]?`<small>Perk: ${esc(PASSPERK[n].n)}</small>`:""}</span><em>${got?"✓":on?"Ready":""}</em></div>`}).join("");
   const perks=Object.entries(PASSPERK).map(([k,v])=>`<div class="pperk ${r>=+k?"on":""}"><b>${k}</b><span>${esc(v.n)}<small>${esc(v.d)}</small></span></div>`).join("");
-  const earn=[["League game you play","30 win · 10 loss"],["League game you sim","10 win"],["Daily mission","20 · all three +40"],["Legend Trial","40"],["Draft Run win","25"],["Gym floor win","20 · grind runs 3"],["Playoff series win","75, no cap"],["Title","200, no cap"],["Season boss beaten","300, no cap"]];
+  const earn=[["League game you play or autoplay","30 win · 10 loss"],["League game you sim","10 win"],["Daily mission","20 · all three +40"],["Legend Trial","40"],["Draft Run win","25"],["Gym floor win","20 · grind runs 3"],["Playoff series win","75, no cap"],["Title","200, no cap"],["Season boss beaten","300, no cap"]];
   const rv=rivalryDays(w);const own=!!(S.coachOwn&&S.coachOwn[w.coach]);
   sheet(`${hd?`<div class="phead"><img src="${hd}" alt=""></div>`:""}<span class="kick">Season Pass · ${esc(w.name)} · ${passDaysLeft()} days left</span><h2>Road to the Ring</h2>
    <div class="pnow"><b>Rank ${r}</b><span>${p.pts.toLocaleString()} / ${(PASS.pts*PASS.ranks).toLocaleString()} points</span><span>Today ${p.dp}/${PASS.cap}${rv?` · Rivalry Weekend ${rv[0].toLocaleDateString("en-US",{month:"short",day:"numeric"})}–${rv[1].getDate()}`:""}</span></div>
@@ -5460,8 +5460,6 @@ const bagPick=(n,salt,w)=>{w=w==null?dWin():w;return bagPerm(n,salt,Math.floor(w
 const MTPL=[
   {id:"win",k:"win",n:"Win {N} games",g:[2,3,5],c:[60,90,150]},
   {id:"play",k:"play",n:"Finish {N} games",g:[3,5,8],c:[50,80,120]},
-  {id:"calls",k:"calls",n:"Make {N} calls in Play",g:[15,30,50],c:[60,100,160]},
-  {id:"playwin",k:"playwin",n:"Win {N} games in Play",g:[1,2,3],c:[80,150,220]},
   {id:"auto",k:"auto",n:"Autoplay {N} games",g:[2,4,6],c:[50,90,130]},
   {id:"threes",k:"threes",n:"Hit {N} threes",g:[10,20,35],c:[60,100,160]},
   {id:"stl",k:"stl",n:"Get {N} steals",g:[5,10,16],c:[60,100,150]},
@@ -5484,7 +5482,12 @@ const MTPL=[
   {id:"evolve",k:"evolve",n:"Evolve a card",g:[1],c:[150]},
   {id:"book",k:"book",n:"Lock {N} cards into the Book",g:[1,2],c:[80,150]}];
 const MBYK={};for(const t of MTPL)(MBYK[t.k]=MBYK[t.k]||[]).push(t);
-function missionsToday(){const w=dWin();if(S.dm&&S.dm.w===w)return S.dm;
+/* Oct 25: play-calling is gone (games play themselves), so "Make N calls" and "Win N games in Play" could never be done.
+   A save holding one gets a working mission in its place, same window */
+const DEADM=new Set(["calls","playwin"]);
+function mFrom(t,w){const v=dHash(w,t.id.length*7+t.id.charCodeAt(0))%t.g.length;return{id:t.id,k:t.k,n:t.n.replace("{N}",t.g[v]),goal:t.g[v],c:t.c[v],p:0,done:false}}
+function missionsToday(){const w=dWin();if(S.dm&&S.dm.w===w){if(S.dm.list.some(x=>DEADM.has(x.id))){const have=new Set(S.dm.list.map(x=>x.id));let q=0;
+    S.dm.list=S.dm.list.map(x=>{if(!DEADM.has(x.id))return x;let t;do{t=MTPL[(dHash(w,977+q++))%MTPL.length]}while(have.has(t.id)&&q<60);have.add(t.id);return mFrom(t,w)});save()}return S.dm}
   const ids=[];for(let k=0;ids.length<3&&k<12;k++){const t=MTPL[bagPick(MTPL.length,101,w*3+k)];if(!ids.includes(t.id))ids.push(t.id)}
   S.dm={w,list:ids.map(id=>{const t=MTPL.find(x=>x.id===id);const v=dHash(w,id.length*7+id.charCodeAt(0))%t.g.length;return{id,k:t.k,n:t.n.replace("{N}",t.g[v]),goal:t.g[v],c:t.c[v],p:0,done:false}}),bonus:false};return S.dm}
 /* something happened that a mission or the event counts */
@@ -5829,7 +5832,7 @@ Object.assign(ACT,{
     const t=+a;if(pageDone(t)){closeAll();claim(t,R.team[t],`${TEAMNICK(t)} page complete`)}}});
 
 /* gym.js: each gym is a ladder of ten floors that ends with its five Legends.
-   Every gym keeps its own team. Each run costs energy, which refills over real time.
+   Every gym keeps its own team. Runs are free (gym energy was removed).
    A cleared floor can be ground ten times: each run takes real time, drops land in a log as they happen,
    and the haul opens with the reveal at the end. The app keeps counting while it's closed. */
 let EN_MAX=60,EN_SEC=180;/* full bar, one point every 3 minutes */
@@ -5930,7 +5933,7 @@ function grindGame(G){/* the current run, played once and kept so the live view 
   const A=gymMine(G.gym,tier),B=gymTeam(gym,G.floor);B.pl.forEach(p=>p.team=1);A.pl.forEach(p=>p.team=0);
   const res=simGame(A,B,{fmt:tier===1?"3v3":tier===2?"half":"full"});res.A=A;res.B=B;GRUN={key:G.t0,res};return res}
 /* a run lasts as long as the game took: a big win is over sooner, a close one or a loss takes the full time (Oct 25) */
-function runDur(tier,res){const m=res.score[0]-res.score[1];return Math.max(8,Math.round(RUNSEC[tier]*(m>0?clamp(1.15-m/45,.55,1.15):1.15)))}
+function runDur(tier,res){const m=res.score[0]-res.score[1];const pk=typeof passRank==="function"&&passRank()>=1?.8:1;/* Season Pass rank 1: Quick grind */return Math.max(8,Math.round(RUNSEC[tier]*pk*(m>0?clamp(1.15-m/45,.55,1.15):1.15)))}
 const runSecs=G=>runDur(gymTier(G.floor),grindGame(G));
 /* what your saved gym team does on a floor: win rate, average run time, pieces an hour. Sixteen quick games, kept until the team changes */
 const FSTAT={};
@@ -6021,7 +6024,7 @@ const gCard=(i,ov,chip)=>`<div class="gcd">${mcHTML(i,{sim:true,noNew:true,act:"
 const gPosSeg=k=>`<div class="seg gposs">${POSN.map((n,q)=>`<button class="${q===k?"on":""}" data-act="gpos" data-arg="${q}">${n}</button>`).join("")}</div>`;
 function guideStart(){const st=[
   ["Best five","My Cards → Lineup → Best lineup","Off spot −15"],
-  ["Play big games","+6% on calls you make","Autoplay the rest"],
+  ["Keep going","One tap on Home","Grind + autoplay"],
   ["Gym floors 1–5","Cheap 3 on 3","First-clear bonus"],
   ["Farm a meta set","One per gym","For your best player"],
   ["Main stat first","Power up the right ones","Sell low pieces"],
@@ -7649,7 +7652,7 @@ function playGame(res0,side,done){
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 25 · 15";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 25 · 16";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const NP=(plugin,method,opts)=>IS_APP&&window.Capacitor.nativePromise?window.Capacitor.nativePromise(plugin,method,opts||{}):Promise.reject(new Error("web"));
 const nset=(k,d)=>{try{const v=localStorage.getItem("hd_n_"+k);return v==null?d:v==="1"}catch(e){return d}};
@@ -7668,7 +7671,7 @@ let CLOUDV=null;
 /* ---- notifications (each can be turned off in More). Scheduled when the app goes to the background, cleared when it comes back ---- */
 const NOTI=[["daily","The Daily resets"],["auto","Autoplay finished"]];
 async function notiSchedule(){if(!IS_APP||!S||S.fr==null)return;const list=[];const now=Date.now();
-  try{if(nset("energy",true)&&typeof energy==="function"){const v=energy();if(v<EN_MAX){const left=(EN_MAX-v-1)*EN_SEC*1000+energyNext()*1000;list.push({id:11,title:"Gym energy full",body:"Your team is rested. Time to grind.",schedule:{at:new Date(now+left)}})}}
+  try{/* gym energy is gone (Oct 25): no "energy full" reminder */
     if(nset("daily",true)&&typeof DWIN!=="undefined"){const at=(dWin()+1)*DWIN;list.push({id:12,title:"The Daily reset",body:"New Challenge, Spotlight, missions and Vault.",schedule:{at:new Date(at+60000)}})}
     if(nset("auto",true)&&S.auto&&S.auto.left>0&&typeof AUTOSEC!=="undefined"){list.push({id:13,title:"Autoplay finished",body:S.auto.until?`Autoplay is done. See how it went.`:`${S.auto.left} game${S.auto.left>1?"s":""} played. See how it went.`,schedule:{at:new Date(now+((autoEst(S.auto)-1)+(1-(window._pvFrac||0)))*autoSec(S.auto)*1000)}})}}catch(e){}
   try{await NP("LocalNotifications","cancel",{notifications:[{id:11},{id:12},{id:13}]})}catch(e){}
@@ -7772,7 +7775,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="169151bde4";
+<script>const APPV="abda685455";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
