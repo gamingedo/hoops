@@ -780,8 +780,8 @@ button.chip.gold{color:var(--ivory);background:#1f2127;border-color:#5a6aa8}
 .frp .row span{font:700 14px var(--f-b)}
 /* card tiers. Original frames: Ruby is a deep red, Black Diamond is graphite with a cool silver edge, Immortal is a slow prism.
    Earned things may use strong color; the motion is slow and soft (no flashing). */
-.mc.tR,.bc.tR{background:linear-gradient(135deg,#5c0f1f,#c23a52 40%,#ff8fa3 50%,#a3243b 62%,#4a0c19)}
-.mc.tB,.bc.tB{background:linear-gradient(135deg,#0c0d12,#21232a 38%,#dfe6f5 50%,#4a5063 62%,#0c0d12)}
+.mc.tR,.bc.tR,.arnt.tR{background:linear-gradient(135deg,#5c0f1f,#c23a52 40%,#ff8fa3 50%,#a3243b 62%,#4a0c19)}
+.mc.tB,.bc.tB,.arnt.tB{background:linear-gradient(135deg,#0c0d12,#21232a 38%,#dfe6f5 50%,#4a5063 62%,#0c0d12)}
 .mc.tI,.bc.tI{background:conic-gradient(from var(--ang,0deg),#f0c060,#ff8fa3,#a07cf0,#6cb8ff,#3fb6a4,#f0c060);animation:prism 9s linear infinite}
 @property --ang{syntax:"<angle>";inherits:false;initial-value:0deg}
 @keyframes prism{to{--ang:360deg}}
@@ -2022,7 +2022,7 @@ html:root body.pvon::after{display:none}
 .arnr.arnh{font:700 13px var(--f-l,var(--f-b));letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
 .arnr.me{background:#ffd23f1a;box-shadow:inset 3px 0 0 var(--goldlt,#ffd23f)}
 .arnk{text-align:right;color:var(--mut);font-weight:700}
-.arnn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.arnn{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.arnt{display:inline-block;width:9px;height:9px;border-radius:3px;margin-left:5px;vertical-align:middle;border:1px solid #ffffff50}
 .arno,.arnp{text-align:right}.arnp{font-weight:800}
 .arnside{position:sticky;top:8px;display:flex;flex-direction:column;gap:10px;max-height:calc(100dvh - 96px - env(safe-area-inset-bottom));overflow:auto}
 .arnside .panel{margin:0}
@@ -2554,6 +2554,7 @@ function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];c
     if(def===stopper&&shooter===best&&def.sets.Lockdown){pm-=.10;perkTags.push({t:di,txt:"LOCKDOWN: "+def.name})}/* the Lockdown set works on anyone, film or not */
     if(def===stopper&&shooter===best&&!film&&!shooter.icon){if(def.sig==="Clamps")pm-=(late?.12:.05)*def.pk;if(hk(def,"D")){pm-=(late?.15:.10)*(def.pk||1);perkTags.push({t:di,txt:"LOCKDOWN: "+def.name})}else if(late&&def.sig==="Clamps")perkTags.push({t:di,txt:"CLAMPS: "+def.name})}
     if((q>=nQ/2||shooter.rk===2)&&hk(shooter,"P")){pm+=.05*shooter.pk;if(late||tO.spot===shooter.id)perkTags.push({t:oi,txt:"PRIME TIME: "+shooter.name})}
+    if(late&&close&&shooter.imm){pm+=.10;perkTags.push({t:oi,txt:"IMMORTAL: "+shooter.name})}
     if(tkOn===shooter){pm+=.10*shooter.pk;perkTags.push({t:oi,txt:"TAKEOVER: "+shooter.name})}else if(tkOn)pm+=.03;/* the team rides it too (+6 on offense) */
     if(late&&shooter.sig==="Unstoppable"){pm+=.12*shooter.pk;perkTags.push({t:oi,txt:"UNSTOPPABLE: "+shooter.name})}
     if(late&&shooter.sets.Closer){pm+=.15;perkTags.push({t:oi,txt:"CLOSER: "+shooter.name})}
@@ -2933,10 +2934,12 @@ function addRing(i){const o=S.own[i];if(!o||!(o.sp>0)||(o.j||0)>=5)return false;
    At full daily reps, 10 to max: 3★ ~4 days, 4★ ~9, 5★ ~14, 6★ ~19, 7★ ~28. */
 const LVE=25,LVB=[0,40,50,65,85,110,140,180];
 /* levels 1-12 cost what they always did. Level 13 jumps to LVJUMP times level 12's price, then every level costs more than the one
-   before: 18% more up to 40, 5% more up to 100, 2% more up to 200 (the cap). No daily limit. A starter banks about 190 minutes a game
-   (a gym grind runs about 70 games an hour). Levels past the old star cap (MAXLV) add a quarter of a normal level's ratings. */
+   before: 12% more up to 40, 4% more up to 100, 2% more up to 200 (the cap). No daily limit. A starter banks about 190 minutes a game
+   (a gym grind runs about 70 games an hour), and all five starters bank together, so for a 5-star: level 50 (Ruby Diamond, the key to
+   Ascension and the Arena's top 20) is about 120 hours of autoplay, level 100 (Black Diamond, rank 1) about 1,500, level 200 (Immortal)
+   about 20,000. Levels past the old star cap (MAXLV) add a quarter of a normal level's ratings. */
 const LVFLAT=12,LVJUMP=25,LVCAP=200;
-const lvMul=l=>l<=40?1.18:l<=100?1.05:1.02;
+const lvMul=l=>l<=40?1.12:l<=100?1.04:1.02;
 const LVMEMO={};
 const lvNeed=(st,l)=>{st=Math.min(7,st);if(l<10)return LVE;if(l<=LVFLAT)return Math.round(LVB[st]*Math.pow(1.1,l-10));const k=st+"_"+l;if(LVMEMO[k]!=null)return LVMEMO[k];let v=LVB[st]*Math.pow(1.1,LVFLAT-10)*LVJUMP;for(let x=LVFLAT+1;x<l;x++)v*=lvMul(x);return LVMEMO[k]=Math.round(v)};
 /* Training: 1,000 minutes for 3,000 Banners. Banners cannot be farmed by simming, and 3,000 is several 5-star discards, so it is a
@@ -2960,10 +2963,15 @@ function spendBan(c){if((S.bnr||0)<c){toast("Not enough Banners");return false}S
 const CARDSELL=[0,2,6,30,120,450];
 const cardSellValue=k=>{const i=spCard(k);if(DB.c[i].k==="L"&&k>=0||DB.c[i].tw)return 0;return CARDSELL[Math.min(5,DB.c[i].s)]+(k<0&&DB.c[i].k!=="L"&&S.own[i]&&(S.own[i].j||0)>=5?10:0)};
 function sellCards(list){let v=0;for(const k of[...list].sort((a,b)=>a-b)){const i=spCard(k);if(!S.own[i])continue;if(k<0){if(!(S.own[i].sp>0))continue;v+=cardSellValue(k);S.own[i].sp--;continue}if(S.roster.includes(i)||DB.c[i].k==="L"||DB.c[i].tw)continue;v+=cardSellValue(i);removeCard(i)}addBan(v);track("discard",list.length);save();return v}
-/* card tiers by OVR (with gear, without the team bonus). Each one adds +2 on every rating and a new frame. */
-/* card tiers were cut Oct 25 (a tiered card keeps its frame and the +2 a tier) */
-const TIERS=[{n:"Ruby Diamond",ovr:120,cost:10000,k:"tR"},{n:"Black Diamond",ovr:130,cost:25000,k:"tB"},{n:"Immortal",ovr:140,cost:50000,k:"tI"}];
+/* card tiers by level (Oct 25: they used to go by OVR and cost coins; now the level is the price). Each one adds +2 on every
+   rating and a new frame; Immortal also shoots +10% late in close games and its first 4th-quarter shot in Play is a sure make. */
+const TIERS=[{n:"Ruby Diamond",lv:50,k:"tR"},{n:"Black Diamond",lv:100,k:"tB"},{n:"Immortal",lv:200,k:"tI"}];
 const tierOf=i=>S.own[i]?S.own[i].tier||0:0;
+function nextTier(i){const t=tierOf(i);return t<3?TIERS[t]:null}
+/* the gate: Ascension and the Arena's top 20 are built for Ruby Diamond teams. How many of a five are at least Ruby */
+const rubyCount=ids=>ids.filter(i=>tierOf(i)>=1).length;
+function canTierUp(i){const nt=nextTier(i);return!!nt&&!!S.own[i]&&S.own[i].lv>=nt.lv}
+function tierUp(i){const nt=nextTier(i);if(!nt||!canTierUp(i))return false;S.own[i].tier=tierOf(i)+1;if(S.own[i].tier===3)S.own[i].immAt=Date.now();save();return true}
 /* evolve: at max level, use up as many spare cards as his stars (any stars). +1 on every rating and more levels to buy */
 function canEvolve(i){const o=S.own[i];return o.st<topStar(i)&&o.lv>=MAXLV[o.st]}
 function evolveFodder(i){return[...spareKeys(),...Object.keys(S.own).map(Number).filter(k=>k!==i&&!S.roster.includes(k)&&DB.c[k].k!=="L")]}
@@ -3049,7 +3057,7 @@ function bonuses(r){r=r||S.roster;const st=r.slice(0,5);const out=[];let b=0;
 /* ---- sim team builders ---- */
 function myTeam(ids,extra){const league=!ids||ids===S.roster||!!(extra&&extra.league);const spots=league||!!(extra&&extra.spots);ids=ids||S.roster;
   const bon=league?AFFB(affCount(ids)):0;
-  const pl=ids.map((i,k)=>{const r=cardR(i);const R=bon&&affGets(i)?r.R.map(v=>Math.min(RCAP,v+bon)):r.R;const sp=simPlayer(i,R,r.sets,0,S.own[i].j);if(hofOn(i)){sp.hof=true;sp.bt.IQ=Math.max(sp.bt.IQ||0,1)}if(bon&&affGets(i))sp.aff=bon;
+  const pl=ids.map((i,k)=>{const r=cardR(i);const R=bon&&affGets(i)?r.R.map(v=>Math.min(RCAP,v+bon)):r.R;const sp=simPlayer(i,R,r.sets,0,S.own[i].j);if(hofOn(i)){sp.hof=true;sp.bt.IQ=Math.max(sp.bt.IQ||0,1)}if(bon&&affGets(i))sp.aff=bon;if(tierOf(i)>=3)sp.imm=true;
     /* starters play a spot: out of position costs ratings, and the spot decides which ratings count */
     /* spots 1 to 5 start; 6 to 10 back up PG to C. Out of position costs ratings either way */
     if(spots&&k<10&&(k<5||ids.length>=8)){const q=k%5;const pen=FITPEN[fitD(i,q)];sp.R=sp.R.map(v=>v-pen);sp.slot=q;sp.pen=pen}
@@ -3601,7 +3609,7 @@ function openCard(id,keepTab){id=+id;const c=DB.c[id],o=S.own[id];if(o&&o.isNew)
       <div class="rgsteps">${[1,2,3,4,5].map(k=>`<div class="${k<=j?"on":k===j+1?"nx":""}"><b>${ROMAN[k]}</b><span>${esc(R[k])}</span></div>`).join("")}</div>
       ${m>1?`<p class="mut" style="margin:6px 0 0;font-size:13px">${c.k==="L"?"Legend":c.s+"★"}: Rings count ×${m}</p>`:""}
       ${j<5?`<button class="btn go" style="width:100%;margin-top:10px" data-act="addRing" data-arg="${id}" ${sp?"":"disabled"}>Add Ring ${ROMAN[j+1]} · uses 1 spare copy</button>`:`<p class="lvmax">All five Rings</p>`}</div>`}
-  else if(CTAB==="lvl"){body+=`<div class="lvk">`+lvPanel(id)+evPanel(id)+`</div>`}
+  else if(CTAB==="lvl"){body+=`<div class="lvk">`+lvPanel(id)+tierPanel(id)+evPanel(id)+`</div>`}
   else if(CTAB==="gear"){const cnt={};for(const gid of o.gear){const g=gid&&S.gear[gid];if(g)cnt[g.set]=(cnt[g.set]||0)+1}const sug=suggestBuild(id);
     /* the build in one line: what all six pieces add, and the sets that are live */
     const tot=[0,0,0,0,0,0,0];for(const gid of o.gear){const g=gid&&S.gear[gid];if(g){const st=gearStats(g);st.forEach((v,j)=>tot[j]+=v)}}
@@ -3646,7 +3654,12 @@ function lvPanel(id){const c=DB.c[id],o=S.own[id],ml=maxLv(id),nat=MAXLV[c.s],g=
     <div class="row lvr"><span class="kick" style="margin:0">Ratings</span><span class="sp"></span><b>${c.k==="K"?`+${so.toFixed(1)} / +${Math.round(rookGrow(c))} · cap ${Math.floor(rookCap(c))}`:`+${so.toFixed(1)} / +${lvBonus(c,nat,o.st).toFixed(1)} at Lv ${nat}`}</b></div>
     ${left>0?`<div class="row" style="margin-top:8px"><span class="kick" style="margin:0">Minutes</span><span class="sp"></span><b>${have.toLocaleString()} / ${need.toLocaleString()}</b></div><div class="row" style="margin-top:4px"><span class="kick" style="margin:0">Left</span><span class="sp"></span><b>${Math.max(0,need-have).toLocaleString()} min · ~${Math.max(1,Math.ceil((need-have)/190)).toLocaleString()} games</b></div><div class="lvb mn"><b style="width:${Math.round(Math.min(1,have/Math.max(1,need))*100)}%"></b></div>
     <button class="btn sm dk" style="width:100%;margin-top:8px" data-act="train" data-arg="${id}" ${(S.bnr||0)<TRAIN.bnr?"disabled":""}>${TRAIN.min.toLocaleString()} min ${banI}${TRAIN.bnr}</button>`:`<p class="lvmax">Max level</p>`}</div>`}
-function evPanel(id){const o=S.own[id];if(o.st>=topStar(id))return hofOn(id)?`<div class="panel evp"><span class="kick">Hall of Fame</span><p style="margin:4px 0 0">Aura on: teammates +2 on every rating; the other team's perks don't work on him.</p></div>`:"";const ml=maxLv(id),ready=canEvolve(id),have=evolveFodder(id).length,need=Math.min(6,o.st),x7=o.st===6;
+function tierPanel(id){const o=S.own[id],t=tierOf(id),nt=nextTier(id);return`<div class="panel tierp"><div class="row"><span class="kick" style="margin:0">Card tier</span><span class="sp"></span><span class="tl">${t?TIERS[t-1].n:"Standard"}</span></div>
+    <div class="tsteps">${TIERS.map((x,k)=>`<span class="${t>k?"on":""}"><b>${x.lv}</b><small>${x.n.replace(" ","<br>")}</small></span>`).join("")}</div>
+    ${nt?(o.lv>=nt.lv?`<button class="btn go" style="width:100%;margin-top:10px" data-act="tierUp" data-arg="${id}">Evolve to ${nt.n}</button>`
+      :`<p class="mut" style="font-size:13px;margin:8px 0 0">Lv ${nt.lv} · ${nt.lv-o.lv} levels to go · +2 all ratings, new frame${nt.lv===200?", Immortal perks":""}</p>`)
+      :`<p class="mut" style="font-size:13px;margin:8px 0 0">Immortal: +10% late in close games · first 4th-quarter shot in Play is a sure make</p>`}</div>`}
+function evPanel(id){const o=S.own[id];if(o.st>=topStar(id))return hofOn(id)?`<div class="panel evp"><span class="kick">Hall of Fame</span><p style="margin:4px 0 0">Aura on: teammates +2 on every rating; the other team's perks don't work on him.</p></div>`:"";const ml=MAXLV[o.st],ready=canEvolve(id),have=evolveFodder(id).length,need=Math.min(6,o.st),x7=o.st===6;
   return`<div class="panel evp"><div class="row"><span class="kick">Evolve</span><span class="sp"></span><span class="tl">${"★".repeat(o.st)} → ${"★".repeat(o.st+1)}</span></div>
     <div class="row lvr"><span class="kick" style="margin:0">Needs</span><span class="sp"></span><b>Lv ${ml} · spares ${Math.min(have,need)}/${need}${x7?` · ${EVO7.coins.toLocaleString()} coins · ${EVO7.bnr.toLocaleString()} Banners`:""}</b></div>${x7?`<p class="mut" style="margin:6px 0 0;font-size:13px">7★ is for Book Legends only. At 7★ Lv ${MAXLV[7]} his Hall of Fame aura turns on.</p>`:""}
     ${ready?`<button class="btn go" style="width:100%;margin-top:10px" data-act="evolvePick" data-arg="${id}" ${have<need||(x7&&(S.coins<EVO7.coins||(S.bnr||0)<EVO7.bnr))?"disabled":""}>Evolve to ${o.st+1}★</button>`:""}</div>`}
@@ -3977,15 +3990,15 @@ function faqHTML(){const q=(t,rows,open)=>`<details class="panel faq"${open?" op
    q("Odds",[["Card packs","5★ 0.05% · 4★ 0.4% · 3★ 3.5% · 2★ 25% · 1★ 71%"],["Gear box","Rare 60% · Epic 32% · Legendary 8%"],["Coach pack","Common 60% · Rare 30% · Epic 10%"],["Coach pity","Every 5th is Rare or better"],["Legends pack","HOF 55% · Top 75 25% · Top 50 12% · Top 25 6% · Top 10 2%"],["Pity",`4★ within ${PITY4} pulls · 5★ within ${PITY5}`]])+
    q("Shops",[["Deal","10 pulls at 30% off · every 18 h"],["Vault","One item off · one buy"],["Spotlight","1 in 10 is him · else a Player pack card"],["Front Office","Your team + 3 more · new every Monday"],["Event shop","5 daily missions · 300 coins each"],["Event cards","Rivalries · or pick 1 of 5 for 1,500"]])+
    q("Coins and Banners",[["Coins","Games → packs, gear, power-ups"],["Game pay","Win 100 · Played +20% · Sim −25%"],["Win streak","+10 a win in a row, up to +50"],["Daily pay",`Full for ${PAYDAY} league games a day · then ${Math.round(PAYLATE*100)}%`],["Banners","Discards, dupes, Legend Trial, Challenge, Draft Run, Arena, rivalries"],["Spend on","Front Office · Legend Forge · Film Room"],["Per discard",`1★ ${CARDSELL[1]} · 2★ ${CARDSELL[2]} · 3★ ${CARDSELL[3]} · 4★ ${CARDSELL[4]} · 5★ ${CARDSELL[5]}`],["Old saves",`1 Chalk = ${BANRATE.chalk} · 1 Film = ${BANRATE.film} · 1 Shard = ${BANRATE.shards}`]])+
-   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 12, then a huge jump and every level costs more than the last, up to level 200 · higher stars cost more"],["Past the star cap","Levels past each star's old cap still add ratings, a quarter as much"],["No limit","No daily cap: autoplay always counts and a sim never does"],["Train",`${TRAIN.min.toLocaleString()} minutes for ${TRAIN.bnr.toLocaleString()} Banners on one card. Banners cannot be farmed by simming`],["Star cap","Full +5 all ratings at the cap (15 to 50 by star)"],["Evolve","Star cap + spares: +1★, +1 all ratings"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
+   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 12, then a huge jump and every level costs more than the last, up to level 200 · higher stars cost more · about 120 hours of autoplay to Ruby Diamond (50), 1,500 to Black (100)"],["Past the star cap","Levels past each star's old cap still add ratings, a quarter as much"],["Card tiers","Ruby Diamond at Lv 50, Black Diamond at Lv 100, Immortal at Lv 200 · +2 all ratings and a new frame each · Ruby opens Ascension and the Arena top 20, Black is what rank 1 takes · Immortal: +10% late in close games, one sure make in Play"],["No limit","No daily cap: autoplay always counts and a sim never does"],["Train",`${TRAIN.min.toLocaleString()} minutes for ${TRAIN.bnr.toLocaleString()} Banners on one card. Banners cannot be farmed by simming`],["Star cap","Full +5 all ratings at the cap (15 to 50 by star)"],["Evolve","Star cap + spares: +1★, +1 all ratings"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
    q("Ratings over 99",[["Cap","140"],["Breakthroughs","At 100 and 110 · tap the name on a card"],["Past 99","Each point counts half"]])+
    q("Gear",[["Slots","6"],["Substats","Common 0 · Rare 2 · Epic 3 · Legendary 4"],["Power-up cap","1★ +3 · 2★ +6 · 3★ +9 · 4★ +12 · 5★ +15"],["New substat","+3, +6, +9, +12"],["Stat set","2 pieces: +4 one rating"],["Meta set","4 pieces; gym drops only"]])+
-   q("Gyms",[["Floors","10; floor 10 is five Legends"],["Ascension","Clear floor 10 to open A1 to A5: the Legends again at 130, 134, 138, 141, 145. Each level drops more 6★ and Legendary pieces, a bigger chance at the named pieces (up to 6%), and pays a first-clear bonus in Banners"],["3 on 3","Floors 1–5"],["Drops","Floors 1–5 50% · 6–9 65% · 10 85%"],["Grind",`10 runs · a big win is over sooner, a close one or a loss takes the full time`],["Chase","Each gym's Legend floor drops its own named 6★ pieces"],["Your clear","Each floor shows your win rate, run time and pieces an hour"]])+
+   q("Gyms",[["Floors","10; floor 10 is five Legends"],["Ascension","Five Ruby Diamond cards (level 50) in your gym team. Clear floor 10 to open A1 to A5: the Legends again at 130, 134, 138, 141, 145. Each level drops more 6★ and Legendary pieces, a bigger chance at the named pieces (up to 6%), and pays a first-clear bonus in Banners"],["3 on 3","Floors 1–5"],["Drops","Floors 1–5 50% · 6–9 65% · 10 85%"],["Grind",`10 runs · a big win is over sooner, a close one or a loss takes the full time`],["Chase","Each gym's Legend floor drops its own named 6★ pieces"],["Your clear","Each floor shows your win rate, run time and pieces an hour"]])+
    q("Seasons",[["Regular season","48 games"],["Playoffs","Top 8"],["Boss","Best of 7"],["Win","Next tier"],["League level",`Tier 1 ${tierLevel(1)} → Tier ${MAXTIER} ${tierLevel(MAXTIER)}`],["Pay","+10% a tier"],["Boss Legends",`Tier ${LEGTIER}+: first win over a boss → pick one of its Legends`]])+
    q("Game plan",[["Set","Before the game · games play themselves"],["Offense","Auto · Through your star · Pick-and-roll · Pace and space · Inside-out"],["Defense","Man · Switch · Zone · Press"],["Tempo","Slow · Normal · Fast"],["They answer","Threes → Switch · Rim → Zone · Star → Switch · Pick-and-roll → Press"],["When","Playoffs after a loss · bosses from game 2 · rivalries and Arena from the first game"]])+
    q("Play",[["Foul trouble","3 in the 1st half, 4 in the 2nd; 6 is out"],["Cold","4 misses in a row: −8%"],["Fresh legs","4 trips on the bench: +5%"],["Autoplay","2x speed · same pay as Play"]])+
    q("Coaches",[["Common","+1 all ratings"],["Rare","+2"],["Epic","+3 + perk"],["Legendary","+4 + stronger perk + Timeout"],["Applies to","League starters"],["Style","His; your five's fit sets the strength"],["No coach","Balanced"],["Packs","Tier 2 and up; Legendary from the Season Pass"]])+
-   q("Arena",[["Board","50 AI managers + you · new every Monday"],["Top 20","Whales: a set strength (122 to 142) that does not move with your team. Elite 138-142, the rest 122-136"],["Season","Six weeks. The same whales all season, then they are rebuilt with new styles"],["Rank 1","The week's biggest prize and the Champion frame; the board shows weeks at #1 and your best run"],["Attacks",`${ARN.att} a day · real games`],["Win",`+${ARN.up} stronger · +${ARN.even} even · +${ARN.down} a little weaker · +10 or +4 far weaker`],["Defense","Your league lineup and game plan"],["Hold",`+${ARN.hold}`],["AI fights","Every day, from OVR"],["Rewards",ARNREW.map(r=>`${r[3]} ${r[1].toLocaleString()} Banners + ${r[2].toLocaleString()} coins`).join(" · ")],["Pay",`${ARNPAY.win} coins a win · ${ARNPAY.loss} a loss`]])+
+   q("Arena",[["Board","50 AI managers + you · new every Monday"],["Top 20","Whales at a set strength that does not move with your team: 15 Ruby Diamond teams at 131-139, 5 Black Diamond elite at 140-143. A team with no tiers tops out near 138, so the top 20 takes Ruby Diamond starters and rank 1 takes Black Diamond"],["Season","Six weeks. The same whales all season, then they are rebuilt with new styles"],["Rank 1","The week's biggest prize and the Champion frame; the board shows weeks at #1 and your best run"],["Attacks",`${ARN.att} a day · real games`],["Win",`+${ARN.up} stronger · +${ARN.even} even · +${ARN.down} a little weaker · +10 or +4 far weaker`],["Defense","Your league lineup and game plan"],["Hold",`+${ARN.hold}`],["AI fights","Every day, from OVR"],["Rewards",ARNREW.map(r=>`${r[3]} ${r[1].toLocaleString()} Banners + ${r[2].toLocaleString()} coins`).join(" · ")],["Pay",`${ARNPAY.win} coins a win · ${ARNPAY.loss} a loss`]])+
    q("Rivalries",[["When","Events (Halloween)"],["Series","Best of 3 against that team's event lineup"],["Their OVR",`Yours ${RIVUP.map(v=>(v>0?"+":"−")+Math.abs(v)).join(", then ")} as you win`],["Win the series","Their event card"],["Lose it","Back next window"],["Pay",`${RIVPAY.win} coins a win · ${RIVPAY.loss} a loss`]])+
    q("Draft Run",[["Format","12 picks, 7 games"],["Loss","Ends the run"],["Ratings","Card ratings only"],["Pay",`Banners by wins, up to ${DRAFT.bnr[7]}; 7-0 adds a Legends pack`],["Cost","One free run every 18 h, then 500 coins"],["Rule","Set by The Daily when the run starts"]])+
    q("The Daily",[["Resets","Every 18 hours"],["Missions","3 at a time · all three: a free pull"],["Challenge",`4:00 left · one try · win: ${CHALPAY.coins} coins + ${CHALPAY.bnr} Banners`],["Gym","Double drops or all its meta set"],["League night","Both teams · league, playoff and boss games"],["Sims",`${SIMCAP} a window · league, playoffs, boss · Play and Autoplay unlimited`],["Same clock","Legend Trial, deal, free Draft Run"]])+
@@ -4356,6 +4369,7 @@ const ACT={
   stNext:()=>{const f=START_NEXT;START_NEXT=null;closeAll();if(f)setTimeout(f,120)},
   startNew:()=>{newStart();renderTitle();openStartReveal()},
   posFix:a=>{const[i,k]=a.split(":").map(Number);POSSEL={id:i,k};openPosTeach(i)},
+  tierUp:a=>{const i=+a;const nt=nextTier(i);if(tierUp(i)){toast(`${lastName(DB.p[DB.c[i].p][0])} is ${nt.n}`);openCard(i,true)}},
   train:a=>{const i=+a,r=trainCard(i);if(r<0)return;if(!S.own[i])return;toast(r>0?`${lastName(DB.p[DB.c[i].p][0])}: +${r} level${r>1?"s":""}`:`${lastName(DB.p[DB.c[i].p][0])}: +${TRAIN.min.toLocaleString()} minutes`);if(SHEET&&SHEET.el.dataset.tag==="card")openCard(i,true);else render()},
   addRing:a=>{const i=+a;if(addRing(i)){const c=DB.c[i];toast(`${lastName(DB.p[c.p][0])}: Ring ${ROMAN[S.own[i].j]} · ${RINGS(c)[S.own[i].j]}`);if(SHEET&&SHEET.el.dataset.tag==="card")openCard(i,true);else render()}},
   pickSel:a=>{window.PICKSEL=+a;render()},
@@ -5238,10 +5252,11 @@ Object.assign(ACT,{passOpen:()=>openPass(),passClaim:()=>passClaim()});
      team), a defense hold 10. The board fights itself every day.
    - Weekly rewards by final rank, paid when the next week's board opens. */
 /* Oct 25: the top of the board is fixed. 20 whales own ranks 1-20 at a set strength that does not move with your team:
-   5 elite (138-142) and 15 whales (122-136). Grinders and casuals still follow your team but stop below the whales (cap),
+   5 elite (140-143, Black Diamond cards) and 15 whales (131-139, Ruby Diamond). A team with no tiers tops out around 138, so
+   the top 20 takes Ruby Diamond starters and rank 1 takes Black Diamond. Grinders and casuals still follow your team but stop below the whales (cap),
    so reaching the top of the board means being strong, not just keeping pace. The 20 whales (names, franchises, styles) stay
    the same for a 6-week Arena season, then are rebuilt. */
-const ARNPROF=[{k:"wn",n:"Elite",count:5,abs:[142,138],gear:10,coach:"l"},{k:"w",n:"Whale",count:15,abs:[136,122],gear:8,coach:"l"},
+const ARNPROF=[{k:"wn",n:"Elite",count:5,abs:[143,140],gear:10,coach:"l",tier:2},{k:"w",n:"Whale",count:15,abs:[139,131],gear:8,coach:"l",tier:1},
   {k:"g",n:"Grinder",count:12,up:[-2,5],grow:.4,gear:6,coach:"e",cap:124},{k:"c",n:"Casual",count:18,up:[-14,-4],grow:.1,gear:3,coach:"r",cap:112}];
 const ARNSEASON=6;/* weeks in an Arena season */
 const arnSeason=w=>Math.floor((w==null?weekIndex():w)/ARNSEASON);
@@ -5311,7 +5326,7 @@ function arnGame(res,won,out){const a=arnSt(),mid=res.ctx.mid;arnAtt(a);a.att.n+
 
 /* ---------- the screen: the board on the left; your week, your attacks and your defense on the right ---------- */
 function arnRow(r,a,ms,k){const me=r.id===50,m=me?null:ms[r.id];
-  return`<div class="arnr${me?" me":""}${me&&arnChamp()?" champ":""}"><b class="arnk">${k+1}</b>${logoHTML(me?S.fr:m.fr,28)}<span class="arnn">${me?"You":esc(m.name)}</span><span class="arno">${r.ovr}</span><span class="arnp">${r.pts.toLocaleString()}</span></div>`}
+  return`<div class="arnr${me?" me":""}${me&&arnChamp()?" champ":""}"><b class="arnk">${k+1}</b>${logoHTML(me?S.fr:m.fr,28)}<span class="arnn">${me?"You":esc(m.name)}${!me&&m.p.tier?`<i class="arnt ${TIERS[m.p.tier-1].k}" title="${TIERS[m.p.tier-1].n}"></i>`:""}</span><span class="arno">${r.ovr}</span><span class="arnp">${r.pts.toLocaleString()}</span></div>`}
 function arnLogTxt(x,ms){const n=esc(ms[x.m].name);return x.att?(x.won?`You beat ${n} · +${x.p}`:`You lost to ${n}`):(x.held?`Held vs ${n} · +${x.p}`:`${n} beat your defense`)}
 const ARND=["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
 function viewArena(){const a=arnSt(),ms=arnBoard(a),T=arnTable(a),rank=T.findIndex(r=>r.id===50)+1,rw=arnRew(rank),left=arnAtt(a),me=Math.round(myTeam().ovr);
@@ -5816,16 +5831,18 @@ function gymBanner(gym){const L=gym.boss.map(legendId).filter(x=>x!=null);
    <span class="kick">${esc(gym.style)} gym</span><h2>${esc(gym.n)}</h2>
    <div class="glg">${L.map(i=>`<span>${faceHTML(i,54)}<b>${esc(lastName(DB.p[DB.c[i].p][0]))}</b></span>`).join("")}</div></div>`}
 function openGym(id){const gym=GYMS.find(g=>g.id===id);if(!gym)return;const cl=S.gyms[id]||0;const L=gymLine(id);const me=gymMine(id,3);const G=S.grind;
-  const rows=[1,2,3,4,5,6,7,8,9,10,...(cl>=10?[11,12,13,14,15]:[])].map(f=>{const tier=gymTier(f),ot=floorTeam(gym,f),done=f<=cl,next=f===cl+1,lock=f>cl+1;
+  const rc=rubyCount(L),ruby=rc>=5;
+  const rows=[1,2,3,4,5,6,7,8,9,10,...(cl>=10?[11,12,13,14,15]:[])].map(f=>{const tier=gymTier(f),ot=floorTeam(gym,f),done=f<=cl,next=f===cl+1&&(f<=10||ruby),lock=f>cl+1||(f>10&&!ruby);
     const top=ot.pl.slice(0,3);
     return`<button class="gf ${done?"done":next?"next":"lock"} ${f>=10?"top":""}" data-act="floor" data-arg="${id}:${f}" ${lock?"disabled":""} aria-label="Floor ${f}">
      <i class="n">${f===10?"★":f>10?"A"+(f-10):f}</i><span class="t"><b>${f===10?"The Legends":f>10?`Ascension ${f-10}`:`Floor ${f}`}</b><small>${FMTN[tier]} · OVR ${ot.ovr}</small></span>
-     <span class="fc">${top.map(p=>faceHTML(p.id,28)).join("")}</span><em>${G&&G.gym===id&&G.floor===f&&!G.done?"Grinding":done?"✓":next?"Play":"🔒"}</em></button>`}).join("");
+     <span class="fc">${top.map(p=>faceHTML(p.id,28)).join("")}</span><em>${G&&G.gym===id&&G.floor===f&&!G.done?"Grinding":done?"✓":next?"Play":f>10&&!ruby?"Ruby":"🔒"}</em></button>`}).join("");
+  const gate=cl>=10&&!ruby?`<p class="mut gtip" style="margin-top:6px"><b>Ascension needs five Ruby Diamond cards</b> · ${rc}/5 · Ruby Diamond is level 50</p>`:"";
   const body=`<div class="gyl">${gymBanner(gym)}
    <div class="gdrop">${enHTML()}<span>Drops <b>${esc(gym.meta)}</b> <span class="meta">Meta</span> · ${gym.stat.map(esc).join(" · ")}</span></div>
    <div class="panel gteam"><div class="row"><span class="kick">Your ${esc(gym.n)} team · OVR ${me.ovr}</span><span class="sp"></span><button class="btn sm" data-act="gedit" data-arg="${id}">Edit</button></div>
     <div class="gl5">${L.map((i,k)=>`<button data-act="card" data-arg="${i}">${faceHTML(i,44)}<b>${esc(lastName(DB.p[DB.c[i].p][0]))}</b><small class="${fitD(i,k)?"off":""}">${POSN[k]} ${slotOvr(i,k)}</small></button>`).join("")}</div>
-    <p class="mut gtip"><b>Counter</b> ${esc(gym.weak)}</p></div></div>
+    <p class="mut gtip"><b>Counter</b> ${esc(gym.weak)}</p>${gate}</div></div>
    <div class="gyr"><span class="kick sh">${cl>10?`Ascension · A${cl-10} of 5`:`Floors · ${cl}/10 cleared`}</span><div class="gfl">${rows}</div></div>`;
   sheet(body,null,null,"gym",()=>openGym(id))}
 
@@ -5839,10 +5856,11 @@ function openFloor(id,f){f=+f;const gym=GYMS.find(g=>g.id===id);const tier=gymTi
    <div class="panel fdr"><p><b>Win:</b> ${DROPTXT[tier]}.${tier===3?" Closer pieces and, rarely, named 6★ pieces drop here too.":""}${f>10?` Every Ascension level adds more 6★ and Legendary pieces.`:""}</p>
     ${cleared?"":`<p><b>First clear</b> +${60+f*20} coins${f>10?` · +${40*(f-10)} Banners`:""}</p>`}${f>=7?`<p><b>${f>=10?"Chase":"Floor 10 chase"}:</b> ${chaseNames(gym)}${f>=10?` · ${Math.round(ascSig(f)*1000)/10}% of drops`:""}</p>`:""}</div>`;
   const busy=G&&!G.done;
-  const foot=`<div class="row"><button class="btn go sp" data-act="gplay" data-arg="${id}:${f}:choose">Play</button><button class="btn sp dk" data-act="gplay" data-arg="${id}:${f}:result">Sim</button></div>
+  const foot=ascLocked(id,f)?`<p class="mut" style="margin:0;text-align:center"><b>Ascension needs five Ruby Diamond cards</b> · ${rubyCount(gymLine(id))}/5 · Ruby Diamond is level 50</p>`:`<div class="row"><button class="btn go sp" data-act="gplay" data-arg="${id}:${f}:choose">Play</button><button class="btn sp dk" data-act="gplay" data-arg="${id}:${f}:result">Sim</button></div>
    ${cleared?`<button class="btn sp dk grb" data-act="ggrind" data-arg="${id}:${f}" ${busy?"disabled":""}>${busy?"A grind is running":`Grind ×10 · about ${mmss(Math.round(clr.avg*10))}`}</button>`:""}`;
   sheet(body,null,foot,"floor",()=>openFloor(id,f))}
-function playFloor(id,f,mode,side){f=+f;const tier=gymTier(f);if(energy()<RUNCOST[tier]){toast("Not enough energy");return}
+function ascLocked(id,f){return f>10&&rubyCount(gymLine(id))<5}
+function playFloor(id,f,mode,side){f=+f;const tier=gymTier(f);if(ascLocked(id,f)){toast("Ascension needs five Ruby Diamond cards");return}if(energy()<RUNCOST[tier]){toast("Not enough energy");return}
   if(mode==="choose"){choosePlay(sd=>playFloor(id,f,"play",sd));return}
   spendEnergy(RUNCOST[tier]);closeAll();runGame("gym",mode,{gym:id,floor:f,ids:gymIds(id,tier),side})}
 
@@ -5920,7 +5938,7 @@ Object.assign(ACT,{
   gym:a=>openGym(a),floor:a=>{const[i,f]=a.split(":");openFloor(i,f)},
   floorP:a=>{const[i,f,k]=a.split(":");OPPV=floorTeam(GYMS.find(g=>g.id===i),+f);openSimPlayer(+k)},
   gplay:a=>{const[i,f,m]=a.split(":");playFloor(i,f,m)},
-  ggrind:a=>{const[i,f]=a.split(":");startGrind(i,f)},
+  ggrind:a=>{const[i,f]=a.split(":");if(ascLocked(i,+f)){toast("Ascension needs five Ruby Diamond cards");return}startGrind(i,f)},
   grind:()=>openGrind(),
   gstop:()=>{const G=S.grind;if(!G)return;G.done=true;G.stopped=true;addEnergy(RUNCOST[gymTier(G.floor)]);GRUN=null;save();openGrind()},
   ghaul:()=>grindHaul(),
@@ -6250,6 +6268,8 @@ function* offense(P,H){const C=this&&this.side!=null?this:CUR_CTL;const{OP,DP}=P
     const x=list[pick];if(!mine&&x.pct0!=null){x.pct=x.pct0;if(x.kind==="passfin")x.both=x.passPct*x.pct}C.calls++;if(X.n===0)X.first=x.k;
     if(x.kind==="setup"&&x.noroll){if(x.clearFast)H.fast[P.oi]=0;X.sit=x.ok;X.n++;continue}
     const r=rollFor(x.kind==="passfin"?x.passPct:x.pct);
+    /* an Immortal's first shot in the 4th quarter is a sure make */
+    if(x.kind==="finish"&&x.shooter.imm&&!C.immUsed&&P.q>=H.nQ-1){C.immUsed=true;r.ok=true;r.nat20=true;r.nat1=false;r.imm=true}
     const shot=(who,out)=>{C.heat=C.heat||{};C.heat[who.id]=out.made?(C.heat[who.id]||0)+1:0;touch[who.id]=(touch[who.id]||0)+1};
     /* a shot happens before the roll is shown, so the roll can say what it led to (made, blocked, and one) */
     if(x.kind==="finish"){const ev0=H.ev.length;const out=H.takeShot(P,x.shooter,x.type,x.base,x.perkTags,{made:r.ok,bh:X.passer||x.shooter,def:x.def,ast:r.ok&&X.passer?X.passer:(r.ok?null:undefined),verb:x.verb,what:x.what,tag:x.k,blkMul:x.k==="layhelp"?1.4:1});
@@ -7581,7 +7601,7 @@ function playGame(res0,side,done){
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 25 · 11";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 25 · 12";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const NP=(plugin,method,opts)=>IS_APP&&window.Capacitor.nativePromise?window.Capacitor.nativePromise(plugin,method,opts||{}):Promise.reject(new Error("web"));
 const nset=(k,d)=>{try{const v=localStorage.getItem("hd_n_"+k);return v==null?d:v==="1"}catch(e){return d}};
@@ -7704,7 +7724,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="3de181a67e";
+<script>const APPV="9da8ee7f53";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
