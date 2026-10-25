@@ -3959,7 +3959,7 @@ function faqHTML(){const q=(t,rows,open)=>`<details class="panel faq"${open?" op
    q("Card tiers",[...TIERS.map(t=>[t.n,`${t.ovr} OVR · ${t.cost.toLocaleString()} coins`]),["Each tier","+2 all ratings, new frame"],["Immortal","+10% late in close games · one sure make in Play"]])+
    q("Ratings over 99",[["Cap","140"],["Breakthroughs","At 100 and 110 · tap the name on a card"],["Past 99","Each point counts half"]])+
    q("Gear",[["Slots","6"],["Substats","Common 0 · Rare 2 · Epic 3 · Legendary 4"],["Power-up cap","1★ +3 · 2★ +6 · 3★ +9 · 4★ +12 · 5★ +15"],["New substat","+3, +6, +9, +12"],["Stat set","2 pieces: +4 one rating"],["Meta set","4 pieces; gym drops only"]])+
-   q("Gyms",[["Floors","10; floor 10 is five Legends"],["3 on 3","Floors 1–5"],["Energy","3 · 5 · 8 a run"],["Refill",`1 per ${Math.round(EN_SEC/60*10)/10} min, up to ${EN_MAX}`],["League game","+2 energy"],["Drops","Floors 1–5 50% · 6–9 65% · 10 85%"],["Grind",`10 runs · ${RUNSEC[1]} / ${RUNSEC[2]} / ${RUNSEC[3]} s a run`],["Daily bonus",`+${EN_DAY} energy on first open · stacks ${EN_STACK} days`]])+
+   q("Gyms",[["Floors","10; floor 10 is five Legends"],["3 on 3","Floors 1–5"],["Drops","Floors 1–5 50% · 6–9 65% · 10 85%"],["Grind",`10 runs · ${RUNSEC[1]} / ${RUNSEC[2]} / ${RUNSEC[3]} s a run`]])+
    q("Seasons",[["Regular season","48 games"],["Playoffs","Top 8"],["Boss","Best of 7"],["Win","Next tier"],["League level",`Tier 1 ${tierLevel(1)} → Tier ${MAXTIER} ${tierLevel(MAXTIER)}`],["Pay","+10% a tier"],["Boss Legends",`Tier ${LEGTIER}+: first win over a boss → pick one of its Legends`]])+
    q("Game plan",[["Set","Before the game · games play themselves"],["Offense","Auto · Through your star · Pick-and-roll · Pace and space · Inside-out"],["Defense","Man · Switch · Zone · Press"],["Tempo","Slow · Normal · Fast"],["They answer","Threes → Switch · Rim → Zone · Star → Switch · Pick-and-roll → Press"],["When","Playoffs after a loss · bosses from game 2 · rivalries and Arena from the first game"]])+
    q("Play",[["Foul trouble","3 in the 1st half, 4 in the 2nd; 6 is out"],["Cold","4 misses in a row: −8%"],["Fresh legs","4 trips on the bench: +5%"],["Autoplay","2x speed · same pay as Play"]])+
@@ -5726,7 +5726,7 @@ Object.assign(ACT,{
    A cleared floor can be ground ten times: each run takes real time, drops land in a log as they happen,
    and the haul opens with the reveal at the end. The app keeps counting while it's closed. */
 let EN_MAX=60,EN_SEC=180;/* full bar, one point every 3 minutes */
-const RUNCOST=[0,3,5,8],RUNSEC=[0,20,30,45];/* by tier: floors 1-5, 6-9, 10 */
+const RUNCOST=[0,0,0,0],RUNSEC=[0,20,30,45];/* by tier: floors 1-5, 6-9, 10 */
 const FMTN=["","3 on 3 to 21","One half","Full game"];
 /* gear is scarce on purpose: low floors are mostly fodder, the good pieces come from the top */
 const DROPTXT=["","Half your wins drop a piece: 1★ to 3★, mostly Common","Two wins in three drop a piece: 2★ to 5★, Epic now and then","Most wins drop a piece: 4★ to 6★, Legendary now and then"];
@@ -5742,11 +5742,11 @@ function spendEnergy(n){if(energy()<n)return false;if(S.en.v>=EN_MAX)S.en.t=Date
 function addEnergy(n){energy();S.en.v=Math.max(S.en.v,Math.min(EN_MAX,S.en.v+n))}
 /* +100 the first time you open the game each day; missed days stack up to 3. It can go over the bar (up to 360); the normal refill stops above 60. */
 const EN_DAY=100,EN_STACK=3;
-function dailyEnergy(){const d=dayIndex();if(S.enDay==null){S.enDay=d-1}const days=Math.min(EN_STACK,d-S.enDay);if(days<=0)return 0;
+function dailyEnergy(){return 0;const d=dayIndex();if(S.enDay==null){S.enDay=d-1}const days=Math.min(EN_STACK,d-S.enDay);if(days<=0)return 0;
   energy();S.en.v=Math.min(EN_MAX+EN_DAY*EN_STACK,S.en.v+EN_DAY*days);S.enDay=d;save();setTimeout(()=>toast(`Daily energy +${EN_DAY*days}${days>1?` (${days} days)`:""}`),700);return days}
 const BOLT='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 2 4 13.5h6.5L9 22l11-12.5h-6.8z"/></svg>';
 const mmss=s=>`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
-function enHTML(){const v=energy(),nx=energyNext();return`<span class="enp" aria-label="Energy ${v}">${BOLT}<b>${v}</b>${v>EN_MAX?`<small>with daily bonus</small>`:`<i>/${EN_MAX}</i>`}${nx?`<small>+1 in ${mmss(nx)}</small>`:""}</span>`}
+function enHTML(){return"";const v=energy(),nx=energyNext();return`<span class="enp" aria-label="Energy ${v}">${BOLT}<b>${v}</b>${v>EN_MAX?`<small>with daily bonus</small>`:`<i>/${EN_MAX}</i>`}${nx?`<small>+1 in ${mmss(nx)}</small>`:""}</span>`}
 
 /* ---------- each gym's own team ---------- */
 function gymLine(id){S.gl=S.gl||{};let L=(S.gl[id]||[]).filter(i=>S.own[i]);
@@ -5791,8 +5791,8 @@ function openFloor(id,f){f=+f;const gym=GYMS.find(g=>g.id===id);const tier=gymTi
    <div class="panel fdr"><p><b>Win:</b> ${DROPTXT[tier]}.${tier===3?" Closer pieces and, rarely, named 6★ pieces drop here too.":""}</p>
     ${cleared?"":`<p><b>First clear</b> +${35+f*10} coins</p>`}</div>`;
   const busy=G&&!G.done;
-  const foot=`<div class="fen">${enHTML()}</div><div class="row"><button class="btn go sp" data-act="gplay" data-arg="${id}:${f}:choose">Play <i class="ec">${BOLT}${cost}</i></button><button class="btn sp dk" data-act="gplay" data-arg="${id}:${f}:result">Sim <i class="ec">${BOLT}${cost}</i></button></div>
-   ${cleared?`<button class="btn sp dk grb" data-act="ggrind" data-arg="${id}:${f}" ${busy?"disabled":""}>${busy?"A grind is running":`Grind ×10 · ${mmss(RUNSEC[tier]*10)} · ${BOLT}${cost} a run`}</button>`:""}`;
+  const foot=`<div class="row"><button class="btn go sp" data-act="gplay" data-arg="${id}:${f}:choose">Play</button><button class="btn sp dk" data-act="gplay" data-arg="${id}:${f}:result">Sim</button></div>
+   ${cleared?`<button class="btn sp dk grb" data-act="ggrind" data-arg="${id}:${f}" ${busy?"disabled":""}>${busy?"A grind is running":`Grind ×10 · ${mmss(RUNSEC[tier]*10)} `}</button>`:""}`;
   sheet(body,null,foot,"floor",()=>openFloor(id,f))}
 function playFloor(id,f,mode,side){f=+f;const tier=gymTier(f);if(energy()<RUNCOST[tier]){toast("Not enough energy");return}
   if(mode==="choose"){choosePlay(sd=>playFloor(id,f,"play",sd));return}
@@ -7542,7 +7542,7 @@ async function cloudPull(){if(!IS_APP)return;try{const r=await NP("Native","clou
 let CLOUDV=null;
 
 /* ---- notifications (each can be turned off in More). Scheduled when the app goes to the background, cleared when it comes back ---- */
-const NOTI=[["energy","Gym energy full"],["daily","The Daily resets"],["auto","Autoplay finished"]];
+const NOTI=[["daily","The Daily resets"],["auto","Autoplay finished"]];
 async function notiSchedule(){if(!IS_APP||!S||S.fr==null)return;const list=[];const now=Date.now();
   try{if(nset("energy",true)&&typeof energy==="function"){const v=energy();if(v<EN_MAX){const left=(EN_MAX-v-1)*EN_SEC*1000+energyNext()*1000;list.push({id:11,title:"Gym energy full",body:"Your team is rested. Time to grind.",schedule:{at:new Date(now+left)}})}}
     if(nset("daily",true)&&typeof DWIN!=="undefined"){const at=(dWin()+1)*DWIN;list.push({id:12,title:"The Daily reset",body:"New Challenge, Spotlight, missions and Vault.",schedule:{at:new Date(at+60000)}})}
@@ -7648,7 +7648,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="902e9ae01b";
+<script>const APPV="befda7718d";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
