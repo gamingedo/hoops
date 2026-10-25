@@ -4403,7 +4403,7 @@ const ACT={
   importGo:()=>{let n=null;try{n=JSON.parse(decodeURIComponent(escape(atob(document.getElementById("imp").value.trim()))))}catch(e){}
     /* only a real save replaces yours; then the app restarts so old saves get updated the same way they do at launch */
     /* a save at the welcome pack (before the team pick) has no season yet */if(!n||typeof n!=="object"||!n.own||!Array.isArray(n.roster)||!(n.season||(n.start&&n.fr==null))||typeof n.coins!=="number"){toast("Not a save code");return}
-    clearInterval(GTIMER);try{localStorage.setItem(SAVEKEY,JSON.stringify(n))}catch(e){toast("Couldn't save on this device");return}location.reload()},
+    n.imp=1;n.savedAt=Date.now();clearInterval(GTIMER);try{localStorage.setItem(SAVEKEY,JSON.stringify(n))}catch(e){toast("Couldn't save on this device");return}location.reload()},
   reset:()=>{sheet(`<h2>Start over?</h2><p>This deletes your team, cards and gear on this device.</p><div class="row"><button class="btn sp" data-act="close">Keep playing</button><button class="btn sp" style="background:#5a2a10" data-act="resetGo">Delete and start over</button></div>`)},
   resetGo:()=>{clearInterval(GTIMER);try{localStorage.removeItem(SAVEKEY)}catch(e){}S=null;closeSheet();renderTitle()}};
 document.addEventListener("click",e=>{if(window._dragEnd&&Date.now()-window._dragEnd<700){e.preventDefault();e.stopPropagation();return}const b=e.target.closest("[data-act]");if(!b)return;const f=ACT[b.dataset.act];if(f){if(!(b.tagName==="INPUT"&&(b.type==="checkbox"||b.type==="radio")))e.preventDefault();f(b.dataset.arg,b)}});
@@ -7535,7 +7535,7 @@ const nput=(k,v)=>{try{localStorage.setItem("hd_n_"+k,v?"1":"0")}catch(e){}};
 let CLOUDT=0;
 function cloudPush(){if(!IS_APP||!S||S.fr==null)return;clearTimeout(CLOUDT);CLOUDT=setTimeout(()=>{try{const v=localStorage.getItem(SAVEKEY);if(v)NP("Native","cloudSet",{key:SAVEKEY,value:v,t:Date.now()}).catch(()=>{})}catch(e){}},4000)}
 async function cloudPull(){if(!IS_APP)return;try{const r=await NP("Native","cloudGet",{key:SAVEKEY});if(!r||!r.value)return;const cl=JSON.parse(r.value);if(!cl||!cl.own)return;
-    const local=S&&S.fr!=null?S:null;const lt=local&&local.savedAt||0,ct=cl.savedAt||r.t||0;
+    const local=S&&(S.fr!=null||S.imp)?S:null;/* a save you loaded yourself at the welcome pack counts as yours; iCloud never replaces it */const lt=local&&local.savedAt||0,ct=cl.savedAt||r.t||0;
     if(!local){localStorage.setItem(SAVEKEY,r.value);location.reload();return}
     if(ct>lt+60000){sheet(`<span class="kick">iCloud</span><h2>A newer save is in iCloud</h2><div class="chips"><span class="chip">${esc(TEAMNICK(cl.fr))} · Season ${cl.season?cl.season.n:1}</span><span class="chip">${new Date(ct).toLocaleString()}</span></div>`,null,
       `<div class="row"><button class="btn sp dk" data-act="close">Keep this phone's</button><button class="btn go sp" data-act="cloudUse">Use iCloud save</button></div>`,"cloud");CLOUDV=r.value}}catch(e){}}
@@ -7648,7 +7648,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="d9709d940c";
+<script>const APPV="902e9ae01b";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
