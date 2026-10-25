@@ -2931,16 +2931,15 @@ function addRing(i){const o=S.own[i];if(!o||!(o.sp>0)||(o.j||0)>=5)return false;
    higher the card the more it starts at. One level never costs more than a day's reps, so a card always gains one a day.
    At full daily reps, 10 to max: 3★ ~4 days, 4★ ~9, 5★ ~14, 6★ ~19, 7★ ~28. */
 const LVE=25,LVB=[0,40,50,65,85,110,140,180];
-const lvNeed=(st,l)=>l<10?LVE:Math.min(REPCAP,Math.round(LVB[Math.min(7,st)]*Math.pow(1.1,l-10)));
+/* levels 1-12 cost what they always did; from 13 on each level costs LVSTEEP times the one before, with no ceiling and no daily limit.
+   A starter banks about 190 minutes a game (a gym grind runs about 70 games an hour), so a 3★ maxes in about 80 games, a 4★ in 600,
+   a 5★ in 4,000 (about 60 hours of grinding) and a 6★ is out of reach: gear is the real grind, levels are the luxury */
+const LVSTEEP=1.4,LVFLAT=12;
+const lvNeed=(st,l)=>{const b=LVB[Math.min(7,st)];return l<10?LVE:l<=LVFLAT?Math.round(b*Math.pow(1.1,l-10)):Math.round(b*Math.pow(1.1,LVFLAT-10)*Math.pow(LVSTEEP,l-LVFLAT))}
 function lvCost(i){const o=S.own[i];return o.lv>=maxLv(i)?0:lvNeed(o.st,o.lv)}
 /* bank minutes and take every level they pay for; returns the levels gained */
-/* Daily reps (Oct 24): each card banks up to REPCAP minutes a Daily window, then he's rested until the reset. Sim is
-   unlimited and coins farm without limit; levels come at the same pace for everyone, so spreading games across your
-   cards (bench, a second five, gym teams) is how you grow more of them. Gear is the grind on top */
-const REPCAP=400;
-const repsUsed=i=>{const o=S.own[i];if(!o)return 0;const w=dWin();return o.rw===w?(o.rm||0):0};
-const repsLeft=i=>Math.max(0,REPCAP-repsUsed(i));
-function bankMinutes(i,m){const o=S.own[i];if(!o||m<=0||DB.c[i].tw)return 0;if(o.lv<maxLv(i)){const w=dWin();if(o.rw!==w){o.rw=w;o.rm=0}m=Math.min(m,REPCAP-o.rm);o.rm+=Math.max(0,m)}if(m<=0)return 0;o.mn=(o.mn||0)+m;let k=0;while(o.lv<maxLv(i)&&o.mn>=lvNeed(o.st,o.lv)){o.mn-=lvNeed(o.st,o.lv);o.lv++;k++}if(k)track("level",k);return k}
+/* no daily limit (Oct 25): every minute of Play and Autoplay counts, so autoplay always beats a sim. Sim gives none. */
+function bankMinutes(i,m){const o=S.own[i];if(!o||m<=0||DB.c[i].tw)return 0;o.mn=(o.mn||0)+m;let k=0;while(o.lv<maxLv(i)&&o.mn>=lvNeed(o.st,o.lv)){o.mn-=lvNeed(o.st,o.lv);o.lv++;k++}if(k)track("level",k);return k}
 /* ---- Banners: the second currency (coins are the first). Chalk, Film and Legend Shards folded into it on Oct 24
    (1 Chalk = 1 Banner, 1 Film = 15, 1 Shard = 15; migrate.js converts old saves). Discards, dupes, the Legend Trial, the
    Challenge, Draft Runs, the pass and Arena pay it; the Front Office, the Legend Forge and the Film Room spend it ---- */
@@ -3637,9 +3636,8 @@ function cardSheet(id,big,body,stc,acts,tab,extra){const pg=pagerHTML(id);
 function lvPanel(id){const c=DB.c[id],o=S.own[id],ml=maxLv(id),nat=MAXLV[c.s],g=lvGain(c),so=(o.lv-1)*g;const left=ml-o.lv;const need=lvCost(id),have=o.mn||0;
   return`<div class="panel lvp"><div class="row"><h3 style="margin:0">Level ${o.lv}<span class="mut" style="font:700 13px var(--f-b)"> / ${ml}</span></h3><span class="sp"></span><span class="lvg">+${g<1?g.toFixed(2):g} a level</span></div>
     <div class="lvb"><b style="width:${Math.round((o.lv-1)/Math.max(1,ml-1)*100)}%"></b></div>
-    <div class="row lvr"><span class="kick" style="margin:0">Ratings</span><span class="sp"></span><b>${c.k==="K"?`+${so.toFixed(1)} / +${Math.round(rookGrow(c))} · cap ${Math.floor(rookCap(c))}`:`+${so.toFixed(1)} / +10`}</b></div>
-    ${left>0?`<div class="row" style="margin-top:8px"><span class="kick" style="margin:0">Minutes</span><span class="sp"></span><b>${have} / ${need}</b></div><div class="lvb mn"><b style="width:${Math.round(Math.min(1,have/Math.max(1,need))*100)}%"></b></div>
-    <div class="row lvr reps"><span class="kick" style="margin:0">Reps today</span><span class="sp"></span><b>${repsLeft(id)>0?`${repsUsed(id)} / ${REPCAP} min`:`Rested · back in ${dLeft()}`}</b></div>`:`<p class="lvmax">Max level</p>`}</div>`}
+    <div class="row lvr"><span class="kick" style="margin:0">Ratings</span><span class="sp"></span><b>${c.k==="K"?`+${so.toFixed(1)} / +${Math.round(rookGrow(c))} · cap ${Math.floor(rookCap(c))}`:`+${so.toFixed(1)} / +${(g*(ml-1)).toFixed(1)}`}</b></div>
+    ${left>0?`<div class="row" style="margin-top:8px"><span class="kick" style="margin:0">Minutes</span><span class="sp"></span><b>${have.toLocaleString()} / ${need.toLocaleString()} · ~${Math.max(1,Math.ceil((need-have)/190)).toLocaleString()} games</b></div><div class="lvb mn"><b style="width:${Math.round(Math.min(1,have/Math.max(1,need))*100)}%"></b></div>`:`<p class="lvmax">Max level</p>`}</div>`}
 function evPanel(id){const o=S.own[id];if(o.st>=topStar(id))return hofOn(id)?`<div class="panel evp"><span class="kick">Hall of Fame</span><p style="margin:4px 0 0">Aura on: teammates +2 on every rating; the other team's perks don't work on him.</p></div>`:"";const ml=maxLv(id),ready=canEvolve(id),have=evolveFodder(id).length,need=Math.min(6,o.st),x7=o.st===6;
   return`<div class="panel evp"><div class="row"><span class="kick">Evolve</span><span class="sp"></span><span class="tl">${"★".repeat(o.st)} → ${"★".repeat(o.st+1)}</span></div>
     <div class="row lvr"><span class="kick" style="margin:0">Needs</span><span class="sp"></span><b>Lv ${ml} · spares ${Math.min(have,need)}/${need}${x7?` · ${EVO7.coins.toLocaleString()} coins · ${EVO7.bnr.toLocaleString()} Banners`:""}</b></div>${x7?`<p class="mut" style="margin:6px 0 0;font-size:13px">7★ is for Book Legends only. At 7★ Lv ${MAXLV[7]} his Hall of Fame aura turns on.</p>`:""}
@@ -3933,7 +3931,7 @@ function powerHTML(){const all=Object.keys(S.own).map(Number);const ready=all.fi
     return`<div class="pw" role="button" tabindex="0" data-act="pwOpen" data-arg="${i}"><span class="pwc">${mcHTML(i,{noNew:true,act:"pwOpen"})}</span><span class="pwi"><b>${esc(p[0])}</b>
       <span class="pwr"><span>Lv ${o.lv}<small>/${ml}</small></span><span>${"★".repeat(Math.min(o.st,7))}</span><span>Gear ${g}/6</span>${o.j?`<span>Rings ${ROMAN[o.j]}</span>`:""}</span>
       <i class="xpb"><b style="width:${Math.round((o.lv-1)/Math.max(1,ml-1)*100)}%"></b></i>
-      ${ev?`<em class="evr">Max level · evolve with ${Math.min(6,o.st)} spare${o.st>1?"s":""}</em>`:o.st>=topStar(i)&&o.lv>=ml?'<em class="mx">Fully powered up</em>':`<em>${repsLeft(i)>0?`Next level in ${Math.max(0,lvCost(i)-(o.mn||0))} min`:`Rested · reps reset in ${dLeft()}`}</em>`}</span></div>`}).join("")||'<div class="empty">Nothing here.</div>'}</div>`;
+      ${ev?`<em class="evr">Max level · evolve with ${Math.min(6,o.st)} spare${o.st>1?"s":""}</em>`:o.st>=topStar(i)&&o.lv>=ml?'<em class="mx">Fully powered up</em>':`<em>Next level in ${Math.max(0,lvCost(i)-(o.mn||0)).toLocaleString()} min</em>`}</span></div>`}).join("")||'<div class="empty">Nothing here.</div>'}</div>`;
   return h}
 /* Rings: a spare copy becomes a Ring only when you say so. One ladder for every card, bigger on rarer cards */
 function ringsHTML(){const ids=Object.keys(S.own).map(Number).filter(i=>(S.own[i].sp||0)>0||(S.own[i].j||0)>0).sort((a,b)=>(S.own[b].sp||0)-(S.own[a].sp||0)||cardOvr(b)-cardOvr(a));
@@ -3971,7 +3969,7 @@ function faqHTML(){const q=(t,rows,open)=>`<details class="panel faq"${open?" op
    q("Odds",[["Card packs","5★ 0.05% · 4★ 0.4% · 3★ 3.5% · 2★ 25% · 1★ 71%"],["Gear box","Rare 60% · Epic 32% · Legendary 8%"],["Coach pack","Common 60% · Rare 30% · Epic 10%"],["Coach pity","Every 5th is Rare or better"],["Legends pack","HOF 55% · Top 75 25% · Top 50 12% · Top 25 6% · Top 10 2%"],["Pity",`4★ within ${PITY4} pulls · 5★ within ${PITY5}`]])+
    q("Shops",[["Deal","10 pulls at 30% off · every 18 h"],["Vault","One item off · one buy"],["Spotlight","1 in 10 is him · else a Player pack card"],["Front Office","Your team + 3 more · new every Monday"],["Event shop","5 daily missions · 300 coins each"],["Event cards","Rivalries · or pick 1 of 5 for 1,500"]])+
    q("Coins and Banners",[["Coins","Games → packs, gear, power-ups"],["Game pay","Win 100 · Played +20% · Sim −25%"],["Win streak","+10 a win in a row, up to +50"],["Daily pay",`Full for ${PAYDAY} league games a day · then ${Math.round(PAYLATE*100)}%`],["Banners","Discards, dupes, Legend Trial, Challenge, Draft Run, Arena, rivalries"],["Spend on","Front Office · Legend Forge · Film Room"],["Per discard",`1★ ${CARDSELL[1]} · 2★ ${CARDSELL[2]} · 3★ ${CARDSELL[3]} · 4★ ${CARDSELL[4]} · 5★ ${CARDSELL[5]}`],["Old saves",`1 Chalk = ${BANRATE.chalk} · 1 Film = ${BANRATE.film} · 1 Shard = ${BANRATE.shards}`]])+
-   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 10, then each level costs more · higher stars cost more"],["Daily reps",`Each card banks up to ${REPCAP} minutes a Daily window, then rests. Play different cards to grow more of them`],["Max level","+10 all ratings"],["Evolve","Max level + spares: +1★, +1 all ratings"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
+   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 12, then each level costs 40% more than the last · higher stars cost more"],["No limit","No daily cap: autoplay always counts and a sim never does"],["Max level","+5 all ratings"],["Evolve","Max level + spares: +1★, +1 all ratings"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
    q("Ratings over 99",[["Cap","140"],["Breakthroughs","At 100 and 110 · tap the name on a card"],["Past 99","Each point counts half"]])+
    q("Gear",[["Slots","6"],["Substats","Common 0 · Rare 2 · Epic 3 · Legendary 4"],["Power-up cap","1★ +3 · 2★ +6 · 3★ +9 · 4★ +12 · 5★ +15"],["New substat","+3, +6, +9, +12"],["Stat set","2 pieces: +4 one rating"],["Meta set","4 pieces; gym drops only"]])+
    q("Gyms",[["Floors","10; floor 10 is five Legends"],["Ascension","Clear floor 10 to open A1 to A5: the Legends again at 130, 134, 138, 141, 145. Each level drops more 6★ and Legendary pieces, a bigger chance at the named pieces (up to 6%), and pays a first-clear bonus in Banners"],["3 on 3","Floors 1–5"],["Drops","Floors 1–5 50% · 6–9 65% · 10 85%"],["Grind",`10 runs · a big win is over sooner, a close one or a loss takes the full time`],["Chase","Each gym's Legend floor drops its own named 6★ pieces"],["Your clear","Each floor shows your win rate, run time and pieces an hour"]])+
@@ -7574,7 +7572,7 @@ function playGame(res0,side,done){
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 25 · 7";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 25 · 8";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const NP=(plugin,method,opts)=>IS_APP&&window.Capacitor.nativePromise?window.Capacitor.nativePromise(plugin,method,opts||{}):Promise.reject(new Error("web"));
 const nset=(k,d)=>{try{const v=localStorage.getItem("hd_n_"+k);return v==null?d:v==="1"}catch(e){return d}};
@@ -7697,7 +7695,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="98dd6491d7";
+<script>const APPV="7dface3744";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
