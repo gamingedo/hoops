@@ -2936,6 +2936,10 @@ const LVE=25,LVB=[0,40,50,65,85,110,140,180];
    a 5★ in 4,000 (about 60 hours of grinding) and a 6★ is out of reach: gear is the real grind, levels are the luxury */
 const LVSTEEP=1.4,LVFLAT=12;
 const lvNeed=(st,l)=>{const b=LVB[Math.min(7,st)];return l<10?LVE:l<=LVFLAT?Math.round(b*Math.pow(1.1,l-10)):Math.round(b*Math.pow(1.1,LVFLAT-10)*Math.pow(LVSTEEP,l-LVFLAT))}
+/* Training: 1,000 minutes for 500 Banners. Banners cannot be farmed by simming (packs never pay for themselves), and 500 is what
+   discarding a 5-star gives, so this is a luxury: autoplay earns the same minutes in about 5 games */
+const TRAIN={min:1000,bnr:500};
+function trainCard(i){const o=S.own[i];if(!o||o.lv>=maxLv(i)||DB.c[i].tw)return 0;if(!spendBan(TRAIN.bnr))return-1;const k=bankMinutes(i,TRAIN.min);save();return k}
 function lvCost(i){const o=S.own[i];return o.lv>=maxLv(i)?0:lvNeed(o.st,o.lv)}
 /* bank minutes and take every level they pay for; returns the levels gained */
 /* no daily limit (Oct 25): every minute of Play and Autoplay counts, so autoplay always beats a sim. Sim gives none. */
@@ -3637,7 +3641,9 @@ function lvPanel(id){const c=DB.c[id],o=S.own[id],ml=maxLv(id),nat=MAXLV[c.s],g=
   return`<div class="panel lvp"><div class="row"><h3 style="margin:0">Level ${o.lv}<span class="mut" style="font:700 13px var(--f-b)"> / ${ml}</span></h3><span class="sp"></span><span class="lvg">+${g<1?g.toFixed(2):g} a level</span></div>
     <div class="lvb"><b style="width:${Math.round((o.lv-1)/Math.max(1,ml-1)*100)}%"></b></div>
     <div class="row lvr"><span class="kick" style="margin:0">Ratings</span><span class="sp"></span><b>${c.k==="K"?`+${so.toFixed(1)} / +${Math.round(rookGrow(c))} · cap ${Math.floor(rookCap(c))}`:`+${so.toFixed(1)} / +${(g*(ml-1)).toFixed(1)}`}</b></div>
-    ${left>0?`<div class="row" style="margin-top:8px"><span class="kick" style="margin:0">Minutes</span><span class="sp"></span><b>${have.toLocaleString()} / ${need.toLocaleString()} · ~${Math.max(1,Math.ceil((need-have)/190)).toLocaleString()} games</b></div><div class="lvb mn"><b style="width:${Math.round(Math.min(1,have/Math.max(1,need))*100)}%"></b></div>`:`<p class="lvmax">Max level</p>`}</div>`}
+    ${left>0?`<div class="row" style="margin-top:8px"><span class="kick" style="margin:0">Minutes</span><span class="sp"></span><b>${have.toLocaleString()} / ${need.toLocaleString()} · ~${Math.max(1,Math.ceil((need-have)/190)).toLocaleString()} games</b></div><div class="lvb mn"><b style="width:${Math.round(Math.min(1,have/Math.max(1,need))*100)}%"></b></div>
+    <button class="btn sm dk" style="width:100%;margin-top:8px" data-act="train" data-arg="${id}" ${(S.bnr||0)<TRAIN.bnr?"disabled":""}>${TRAIN.min.toLocaleString()} min ${banI}${TRAIN.bnr}</button>
+    <p class="mut" style="margin:6px 0 0;font-size:12px">Same as about ${Math.round(TRAIN.min/190)} games of autoplay</p>`:`<p class="lvmax">Max level</p>`}</div>`}
 function evPanel(id){const o=S.own[id];if(o.st>=topStar(id))return hofOn(id)?`<div class="panel evp"><span class="kick">Hall of Fame</span><p style="margin:4px 0 0">Aura on: teammates +2 on every rating; the other team's perks don't work on him.</p></div>`:"";const ml=maxLv(id),ready=canEvolve(id),have=evolveFodder(id).length,need=Math.min(6,o.st),x7=o.st===6;
   return`<div class="panel evp"><div class="row"><span class="kick">Evolve</span><span class="sp"></span><span class="tl">${"★".repeat(o.st)} → ${"★".repeat(o.st+1)}</span></div>
     <div class="row lvr"><span class="kick" style="margin:0">Needs</span><span class="sp"></span><b>Lv ${ml} · spares ${Math.min(have,need)}/${need}${x7?` · ${EVO7.coins.toLocaleString()} coins · ${EVO7.bnr.toLocaleString()} Banners`:""}</b></div>${x7?`<p class="mut" style="margin:6px 0 0;font-size:13px">7★ is for Book Legends only. At 7★ Lv ${MAXLV[7]} his Hall of Fame aura turns on.</p>`:""}
@@ -3969,7 +3975,7 @@ function faqHTML(){const q=(t,rows,open)=>`<details class="panel faq"${open?" op
    q("Odds",[["Card packs","5★ 0.05% · 4★ 0.4% · 3★ 3.5% · 2★ 25% · 1★ 71%"],["Gear box","Rare 60% · Epic 32% · Legendary 8%"],["Coach pack","Common 60% · Rare 30% · Epic 10%"],["Coach pity","Every 5th is Rare or better"],["Legends pack","HOF 55% · Top 75 25% · Top 50 12% · Top 25 6% · Top 10 2%"],["Pity",`4★ within ${PITY4} pulls · 5★ within ${PITY5}`]])+
    q("Shops",[["Deal","10 pulls at 30% off · every 18 h"],["Vault","One item off · one buy"],["Spotlight","1 in 10 is him · else a Player pack card"],["Front Office","Your team + 3 more · new every Monday"],["Event shop","5 daily missions · 300 coins each"],["Event cards","Rivalries · or pick 1 of 5 for 1,500"]])+
    q("Coins and Banners",[["Coins","Games → packs, gear, power-ups"],["Game pay","Win 100 · Played +20% · Sim −25%"],["Win streak","+10 a win in a row, up to +50"],["Daily pay",`Full for ${PAYDAY} league games a day · then ${Math.round(PAYLATE*100)}%`],["Banners","Discards, dupes, Legend Trial, Challenge, Draft Run, Arena, rivalries"],["Spend on","Front Office · Legend Forge · Film Room"],["Per discard",`1★ ${CARDSELL[1]} · 2★ ${CARDSELL[2]} · 3★ ${CARDSELL[3]} · 4★ ${CARDSELL[4]} · 5★ ${CARDSELL[5]}`],["Old saves",`1 Chalk = ${BANRATE.chalk} · 1 Film = ${BANRATE.film} · 1 Shard = ${BANRATE.shards}`]])+
-   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 12, then each level costs 40% more than the last · higher stars cost more"],["No limit","No daily cap: autoplay always counts and a sim never does"],["Max level","+5 all ratings"],["Evolve","Max level + spares: +1★, +1 all ratings"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
+   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 12, then each level costs 40% more than the last · higher stars cost more"],["No limit","No daily cap: autoplay always counts and a sim never does"],["Train",`${TRAIN.min.toLocaleString()} minutes for ${TRAIN.bnr} Banners on one card. Banners cannot be farmed by simming`],["Max level","+5 all ratings"],["Evolve","Max level + spares: +1★, +1 all ratings"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
    q("Ratings over 99",[["Cap","140"],["Breakthroughs","At 100 and 110 · tap the name on a card"],["Past 99","Each point counts half"]])+
    q("Gear",[["Slots","6"],["Substats","Common 0 · Rare 2 · Epic 3 · Legendary 4"],["Power-up cap","1★ +3 · 2★ +6 · 3★ +9 · 4★ +12 · 5★ +15"],["New substat","+3, +6, +9, +12"],["Stat set","2 pieces: +4 one rating"],["Meta set","4 pieces; gym drops only"]])+
    q("Gyms",[["Floors","10; floor 10 is five Legends"],["Ascension","Clear floor 10 to open A1 to A5: the Legends again at 130, 134, 138, 141, 145. Each level drops more 6★ and Legendary pieces, a bigger chance at the named pieces (up to 6%), and pays a first-clear bonus in Banners"],["3 on 3","Floors 1–5"],["Drops","Floors 1–5 50% · 6–9 65% · 10 85%"],["Grind",`10 runs · a big win is over sooner, a close one or a loss takes the full time`],["Chase","Each gym's Legend floor drops its own named 6★ pieces"],["Your clear","Each floor shows your win rate, run time and pieces an hour"]])+
@@ -4348,6 +4354,7 @@ const ACT={
   stNext:()=>{const f=START_NEXT;START_NEXT=null;closeAll();if(f)setTimeout(f,120)},
   startNew:()=>{newStart();renderTitle();openStartReveal()},
   posFix:a=>{const[i,k]=a.split(":").map(Number);POSSEL={id:i,k};openPosTeach(i)},
+  train:a=>{const i=+a,r=trainCard(i);if(r<0)return;if(!S.own[i])return;toast(r>0?`${lastName(DB.p[DB.c[i].p][0])}: +${r} level${r>1?"s":""}`:`${lastName(DB.p[DB.c[i].p][0])}: +${TRAIN.min.toLocaleString()} minutes`);if(SHEET&&SHEET.el.dataset.tag==="card")openCard(i,true);else render()},
   addRing:a=>{const i=+a;if(addRing(i)){const c=DB.c[i];toast(`${lastName(DB.p[c.p][0])}: Ring ${ROMAN[S.own[i].j]} · ${RINGS(c)[S.own[i].j]}`);if(SHEET&&SHEET.el.dataset.tag==="card")openCard(i,true);else render()}},
   pickSel:a=>{window.PICKSEL=+a;render()},
   pickfr:a=>{if(S&&S.fr==null&&S.start&&S.start.ok){finishStart(+a);S.start.kept=1;const skip=S.start.ok==="skip";S.start.first=skip?0:1;save();VIEW="team";render();if(!skip)setTimeout(()=>runGame("reg","play",{side:"full",first:1}),300);return}newGame(+a);VIEW="team";render();openStartReveal()},
@@ -7572,7 +7579,7 @@ function playGame(res0,side,done){
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 25 · 8";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 25 · 9";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const NP=(plugin,method,opts)=>IS_APP&&window.Capacitor.nativePromise?window.Capacitor.nativePromise(plugin,method,opts||{}):Promise.reject(new Error("web"));
 const nset=(k,d)=>{try{const v=localStorage.getItem("hd_n_"+k);return v==null?d:v==="1"}catch(e){return d}};
@@ -7695,7 +7702,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="7dface3744";
+<script>const APPV="e16384e729";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
