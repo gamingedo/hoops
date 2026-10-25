@@ -2381,7 +2381,9 @@ function perkAt(c,t){const k=perkKey(c);if(!k)return null;const m=Math.min(PKCAP
    Y:`Fearless ${P(.05)} in the last 5 min`,X:`Microwave ${P(.06)}${v2?", starting too":" off the bench"}`,M:`Takeover ${P(.10)} when behind late${v2?", twice a game":""}`,D:`Lockdown: their best ${N(.10)}, ${N(.15)} late`,
    Unstoppable:`Unstoppable ${P(.12)} in the last 2 min`,Clamps:`Clamps: their best ${N(.05)}, ${N(.12)} late`,Maestro:`Maestro: teammates +${Math.round(3*m)} SHT, IQ`,"Paint Patrol":`Paint Patrol: their rim shots ${N(.05)}`})[k]+(v2&&c.k==="L"?" · Icon: their perks don't work on him":"")}
 const RINGS=c=>{const m=rarMul(c),f=v=>Number.isInteger(v*m)?v*m:(v*m).toFixed(1),p3=perkAt(c,1),p5=perkAt(c,2);return["",`+${f(2)} best rating`,`+${f(1)} all ratings`,p3||`+${f(1)} all ratings`,`+${f(2)} all ratings`,p5||"Closer: last 2 min +15%"]};
-const lvGain=c=>c.tw?0:c.k==="K"?rookGrow(c)/(MAXLV[6]-1):(c.k==="Y"?15:c.k==="L"?LGROW[c.gt==null?5:c.gt]:10)/(MAXLV[c.s]-1);
+/* levels are the smaller half of a build: half of what they once gave, so gear carries most of the climb (Oct 25) */
+const LVSHARE=.5;
+const lvGain=c=>c.tw?0:LVSHARE*(c.k==="K"?rookGrow(c)/(MAXLV[6]-1):(c.k==="Y"?15:c.k==="L"?LGROW[c.gt==null?5:c.gt]:10)/(MAXLV[c.s]-1));
 /* rookies: growth by draft slot, +30 in all for the first pick sliding to +18 at 30, +12 after; spread over every level up
    to the 6★ ceiling and pointed at his strengths (his best rating grows about half again as fast as his weakest).
    No rookie rating passes 110 for the first pick, 0.5 less per pick after (pick 30: 95.5), whatever gear or tiers add */
@@ -3068,7 +3070,7 @@ function aiFive(ids,must){must=must||[];const cand=[...new Set([...must,...ids])
 /* the ladder starts from your own team: Tier 1 sits level with the team you start with (franchises start
    anywhere from about 92 to 103). Every franchise climbs the same steps from there, so a weaker start isn't also a steeper climb.
    The steps start big and shrink: cheap levels make a young team grow fast, the gear grind slowly. Nothing goes past 137 (a 140 boss is the cap) */
-const TSTEPS=[0,8,14,19,23,27,30,32,34,36,37];
+const TSTEPS=[0,5,9,13,16,19,21,23,25,27,28];/* Oct 25: levels give half as much (a maxed team is about 9 OVR lower), so every step is lowered to match */
 const TOPL=137,MAXTIER=TSTEPS.length;
 const tierLevel=t=>{const b=(S&&S.base)||96;return Math.min(TOPL,b+TSTEPS[clamp(t||1,1,MAXTIER)-1])};
 const TIERL={get length(){return MAXTIER}};/* old name, for anything still counting tiers */
@@ -3209,7 +3211,7 @@ const GYMS=[
   {id:"tri",n:"The Triangle",style:"Maestros",strong:"Playmaking and IQ",g:"read",weak:"Varied attack · switching",meta:"Floor General",stat:["Vision","Smarts"],key:2,boss:["Magic Johnson","John Stockton","Jason Kidd","Tim Duncan","Manu Ginobili"]}];
 GYMS.forEach(g=>g.sets=[g.meta,...g.stat]);
 /* floor levels span the league's range (S3 sim, Oct 24): they were 60 to 105, and every profile cleared all 50 floors on day 2 */
-const FLOORT=[0,78,84,90,96,102,108,114,120,127,135];
+const FLOORT=[0,76,81,86,91,96,101,106,112,118,126];/* Oct 25: lowered 2 to 9 with the level bonus cut */
 const gymTier=f=>f<=5?1:f<=9?2:3;
 function gymTeam(gym,floor){const t=gymTeam0(gym,floor);return typeof aiCoach==="function"?aiCoach(t,floor<=3?"c":floor<=6?"r":floor<=9?"e":"l",gym.id):t}
 function gymTeam0(gym,floor){if(floor===10){const L=gym.boss.map(legendId).filter(x=>x!=null);return scaledTeam(L,FLOORT[10],{name:gym.n+" Legends",abbr:"HOF",color:"#c8a24a",tactic:null,gimmick:gym.g,boss:true,gym:gym.id})}
@@ -7648,7 +7650,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="befda7718d";
+<script>const APPV="4c3091f714";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
