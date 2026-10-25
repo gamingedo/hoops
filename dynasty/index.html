@@ -2469,7 +2469,7 @@ const GIMMICKS={heat:"Heat Check",bully:"Bully",switch:"Switch Everything",runou
 /* the game engine is one generator. Sim runs it straight through. Play stops it at your calls (see play.js):
    opt.ctl = {side:0 to run your offense or 1 to run your defense, run:function*(P,H)}. */
 function simGame(A,B,opt){const g=simIter(A,B,opt);let r=g.next();while(!r.done)r=g.next();return r.value}
-function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];const ev=[];const box={};const score=opt.start?opt.start.slice(0,2):[0,0];
+function* simIter(A,B,opt){opt=opt||{};const fmt=opt.fmt||"full";const T=[A,B];const ev=[];const box={};/* each basket carries its scorer's line as it stood then (the replay trails the engine) */{const _p=ev.push.bind(ev);ev.push=(...a)=>{for(const e of a){if(e&&e.who!=null&&(e.type==="make"||e.type==="runout")){const b=box[e.who+"|"+(e.o!=null?e.o:e.team)];if(b)e.bx={pts:b.pts,ast:b.ast,reb:b.reb,fgm:b.fgm,fga:b.fga,tpm:b.tpm,tpa:b.tpa}}}return _p(...a)}}const score=opt.start?opt.start.slice(0,2):[0,0];
   const mk=p=>box[p.id+"|"+p.team]||(box[p.id+"|"+p.team]={id:p.id,team:p.team,name:p.name,num:p.num,pts:0,reb:0,ast:0,stl:0,blk:0,tov:0,fgm:0,fga:0,tpm:0,tpa:0,ftm:0,fta:0,min:0,clutchA:0,clutchM:0,pm:0,pf:0});
   for(const t of T)for(const p of t.pl)mk(p);
   if(opt.sink){opt.sink.ev=ev;opt.sink.score=score;opt.sink.box=box}
@@ -3585,11 +3585,11 @@ function openCard(id,keepTab){id=+id;const c=DB.c[id],o=S.own[id];if(o&&o.isNew)
      <table class="box ctr" style="margin-top:6px"><tr><th>FG%</th><th>3P%</th><th>FT%</th><th>3PM</th></tr><tr><td>${pct(tot.fgm,tot.fga)}</td><td>${pct(tot.tpm,tot.tpa)}</td><td>${pct(tot.ftm,tot.fta)}</td><td>${tot.tpm}</td></tr></table>
      ${tot.gp?`<p style="font-size:13px"><b>Highs</b> ${o.stats.hi.pts} pts · ${o.stats.hi.reb} reb · ${o.stats.hi.ast} ast · ${o.stats.hi.stl||0} stl · ${o.stats.hi.blk||0} blk · <b>Clutch</b> ${o.stats.clM}/${o.stats.clA}</p>`:""}
      ${(a=>a.length?`<p style="font-size:13px"><b>Awards</b> ${a.join(" · ")}</p>`:"")([...new Set(o.stats.aw.filter(x=>!/^(All-League|MVP|Team MVP) S/.test(x)))])}
-     <button class="btn sm ghost" data-act="moreStats" data-arg="${id}">${MORESTATS?"Hide seasons":"By season"}</button>
-     ${MORESTATS?`<table class="box" style="margin-top:8px"><tr><th>Season</th><th>GP</th><th>PPG</th><th>RPG</th><th>APG</th><th>SPG</th><th>BPG</th></tr>${Object.keys(o.stats.s).sort((a,b)=>parseInt(a)-parseInt(b)||a.length-b.length).map(k=>{const t=o.stats.s[k];return`<tr><td>S${parseInt(k)}${k.endsWith("p")?" playoffs":k.endsWith("b")?" boss":""}</td><td>${t.gp}</td><td>${(t.pts/t.gp).toFixed(1)}</td><td>${(t.reb/t.gp).toFixed(1)}</td><td>${(t.ast/t.gp).toFixed(1)}</td><td>${((t.stl||0)/t.gp).toFixed(1)}</td><td>${((t.blk||0)/t.gp).toFixed(1)}</td></tr>`}).join("")||'<tr><td colspan="7" class="mut">No games yet</td></tr>'}</table>`:""}</div>`;
+     
+     ${false&&MORESTATS?`<table class="box" style="margin-top:8px"><tr><th>Season</th><th>GP</th><th>PPG</th><th>RPG</th><th>APG</th><th>SPG</th><th>BPG</th></tr>${Object.keys(o.stats.s).sort((a,b)=>parseInt(a)-parseInt(b)||a.length-b.length).map(k=>{const t=o.stats.s[k];return`<tr><td>S${parseInt(k)}${k.endsWith("p")?" playoffs":k.endsWith("b")?" boss":""}</td><td>${t.gp}</td><td>${(t.pts/t.gp).toFixed(1)}</td><td>${(t.reb/t.gp).toFixed(1)}</td><td>${(t.ast/t.gp).toFixed(1)}</td><td>${((t.stl||0)/t.gp).toFixed(1)}</td><td>${((t.blk||0)/t.gp).toFixed(1)}</td></tr>`}).join("")||'<tr><td colspan="7" class="mut">No games yet</td></tr>'}</table>`:""}</div>`;
     const ks=Object.keys(o.stats.s).sort((a,b)=>parseInt(a)-parseInt(b)||a.length-b.length);const per=(t,f)=>t.gp?((t[f]||0)/t.gp).toFixed(1):"–";const pc=(m,a)=>a?(m/a*100).toFixed(1):"–";
     const srow=(lab,t,cls)=>`<tr class="${cls||""}"><th>${lab}</th><td>${t.gp}</td><td>${per(t,"pts")}</td><td>${per(t,"reb")}</td><td>${per(t,"ast")}</td><td>${per(t,"stl")}</td><td>${per(t,"blk")}</td><td>${pc(t.fgm,t.fga)}</td><td>${pc(t.tpm,t.tpa)}</td><td>${pc(t.ftm,t.fta)}</td><td>${t.tpm||0}</td></tr>`;
-    body+=`<div class="panel stw lsonly"><div class="bxw stx"><table class="box ctr"><tr><th></th><th>GP</th><th>PPG</th><th>RPG</th><th>APG</th><th>SPG</th><th>BPG</th><th>FG%</th><th>3P%</th><th>FT%</th><th>3PM</th></tr>${srow("Career",tot,"car")}${ks.map(k=>srow(`S${parseInt(k)}${k.endsWith("p")?" PO":k.endsWith("b")?" Boss":""}`,o.stats.s[k])).join("")}</table></div>
+    body+=`<div class="panel stw lsonly"><div class="bxw stx"><table class="box ctr"><tr><th></th><th>GP</th><th>PPG</th><th>RPG</th><th>APG</th><th>SPG</th><th>BPG</th><th>FG%</th><th>3P%</th><th>FT%</th><th>3PM</th></tr>${srow("Career",tot,"car")}</table></div>
      ${tot.gp?`<p class="sthl"><b>Highs</b> ${o.stats.hi.pts} pts · ${o.stats.hi.reb} reb · ${o.stats.hi.ast} ast · ${o.stats.hi.stl||0} stl · ${o.stats.hi.blk||0} blk · <b>Clutch</b> ${o.stats.clM}/${o.stats.clA}</p>`:""}
      ${(a=>a.length?`<p class="sthl"><b>Awards</b> ${a.join(" · ")}</p>`:"")([...new Set(o.stats.aw.filter(x=>!/^(All-League|MVP|Team MVP) S/.test(x)))])}
      </div>`}
@@ -6789,10 +6789,10 @@ function SLStage(o){
       if(ball.who!==sh){await passBall(ball.who,sh)}
       if(!skip()){const dx=sh.X-rim.X,dy=sh.Y-rim.Y,d=Math.hypot(dx,dy)||1;let want=null;
         if(type==="rim"){const r0=x.dunk?1.7:2.8;if(d>r0+1.5){want={X:rim.X+(dirR?-r0:r0),Y:rim.Y+(sh.Y<25?-1.2:1.2)}}}
-        else if(type===3||type==="3"){if(d<24.3||(Math.abs(dy)>21&&Math.abs(dx)>13)){const corner=Math.abs(dy)>16&&Math.abs(dx)<14;want=corner?{X:dirR?92:2,Y:sh.Y<25?3.2:46.8}:{X:rim.X+dx/d*25,Y:rim.Y+dy/d*25}}}
+        else if(type===3||type==="3"){if(d<24.3||d>27.5||(Math.abs(dy)>21&&Math.abs(dx)>13)){const corner=Math.abs(dy)>16&&Math.abs(dx)<14;want=corner?{X:dirR?92:2,Y:sh.Y<25?3.2:46.8}:{X:rim.X+dx/d*25,Y:rim.Y+dy/d*25}}}
         else if(d<10||d>21){want={X:rim.X+dx/d*15,Y:rim.Y+dy/d*15}}
-        if(want){goTo(sh,want.X,want.Y,type==="rim"?17:12);await until(()=>near(sh,1.2),1.6)}}
-      sh.tx=null;sh.vx*=.15;sh.vy*=.15;const dist=Math.hypot(rim.X-sh.X,rim.Y-sh.Y),close=dist<9;
+        if(want){const far=Math.hypot(want.X-sh.X,want.Y-sh.Y);goTo(sh,want.X,want.Y,type==="rim"?17:far>14?16:12);await until(()=>near(sh,1.2),far>14?2.8:1.6)}}
+      sh.tx=null;sh.vx*=.15;sh.vy*=.15;const dist=Math.hypot(rim.X-sh.X,rim.Y-sh.Y),close=dist<9;if(window._slAudit&&(type===3||type==="3")){const A_=window._slAudit;A_.threes=(A_.threes||0)+1;if(dist>28.5)A_.deep=(A_.deep||0)+1}
       /* at the rim: a layup or a dunk (PixelLab, side-on); anywhere else the jump shot */
       let an,fin=false;if(type==="rim"&&close){const d8=dirOf(rim.X-sh.X,rim.Y-sh.Y),dd=x.dunk&&(d8==="north"||d8==="south")&&hasB(sh,"dunk_"+d8)?d8:dir6(rim.X-sh.X,rim.Y-sh.Y);const k=(x.dunk?"dunk_":"layup_")+dd;if(has(k)){an=k;fin=true;sh.face=dd}}
       if(!an){const diag=diagTo(sh,rim);sh.face=diag;an="shot_"+diag}
@@ -6925,9 +6925,11 @@ function venueFor(res0,hT){const k=res0.kind,ctx=res0.ctx||{},AD=typeof ARTDATA!
 const RIVALS=[["Celtics","Lakers"],["Celtics","76ers"],["Knicks","Heat"],["Knicks","Nets"],["Knicks","Pacers"],["Bulls","Pistons"],["Lakers","Clippers"],["Warriors","Cavaliers"],["Spurs","Mavericks"],["Spurs","Rockets"],["Suns","Lakers"],["Celtics","Pistons"],["Trail Blazers","Lakers"],["Jazz","Rockets"],["Celtics","Heat"]];
 function rivalOf(A,B){const a=A&&A.ti!=null?TEAMNICK(A.ti):"",b=B&&B.ti!=null?TEAMNICK(B.ti):"";return RIVALS.some(([x,y])=>(x===a&&y===b)||(x===b&&y===a))?`RIVALRY NIGHT · ${a.toUpperCase()} vs ${b.toUpperCase()}`:null}
 function playGame(res0,side,done){
+  /* one game on court at a time: a finished one still open closes first (its result counts); a live one comes back up and the new one waits */
+  {const c=window._pvCur;if(c&&document.body.contains(c.ov)){if(c.isEnded()){c.close();setTimeout(()=>playGame(res0,side,done),700);return}c.show();toast("A game is still on court. Finish it or skip to the end first");done(null);return}}
   const A=res0.A,B=res0.B,fmt=res0.fmt;PVTEAMS={A,B};const AUTO=res0.mode==="auto";const ctl=playCtl(side,AUTO?null:res0.mode);if(AUTO)ctl.auto=true;const sink={};const it=simIter(A,B,{fmt,start:res0.start,ctl,sink});
   let CURQ=0,SKIPQ=null;
-  const BASE=AUTO?`Autoplay${res0.autoLeft>1?` · ${res0.autoLeft} games left`:""}`:"";
+  const BASE=AUTO?(res0.watch?"Live":`Autoplay${res0.autoLeft>1?` · ${res0.autoLeft} games left`:""}`):"";
   /* the first game of a new save: the OP card is in the spotlight. A line on the card, and his perk tags show whenever it works */
   const STAR=A.first&&A.spot!=null?A.pl.find(p=>p.id===A.spot):null;
   const nQ=fmt==="3v3"||fmt==="q"?1:2;/* the engine plays two halves (3v3 and practice: one period) */const CW=640,CH=360,RIM={x:256,y:70};/* RIM: where the basket is in Play's own side-on numbers; the picture's is ARENA.RIM */
@@ -6935,7 +6937,7 @@ function playGame(res0,side,done){
      land: the screen is sideways already. side: an upright screen that can't turn (rotation lock on), so the box turns
      itself as it opens and you turn the phone. ask: an upright screen on a phone that can turn, so a calm card asks you
      to turn it and iOS does the one turn. */
-  const ov=document.createElement("div");ov.className="pvs";
+  const ov=document.createElement("div");ov.className="pvs";window._pvCur={ov,isEnded:()=>ended,show:()=>{const o=mini&&mini.querySelector(".open");if(o)o.click()},close:()=>{const d=ov.querySelector("#pvDone");if(d)d.click();else{leave();done(null)}}};
   const GL=typeof ARTDATA!=="undefined"&&ARTDATA.glogo||{};const logo=(t,z)=>t.gym&&GL[t.gym]?`<img class="glg" src="${GL[t.gym]}" alt="" style="width:${z||28}px;height:${z||28}px">`:t.ti!=null?logoHTML(t.ti,z||28):`<span class="lgo" style="background:${t.color};width:${z||28}px;height:${z||28}px"><b style="color:${lumOf(t.color)>.6?"#1b2140":"#fff"}">${esc(t.abbr)}</b></span>`;
   ov.innerHTML=`<div class="pvl" id="pvL">
    <div class="pvlc"><div class="pvbug" id="pvBug"><button class="tm" data-act="pvTeam" data-arg="A" aria-label="Your roster">${logo(A)}<span>${esc(A.abbr)}</span><b id="pvA">${(res0.start||[0,0])[0]}</b></button><div class="mid"><b id="pvClk">${fmt==="3v3"?"FIRST TO 21":fmt==="q"?"4:00":fmt==="half"?"H1 3:00":"H1 4:00"}</b><small id="pvSub">${BASE}</small></div><button class="tm r" data-act="pvTeam" data-arg="B" aria-label="Their roster"><span>${esc(B.abbr)}</span><b id="pvB">${(res0.start||[0,0])[1]}</b>${logo(B)}</button></div>
@@ -7268,7 +7270,7 @@ function playGame(res0,side,done){
       moves.push(T(a,{x:v.x,y:v.y},runDur(far)).then(()=>{if(p!==bh){a.anim=t===1&&!v.chase?"slide":v.chase?(ARENA.view==="D"?"idleS":"idleN"):"idle";a.fps=2}}))}
     if(moves.length)await Promise.all(moves);spread();window._pv.last={sit,bh:key(bh),dh:dh&&key(dh),me:[...me].map(([p,v])=>[key(p),Math.round(v.x),Math.round(v.y)]),them:[...them].map(([p,v])=>[key(p),Math.round(v.x),Math.round(v.y)])}}
   /* after a basket, the scorer's line slides in at the bottom of the court for a moment (the Hoop Land touch) */
-  function scoreCard(e){if(simAll||!e||e.who==null)return;const b=(sink.box||{})[e.who+"|"+e.o];if(!b)return;const pl=plOf(e.who+"|"+e.o);if(!pl)return;
+  function scoreCard(e){if(simAll||!e||e.who==null)return;const b=e.bx||(sink.box||{})[e.who+"|"+e.o];if(!b)return;const pl=plOf(e.who+"|"+e.o);if(!pl)return;
     const el=$("#pvSc");const fg=b.fga?`${b.fgm}/${b.fga} FG`:"";const tp=b.tpa?`${b.tpm}/${b.tpa} 3PT`:"";
     el.innerHTML=`<b>${esc(pl.name)}</b><span><i>${b.pts}</i> PTS</span>${b.ast?`<span><i>${b.ast}</i> AST</span>`:""}${b.reb?`<span><i>${b.reb}</i> REB</span>`:""}${e.shot===3&&tp?`<span>${tp}</span>`:fg?`<span>${fg}</span>`:""}`;
     el.style.setProperty("--tc",(e.o===0?A:B).color||"#444");el.className="pvsc on";clearTimeout(scoreCard.h);scoreCard.h=setTimeout(()=>el.className="pvsc",2600/calm())}
@@ -7481,8 +7483,8 @@ function playGame(res0,side,done){
   function finish(res){if(ended)return;ended=true;FINAL=true;if(!simAll)ARENA.snd.play("buzzer",.4);ARENA.snd.stop();draw(performance.now());/* the whole arena at the final */if(!res){leave();done(null);return}
     $("#pvA").textContent=res.score[0];$("#pvB").textContent=res.score[1];$("#pvClk").textContent="FINAL";/* the title-clinching Finals win: confetti over the court before the recap */{const po=S.season&&S.season.po;if(res0.kind==="po"&&po&&po.round===2&&res.score[0]>res.score[1]&&po.w+1>=3&&SL&&SL.confetti)SL.confetti()}
     const won=res.score[0]>res.score[1];const el=$("#pvCard");
-    el.innerHTML=`<div class="pvres"><span class="pvcl">Final</span><p class="pvv on ${won?"ok":"no"}">${won?"You win":"You lose"}</p><p class="pvd">${res.score[0]}-${res.score[1]}. You called ${ctl.myPoss} of ${ctl.total} trips.</p></div>`;
-    $(".pvft").innerHTML=`<button class="btn go" id="pvDone" style="width:100%">${AUTO?"Next":"See the recap"}</button>`;
+    el.innerHTML=`<div class="pvres"><span class="pvcl">Final</span><p class="pvv on ${won?"ok":"no"}">${won?"You win":"You lose"}</p><p class="pvd">${res.score[0]}-${res.score[1]}${ctl.myPoss?`. You called ${ctl.myPoss} of ${ctl.total} trips`:""}.</p></div>`;
+    $(".pvft").innerHTML=`<button class="btn go" id="pvDone" style="width:100%">${AUTO?"Next":"See the recap"}</button>`;if(AUTO&&res0.watch){$("#pvCard").hidden=false;$(".pvft").hidden=false;const t=$(".pvatools");if(t)t.style.display="none"}
     res.played={side,calls:ctl.total,mine:ctl.myPoss};closeLU();
     /* leaving: on a box that turned itself, it turns back upright; otherwise it just fades (the phone does any turning) */
     $("#pvDone").onclick=()=>{removeEventListener("resize",onRes);document.body.classList.remove("pvon");loadEl.classList.remove("gone");loadEl.classList.add("end");askEl.hidden=true;
@@ -7635,7 +7637,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="2b10903d0a";
+<script>const APPV="a6715c6a99";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
