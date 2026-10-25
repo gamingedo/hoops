@@ -1656,7 +1656,7 @@ details.panel>summary,.guideb b{font:400 18px/1.15 var(--f-d)!important;letter-s
   .v-cards .gflt,.v-cards .gflt2,.v-cards .autog{display:inline-flex;vertical-align:top;margin-right:8px}
   .bkgrid{grid-template-columns:repeat(5,minmax(0,1fr))}
   /* More: two columns */
-  .app.v-more{columns:2;column-gap:14px}.v-more>.top{column-span:all}.v-more>*{break-inside:avoid}
+  /* More: two columns (.setgrid, real grid columns) */
   /* no tabs yet (the first screens): no rail to leave room for */
   .app:not(:has(>.nav)){padding-right:max(16px,env(safe-area-inset-right))}
   .app:not(:has(>.nav))>.top{margin-right:calc(-1 * max(16px,env(safe-area-inset-right)));padding-right:max(16px,env(safe-area-inset-right))}
@@ -1918,7 +1918,7 @@ html,body{background:#000}
 .segrow .segact{margin-left:auto;white-space:nowrap;align-self:stretch;min-height:40px;height:auto}
 .cxbar{gap:8px;margin:10px 0 10px;flex-wrap:nowrap}.cxbar>*{height:40px;min-height:40px;margin:0}.cxbar input{flex:1;min-width:0}.cxbar select{flex:0 0 auto;width:auto;max-width:170px}
 .seg button{white-space:nowrap}
-@media (orientation:landscape) and (max-height:560px){.app.v-more>.panel{margin-top:0;margin-bottom:14px}}
+@media (orientation:landscape) and (max-height:560px){.v-more .setcol>.panel{margin:0}}
 .bkt1>b{white-space:nowrap;overflow:hidden;max-width:100%;display:block}
 /* Rings tab */
 .rlad{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin:10px 0}.rlad span{display:inline-flex;gap:6px;align-items:center;padding:6px 10px;border-radius:10px;background:#ffffff0d;font:700 13px var(--f-b)}
@@ -3967,7 +3967,7 @@ function orApply(){let test=false;try{test=localStorage.getItem("hd_orient")==="
   el.innerHTML=`<i class="orph" aria-hidden="true"></i><b>Turn your phone sideways</b><small>Rotation lock off</small>`}
 /* ---------- Settings: the game's options, the iPhone's, and Help (FAQ and Guide) one tap away ---------- */
 function setRow(label,ctl,sub){return`<div class="srow"><span class="sl"><b>${label}</b>${sub?`<small>${sub}</small>`:""}</span><span class="sp"></span>${ctl}</div>`}
-function viewMore(){let h=topHTML("Settings");
+function viewMore(){let h=topHTML("Settings");const h0=h;/* two real columns (CSS multi-column breaks taps and painting in the iPhone app) */
   const spd=(()=>{try{const v=+localStorage.getItem("hd_spd");return[1,1.5,2].includes(v)?v:2}catch(e){return 2}})();
   const snd=typeof ARENA!=="undefined"&&ARENA.snd?ARENA.snd.on:true;
   h+=`<div class="panel setp"><span class="kick">Game</span>
@@ -3978,9 +3978,11 @@ function viewMore(){let h=topHTML("Settings");
   h+=`<div class="panel setp"><span class="kick">Help</span>
     <button class="srow sgo" data-act="faq"><span class="sl"><b>FAQ</b></span><span class="sp"></span><i>›</i></button>
     <button class="srow sgo" data-act="guide"><span class="sl"><b>Guide</b></span><span class="sp"></span><i>›</i></button></div>`;
+  const L=h.slice(h0.length);h=h0;
   h+=`<div class="panel setp"><span class="kick">Franchise</span>${setRow(esc(TEAMNICK(S.fr)),S.nextFr!=null?`<button class="btn sm" data-act="frCancel">Cancel switch</button>`:`<button class="btn sm" data-act="frChange">Change team</button>`,S.nextFr!=null?`Switching to the ${esc(TEAMNICK(S.nextFr))} next season`:"")}</div>`;
   h+=`<div class="panel setp"><span class="kick">Save</span><div class="row" style="gap:8px;flex-wrap:wrap"><button class="btn sm" data-act="export">Copy save code</button><button class="btn sm" data-act="import">Load save code</button><span class="sp"></span><button class="btn sm ghost" data-act="reset">Start over</button></div></div>`;
   h+=`<div class="panel setp"><span class="kick">Credits</span><p>Made by DocMan2021 with Claude.</p><p class="mut">Stats, awards and rosters: NBA.com. Hall of Fame list: Naismith Basketball Hall of Fame. Player photos: NBA.com, for personal use. Fonts: Jersey 15, Barlow, Silkscreen, VT323. Art made with PixelLab. A personal fan project, not affiliated with the NBA.</p></div>`;
+  {const R=h.slice(h0.length);h=h0+`<div class="setgrid"><div class="setcol">${L}</div><div class="setcol">${R}</div></div>`}
   return h}
 function viewFaq(){let h=topHTML(`<button class="back" data-act="nav" data-arg="more" aria-label="Back to Settings">‹</button>FAQ`,"");
   h+=faqHTML();return h}
@@ -7637,7 +7639,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="a6715c6a99";
+<script>const APPV="24aa042ad1";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
