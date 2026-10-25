@@ -2907,8 +2907,11 @@ function addRing(i){const o=S.own[i];if(!o||!(o.sp>0)||(o.j||0)>=5)return false;
    A card banks the minutes he was on the floor while you were calling the game (scaled to NBA minutes, so a starter in a
    full game banks about 30). Close games pay 1.5x, blowouts 0.7x. A roster card who sat the whole game banks 4.
    Each level costs more minutes than the last, and more stars cost more: a 1★ maxes in about 10 games, a 5★ in a season. */
-const LVM=[0,40,40,45,57,69,74,78];/* Oct 25: about 4.5x slower; a 4★ maxes in ~8 Daily windows, a 5★ in ~12, at the daily reps cap */
-const lvNeed=(st,l)=>Math.round(LVM[Math.min(7,st)]*(1+.06*l));
+/* Oct 25 level curve: quick to 10 (25 min a level, any card), then steep: from 10 on each level costs 10% more, and the
+   higher the card the more it starts at. One level never costs more than a day's reps, so a card always gains one a day.
+   At full daily reps, 10 to max: 3★ ~4 days, 4★ ~9, 5★ ~14, 6★ ~19, 7★ ~28. */
+const LVE=25,LVB=[0,40,50,65,85,110,140,180];
+const lvNeed=(st,l)=>l<10?LVE:Math.min(REPCAP,Math.round(LVB[Math.min(7,st)]*Math.pow(1.1,l-10)));
 function lvCost(i){const o=S.own[i];return o.lv>=maxLv(i)?0:lvNeed(o.st,o.lv)}
 /* bank minutes and take every level they pay for; returns the levels gained */
 /* Daily reps (Oct 24): each card banks up to REPCAP minutes a Daily window, then he's rested until the reset. Sim is
@@ -3156,7 +3159,7 @@ function applyGame(res,kind,meta){/* kind: reg, po, boss, gym, prac */
   /* daily missions and the event count this game */
   if(kind!=="prac"){track("play");if(won)track(kind==="gym"?"gym":"win");if(pl&&pl.mine)track("calls",pl.mine);trackGame(res,out,kind)}
   /* minutes: every game levels the men who played in it; the league roster's bench banks a little too */
-  out.levels=[];if(kind!=="prac"){const margin=Math.abs(res.score[0]-res.score[1]);const mult=margin<=5?1.5:margin>=20?.7:1;const onFloor=new Set();
+  out.levels=[];if(kind!=="prac"&&how!=="sim"){/* a simmed game gives no minutes */const margin=Math.abs(res.score[0]-res.score[1]);const mult=margin<=5?1.5:margin>=20?.7:1;const onFloor=new Set();
     for(const k in res.box){const b=res.box[k];if(b.team!==0||b.min<=0)continue;onFloor.add(b.id);const m=Math.round(b.min*6*mult);const lv=bankMinutes(b.id,m);if(lv)out.levels.push({i:b.id,lv,to:S.own[b.id].lv})}
     if(kind==="reg"||kind==="po"||kind==="boss"||kind==="trial")for(const i of S.roster){if(onFloor.has(i)||!S.own[i])continue;const lv=bankMinutes(i,Math.round(4*mult));if(lv)out.levels.push({i,lv,to:S.own[i].lv})}}
   for(const k in res.box){const b=res.box[k];if(b.team!==0)continue;const i=b.id;const o=S.own[i];if(!o)continue;
@@ -3946,7 +3949,7 @@ function faqHTML(){const q=(t,rows,open)=>`<details class="panel faq"${open?" op
    q("Odds",[["Card packs","5★ 0.05% · 4★ 0.4% · 3★ 3.5% · 2★ 25% · 1★ 71%"],["Gear box","Rare 60% · Epic 32% · Legendary 8%"],["Coach pack","Common 60% · Rare 30% · Epic 10%"],["Coach pity","Every 5th is Rare or better"],["Legends pack","HOF 55% · Top 75 25% · Top 50 12% · Top 25 6% · Top 10 2%"],["Pity",`4★ within ${PITY4} pulls · 5★ within ${PITY5}`]])+
    q("Shops",[["Deal","10 pulls at 30% off · every 18 h"],["Vault","One item off · one buy"],["Spotlight","1 in 10 is him · else a Player pack card"],["Front Office","Your team + 3 more · new every Monday"],["Event shop","5 daily missions · 300 coins each"],["Event cards","Rivalries · or pick 1 of 5 for 1,500"]])+
    q("Coins and Banners",[["Coins","Games → packs, gear, power-ups"],["Game pay","Win 100 · Played +20% · Sim −25%"],["Win streak","+10 a win in a row, up to +50"],["Daily pay",`Full for ${PAYDAY} league games a day · then ${Math.round(PAYLATE*100)}%`],["Banners","Discards, dupes, Legend Trial, Challenge, Draft Run, Arena, rivalries"],["Spend on","Front Office · Legend Forge · Film Room"],["Per discard",`1★ ${CARDSELL[1]} · 2★ ${CARDSELL[2]} · 3★ ${CARDSELL[3]} · 4★ ${CARDSELL[4]} · 5★ ${CARDSELL[5]}`],["Old saves",`1 Chalk = ${BANRATE.chalk} · 1 Film = ${BANRATE.film} · 1 Shard = ${BANRATE.shards}`]])+
-   q("Levels",[["Level up","Every game: Play, Autoplay or Sim"],["Daily reps",`Each card banks up to ${REPCAP} minutes a Daily window, then rests. Play different cards to grow more of them`],["Max level","+10 all ratings"],["Evolve","Max level + spares: +1★, +1 all ratings"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
+   q("Levels",[["Level up","Minutes from Play and Autoplay games · Sim gives none"],["Curve","Quick to level 10, then each level costs more · higher stars cost more"],["Daily reps",`Each card banks up to ${REPCAP} minutes a Daily window, then rests. Play different cards to grow more of them`],["Max level","+10 all ratings"],["Evolve","Max level + spares: +1★, +1 all ratings"],["Duplicates","Kept as spare copies: you choose"],["Spare copy","A Ring, evolve fodder, or Banners"],["Rings","I +2 best · II +1 all · III perk ×1.3 · IV +2 all · V perk ×1.6 + a twist"],["No perk","III +1 all · V Closer"],["Rarity","4★ ×1.25 · 5★, Legends ×1.5 · max ×2"],["Legend Forge",`Legends pack ${FORGE.pack.toLocaleString()} · pick 1 of 3 ${FORGE.pick.toLocaleString()} Banners`],["Book Legends","Evolve to 7★; at 7★ max: Hall of Fame aura"]])+
    q("Card tiers",[...TIERS.map(t=>[t.n,`${t.ovr} OVR · ${t.cost.toLocaleString()} coins`]),["Each tier","+2 all ratings, new frame"],["Immortal","+10% late in close games · one sure make in Play"]])+
    q("Ratings over 99",[["Cap","140"],["Breakthroughs","At 100 and 110 · tap the name on a card"],["Past 99","Each point counts half"]])+
    q("Gear",[["Slots","6"],["Substats","Common 0 · Rare 2 · Epic 3 · Legendary 4"],["Power-up cap","1★ +3 · 2★ +6 · 3★ +9 · 4★ +12 · 5★ +15"],["New substat","+3, +6, +9, +12"],["Stat set","2 pieces: +4 one rating"],["Meta set","4 pieces; gym drops only"]])+
@@ -7639,7 +7642,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="61bc7a08bb";
+<script>const APPV="ca39a8b3e6";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
