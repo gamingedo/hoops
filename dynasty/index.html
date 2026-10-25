@@ -4234,7 +4234,7 @@ function runGame(kind,mode,ctx){ctx=ctx||{};let A,B,fmt="full";const s=S.season;
    else if(mode!=="play"&&SIMKIND(kind)&&!ctx.auto&&simLeft()<=0){if(mode==="quiet")return null;toast(`No sims left · next in ${dLeft()}`);mode="play";ctx.side="watch"}ctx.gap=gap}
   const label=kind==="reg"?`Game ${s.g+1} of 48`:kind==="po"?`${["First round","Semifinals","Finals"][s.po.round]} · game ${s.po.w+s.po.l+1}`:kind==="boss"?`Boss series · game ${bossSeries().w+bossSeries().l+1}`:kind==="gym"?`${GYMS.find(g=>g.id===ctx.gym).n} · Floor ${ctx.floor}`:kind==="trial"?"Legend Trial":kind==="draft"?`Draft Run · game ${S.draft.g+1} of ${DRAFT.games}`:kind==="chal"?`Challenge · ${chalToday().sit.n}`:kind==="riv"?`${TEAMNICK(ctx.t)} rivalry · game ${rivS(ctx.t).w+rivS(ctx.t).l+1}`:kind==="arena"?`Arena · ${arnLabel(ctx.mid)}`:"Practice";
   /* Play: you call one side, the engine the other */
-  if(mode==="play"){/* an auto-battler: every call is made before the game (lineup, gear, game plan); the game plays itself */const pm="watch";const auto=ctx.side==="auto",watch=pm==="watch"&&!auto;const po={A,B,fmt,start:ctx.start,kind,ctx,mode:auto||watch?"auto":pm,watch,canSim:ctx.gap>=SIMGAP&&(!SIMKIND(kind)||simLeft()>0),autoLeft:ctx.autoLeft};playGame(po,"both",res=>{if(po.skipped&&SIMKIND(kind)&&res)simState().n++;if(!res){if(auto){S.auto=null;save()}render();return}res.A=A;res.B=B;res.kind=kind;res.ctx=ctx;res.label=label;if(auto)autoDone(res);else finishGame(res)});return}
+  if(mode==="play"){/* an auto-battler: every call is made before the game (lineup, gear, game plan); the game plays itself */const pm="watch";const auto=ctx.side==="auto",watch=pm==="watch"&&!auto;const po={A,B,fmt,start:ctx.start,kind,ctx,mode:auto||watch?"auto":pm,watch,canSim:ctx.gap>=SIMGAP&&(!SIMKIND(kind)||simLeft()>0),autoLeft:ctx.autoLeft,autoUntil:ctx.autoUntil};playGame(po,"both",res=>{if(po.skipped&&SIMKIND(kind)&&res)simState().n++;if(!res){if(auto){S.auto=null;save()}render();return}res.A=A;res.B=B;res.kind=kind;res.ctx=ctx;res.label=label;if(auto)autoDone(res);else finishGame(res)});return}
   if(SIMKIND(kind)&&!ctx.auto)simState().n++;
   const res=simGame(A,B,{fmt,start:ctx.start});res.A=A;res.B=B;res.kind=kind;res.ctx=ctx;res.label=label;
   if(mode==="quiet")return{res,out:finishGame(res,true)};
@@ -4945,21 +4945,27 @@ Object.assign(ACT,{goSale:()=>{VIEW="packs";SHOPTAB="events";render();window.scr
 const AUTOSEC=180;/* how long one autoplayed league game takes on screen at 2x (measured: 8 game minutes ≈ 175 s); the queue keeps its own measured average in a.sec */
 const autoSec=a=>a&&a.sec?a.sec:AUTOSEC;
 function autoKind(){const s=S.season;return s.phase==="reg"?"reg":s.phase==="po"&&!s.po.out?"po":s.phase==="done"&&!bossOver()&&!S.bossesBeaten.includes(s.n)?"boss":null}
-function openAuto(){const k=autoKind();if(!k){toast("No games to autoplay right now");return}const left=k==="reg"?48-S.season.g:7;
+/* Oct 25: autoplay can run on through the playoffs, and on through the boss series, without stopping between them */
+const AUTOCHAIN={po:["reg","po"],boss:["reg","po","boss"]};
+/* about how many games a run has left (for the finish notification): the rest of the season, a playoff run, a boss series */
+const autoEst=a=>{if(!a.until)return a.left;const s=S.season,k=autoKind();let n=0;if(k==="reg")n+=48-s.g;if(k==="reg"||k==="po")n+=k==="po"?Math.max(4,(4-(s.po.round||0))*5):12;if(a.until==="boss")n+=5;return Math.max(1,n)};
+const autoOk=(a,k)=>!!k&&(k===a.kind||!!(a.until&&AUTOCHAIN[a.until].includes(k)));
+function openAuto(){const k=autoKind();if(!k){toast("No games to autoplay right now");return}const left=k==="reg"?48-S.season.g:7;const bossOn=!S.bossesBeaten.includes(S.season.n);
+  const b=(arg,txt)=>`<button class="btn sp dk" data-act="autoGo" data-arg="${arg}">${txt}</button>`;
   sheet(`<span class="kick">Autoplay</span><h2>Let them play</h2>
-   <div class="row ngb">${[1,5,10].filter(n=>n<=left).map(n=>`<button class="btn sp dk" data-act="autoGo" data-arg="${n}">${n} game${n>1?"s":""}</button>`).join("")}${left>10&&k==="reg"?`<button class="btn sp dk" data-act="autoGo" data-arg="${left}">Rest of the season</button>`:""}</div>`,null,null,"auto")}
-function startAuto(n){const k=autoKind();if(!k)return;S.auto={kind:k,left:+n,t:Date.now(),log:[]};save();closeAll();nextAuto()}
+   <div class="row ngb">${k!=="boss"?[5,10].filter(n=>n<left).map(n=>b(n,`${n} games`)).join(""):""}${k==="reg"?b(left,"Rest of the season"):""}${k!=="boss"?b("po",k==="po"?"Rest of the playoffs":"Through playoffs"):""}${bossOn?b("boss",k==="boss"?"The boss series":"Through boss"):""}</div>`,null,null,"auto")}
+function startAuto(n){const k=autoKind();if(!k)return;const until=AUTOCHAIN[n]?n:null;S.auto={kind:k,until,left:until?999:+n,t:Date.now(),log:[]};save();closeAll();nextAuto()}
 function nextAuto(){const a=S.auto;if(!a)return;let k=autoKind();
-  let caught=AUTOWAY;AUTOWAY=0;while(AUTOCATCH>0&&a.left>0&&k===a.kind){AUTOCATCH--;const r=runGame(k,"quiet",{auto:1});if(!r)break;a.log.push(r);a.left--;caught++;k=autoKind()}AUTOCATCH=0;
+  let caught=AUTOWAY;AUTOWAY=0;while(AUTOCATCH>0&&a.left>0&&autoOk(a,k)){AUTOCATCH--;const r=runGame(k,"quiet",{auto:1});if(!r)break;a.log.push(r);a.left--;caught++;k=autoKind()}AUTOCATCH=0;
   if(caught){const L=a.log.slice(-caught),w=L.filter(x=>x.res?x.res.score[0]>x.res.score[1]:x.score&&x.score[0]>x.score[1]).length;toast(`${caught} game${caught>1?"s":""} played while you were away · ${w}–${caught-w}`)}
-  if(a.left<=0||!k||k!==a.kind||(k==="reg"&&lineupIssues().includes("Same player twice"))){endAuto();return}
-  a.t=Date.now();a.gt0=Date.now();save();runGame(k,"play",{side:"auto",autoLeft:a.left})}
+  if(a.left<=0||!autoOk(a,k)||(k==="reg"&&lineupIssues().includes("Same player twice"))){endAuto();return}
+  a.t=Date.now();a.gt0=Date.now();save();runGame(k,"play",{side:"auto",autoLeft:a.until?0:a.left,autoUntil:a.until})}
 function autoDone(res){const a=S.auto;if(!a)return;if(a.gt0&&!AUTOHID&&!AUTOWAY){const d=(Date.now()-a.gt0)/1000;if(d>40&&d<900)a.sec=Math.round(a.sec?(a.sec*2+d)/3:d)}a.gt0=0;const out=finishGame(res,true);a.log.push({res,out});a.left--;a.t=Date.now();save();setTimeout(nextAuto,200)}
 function endAuto(away){const a=S.auto;S.auto=null;AUTOMIN=false;AUTOPS=false;keepAwake(false);save();render();if(a&&a.log.length){SIMLOG={kind:a.kind,log:a.log,n0:S.season.n,auto:1};simSummary()}}
 /* opening the app with a queue still running: finish the games that would have been played while it was closed */
 function autoCatchUp(){const a=S.auto;if(!a)return;const n=Math.min(a.left,Math.floor((Date.now()-a.t)/(autoSec(a)*1000))+1);a.log=[];
-  for(let i=0;i<n;i++){const k=autoKind();if(!k||k!==a.kind)break;const r=runGame(k,"quiet",{auto:1});if(!r)break;a.log.push(r);a.left--}
-  a.t=Date.now();save();if(a.log.length){const log=a.log;S.auto=a.left>0?{...a,log:[]}:null;save();render();SIMLOG={kind:a.kind,log,n0:S.season.n,auto:1};simSummary();toast(`Autoplayed ${log.length} game${log.length>1?"s":""} while you were away`)}}
+  for(let i=0;i<n;i++){const k=autoKind();if(!autoOk(a,k))break;const r=runGame(k,"quiet",{auto:1});if(!r)break;a.log.push(r);a.left--}
+  a.t=Date.now();save();if(a.log.length){const log=a.log;S.auto=a.left>0&&autoOk(a,autoKind())?{...a,log:[]}:null;save();render();SIMLOG={kind:a.kind,log,n0:S.season.n,auto:1};simSummary();toast(`Autoplayed ${log.length} game${log.length>1?"s":""} while you were away`)}}
 /* the phone locked with the app still in memory: on the way back, the game on screen finishes instantly and the games
    that would have been played meanwhile are played too, then autoplay carries on */
 let AUTOHID=0,AUTOCATCH=0,AUTOWAY=0;
@@ -7037,7 +7043,7 @@ function playGame(res0,side,done){
   {const c=window._pvCur;if(c&&document.body.contains(c.ov)){if(c.isEnded()){c.close();setTimeout(()=>playGame(res0,side,done),700);return}c.show();toast("A game is still on court. Finish it or skip to the end first");done(null);return}}
   const A=res0.A,B=res0.B,fmt=res0.fmt;PVTEAMS={A,B};const AUTO=res0.mode==="auto";const ctl=playCtl(side,AUTO?null:res0.mode);if(AUTO)ctl.auto=true;const sink={};const it=simIter(A,B,{fmt,start:res0.start,ctl,sink});
   let CURQ=0,SKIPQ=null;
-  const BASE=AUTO?(res0.watch?"Live":`Autoplay${res0.autoLeft>1?` · ${res0.autoLeft} games left`:""}`):"";
+  const BASE=AUTO?(res0.watch?"Live":`Autoplay${res0.autoUntil?` · through the ${res0.autoUntil==="po"?"playoffs":"boss"}`:res0.autoLeft>1?` · ${res0.autoLeft} games left`:""}`):"";
   /* the first game of a new save: the OP card is in the spotlight. A line on the card, and his perk tags show whenever it works */
   const STAR=A.first&&A.spot!=null?A.pl.find(p=>p.id===A.spot):null;
   const nQ=fmt==="3v3"||fmt==="q"?1:2;/* the engine plays two halves (3v3 and practice: one period) */const CW=640,CH=360,RIM={x:256,y:70};/* RIM: where the basket is in Play's own side-on numbers; the picture's is ARENA.RIM */
@@ -7096,7 +7102,7 @@ function playGame(res0,side,done){
       AUTOPS=AUTO}
     else{if(p)p.remove();AUTOPS=false}}
   /* autoplay: the right column says what's going on; nothing to call, so Coach and Lineup step aside */
-  if(AUTO){$("#pvCard").innerHTML=`<div class="pvauto"><span class="kick">${res0.watch?"Live":"Autoplay"}</span><h3>${esc(A.name)}</h3>${res0.autoLeft>1?`<small>${res0.autoLeft-1} more after this one</small>`:""}</div>`;$("#pvCoach").hidden=true;$("#pvLu").hidden=true;$("#pvSim").textContent="Finish now"}
+  if(AUTO){$("#pvCard").innerHTML=`<div class="pvauto"><span class="kick">${res0.watch?"Live":"Autoplay"}</span><h3>${esc(A.name)}</h3>${res0.autoUntil?`<small>Through the ${res0.autoUntil==="po"?"playoffs":"boss"}</small>`:""}${res0.autoLeft>1?`<small>${res0.autoLeft-1} more after this one</small>`:""}</div>`;$("#pvCoach").hidden=true;$("#pvLu").hidden=true;$("#pvSim").textContent="Finish now"}
   if(AUTO){window._pvSimAll=()=>{if(!ended)$("#pvSim").onclick()};$("#pvMin").onclick=minimize;$("#pvPow").onclick=()=>powerSave(true);
     /* skip to the half: run without drawing until the second half starts, then watch again. Skip to end: the rest at once */
     {const col=$(".pvrc");const box=document.createElement("div");box.className="pvatools";box.innerHTML=`<span class="kick">${res0.watch?"Live":"Autoplay"}</span>`;col.prepend(box);for(const id of["pvSkH","pvSkE","pvSpd","pvMin","pvPow","pvSnd"]){const b=$("#"+id);if(b)box.appendChild(b)}$("#pvCard").hidden=true;$(".pvft").hidden=true}
@@ -7623,7 +7629,7 @@ function playGame(res0,side,done){
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 25 · 13";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 25 · 14";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 const NP=(plugin,method,opts)=>IS_APP&&window.Capacitor.nativePromise?window.Capacitor.nativePromise(plugin,method,opts||{}):Promise.reject(new Error("web"));
 const nset=(k,d)=>{try{const v=localStorage.getItem("hd_n_"+k);return v==null?d:v==="1"}catch(e){return d}};
@@ -7644,7 +7650,7 @@ const NOTI=[["daily","The Daily resets"],["auto","Autoplay finished"]];
 async function notiSchedule(){if(!IS_APP||!S||S.fr==null)return;const list=[];const now=Date.now();
   try{if(nset("energy",true)&&typeof energy==="function"){const v=energy();if(v<EN_MAX){const left=(EN_MAX-v-1)*EN_SEC*1000+energyNext()*1000;list.push({id:11,title:"Gym energy full",body:"Your team is rested. Time to grind.",schedule:{at:new Date(now+left)}})}}
     if(nset("daily",true)&&typeof DWIN!=="undefined"){const at=(dWin()+1)*DWIN;list.push({id:12,title:"The Daily reset",body:"New Challenge, Spotlight, missions and Vault.",schedule:{at:new Date(at+60000)}})}
-    if(nset("auto",true)&&S.auto&&S.auto.left>0&&typeof AUTOSEC!=="undefined"){list.push({id:13,title:"Autoplay finished",body:`${S.auto.left} game${S.auto.left>1?"s":""} played. See how it went.`,schedule:{at:new Date(now+((S.auto.left-1)+(1-(window._pvFrac||0)))*autoSec(S.auto)*1000)}})}}catch(e){}
+    if(nset("auto",true)&&S.auto&&S.auto.left>0&&typeof AUTOSEC!=="undefined"){list.push({id:13,title:"Autoplay finished",body:S.auto.until?`Autoplay is done. See how it went.`:`${S.auto.left} game${S.auto.left>1?"s":""} played. See how it went.`,schedule:{at:new Date(now+((autoEst(S.auto)-1)+(1-(window._pvFrac||0)))*autoSec(S.auto)*1000)}})}}catch(e){}
   try{await NP("LocalNotifications","cancel",{notifications:[{id:11},{id:12},{id:13}]})}catch(e){}
   if(!list.length)return;try{const p=await NP("LocalNotifications","requestPermissions");if(p&&p.display==="granted")await NP("LocalNotifications","schedule",{notifications:list})}catch(e){}}
 if(IS_APP)document.addEventListener("visibilitychange",()=>{if(document.hidden)notiSchedule();else NP("LocalNotifications","cancel",{notifications:[{id:11},{id:12},{id:13}]}).catch(()=>{})});
@@ -7746,7 +7752,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="c51e7e1df8";
+<script>const APPV="71c4da9f3a";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
