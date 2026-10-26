@@ -3609,8 +3609,10 @@ function bigCardHTML(id,x){x=x||{};
   <div class="bt2"><div class="bo"><b class="${ov>99?"hi":""}${gain>0?" bn":""}">${ov}</b><span>${x.ovrLab||(o?`OVR · Level ${o.lv}`:"OVR at max level")}${gain>0?` <em class="dl" title="Team bonuses">+${gain}</em>`:""}</span></div>${artHTML(c,p,true)}</div>
   <div class="tg">${o&&o.tier?`<span class="tierb">${TIERS[o.tier-1].n}</span> `:""}${typeName(c)} <span class="stars">${starStr(c,o)}</span>${o&&o.st>c.s?' <span class="evo">evolved</span>':""}${c.k==="L"?` <span class="stamp">${c.gt!=null?GTIER[c.gt]:"Hall of Fame"}</span>`:""}${c.a&&c.k!=="K"?' <span class="now">2026-27 roster</span>':""}</div>
   <div class="nm">${esc(p[0])}</div><div class="sub">${sub}</div></div><div class="in bcback"><div class="nm sm">${esc(p[0])}</div>${back}</div></div></div>`}
-function barsHTML(R,from,key){const ks=new Set(key||[]);const rows=R.map((v,i)=>{const x=v>99;const b=null;/* breakthroughs were cut Oct 25 */
-    return`<div class="bar${ks.size?ks.has(i)?" k":" nk":""}"><span>${RKN[i]}${b?`<button class="btag" data-act="btInfo" data-arg="${RK[i]}:${v>=110?1:0}">${esc(b[0])}</button>`:""}</span><i><b style="width:${Math.round(Math.min(v,RCAP)/RCAP*100)}%;background:${x?"linear-gradient(90deg,#c99a45,#f6dca0)":v>=80?"#6cb8ff":v>=65?"#4f8ff0":"#56658f"}"></b></i><em class="${x?"hi":""}">${Math.round(v)}${from&&Math.round(v)!==Math.round(from[i])?(d=>`<small class="dl ${d<0?"dn":""}">${d>0?"+":"−"}${Math.abs(d)}</small>`)(Math.round(v)-Math.round(from[i])):""}</em></div>`}).join("");
+/* showBase (Oct 26): the big number is the card's own rating (level, stars, tier) and the +X is everything you put on it
+   (gear, sets, the franchise bonus, auras); the bar is the total he plays at */
+function barsHTML(R,from,key,showBase){const ks=new Set(key||[]);const rows=R.map((v,i)=>{const x=v>99;const b=null;/* breakthroughs were cut Oct 25 */const shown=showBase&&from?Math.round(from[i]):Math.round(v);
+    return`<div class="bar${ks.size?ks.has(i)?" k":" nk":""}"><span>${RKN[i]}${b?`<button class="btag" data-act="btInfo" data-arg="${RK[i]}:${v>=110?1:0}">${esc(b[0])}</button>`:""}</span><i><b style="width:${Math.round(Math.min(v,RCAP)/RCAP*100)}%;background:${x?"linear-gradient(90deg,#c99a45,#f6dca0)":v>=80?"#6cb8ff":v>=65?"#4f8ff0":"#56658f"}"></b></i><em class="${(showBase?shown>99:x)?"hi":""}">${shown}${from&&Math.round(v)!==Math.round(from[i])?(d=>`<small class="dl ${d<0?"dn":""}">${d>0?"+":"−"}${Math.abs(d)}</small>`)(Math.round(v)-Math.round(from[i])):""}</em></div>`}).join("");
   return`<div class="bars">${rows}</div>`}
 /* what a card has beyond its ratings, one short chip each: his card's perks and the gear sets that are live */
 const perkChips=(pk,sets)=>pk.length||(sets&&sets.length)?`<div class="chips pkc">${pk.map(x=>`<span class="chip gold">${esc(x.n)} · ${esc(x.s||x.d)}</span>`).join("")}${(sets||[]).map(k=>`<span class="chip">${esc(k)} · ${esc(SETS[k].s||SETS[k].d)}</span>`).join("")}</div>`:"";
@@ -3731,7 +3733,7 @@ function openCard(id,keepTab){id=+id;const c=DB.c[id],o=S.own[id];if(o&&o.isNew)
   if(!o){const six=RVIEW==="six"&&c.s<6?ownedRatings(id,{lv:40,st:6,j:0,gear:[]},{}):null;
     body+=`<div class="panel rvp">${c.s<6?`<div class="row rv"><div class="seg sm"><button class="${six?"":"on"}" data-act="ratView" data-arg="${id}:now">Max Lv</button><button class="${six?"on":""}" data-act="ratView" data-arg="${id}:six">6★ Lv 40</button></div><span class="sp"></span><span class="rvo">${six?`<b>${c.o}</b> → <b class="up">${ovrOf(six.R)}</b>`:`OVR <b>${c.o}</b>`}</span></div>`:""}${barsHTML(six?six.R:c.r,six?c.r:null)}${perkChips(pk)}</div>`;
     sheet(cardSheet(id,big,body,`<span class="chip">Not owned</span>`,"","unowned"),null,`<p class="mut" style="margin:0;text-align:center">Not owned</p>`,"card",()=>openCard(id,true));SHEET.el.dataset.cid=id;return}
-  const r=cardR(id),rb=cardRB(id);const inRoster=S.roster.includes(id),isStarter=S.roster.indexOf(id)>-1&&S.roster.indexOf(id)<5;const ml=maxLv(id);
+  const r=cardR(id),rb=cardRB(id);const baseR=ownedRatings(id,{...S.own[id],gear:[]},S.gear).R;const inRoster=S.roster.includes(id),isStarter=S.roster.indexOf(id)>-1&&S.roster.indexOf(id)<5;const ml=maxLv(id);
   /* what lifts his Now ratings: the franchise bonus and teammates' auras (one chip each) */
   const srcs=[...(rb.up?bonuses().out.map(x=>srcChip(x.n,x.v)):[]),...(rb.up&&rb.au.some(v=>v>0)?[srcChip("Auras",null,"up")]:[])];
   const nowChips=srcs.length?`<div class="chips src">${srcs.join("")}</div>`:affil(id)?`<div class="chips src"><span class="chip">${esc(TEAMNICK(S.fr))} card · +1 to the team as a starter</span></div>`:"";
@@ -3748,7 +3750,7 @@ function openCard(id,keepTab){id=+id;const c=DB.c[id],o=S.own[id];if(o&&o.isNew)
       return L.length?`<div class="chips src">${L.join("")}</div>`:""})():"";
     body+=`<div class="panel rvp"><div class="row rv"><div class="seg sm">${views.filter(([k])=>!(k==="max"&&o.lv>=MAXLV[o.st])).map(([k,n])=>`<button class="${RVIEW===k?"on":""}" data-act="ratView" data-arg="${id}:${k}">${n}</button>`).join("")}</div><span class="sp"></span><span class="rvo">${RVIEW==="spot"?(sp.ovr===sp.card?`OVR <b>${sp.ovr}</b>`:`<b>${sp.card}</b> → <b class="${sp.ovr>=sp.card?"up":"dn"}">${sp.ovr}</b>`):RVIEW==="now"?`OVR <b>${ovrOf(rb.R)}</b>`:`<b>${ovrOf(r.R)}</b> → <b class="up">${ovrOf(show.R)}</b>`}</span></div>${RVIEW==="now"?nowChips:RVIEW==="spot"?spotNote:""}
     ${RVIEW!=="now"&&RVIEW!=="spot"?`<p class="mut" style="font-size:12px;margin:6px 0 0">${RVIEW==="max"?`Lv ${MAXLV[o.st]} · ${o.st}★`:`6★ · Lv 40`}</p>`:""}
-    ${RVIEW==="spot"?barsHTML(sp.R,sp.base,spotKey):RVIEW==="now"?barsHTML(rb.R,rb.up?r.R:null):barsHTML(show.R,r.R)}${perkChips(pk,Object.keys(r.sets))}</div>
+    ${RVIEW==="spot"?barsHTML(sp.R,baseR,spotKey,true):RVIEW==="now"?barsHTML(rb.R,baseR,null,true):barsHTML(show.R,r.R)}${perkChips(pk,Object.keys(r.sets))}</div>
 `}
   /* Rings: his own tab. A spare copy of him becomes a Ring only when you say so */
   else if(CTAB==="lvl"){body+=`<div class="lvk">`+lvPanel(id)+tierPanel(id)+evPanel(id)+`</div>`}
@@ -7761,7 +7763,7 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 25 · 27 · v2";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 26 · 28 · v2";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 /* haptics (Oct 25): a tick for a roll, a thump for a PERFECT; nothing on the web */
 function haptic(k){if(!IS_APP)return;try{NP("Haptics","impact",{style:k==="heavy"?"HEAVY":k==="medium"?"MEDIUM":"LIGHT"}).catch(()=>{})}catch(e){}}
@@ -7890,7 +7892,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="c5594c3882";
+<script>const APPV="ab87dc9db0";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
