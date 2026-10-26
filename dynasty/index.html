@@ -671,7 +671,7 @@ table.box.ps td,table.box.ps th{padding:7px 3px;font-size:14px}
 .pvbug .tm b{font:900 30px/1 var(--f-d);font-variant-numeric:tabular-nums;min-width:2.1ch;text-align:center}.pvbug .mid{text-align:center}.pvbug .mid b{display:block;font:900 15px var(--f-d);letter-spacing:.04em}.pvbug .mid small{font:700 11px var(--f-b);color:var(--goldlt);letter-spacing:.04em}
 .pvct{position:relative;border-radius:12px;overflow:hidden;background:#090a0c;flex:none}.pvct canvas{display:block;width:100%;height:auto;image-rendering:pixelated;aspect-ratio:16/9}
 .pvban{position:absolute;left:50%;top:10px;transform:translateX(-50%) scale(.9);opacity:0;font:900 22px var(--f-d);letter-spacing:.04em;padding:4px 12px;border-radius:10px;background:#0b1024cc;transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap}
-.pvfade{position:absolute;inset:0;background:#05060b;opacity:0;pointer-events:none;transition:opacity .24s ease}.pvfade.on{opacity:1;transition:opacity .22s ease}
+.pvfade{position:absolute;inset:0;background:#05060b;opacity:0;pointer-events:none;transition:opacity .7s ease-in-out}.pvfade.on{opacity:1;transition:opacity .5s ease-in-out}
 .pvban.on{opacity:1;transform:translateX(-50%) scale(1)}.pvban.good{color:var(--goldlt)}.pvban.bad{color:var(--dnd)}
 .pvmom{position:absolute;left:8px;top:8px;font:800 12px var(--f-b)}.pvmom span{display:inline-block;padding:3px 8px;border-radius:8px;background:#0b1024cc}.pvmom .up{color:var(--goldlt)}.pvmom .dn{color:var(--dnd)}
 .pvcap{margin:0;min-height:20px;font:700 14px/1.35 var(--f-b);color:var(--mut);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -7167,7 +7167,7 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
    <div class="pvload" id="pvLoad"><div class="pvlm">${logo(A,54)}<b>VS</b>${logo(B,54)}</div><p>${esc(A.name)} vs ${esc(B.name)}</p><small id="pvTurn">Turn your phone sideways</small></div></div>
    <div class="pvask" id="pvAsk" hidden><div class="pvlm">${logo(A,54)}<b>VS</b>${logo(B,54)}</div><p>${esc(A.name)} vs ${esc(B.name)}</p><i class="pvphone" aria-hidden="true"></i><b>Turn your phone sideways</b><button class="btn sm" id="pvAskSide">Rotation lock on? Play it sideways</button></div>`;
   raise(ov);document.body.appendChild(ov);ov.addEventListener("pointerdown",()=>ARENA.snd.unlock(),{once:true});document.body.classList.add("pvon");
-  const $=s=>ov.querySelector(s);const cv=$("#pvC"),g=cv.getContext("2d");const SLAA=typeof window!=="undefined"&&window.__AA===true,OC=document.createElement("canvas"),og=OC.getContext("2d");g.imageSmoothingEnabled=false;let KS=1,DPR=1,FADE0=0;let SPD=KEYM?2:AUTO?2:(()=>{try{const v=+localStorage.getItem("hd_spd");return[1,1.5,2].includes(v)?v:2}catch(e){return 2}})(),MIN=false,PSAVE=false,ended=false,coachTrip=false,simAll=false,li=0,lastPossKey=null;
+  const $=s=>ov.querySelector(s);const cv=$("#pvC"),g=cv.getContext("2d");const SLAA=typeof window!=="undefined"&&window.__AA===true,OC=document.createElement("canvas"),og=OC.getContext("2d");g.imageSmoothingEnabled=false;let KS=1,DPR=1,FADE0=0;let SPD=KEYM?1:AUTO?2:(()=>{try{const v=+localStorage.getItem("hd_spd");return[1,1.5,2].includes(v)?v:2}catch(e){return 2}})(),MIN=false,PSAVE=false,ended=false,coachTrip=false,simAll=false,li=0,lastPossKey=null;
   let SL=null;
   const LB=$("#pvL");let ROT=false,MODE="land",loadT=0;if(AUTO)LB.classList.add("auto");/* autoplay is for watching: the court takes the whole screen */
   /* size the landscape box to the screen, turned or not, and fit the court (16:9) in the left column */
@@ -7213,7 +7213,7 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
     if(AUTOMIN)setTimeout(minimize,0);else if(AUTOPS)setTimeout(()=>powerSave(true),0);
     if(res0.canSim===false){for(const id of["pvSkH","pvSkE","pvSim"]){const b=$("#"+id);if(b)b.hidden=true}}
     $("#pvSkH").onclick=()=>{if(CURQ>=nQ-1){$("#pvSim").onclick();return}SKIPQ=CURQ+1;simAll=true;if(CARD)pickOpt(-1)};$("#pvSkE").onclick=()=>$("#pvSim").onclick()}
-  $("#pvSpd").onclick=()=>{if(KEYM){KEYM=false;SPD=1}else if(SPD===1)SPD=1.5;else if(SPD===1.5)SPD=2;else{KEYM=true;SPD=2}$("#pvSpd").textContent=KEYM?"Key moments":SPD+"x";try{localStorage.setItem("hd_spd",KEYM?"key":SPD)}catch(e){}};$("#pvSpd").textContent=KEYM?"Key moments":SPD+"x";
+  $("#pvSpd").onclick=()=>{if(KEYM){KEYM=false;SPD=1}else if(SPD===1)SPD=1.5;else if(SPD===1.5)SPD=2;else{KEYM=true;SPD=1}$("#pvSpd").textContent=KEYM?"Key moments":SPD+"x";try{localStorage.setItem("hd_spd",KEYM?"key":SPD)}catch(e){}};$("#pvSpd").textContent=KEYM?"Key moments":SPD+"x";
   $("#pvCoach").onclick=()=>{coachTrip=true;if(CARD)pickOpt(-1)};
   /* the Coach's Timeout (Season Pass): once a game, your five shake off cold streaks and come back fresh; they forget what you've been running */
   const TO=$("#pvTO");if(TO)TO.onclick=()=>{for(const p of A.pl){p.cold=false;p.missRun=0;p.fresh=6}ctl.seen=[];ctl.mom=Math.max(0,ctl.mom);TO.disabled=true;TO.textContent="Timeout used";toast("Timeout: fresh legs, cold streaks gone")};
@@ -7541,12 +7541,12 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
       else{const t=scr({x:RIM.x-18,y:142});await fly(t.x,t.y-6,40,.5);ARENA.snd.play("bounce",.4)}}}
   /* events since we last looked: score, caption, and a quick drawing of plays the engine ran on its own */
   /* Key moments: a cut. The court fades to black, everyone is already in place for the next play, and it fades back in */
-  let lastDrawn=-1;const fade=on=>new Promise(r=>{const f=$("#pvFade");if(!f||simAll)return r();f.classList.toggle("on",on);setTimeout(r,on?620:60)});
+  let lastDrawn=-1;/* a broadcast cut: half a second down, a breath on black, then it comes back up slowly over the new set-up */const fade=on=>new Promise(r=>{const f=$("#pvFade");if(!f||simAll)return r();f.classList.toggle("on",on);setTimeout(r,on?950:120)});
   async function catchUp(animate,upTo){if(IMM)IMM.op="catchUp";const ev=sink.ev||[];while(li<(upTo==null?ev.length:Math.min(upTo,ev.length))){const e=ev[li++];/* the end of a period: the buzzer, then a breath before play goes on */if(animate&&SL&&e.q!=null&&e.q>CURQ&&!simAll){ARENA.snd.play("buzzer",.35);await waitC(1.5)}if(e.q!=null)CURQ=Math.max(CURQ,e.q);if(SKIPQ!=null&&CURQ>=SKIPQ){SKIPQ=null;simAll=false}if(e.type==="q"){board(e);if(SL&&nQ===2&&e.q===0)SL.half();if(e.txt){cap(e.txt);ctl.mom=Math.round(ctl.mom*.5);momHTML();if(!simAll)await waitC(.9)}continue}
       /* Key moments (Oct 25): only the plays worth watching are drawn (a basket or stop with an ability on it, dunks, blocks, steals and
-         run-outs, the last three trips of a close game; ten at most before the finish; the court clock runs 15 s a trip), the rest tick the board. Ten or so plays a game: about a minute */
+         run-outs, the last three trips of a close game; seven at most before the finish; the court clock runs 15 s a trip), the rest tick the board. Ten or so plays a game: about a minute */
       const late=e.q===nQ-1&&e.clock!=null&&e.clock<=45&&Math.abs((e.s||[0,0])[0]-(e.s||[0,0])[1])<=8;
-      const key=!KEYM||late||(KEYD<10&&((e.abs&&e.abs.length&&e.type!=="miss")||e.type==="blk"||e.type==="stl"||e.type==="runout"||(e.type==="make"&&/throws it down/.test(e.txt||""))));
+      const key=!KEYM||late||(KEYD<7&&((e.abs&&e.abs.length&&e.type!=="miss")||e.type==="blk"||e.type==="stl"||e.type==="runout"||(e.type==="make"&&/throws it down/.test(e.txt||""))));
       const drawIt=animate&&!simAll&&e.on&&!ctl.pick&&(e.type==="make"||e.type==="miss"||e.type==="blk"||e.type==="stl"||e.type==="to"||e.type==="runout")&&e.o!==side&&key;
       if(drawIt&&KEYM&&!late)KEYD++;
       if(!drawIt){board(e);if(e.txt)cap(e.txt)}
@@ -7745,7 +7745,7 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 25 · 23 · v2";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 25 · 24 · v2";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 /* haptics (Oct 25): a tick for a roll, a thump for a PERFECT; nothing on the web */
 function haptic(k){if(!IS_APP)return;try{NP("Haptics","impact",{style:k==="heavy"?"HEAVY":k==="medium"?"MEDIUM":"LIGHT"}).catch(()=>{})}catch(e){}}
@@ -7870,7 +7870,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="ac3b2e02a9";
+<script>const APPV="091c5dec45";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
