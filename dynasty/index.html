@@ -2164,13 +2164,13 @@ body.prOn{overflow:hidden}
 .pr .prpan h2{margin:0;font-size:28px;font-weight:800;text-transform:none;letter-spacing:0;font-family:Barlow,sans-serif}.pr .prpan p{margin:0;font-size:20px;font-weight:600;line-height:1.35}
 .pr .prtop{display:flex;align-items:center;gap:12px}.pr .prseg{display:inline-flex;border-radius:8px;overflow:hidden;border:1px solid #262337}.pr .prseg b{padding:6px 12px;font-size:14px;font-weight:800;color:#9a93b8}.pr .prseg b.on{background:#7fe9ff;color:#0b0a12}
 .pr .probig{font-size:36px;font-weight:800;line-height:1;color:#f6dca0}
-.pr .prrat{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-around;font-size:21px;font-weight:700;font-variant-numeric:tabular-nums}.pr .prrat>div{display:flex;gap:8px}.pr .prrat>div span:nth-child(2){width:56px;text-align:right}.pr .prrat>div span:nth-child(3){width:64px;text-align:right}
+.pr .prrat{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-around;font-size:21px;font-weight:700;font-variant-numeric:tabular-nums}.pr .prrat>div{display:grid;grid-template-columns:1fr 72px 72px;align-items:center}.pr .prrat>div span:nth-child(2){text-align:right}.pr .prrat>div span:nth-child(3){text-align:right}.pr .prhd2{font-size:14px;font-weight:800;color:#9a93b8;letter-spacing:.04em}.pr .prtop .probig{width:144px;text-align:right}
 .pr .prtiers{margin-top:auto;display:flex;flex-direction:column;gap:6px;font-size:18px;font-weight:700}.pr .prtiers>div{display:flex;align-items:center;height:40px;padding:0 14px;border-radius:8px;background:#1a1726;color:#c9c3e0}.pr .prtiers>div:first-child{color:#9a93b8}.pr .prtiers>div.now{background:#1d1810;border:1px solid #d9b25a;color:#f6dca0}.pr .prtiers b{font-size:22px;font-weight:800;color:#f3efe6}
 .pr .prnum{width:300px;flex:0 0 300px;border-radius:10px;background:#14121d;border:1px solid #262337;box-sizing:border-box;padding:12px 16px;display:flex;flex-direction:column;gap:8px}
 .pr .prwho{display:flex;align-items:center;gap:12px}.pr .prwho b{display:block;font-size:20px;font-weight:800}.pr .prwho small{display:block;font-size:14px;font-weight:700;color:#d9b25a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:210px}
 .pr .prhd{display:flex;font-size:14px;font-weight:800;color:#9a93b8;letter-spacing:.04em}.pr .prhd span:nth-child(2){width:56px;text-align:right}.pr .prhd span:nth-child(3){width:64px;text-align:right}
 .pr .prrows{flex:1 1 auto;display:flex;flex-direction:column;justify-content:space-around;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}.pr .prrows>div{display:flex}.pr .prrows>div span:nth-child(2){width:56px;text-align:right}.pr .prrows>div span:nth-child(3){width:64px;text-align:right}
-.pr .prov{font-size:26px;font-weight:800}.pr .prov i{font-style:normal;color:#9a93b8;font-size:18px}
+.pr .prov{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:800;color:#9a93b8;border-top:1px solid #262337;padding-top:8px}.pr .prov b{font-size:28px;color:#f6dca0;line-height:1}.pr .prov i{font-style:normal;min-width:44px;text-align:center;padding:3px 8px;border-radius:8px;background:#1a1726;color:#c9c3e0;font-size:16px}.pr .prov i.up{background:#143a24;color:#7dff9b}.pr .prov i.dn{background:#3a1220;color:#ff8fa3}
 .pr .prgear{flex-direction:row;align-items:center;gap:6px;padding:8px 10px;overflow:hidden}
 .pr .prring{width:276px;height:296px;position:relative;flex:0 0 276px;transform:scale(.9);transform-origin:center}
 .pr .prpc{position:absolute;width:78px;height:96px;border-radius:14px;background:#1a1726;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:4px;box-sizing:border-box}.pr .prpc .ga{width:70px!important;height:70px!important}.pr .prpc small{display:block;height:18px;font-size:12px;font-weight:800;line-height:18px}
@@ -7848,7 +7848,7 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 26 · 30 · v2";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 26 · 31 · v2";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 /* haptics (Oct 25): a tick for a roll, a thump for a PERFECT; nothing on the web */
 function haptic(k){if(!IS_APP)return;try{NP("Haptics","impact",{style:k==="heavy"?"HEAVY":k==="medium"?"MEDIUM":"LIGHT"}).catch(()=>{})}catch(e){}}
@@ -7951,13 +7951,13 @@ function prTeam(){const ids=prTen();const tile=(i,k)=>{const c=DB.c[i];const q=k
   return`<div class="prcard${k<5?"":" bn"}" role="button" tabindex="0" data-pr="card" data-arg="${i}" aria-label="${esc(lastName(DB.p[c.p][0]))}"><div class="prcd">${mcHTML(i,{noNew:true})}</div>${team?'<i class="prgold"></i>':""}<span class="prspot${pen?" bad":""}">${q!=null?POSN[q]+(pen?` −${pen}`:""):k===5?"6TH":esc(posLabel(i).split("/")[0])}</span></div>`};
   return prBar("LINEUP",`Power <b>${prPower()}</b>`,prChip())+`<div class="prteam"><div class="prrow">${ids.slice(0,5).map(tile).join("")}</div><div class="prrow">${ids.slice(5,10).map((i,k)=>tile(i,k+5)).join("")}</div></div>`}
 /* card screen: art (or numbers) · tab column · panel */
-function prNums(i){const o=S.own[i];const now=cardR(i).R;const aft=PR.pick?prAfter(i,PR.pick).R:now;
-  return`<section class="prnum"><div class="prwho"><div class="prcd sm" data-pr="tab" data-arg="rat">${mcHTML(i,{noNew:true})}</div><div><b>${esc(lastName(DB.p[DB.c[i].p][0]))}</b><small>${esc(cardLine(i)||typeName(DB.c[i]))} · Lv ${o?o.lv:1}</small></div></div><div class="prhd"><span class="sp"></span><span>NOW</span><span>AFTER</span></div><div class="prrows">${RKN.map((n,j)=>`<div><span class="sp">${n}</span><span>${now[j]}</span><span class="${aft[j]>now[j]?"up":aft[j]<now[j]?"dn":"mut"}">${aft[j]}</span></div>`).join("")}</div>${PR.pick?`<div class="prov">${ovrOf(now)} <i>→</i> <b class="${ovrOf(aft)>=ovrOf(now)?"up":"dn"}">${ovrOf(aft)}</b></div>`:""}</section>`}
+function prNums(i){const o=S.own[i];const now=cardR(i).R;const aft=PR.pick?prAfter(i,PR.pick).R:now;const d=ovrOf(aft)-ovrOf(now);
+  return`<section class="prnum"><div class="prwho"><div class="prcd sm" data-pr="tab" data-arg="rat">${mcHTML(i,{noNew:true})}</div><div><b>${esc(lastName(DB.p[DB.c[i].p][0]))}</b><small>${esc(cardLine(i)||typeName(DB.c[i]))} · Lv ${o?o.lv:1}</small></div></div><div class="prhd"><span class="sp"></span><span>NOW</span><span>AFTER</span></div><div class="prrows">${RKN.map((n,j)=>`<div><span class="sp">${n}</span><span>${now[j]}</span><span class="${aft[j]>now[j]?"up":aft[j]<now[j]?"dn":"mut"}">${aft[j]}</span></div>`).join("")}</div><div class="prov"><span class="sp">Overall</span><b>${ovrOf(now)}</b><i class="${d>0?"up":d<0?"dn":""}" style="visibility:${PR.pick?"visible":"hidden"}">${d>0?"+":""}${d}</i></div></section>`}
 function prAfter(i,gid){const o=S.own[i],g=S.gear[gid];const gear=(o.gear||[]).slice();gear[g.slot]=gid;return ownedRatings(i,{...o,gear},S.gear)}
 function prTabs(cur){return`<div class="prtabs">${[["rat","Ratings"],["ab","Ability"],["lv","Level"],["gear","Gear"],["st","Stats"]].map(([k,n])=>`<button class="${cur===k?"on":""}" data-pr="tab" data-arg="${k}">${n}</button>`).join("")}</div>`}
 function prCard(){const i=PR.id,c=DB.c[i],o=S.own[i];const t=PR.tab;const bag=Object.keys(S.gear).length;
   let left=t==="rat"?`<section class="prbig"><div class="prcd">${mcHTML(i,{noNew:true})}</div></section>`:prNums(i);let right="";
-  if(t==="rat"){const R=cardR(i).R;const base=ownedRatings(i,{...(o||{}),gear:[]},S.gear).R;right=`<section class="prpan"><div class="prtop"><span class="seg prseg"><b class="on">Now</b><b>Max</b></span><span class="sp"></span><b class="probig">${ovrOf(R)}</b></div><div class="prrat">${RKN.map((n,j)=>`<div><span class="sp">${n}</span><span>${base[j]}</span><span class="up">${R[j]-base[j]>0?`+${R[j]-base[j]}`:""}</span></div>`).join("")}</div></section>`}
+  if(t==="rat"){const R=cardR(i).R;const base=ownedRatings(i,{...(o||{}),gear:[]},S.gear).R;right=`<section class="prpan"><div class="prtop"><span class="seg prseg"><b class="on">Now</b><b>Max</b></span><span class="sp"></span><span class="prhd2">Overall</span><b class="probig">${ovrOf(R)}</b></div><div class="prrat">${RKN.map((n,j)=>`<div><span class="sp">${n}</span><span>${base[j]}</span><span class="up">${R[j]-base[j]>0?`+${R[j]-base[j]}`:""}</span></div>`).join("")}</div></section>`}
   else if(t==="ab"){const k=abilityOf(i);const tr=tierOf(i);right=k?`<section class="prpan"><h2>${esc(ABIL[k].n)}</h2><p>${esc(ABIL[k].d)} <b class="up">${abPct(k,Math.max(1,tr))}</b></p><div class="prtiers">${[["Locked",0,0],["Ruby Diamond",1,50],["Black Diamond",2,100],["Immortal",3,200]].map(([n,tt,lv])=>`<div class="${tt===tr?"now":""}"><span class="sp">${n}${tt===tr?" · now":lv?` · Lv ${lv}`:""}</span><b>${Math.round(ABV[tt]*100)}%</b></div>`).join("")}</div></section>`:`<section class="prpan"><h2>No ability</h2><p class="mut">Abilities come on 4★+ cards.</p></section>`}
   else if(t==="gear"){right=`<section class="prpan prgear">${prRing(i,true)}<div class="practs"><button data-pr="toast" data-arg="Auto equip">Auto equip</button><button data-pr="toast" data-arg="Power up all">Power up all</button><button data-pr="toast" data-arg="Remove all">Remove all</button></div></section>`}
   else right=`<section class="prpan"><h2>${t==="lv"?"Level":"Stats"}</h2><p class="mut">Not in this test.</p></section>`;
@@ -7982,7 +7982,7 @@ window.addEventListener("resize",()=>{if(PR)prFit()});
 document.addEventListener("click",e=>{if(!PR)return;const b=e.target.closest("[data-pr]");if(!b)return;e.preventDefault();e.stopPropagation();const a=b.dataset.pr,arg=b.dataset.arg;
   if(a==="exit")protoClose();else if(a==="toast")toast(`${arg} — not in this test`);else if(a==="home"||a==="tour"||a==="team"||a==="gym"){PR.scr=a;PR.pick=null;protoRender()}
   else if(a==="gear"){PR.id=PR.id!=null?PR.id:prTen()[0];PR.tab="gear";PR.scr="card";protoRender()}
-  else if(a==="card"){PR.id=+arg;PR.tab="rat";PR.scr="card";PR.pick=null;protoRender()}
+  else if(a==="card"){PR.id=+arg;PR.pick=null;if(PR.scr!=="gearscreen"){PR.scr="card";if(!b.closest(".prstrip"))PR.tab="rat"}protoRender()}
   else if(a==="tab"){PR.tab=arg;PR.scr="card";PR.pick=null;protoRender()}
   else if(a==="slot"){PR.slot=+arg;PR.pick=null;PR.scr="gearscreen";protoRender()}
   else if(a==="slotsel"){PR.slot=+arg;PR.pick=null;protoRender()}
@@ -8054,7 +8054,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="0d996ce3a6";
+<script>const APPV="7c18c85cb5";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
