@@ -6309,7 +6309,7 @@ function startGrind(id,f,quiet,n){f=+f;n=GRINDN.includes(+n)?+n:10;const tier=gy
   if(S.grind&&S.grind.done){if(!quiet){openGrind();toast("Open your last haul first")}return false}
   if(ascLocked(id,f)){if(!quiet)toast("Ascension needs five Ruby Diamond cards");return false}
   if(!spendEnergy(RUNCOST[tier])){if(!quiet)toast("Not enough energy");return false}
-  S.grind={gym:id,floor:f,n,i:0,w:0,t0:Date.now(),per:RUNSEC[tier],log:[],coins:0,auto:n>10?true:AUTOSELL,done:false};S.lastGrind={gym:id,floor:f,n};save();clearInterval(GTIMER);GTIMER=setInterval(grindPulse,1000);if(!quiet){closeAll();VIEW="gymrun";render()}return true}
+  S.grind={gym:id,floor:f,n,i:0,w:0,t0:Date.now(),per:RUNSEC[tier],log:[],coins:0,auto:n>10?true:AUTOSELL,done:false};S.lastGrind={gym:id,floor:f,n};save();clearInterval(GTIMER);GTIMER=setInterval(grindPulse,1000);if(!quiet){clearStack();if(SHEET){SHEET.el.remove();SHEET=null}VIEW="gymrun";render()}return true}
 /* the score of the run in progress at this moment */
 function grindLive(G){const res=grindGame(G);const dur=runSecs(G);const now=G.paused||Date.now();const f=clamp((now-G.t0)/(dur*1000),0,1);const ev=res.ev.filter(e=>e.s);
   const nQ=res.fmt==="3v3"?1:res.fmt==="half"?2:4,qL=res.fmt==="3v3"?600:720;
@@ -8329,7 +8329,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="771747cb59";
+<script>const APPV="fcccdbc59b";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
