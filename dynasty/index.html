@@ -671,6 +671,7 @@ table.box.ps td,table.box.ps th{padding:7px 3px;font-size:14px}
 .pvbug .tm b{font:900 30px/1 var(--f-d);font-variant-numeric:tabular-nums;min-width:2.1ch;text-align:center}.pvbug .mid{text-align:center}.pvbug .mid b{display:block;font:900 15px var(--f-d);letter-spacing:.04em}.pvbug .mid small{font:700 11px var(--f-b);color:var(--goldlt);letter-spacing:.04em}
 .pvct{position:relative;border-radius:12px;overflow:hidden;background:#090a0c;flex:none}.pvct canvas{display:block;width:100%;height:auto;image-rendering:pixelated;aspect-ratio:16/9}
 .pvban{position:absolute;left:50%;top:10px;transform:translateX(-50%) scale(.9);opacity:0;font:900 22px var(--f-d);letter-spacing:.04em;padding:4px 12px;border-radius:10px;background:#0b1024cc;transition:opacity .2s,transform .2s;pointer-events:none;white-space:nowrap}
+.pvfade{position:absolute;inset:0;background:#05060b;opacity:0;pointer-events:none;transition:opacity .24s ease}.pvfade.on{opacity:1;transition:opacity .22s ease}
 .pvban.on{opacity:1;transform:translateX(-50%) scale(1)}.pvban.good{color:var(--goldlt)}.pvban.bad{color:var(--dnd)}
 .pvmom{position:absolute;left:8px;top:8px;font:800 12px var(--f-b)}.pvmom span{display:inline-block;padding:3px 8px;border-radius:8px;background:#0b1024cc}.pvmom .up{color:var(--goldlt)}.pvmom .dn{color:var(--dnd)}
 .pvcap{margin:0;min-height:20px;font:700 14px/1.35 var(--f-b);color:var(--mut);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -6823,20 +6824,22 @@ function SLStage(o){
     return ACT[k]={k,p,ti,bp:bt==="B"?"":bt+":",look:lk,X:47+(ti?3:-3),Y:-1.5,vx:0,vy:0,tx:null,ty:null,max:17,face:"south",act:null,man:null,on:false,name:lastName(p.name),slot:p.slot!=null?p.slot:0}}
   let ON=[[],[]];/* bodies on the floor, per team */
   const all=()=>[...ON[0],...ON[1],...Object.values(ACT).filter(b=>b.leaving)];
-  const ball={who:null,air:null,X:47,Y:25,Z:4};let offT=0,GUARD=false,HELP=null,SCREEN=null,started=false,FTSET=false;
-  function goTo(b,X,Y,max,oob){if(!b)return;b.tx=oob?Math.max(-3,Math.min(97,X)):Math.max(1,Math.min(93,X));b.ty=Math.max(oob?-2:1,Math.min(49,Y));b.max=max||17}
+  const ball={who:null,air:null,X:47,Y:25,Z:.4};let offT=0,GUARD=false,HELP=null,SCREEN=null,started=false,FTSET=false;
+  function goTo(b,X,Y,max,oob){if(!b)return;const tx=oob?Math.max(-3,Math.min(97,X)):Math.max(1,Math.min(93,X)),ty=Math.max(oob?-2:1,Math.min(49,Y));
+    /* a target that only shifted a few inches is the same target: nobody shuffles after a man who is standing still */
+    if(b.tx!=null&&Math.hypot(tx-b.tx,ty-b.ty)<.7){b.max=max||17;return}b.tx=tx;b.ty=ty;b.max=max||17}
   function act(b,an,dur,frames,face){b.act={an,dur,t0:now,frames,face}}
   let now=0;
   function step(dt){const L=all();for(const p of L){let ax=0,ay=0;
-      if(p.tx!=null){const dx=p.tx-p.X,dy=p.ty-p.Y,d=Math.hypot(dx,dy);const want=Math.min(p.max,d*2.8);ax=(dx/(d||1))*want-p.vx;ay=(dy/(d||1))*want-p.vy}
+      if(p.tx!=null){const dx=p.tx-p.X,dy=p.ty-p.Y,d=Math.hypot(dx,dy);/* he arrives and stops; no creeping over the last inches */if(d<.45&&Math.hypot(p.vx,p.vy)<3){p.vx=0;p.vy=0;ax=0;ay=0}else{const want=Math.min(p.max,d*2.8);ax=(dx/(d||1))*want-p.vx;ay=(dy/(d||1))*want-p.vy}}
       else{ax=-p.vx;ay=-p.vy}
       if(!p.leaving&&!FTSET)for(const q of L)if(q!==p&&!q.leaving&&p.contact!==q&&q.contact!==p){const dx=p.X-q.X,dy=p.Y-q.Y,d=Math.hypot(dx,dy*1.5),R0=3.3;if(d<R0&&d>0){const f=(R0-d)*(d<2?40:22);ax+=dx/d*f;ay+=dy/d*f}}
-      const a=Math.hypot(ax,ay),amax=38*dt;if(a>amax){ax*=amax/a;ay*=amax/a}p.vx+=ax;p.vy+=ay;p.X+=p.vx*dt;p.Y+=p.vy*dt;p.dist=(p.dist||0)+Math.hypot(p.vx,p.vy)*dt;
+      const a=Math.hypot(ax,ay),amax=38*dt;if(a>amax){ax*=amax/a;ay*=amax/a}p.vx+=ax;p.vy+=ay;p.X+=p.vx*dt;p.Y+=p.vy*dt;const sm=Math.min(1,dt*9);p.svx=(p.svx||0)+(p.vx-(p.svx||0))*sm;p.svy=(p.svy||0)+(p.vy-(p.svy||0))*sm;p.dist=(p.dist||0)+Math.hypot(p.vx,p.vy)*dt;
       if(p.leaving&&Math.hypot(p.X-p.tx,p.Y-p.ty)<1){p.leaving=false;p.gone=true}}
     /* bodies never stand inside each other: any two closer than 2 ft are pushed apart at once (the steal, the block and the
        screen pairs are allowed to touch) */
     if(!FTSET){const V=L.filter(p=>!p.leaving&&!p.gone);for(let it=0;it<2;it++)for(let i=0;i<V.length;i++)for(let j=i+1;j<V.length;j++){const p=V[i],q=V[j];if(p.contact===q||q.contact===p)continue;
-      const dx=p.X-q.X,dy=(p.Y-q.Y)*1.5,d=Math.hypot(dx,dy),R0=2.1;if(d>=R0)continue;const ux=d>0?dx/d:(i%2?1:-1),uy=d>0?dy/d:0,m=(R0-d)/2;
+      const dx=p.X-q.X,dy=(p.Y-q.Y)*1.5,d=Math.hypot(dx,dy),R0=2.1;if(d>=R0)continue;const ux=d>0?dx/d:(i%2?1:-1),uy=d>0?dy/d:0,m=(R0-d)/2*.6;
       const wp=ball.who===p?.25:1,wq=ball.who===q?.25:1,ws=wp+wq;p.X+=ux*m*2*wp/ws;p.Y+=uy*m*2*wp/ws/1.5;q.X-=ux*m*2*wq/ws;q.Y-=uy*m*2*wq/ws/1.5}}
     if(ball.air){const b=ball.air,u=Math.min(1,(now-b.t0)/b.dur);ball.X=b.X0+(b.X1-b.X0)*u;ball.Y=b.Y0+(b.Y1-b.Y0)*u;ball.Z=b.Z0+(b.Z1-b.Z0)*u+b.h*4*u*(1-u);if(u>=1){const f=b.done;ball.air=null;f&&f()}}
     const bx=ball.who?ball.who.X:ball.X;const goal=Math.max(W/2/PX-4,Math.min(98-W/2/PX,bx+(rimOf(offT).X>47?6:-6)));camX+=(goal-camX)*Math.min(1,dt*2.2);
@@ -6852,17 +6855,23 @@ function SLStage(o){
   const STRIDE={walk:5,run:7.5,rdrib:7,dslide:4.5};
   function gait(p,sp){const g0=p.gait||"stand";let g=g0;
     if(g0==="stand"){if(sp>.8)g=sp>4.8?"run":"walk"}else if(g0==="walk"){if(sp<.35)g="stand";else if(sp>4.8)g="run"}else{if(sp<3.6)g=sp<.35?"stand":"walk"}
+    /* coming to a stop takes a beat: a one-frame dip in speed never flashes the standing drawing */
+    if(g==="stand"&&g0!=="stand"){if(p.slowT==null)p.slowT=now;if(now-p.slowT<.12)g=g0}else p.slowT=null;
     return p.gait=g}
   const legs=(p,an,kind)=>{const n=ARENA.count(an);let L=STRIDE[kind]*(p.hk||1);/* a dribbler keeps his bounce rhythm: at a walk his strides shorten instead of the ball slowing */if(kind==="rdrib")L=Math.max(3.5,Math.min(L,Math.hypot(p.vx,p.vy)*.75));return Math.floor(((p.dist||0)%L)/L*n)%n};
-  function pose(p){const sp=Math.hypot(p.vx,p.vy);
+  /* where he faces while moving: his smoothed heading, and he only turns once it has clearly left his current sector */
+  function turn(p,dx,dy){const d=dirOf(dx,dy);if(d===p.face||!(p.face in ANG))return p.face=d;const a=Math.atan2(dy*PY,dx*PX)*180/Math.PI,e=Math.abs(((a-ANG[p.face])%360+540)%360-180);if(e>34)p.face=d;return p.face}
+  /* a defender slides below a sprint and runs above it; the line has a band so he never flickers between the two */
+  const sliding=(p,sp)=>p.slide=p.slide?sp<12.5:sp<10;
+  function pose(p){/* speed: the smoothed one, except that pushing off counts at once (no feet sliding while the drawing stands) */const sp=Math.max(Math.hypot(p.svx||0,p.svy||0),(p.gait||"stand")==="stand"?Math.hypot(p.vx,p.vy):0);
     if(p.act){const F=p.act.frames,n=F?F.length:ARENA.count(p.act.an),u=(now-p.act.t0)/p.act.dur;if(u<1){const k=Math.min(n-1,Math.floor(u*n));return[p.act.an,F?F[k]:k]}p.act=null}
     const hold=ball.who===p,g=gait(p,sp);
-    if(p.ti!==offT&&GUARD&&g!=="stand"&&sp<11&&has("dslide_south")&&!p.leaving){const w=want(p);p.face=dirOf(w.dx,w.dy);const an="dslide_"+p.face;return[an,legs(p,an,"dslide")]}
-    if(g!=="stand"){const d=dirOf(p.vx,p.vy);p.face=d;
+    if(p.ti!==offT&&GUARD&&g!=="stand"&&sliding(p,sp)&&has("dslide_south")&&!p.leaving){const w=want(p);turn(p,w.dx,w.dy);const an="dslide_"+p.face;return[an,legs(p,an,"dslide")]}
+    if(g!=="stand"){const d=turn(p,p.svx,p.svy);
       if(hold&&!p.carry){const an="rdrib_"+d;return[an,legs(p,an,"rdrib")]}
       if(g==="walk"&&has(bn(p,"walk_"+d))){const an="walk_"+d;return[an,legs(p,bn(p,an),"walk")]}
       const an="run_"+d;return[an,legs(p,bn(p,an),g==="walk"?"walk":"run")]}
-    const w=want(p);if(Math.hypot(w.dx,w.dy)>.5)p.face=dirOf(w.dx,w.dy);
+    const w=want(p);/* standing still: look where the rule says; a man already pushing off keeps his face until his gait catches up */if(Math.hypot(w.dx,w.dy)>.5&&Math.hypot(p.vx,p.vy)<.6)turn(p,w.dx,w.dy);
     if(hold&&!p.carry&&has("sdrib_"+p.face)){const an="sdrib_"+p.face;return[an,Math.floor(now*10)%ARENA.count(an)]}
     const an=idleOf(p.face),n=ARENA.count(bn(p,an));return[an,Math.floor(now/1.6*n)%n]}
   /* THE rule: where is he looking? Acting: his act's target. Screening: his man. Guarding: his man. Moving: where he goes.
@@ -6871,8 +6880,8 @@ function SLStage(o){
     if(p.act&&p.act.face)return{dx:p.act.face.X-p.X,dy:p.act.face.Y-p.Y,why:"act"};
     if(SCREEN&&SCREEN.by===p&&SCREEN.set&&(p.gait||"stand")==="stand")return{dx:SCREEN.on.X-p.X,dy:SCREEN.on.Y-p.Y,why:"screen"};
     if(p.lookAt&&(p.gait||"stand")==="stand")return{dx:p.lookAt.X-p.X,dy:p.lookAt.Y-p.Y,why:"look"};
-    if(p.ti!==offT&&GUARD&&(p.gait||"stand")!=="stand"&&sp<11&&has("dslide_south")&&p.man)return{dx:p.man.X-p.X,dy:p.man.Y-p.Y,why:"defense"};
-    if((p.gait||"stand")!=="stand"&&!p.act)return{dx:p.vx,dy:p.vy,why:"moving"};
+    if(p.ti!==offT&&GUARD&&(p.gait||"stand")!=="stand"&&sliding(p,Math.hypot(p.svx||0,p.svy||0))&&has("dslide_south")&&p.man)return{dx:p.man.X-p.X,dy:p.man.Y-p.Y,why:"defense"};
+    if((p.gait||"stand")!=="stand"&&!p.act)return{dx:p.svx||p.vx,dy:p.svy||p.vy,why:"moving"};
     if(ball.who===p)return{dx:rim.X-p.X,dy:rim.Y-p.Y,why:"ball"};
     if(p.ti===offT||!p.man){const h=ball.who||ball;return{dx:h.X-p.X,dy:h.Y-p.Y,why:"offense"}}
     return{dx:p.man.X-p.X,dy:p.man.Y-p.Y,why:"defense"}}
@@ -6918,7 +6927,7 @@ function SLStage(o){
   const wait=s=>new Promise(r=>{if(skip())return r();const end=now+s;const f=()=>{if(dead||skip()||now>=end)return r();setTimeout(f,16)};f()});
   const until=(fn,max)=>new Promise(r=>{if(skip())return r();const end=now+(max||6);const f=()=>{if(dead||skip()||fn()||now>=end)return r();setTimeout(f,16)};f()});
   const near=(p,d)=>p.tx==null||Math.hypot(p.tx-p.X,p.ty-p.Y)<(d||1.5);
-  const snap=()=>{for(const p of all()){if(p.tx!=null){p.X=p.tx;p.Y=p.ty}p.vx=p.vy=0;if(p.leaving){p.leaving=false;p.gone=true}}ball.air=null};
+  const snap=()=>{for(const p of all()){if(p.tx!=null){p.X=p.tx;p.Y=p.ty}p.vx=p.vy=0;p.svx=p.svy=0;if(p.leaving){p.leaving=false;p.gone=true}}ball.air=null;const bx=ball.who?ball.who.X:ball.X;camX=Math.max(W/2/PX-4,Math.min(98-W/2/PX,bx+(rimOf(offT).X>47?6:-6)))};
   /* ---- spots in the half court, as distance from the attacked baseline and across ---- */
   const SPOTS=[[30,25],[21,8],[21,42],[3,46],[7,18]];
   const spotAt=(slot,t,jit)=>{const[d,y]=SPOTS[slot%5],R=rimOf(t),dirR=R.X>47;return{X:dirR?94-d+(jit?jit[0]:0):d-(jit?jit[0]:0),Y:y+(jit?jit[1]:0)}};
@@ -6951,9 +6960,9 @@ function SLStage(o){
     /* a new possession for team t with these five (keys) against those five: they go to their spots, the defense picks up */
     async setup(t,oKeys,dKeys,opt){STOP='setup';opt=opt||{};const prevOff=offT;offT=t;setOn(t,oKeys);setOn(1-t,dKeys);HELP=null;SCREEN=null;
       const O=ON[t];match();const pg=O.find(p=>p.slot===0)||O[0];const first=!started;started=true;if(first){ball.who=pg;ball.air=null}
-      if(!ball.who||ball.who.ti!==t){if(ball.who&&ball.who.ti!==t)ball.who=null;if(!ball.who){if(skip()){ball.who=pg}else{const h=O.slice().sort((a,b)=>Math.hypot(a.X-ball.X,a.Y-ball.Y)-Math.hypot(b.X-ball.X,b.Y-ball.Y))[0];goTo(h,ball.X,ball.Y,16);if(ball.Z>.6&&!ball.air)flyBall(ball.X,ball.Y,.4,.5,.3);await until(()=>Math.hypot(h.X-ball.X,h.Y-ball.Y)<1.5,2.5);ball.who=h;ball.air=null}}}
+      if(!ball.who||ball.who.ti!==t){if(ball.who&&ball.who.ti!==t)ball.who=null;if(!ball.who){if(skip()||opt.snap){ball.who=pg}else{const h=O.slice().sort((a,b)=>Math.hypot(a.X-ball.X,a.Y-ball.Y)-Math.hypot(b.X-ball.X,b.Y-ball.Y))[0];goTo(h,ball.X,ball.Y,16);if(ball.Z>.6&&!ball.air)flyBall(ball.X,ball.Y,.4,.5,.3);await until(()=>Math.hypot(h.X-ball.X,h.Y-ball.Y)<1.5,2.5);ball.who=h;ball.air=null}}}
       GUARD=false;for(const p of O){const s=spotAt(p.slot,t,opt.brk&&p!==ball.who?[-6,0]:null);goTo(p,s.X,s.Y,p===ball.who?15:18)}
-      defend();if(skip()||first){snap();GUARD=true;if(first)await wait(.5);return}
+      defend();if(skip()||first||opt.snap){snap();GUARD=true;if(first)await wait(.5);return}
       await until(()=>O.filter(p=>near(p,3)).length>=3,opt.brk?1.2:2);GUARD=true},
     give(k){const b=ACT[k];if(b){ball.who=b;ball.air=null}},
     /* get the ball to k by passing (only snaps when the game is skipping ahead) */
@@ -7040,8 +7049,8 @@ function SLStage(o){
     /* after a basket: the other team's big takes it out behind the baseline and inbounds to the point guard */
     async inbound(){STOP='inbound';const scorer=offT,rim=rimOf(scorer),dirR=rim.X>47;const N=ON[1-scorer];if(!N.length)return;offT=1-scorer;GUARD=false;
       if(o.oneBasket){/* half court: the ball is checked at the top */const pg=N.find(p=>p.slot===0)||N[0];ball.who=null;ball.X=rim.X+(dirR?-1:1);ball.Y=rim.Y+1;ball.Z=.4;if(skip()){ball.who=pg;return}const s=spotAt(0,offT);goTo(pg,s.X,s.Y,14);await wait(.4);ball.X=s.X;ball.Y=s.Y;await passBall(null,pg);return}
-      const ib=N.find(p=>p.slot===4)||N[N.length-1],pg=N.find(p=>p.slot===0&&p!==ib)||N.find(p=>p!==ib)||ib,bx=dirR?95.6:-1.6;
       ball.who=null;ball.X=rim.X+(dirR?-.6:.6);ball.Y=rim.Y+.8;ball.Z=.4;
+      /* whoever is closest takes the ball out, so it never lies there while a man jogs in from the far end */const ib=N.slice().sort((a,b)=>Math.hypot(a.X-ball.X,a.Y-ball.Y)-Math.hypot(b.X-ball.X,b.Y-ball.Y))[0],pg=N.find(p=>p.slot===0&&p!==ib)||N.find(p=>p!==ib)||ib,bx=dirR?95.6:-1.6;
       if(skip()){ball.who=pg;return}
       N.forEach(p=>{if(p!==ib&&p!==pg){const s=spotAt(p.slot,offT);goTo(p,47+(s.X-47)*.35,s.Y,15)}});ON[scorer].forEach(p=>{const s=spotAt(p.slot,offT);goTo(p,(47+s.X)/2,s.Y,13)});
       goTo(pg,rim.X+(dirR?-10:10),rim.Y+(rim.Y>pg.Y?-7:7),13);
@@ -7054,7 +7063,7 @@ function SLStage(o){
       t.contact=null;ball.who=t;GUARD=false;offT=t.ti;
       if(runout){const rim=rimOf(t.ti);if(!skip()){goTo(t,rim.X+(rim.X>47?-3:3),rim.Y+2,19);await until(()=>near(t,1.5),3.5)}await S.shot(tK,"rim",true,{})}},
     /* a turnover: the ball squirts out of bounds; the other team will take it from there */
-    async turnover(k){STOP='turnover';const p=ACT[k]||ball.who;GUARD=false;if(!p){return}ball.who=null;ball.X=p.X;ball.Y=p.Y;ball.Z=3;if(o.onBounce)o.onBounce();await flyBall(p.X+(Math.random()-.5)*6,p.Y<25?-1.5:51.5,1,2,.5)},
+    async turnover(k){STOP='turnover';const p=ACT[k]||ball.who;GUARD=false;if(!p){return}ball.who=null;ball.X=p.X;ball.Y=p.Y;ball.Z=3;if(o.onBounce)o.onBounce();const oy=p.Y<25?-1.5:51.5,ox=p.X+(Math.random()-.5)*6;await flyBall(ox,oy,.4,2,.5);/* it lands, hops once and sits on the floor until someone goes to get it */if(o.onBounce)o.onBounce();await flyBall(ox+(ox>p.X?1:-1),oy,.4,.7,.25)},
     /* free throws: the shooter at the line, two of theirs and one of his on each side of the lane, the rest back */
     async ft(k,res,oKeys,dKeys){STOP='ft';const sh=body(k);if(!sh)return;const t=sh.ti;offT=t;setOn(t,oKeys);setOn(1-t,dKeys);const rim=rimOf(t),dirR=rim.X>47,toward=dirR?-1:1;GUARD=false;HELP=null;SCREEN=null;
       const lineX=rim.X+toward*13.75;const O=ON[t].filter(p=>p!==sh),D=ON[1-t];
@@ -7149,7 +7158,7 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
   const GL=typeof ARTDATA!=="undefined"&&ARTDATA.glogo||{};const logo=(t,z)=>t.gym&&GL[t.gym]?`<img class="glg" src="${GL[t.gym]}" alt="" style="width:${z||28}px;height:${z||28}px">`:t.ti!=null?logoHTML(t.ti,z||28):`<span class="lgo" style="background:${t.color};width:${z||28}px;height:${z||28}px"><b style="color:${lumOf(t.color)>.6?"#1b2140":"#fff"}">${esc(t.abbr)}</b></span>`;
   ov.innerHTML=`<div class="pvl" id="pvL">
    <div class="pvlc"><div class="pvbug" id="pvBug"><button class="tm" data-act="pvTeam" data-arg="A" aria-label="Your roster">${logo(A)}<span>${esc(A.abbr)}</span><b id="pvA">${(res0.start||[0,0])[0]}</b></button><div class="mid"><b id="pvClk">${fmt==="3v3"?"FIRST TO 21":fmt==="q"?"4:00":fmt==="half"?"H1 3:00":"H1 4:00"}</b><small id="pvSub">${BASE}</small></div><button class="tm r" data-act="pvTeam" data-arg="B" aria-label="Their roster"><span>${esc(B.abbr)}</span><b id="pvB">${(res0.start||[0,0])[1]}</b>${logo(B)}</button></div>
-    <div class="pvct" id="pvCt"><canvas id="pvC" width="${CW}" height="${CH}" aria-label="The court"></canvas><div class="pvban" id="pvBan"></div><div class="pvab" id="pvAb"></div><div class="pvsc" id="pvSc"></div><p class="pvcap" id="pvCap">Tip-off</p><div class="pvtools">${AUTO?`<button class="btn sm" id="pvSkH" aria-label="Skip to the half">Skip to half</button><button class="btn sm" id="pvSkE" aria-label="Skip to the end">Skip to end</button><button class="btn sm" id="pvMin" aria-label="Minimize">Minimize</button><button class="btn sm" id="pvPow" aria-label="Power saving">Power save</button>`:""}<button class="btn sm" id="pvLu">Lineup</button><button class="btn sm pvspd" id="pvSpd" aria-label="Game speed">${KEYM?"Key moments":(AUTO?2:1)+"x"}</button><button class="btn sm pvsnd" id="pvSnd" aria-label="Sound">${ARENA.snd.on?"Sound on":"Sound off"}</button></div></div>
+    <div class="pvct" id="pvCt"><canvas id="pvC" width="${CW}" height="${CH}" aria-label="The court"></canvas><div class="pvban" id="pvBan"></div><div class="pvab" id="pvAb"></div><div class="pvfade" id="pvFade"></div><div class="pvsc" id="pvSc"></div><p class="pvcap" id="pvCap">Tip-off</p><div class="pvtools">${AUTO?`<button class="btn sm" id="pvSkH" aria-label="Skip to the half">Skip to half</button><button class="btn sm" id="pvSkE" aria-label="Skip to the end">Skip to end</button><button class="btn sm" id="pvMin" aria-label="Minimize">Minimize</button><button class="btn sm" id="pvPow" aria-label="Power saving">Power save</button>`:""}<button class="btn sm" id="pvLu">Lineup</button><button class="btn sm pvspd" id="pvSpd" aria-label="Game speed">${KEYM?"Key moments":(AUTO?2:1)+"x"}</button><button class="btn sm pvsnd" id="pvSnd" aria-label="Sound">${ARENA.snd.on?"Sound on":"Sound off"}</button></div></div>
 </div>
    <div class="pvrc"><div class="pvcard" id="pvCard"></div>
     
@@ -7389,7 +7398,7 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
       if(Math.hypot(tx-sx,ty-sy)<3)continue;const an=a.anim,fps=a.fps;a.x=sx;a.y=sy;a.anim="run";a.fps=walk?7:10;a.once=false;
       moves.push(T(a,{x:tx,y:ty},runDur(Math.hypot(tx-sx,ty-sy))*(walk?1.3:1)).then(()=>{a.anim=an;a.fps=fps}))}
     SETTLE=Promise.all(moves).then(()=>spread())}
-  function formation(P){if(SL){SETTLE=SL.setup(P.oi,P.OP.map(key),P.DP.map(key));return}if(IMM)IMM.op="formation";const prev={};for(const k in ACTS)if(ACTS[k].vis!==false)prev[k]={x:ACTS[k].x,y:ACTS[k].y};const v0=ARENA.view;
+  function formation(P,opt){if(SL){SETTLE=SL.setup(P.oi,P.OP.map(key),P.DP.map(key),opt);return}if(IMM)IMM.op="formation";const prev={};for(const k in ACTS)if(ACTS[k].vis!==false)prev[k]={x:ACTS[k].x,y:ACTS[k].y};const v0=ARENA.view;
     const off=P.oi;setOff(off);const swapped=ARENA.view!==v0;if(swapped)FADE0=performance.now();for(const k in ACTS)ACTS[k].vis=false;const three=P.OP.length<=3;
     P.OP.forEach((p,j)=>{const s=three?SPOT3[j]:SPOT[p.slot!=null?p.slot:j]||SPOT[j];setA(key(p),{x:s[0],y:s[1],anim:"idle",flip:false,vis:true,lab:lastName(p.name),me:off===0,fps:2})});
     P.DP.forEach(p=>{const m=P.OP.find(o=>P.matchOf(o)===p)||P.OP[0];const a=ACTS[key(m)];const u=(a.y-132)*.66,v=(284-a.x)*.22,d=Math.hypot(u,v-5.25)||1,k=Math.max(Math.min(.4,4/d),Math.min(.6,3/d));const q=FT(u-u*k,v-(v-5.25)*k);setA(key(p),{x:q[0],y:q[1],anim:"slide",flip:true,vis:true,lab:null,fps:2})});
@@ -7531,13 +7540,15 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
         give(rk);ARENA.snd.play("bounce",.2);await wait(.3);const c=ACTS[rk];c.once=false;c.anim="idle";c.fps=2}
       else{const t=scr({x:RIM.x-18,y:142});await fly(t.x,t.y-6,40,.5);ARENA.snd.play("bounce",.4)}}}
   /* events since we last looked: score, caption, and a quick drawing of plays the engine ran on its own */
+  /* Key moments: a cut. The court fades to black, everyone is already in place for the next play, and it fades back in */
+  let lastDrawn=-1;const fade=on=>new Promise(r=>{const f=$("#pvFade");if(!f||simAll)return r();f.classList.toggle("on",on);setTimeout(r,on?620:60)});
   async function catchUp(animate,upTo){if(IMM)IMM.op="catchUp";const ev=sink.ev||[];while(li<(upTo==null?ev.length:Math.min(upTo,ev.length))){const e=ev[li++];/* the end of a period: the buzzer, then a breath before play goes on */if(animate&&SL&&e.q!=null&&e.q>CURQ&&!simAll){ARENA.snd.play("buzzer",.35);await waitC(1.5)}if(e.q!=null)CURQ=Math.max(CURQ,e.q);if(SKIPQ!=null&&CURQ>=SKIPQ){SKIPQ=null;simAll=false}if(e.type==="q"){board(e);if(SL&&nQ===2&&e.q===0)SL.half();if(e.txt){cap(e.txt);ctl.mom=Math.round(ctl.mom*.5);momHTML();if(!simAll)await waitC(.9)}continue}
       /* Key moments (Oct 25): only the plays worth watching are drawn (a basket or stop with an ability on it, dunks, blocks, steals and
          run-outs, the last three trips of a close game; ten at most before the finish; the court clock runs 15 s a trip), the rest tick the board. Ten or so plays a game: about a minute */
       const late=e.q===nQ-1&&e.clock!=null&&e.clock<=45&&Math.abs((e.s||[0,0])[0]-(e.s||[0,0])[1])<=8;
       const key=!KEYM||late||(KEYD<10&&((e.abs&&e.abs.length&&e.type!=="miss")||e.type==="blk"||e.type==="stl"||e.type==="runout"||(e.type==="make"&&/throws it down/.test(e.txt||""))));
       const drawIt=animate&&!simAll&&e.on&&!ctl.pick&&(e.type==="make"||e.type==="miss"||e.type==="blk"||e.type==="stl"||e.type==="to"||e.type==="runout")&&e.o!==side&&key;
-      if(drawIt){flashAbs(e);if(KEYM&&!late)KEYD++}
+      if(drawIt&&KEYM&&!late)KEYD++;
       if(!drawIt){board(e);if(e.txt)cap(e.txt)}
       if(drawIt){
         /* the engine's possession: set up, then the result */
@@ -7545,7 +7556,8 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
         P.matchOf=p=>P.DP[P.OP.indexOf(p)]||P.DP[0];const sk=e.who+"|"+e.o;
         /* a putback goes straight back up: no reset to the spots */
         if(SL&&e.type==="make"&&/puts it back/.test(e.txt||"")){await SETTLE;await SL.putback(sk,true,null);await SL.inbound();board(e);if(e.txt)cap(e.txt);pop("+2",e.o===0?"good":"bad");scoreCard(e);await waitC(.5);continue}
-        formation(P);
+        const cut=KEYM&&lastDrawn>=0&&lastDrawn!==li-2;lastDrawn=li-1;
+        if(cut)await fade(true);formation(P,cut?{snap:true}:null);if(cut){await SETTLE;fade(false)}flashAbs(e);
         if(SL&&(e.type==="stl"||e.type==="runout")){await SETTLE;const vk=e.vic+"|"+e.o,tk=e.who+"|"+(1-e.o);await SL.feed(vk);await SL.steal(vk,tk,e.type==="runout");board(e);if(e.txt)cap(e.txt);pop("STEAL",e.o===0?"bad":"good");if(e.type==="runout")await SL.inbound();await waitC(.5)}
         else if(SL&&e.type==="to"){await SETTLE;board(e);if(e.txt)cap(e.txt);pop("TURNOVER",e.o===0?"bad":"good");await SL.turnover(SL.holder()||e.who+"|"+e.o);await waitC(.5)}
         else if(e.type==="stl"||e.type==="runout"){await SETTLE;const vk=e.vic+"|"+e.o,tk=e.who+"|"+(1-e.o);
@@ -7733,7 +7745,7 @@ function playGame(res0,side,done){let KEYM=(()=>{try{return localStorage.getItem
 /* native.js: the iPhone app's extras. Everything here is skipped on the web (no Capacitor), so the web game is unchanged.
    Native code lives in the iOS repo (ios-native/): a small "Native" plugin for iCloud, Game Center and app icons, plus the
    official LocalNotifications plugin. Calls go through Capacitor.nativePromise, so no JavaScript library is needed. */
-const BUILDTAG="Oct 25 · 22 · v2";/* shown in Settings so you can tell which build is installed */
+const BUILDTAG="Oct 25 · 23 · v2";/* shown in Settings so you can tell which build is installed */
 const IS_APP=typeof window!=="undefined"&&!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
 /* haptics (Oct 25): a tick for a roll, a thump for a PERFECT; nothing on the web */
 function haptic(k){if(!IS_APP)return;try{NP("Haptics","impact",{style:k==="heavy"?"HEAVY":k==="medium"?"MEDIUM":"LIGHT"}).catch(()=>{})}catch(e){}}
@@ -7858,7 +7870,7 @@ function watchGame(res,done){
 
 boot();
 </script>
-<script>const APPV="405bd0acbf";
+<script>const APPV="ac3b2e02a9";
 /* register right away, not on "load": on a weak signal a font or photo can hold "load" back for a long time */
 if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").then(r=>r.update()).catch(()=>{});
 /* auto-update: check for a newer build on launch and whenever the app comes back to the front; reload when nothing is open */
